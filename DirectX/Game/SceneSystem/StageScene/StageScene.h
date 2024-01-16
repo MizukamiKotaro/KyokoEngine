@@ -5,6 +5,7 @@
 #include "Game/StageLights/StageLights.h"
 #include "Sprite.h"
 #include "PostEffect/Contrast/Contrast.h"
+#include "Light/Light.h"
 
 class StageScene : public IScene
 {
@@ -23,4 +24,8 @@ private:
 	std::unique_ptr<Sprite> puniru_;
 
 	std::unique_ptr<Contrast> contrast_;
+
+	std::unique_ptr<PointLight> pointLight_;
+
+	std::unique_ptr<Sprite> sprite_;
 };
