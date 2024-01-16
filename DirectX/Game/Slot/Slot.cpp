@@ -61,10 +61,10 @@ void Slot::Initialize() {
 
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {
-			slot_[i][j]->size_ *= 3.0f;
-			slot_[i][j]->pos_ = { 640.0f + slot_[i][j]->size_.x * (-1 + i), 360.0f + slot_[i][j]->size_.y * (-1 + i) };
+			slot_[i][j]->pos_ = { 640.0f + slot_[i][j]->size_.x * (-1 + i), 360.0f + (slot_[i][j]->size_.y + interval_) * (-1 + j) };
 			slot_[i][j]->Update();
 		}
+		isRotStop_[i] = true;
 	}
 	DownToTop();
 }
