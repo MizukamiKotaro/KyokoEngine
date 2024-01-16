@@ -4,6 +4,8 @@
 #include "Externals/imgui/imgui.h"
 #include "RandomGenerator/RandomGenerator.h"
 #include <numbers>
+#include "RandomGenerator/RandomGenerator.h"
+#include "Input.h"
 
 Slot::Slot()
 {
@@ -38,21 +40,21 @@ Slot::Slot()
 	slot_[1][2]->SetTextureHandle(texMan->LoadTexture("Resources/slot/c2.png"));
 	slot_[2][2]->SetTextureHandle(texMan->LoadTexture("Resources/slot/c3.png"));
 
+	interval_ = 200.0f;
+
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {
 			slot_[i][j]->size_ *= 3.0f;
-			slot_[i][j]->pos_ = { 640.0f + slot_[i][j]->size_.x * (-1 + i), 360.0f + slot_[i][j]->size_.y * (-1 + j) };
+			slot_[i][j]->pos_ = { 640.0f + slot_[i][j]->size_.x * (-1 + i), 360.0f + (slot_[i][j]->size_.y + interval_) * (-1 + j) };
 			slot_[i][j]->Update();
 		}
+		isRotStop_[i] = true;
 	}
 	DownToTop();
 
 	plane_->SetSRVGPUDescriptorHandle_(postEffect_->GetSRVGPUDescriptorHandle());
 
-	rotSpeed_[0] = 10.0f;
-	rotSpeed_[1] = 13.0f;
-	rotSpeed_[2] = 15.0f;
-
+	limitSpeed_ = 15.0f;
 }
 
 void Slot::Initialize() {
@@ -69,7 +71,14 @@ void Slot::Initialize() {
 
 void Slot::Update(Camera* camera) {
 
+	Input* input = Input::GetInstance();
 
+	if (input->PressedKey(DIK_1)) {
+		StartRotation();
+	}
+	if (input->PressedKey(DIK_2)) {
+		StopRotation();
+	}
 
 #ifdef _DEBUG
 	ImGui::Begin("Slot");
@@ -78,12 +87,7 @@ void Slot::Update(Camera* camera) {
 	ImGui::End();
 #endif // _DEBUG
 
-	for (int i = 0; i < 3; i++) {
-		for (int j = 0; j < 3; j++) {
-			slot_[i][j]->pos_.y += rotSpeed_[i];
-			slot_[i][j]->Update();
-		}
-	}
+	Rotation();
 
 	plane_->Update();
 
@@ -99,10 +103,90 @@ void Slot::Draw(Camera* camera) {
 
 void Slot::StartRotation()
 {
+	isRot_ = true;
+	isStop_ = false;
+
+	RandomGenerator* rand = RandomGenerator::GetInstance();
+
+	for (int i = 0; i < 3; i++) {
+		isRotStop_[i] = false;
+		rotSpeed_[i] = rand->RandFloat(25.0f, 35.0f);
+	}
 }
 
-void Slot::StopSlot(int num)
+void Slot::StopRotation()
 {
+	isStop_ = true;
+}
+
+void Slot::Rotation()
+{
+	if (isRot_) {
+
+		for (int i = 0; i < 3; i++) {
+			if (!isRotStop_[i]) {
+				if (rotSpeed_[i] > limitSpeed_) {
+					rotSpeed_[i] -= 0.1f;
+				}
+
+				isAcross_[i] = false;
+
+				for (int j = 0; j < 3; j++) {
+
+					float posY = slot_[i][j]->pos_.y;
+					slot_[i][j]->pos_.y += rotSpeed_[i];
+
+					if (posY <= 360.0f && slot_[i][j]->pos_.y >= 360.0f) {
+						isAcross_[i] = true;
+						acrossNum_ = j;
+					}
+				}
+
+				if (rotSpeed_[i] < limitSpeed_ || isStop_) {
+					if (i == 0 && !isRotStop_[0]) {
+						if (isAcross_[i]) {
+							float y = 360.0f - slot_[i][acrossNum_]->pos_.y;
+
+							for (int j = 0; j < 3; j++) {
+								slot_[i][j]->pos_.y += y;
+							}
+
+							isRotStop_[i] = true;
+							faceType_ = acrossNum_;
+						}
+					}
+					else if (isRotStop_[0] && i == 2) {
+						if (isAcross_[i] && acrossNum_ == faceType_) {
+							float y = 360.0f - slot_[i][acrossNum_]->pos_.y;
+
+							for (int j = 0; j < 3; j++) {
+								slot_[i][j]->pos_.y += y;
+							}
+
+							isRotStop_[i] = true;
+						}
+					}
+					else if (isRotStop_[2]) {
+						if (isAcross_[i] && acrossNum_ == faceType_) {
+							float y = 360.0f - slot_[i][acrossNum_]->pos_.y;
+
+							for (int j = 0; j < 3; j++) {
+								slot_[i][j]->pos_.y += y;
+							}
+							isRotStop_[i] = true;
+							isRot_ = false;
+						}
+					}
+				}
+			}
+
+			for (int j = 0; j < 3; j++) {
+				slot_[i][j]->Update();
+			}
+		}
+
+
+	}
 }
 
 void Slot::PostEffectWright(Camera* camera)
@@ -126,7 +210,7 @@ void Slot::DownToTop()
 		for (int j = 0; j < 3; j++) {
 
 			if (slot_[i][j]->pos_.y >= 720.0f + slot_[i][j]->size_.y / 2.0f) {
-				slot_[i][j]->pos_.y -= slot_[i][j]->size_.y * 3.0f;
+				slot_[i][j]->pos_.y -= (slot_[i][j]->size_.y + interval_) * 3.0f;
 				slot_[i][j]->Update();
 			}
 		}

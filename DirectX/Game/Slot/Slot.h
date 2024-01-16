@@ -23,9 +23,11 @@ public:
 
 	void StartRotation();
 
-	void StopSlot(int num);
+	void StopRotation();
 
 private:
+
+	void Rotation();
 
 	void PostEffectWright(Camera* camera);
 
@@ -42,4 +44,19 @@ private:
 	std::unique_ptr<Sprite> back_;
 
 	std::array<float, 3> rotSpeed_;
+
+	std::array<bool, 3> isRotStop_;
+
+	std::array<bool, 3> isAcross_;
+	int acrossNum_;
+
+	float limitSpeed_;
+
+	bool isRot_ = false;
+
+	bool isStop_ = true;
+
+	int faceType_;
+
+	float interval_;
 };
