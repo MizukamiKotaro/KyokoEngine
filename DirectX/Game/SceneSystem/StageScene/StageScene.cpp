@@ -18,6 +18,8 @@ StageScene::StageScene()
 	contrast_ = std::make_unique<Contrast>();
 
 	pointLight_ = std::make_unique<PointLight>();
+
+	slot_ = std::make_unique<Slot>();
 }
 
 void StageScene::Init()
@@ -42,6 +44,7 @@ void StageScene::Update()
 
 #endif // _DEBUG
 
+	slot_->Update(camera_.get());
 
 	lights_->Update();
 }
@@ -58,9 +61,11 @@ void StageScene::Draw()
 
 	Kyoko::PreDraw();
 
-	contrast_->Draw(*camera_.get());
+	//contrast_->Draw(*camera_.get());
 
-	pointLight_->Draw(*camera_.get());
+	slot_->Draw(camera_.get());
+
+	//pointLight_->Draw(*camera_.get());
 	
 	BlackDraw();
 

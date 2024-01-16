@@ -145,6 +145,7 @@ void Sprite::SetTextureHandle(uint32_t textureHundle)
 {
 	textureHundle_ = textureHundle;
 
+	AdjustTextureSize();
 }
 
 void Sprite::SetAnchorPoint(const Vector2& anchorpoint)
