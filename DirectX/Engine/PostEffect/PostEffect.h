@@ -133,6 +133,5 @@ private:
 	Vector2 textureSize_;
 
 	bool isInvisible_ = false;
-
 };
 

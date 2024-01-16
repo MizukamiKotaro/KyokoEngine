@@ -1,19 +1,16 @@
-#include "ModelGraphicsPipline.h"
+#include "ContrastGraphicsPipeline.h"
 #include "Engine/Base/DirectXBase/DirectXBase.h"
 #include <cassert>
 #include "Engine/Base/DebugLog/DebugLog.h"
 #include <format>
-#include <fstream>
-#include <sstream>
-#include "TextureManager/TextureManager.h"
 
-ModelGraphicsPipline* ModelGraphicsPipline::GetInstance()
+ContrastGraphicsPipeline* ContrastGraphicsPipeline::GetInstance()
 {
-	static ModelGraphicsPipline instance;
+	static ContrastGraphicsPipeline instance;
 	return &instance;
 }
 
-void ModelGraphicsPipline::Initialize()
+void ContrastGraphicsPipeline::Initialize()
 {
 
 	device_ = DirectXBase::GetInstance()->GetDevice();
@@ -25,7 +22,7 @@ void ModelGraphicsPipline::Initialize()
 
 }
 
-void ModelGraphicsPipline::PreDraw()
+void ContrastGraphicsPipeline::PreDraw()
 {
 	blendMode_ = BlendMode::kBlendModeNormal;
 
@@ -37,7 +34,7 @@ void ModelGraphicsPipline::PreDraw()
 
 }
 
-void ModelGraphicsPipline::SetBlendMode(uint32_t blendMode)
+void ContrastGraphicsPipeline::SetBlendMode(uint32_t blendMode)
 {
 	if (static_cast<uint32_t>(blendMode_) != blendMode) {
 
@@ -70,8 +67,9 @@ void ModelGraphicsPipline::SetBlendMode(uint32_t blendMode)
 	}
 }
 
-void ModelGraphicsPipline::InitializeDXC()
+void ContrastGraphicsPipeline::InitializeDXC()
 {
+
 	//DXCの初期化
 	HRESULT hr = DxcCreateInstance(CLSID_DxcUtils, IID_PPV_ARGS(dxcUtils_.GetAddressOf()));
 	assert(SUCCEEDED(hr));
@@ -81,9 +79,10 @@ void ModelGraphicsPipline::InitializeDXC()
 	//現時点ではincludeはしないが、includeに対応するための設定を行っておく
 	hr = dxcUtils_->CreateDefaultIncludeHandler(includeHandler_.GetAddressOf());
 	assert(SUCCEEDED(hr));
+
 }
 
-void ModelGraphicsPipline::InitializePSO()
+void ContrastGraphicsPipeline::InitializePSO()
 {
 	//DescriptorRange
 	D3D12_DESCRIPTOR_RANGE descriptorRange[1] = {};
@@ -99,7 +98,7 @@ void ModelGraphicsPipline::InitializePSO()
 	descriptionRootSignature.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
 
 	//RootParameter作成。複数設定ができるので配列。
-	D3D12_ROOT_PARAMETER rootParameters[7] = {};
+	D3D12_ROOT_PARAMETER rootParameters[4] = {};
 	rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV; // CBVを使う
 	rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL; // PixelShaderで使う
 	rootParameters[0].Descriptor.ShaderRegister = 0; // レジスタ番号0とバインド
@@ -113,15 +112,6 @@ void ModelGraphicsPipline::InitializePSO()
 	rootParameters[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV; // CBVを使う
 	rootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL; // PixelShaderで使う
 	rootParameters[3].Descriptor.ShaderRegister = 1; // レジスタ番号1を使う
-	rootParameters[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV; // CBVを使う
-	rootParameters[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL; // PixelShaderで使う
-	rootParameters[4].Descriptor.ShaderRegister = 2; // レジスタ番号0とバインド
-	rootParameters[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV; // CBVを使う
-	rootParameters[5].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL; // PixelShaderで使う
-	rootParameters[5].Descriptor.ShaderRegister = 3; // レジスタ番号0とバインド
-	rootParameters[6].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV; // CBVを使う
-	rootParameters[6].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL; // PixelShaderで使う
-	rootParameters[6].Descriptor.ShaderRegister = 4; // レジスタ番号0とバインド
 	descriptionRootSignature.pParameters = rootParameters; // ルートパラメータ配列へのポインタ
 	descriptionRootSignature.NumParameters = _countof(rootParameters); // 配列の長さ
 
@@ -149,7 +139,7 @@ void ModelGraphicsPipline::InitializePSO()
 	assert(SUCCEEDED(hr));
 
 	//InputLayout
-	D3D12_INPUT_ELEMENT_DESC inputElementDescs[4] = {};
+	D3D12_INPUT_ELEMENT_DESC inputElementDescs[2] = {};
 	inputElementDescs[0].SemanticName = "POSITION";
 	inputElementDescs[0].SemanticIndex = 0;
 	inputElementDescs[0].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
@@ -158,14 +148,6 @@ void ModelGraphicsPipline::InitializePSO()
 	inputElementDescs[1].SemanticIndex = 0;
 	inputElementDescs[1].Format = DXGI_FORMAT_R32G32_FLOAT;
 	inputElementDescs[1].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
-	inputElementDescs[2].SemanticName = "NORMAL";
-	inputElementDescs[2].SemanticIndex = 0;
-	inputElementDescs[2].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-	inputElementDescs[2].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
-	inputElementDescs[3].SemanticName = "WORLD_POSITION";
-	inputElementDescs[3].SemanticIndex = 1;
-	inputElementDescs[3].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-	inputElementDescs[3].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
 	D3D12_INPUT_LAYOUT_DESC inputLayoutDesc{};
 	inputLayoutDesc.pInputElementDescs = inputElementDescs;
 	inputLayoutDesc.NumElements = _countof(inputElementDescs);
@@ -178,20 +160,20 @@ void ModelGraphicsPipline::InitializePSO()
 	rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
 
 	//Shaderをコンパイルする
-	vertexShaderBlob_ = CompileShader(L"Resources/Shaders/Object3dShader/Object3d.VS.hlsl", L"vs_6_0", dxcUtils_.Get(), dxcCompiler_.Get(), includeHandler_.Get());
+	vertexShaderBlob_ = CompileShader(L"Resources/Shaders/ContrastShader/Contrast.VS.hlsl", L"vs_6_0", dxcUtils_.Get(), dxcCompiler_.Get(), includeHandler_.Get());
 	assert(vertexShaderBlob_ != nullptr);
 
-	pixelShaderBlob_ = CompileShader(L"Resources/Shaders/Object3dShader/Object3d.PS.hlsl", L"ps_6_0", dxcUtils_.Get(), dxcCompiler_.Get(), includeHandler_.Get());
+	pixelShaderBlob_ = CompileShader(L"Resources/Shaders/ContrastShader/Contrast.PS.hlsl", L"ps_6_0", dxcUtils_.Get(), dxcCompiler_.Get(), includeHandler_.Get());
 	assert(pixelShaderBlob_ != nullptr);
 
-	// DepthStencilStateの設定
-	D3D12_DEPTH_STENCIL_DESC depthStencilDesc{};
-	// Depthの機能を有効化する
-	depthStencilDesc.DepthEnable = true;
-	// 書き込みします
-	depthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
-	// 比較関数はLessEqual。つまり、近ければ描画される
-	depthStencilDesc.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
+	//// DepthStencilStateの設定
+	//D3D12_DEPTH_STENCIL_DESC depthStencilDesc{};
+	//// Depthの機能を有効化する
+	//depthStencilDesc.DepthEnable = true;
+	//// 書き込みします
+	//depthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
+	//// 比較関数はLessEqual。つまり、近ければ描画される
+	//depthStencilDesc.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
 
 	for (int i = 0; i < kCountOfBlendMode; i++) {
 		//BlendStateの設定
@@ -259,7 +241,8 @@ void ModelGraphicsPipline::InitializePSO()
 		graphicsPipelineStateDesc.SampleDesc.Count = 1;
 		graphicsPipelineStateDesc.SampleMask = D3D12_DEFAULT_SAMPLE_MASK;
 		// DepthStencilの設定
-		graphicsPipelineStateDesc.DepthStencilState = depthStencilDesc;
+		//graphicsPipelineStateDesc.DepthStencilState = depthStencilDesc;
+		graphicsPipelineStateDesc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_ALWAYS;
 		graphicsPipelineStateDesc.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
 		//実際に生成
 		hr = device_->CreateGraphicsPipelineState(&graphicsPipelineStateDesc, IID_PPV_ARGS(graphicsPipelineStates_[i].GetAddressOf()));
@@ -268,7 +251,7 @@ void ModelGraphicsPipline::InitializePSO()
 
 }
 
-IDxcBlob* ModelGraphicsPipline::CompileShader(const std::wstring& filePath, const wchar_t* profile, IDxcUtils* dxcUtils, IDxcCompiler3* dxcCompiler, IDxcIncludeHandler* includeHandler)
+IDxcBlob* ContrastGraphicsPipeline::CompileShader(const std::wstring& filePath, const wchar_t* profile, IDxcUtils* dxcUtils, IDxcCompiler3* dxcCompiler, IDxcIncludeHandler* includeHandler)
 {
 	// 1. hlslファイルを読む
 	//これからシェーダーをコンパイルする旨をログに出す

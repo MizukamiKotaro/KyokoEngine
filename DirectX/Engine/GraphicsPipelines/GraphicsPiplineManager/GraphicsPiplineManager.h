@@ -8,9 +8,10 @@
 #include <array>
 #include "GraphicsPipelines/ModelGraphicsPipline/ModelGraphicsPipline.h"
 #include "GraphicsPipelines/ParticleGraphicsPipeline/ParticleGraphicsPipeline.h"
-#include "GraphicsPipelines/SpirteGraphicsPipeline/SpriteGraphicsPipeline.h"
+#include "GraphicsPipelines/SpriteGraphicsPipeline/SpriteGraphicsPipeline.h"
 #include "GraphicsPipelines/PointLightGraphicsPipline/PointLightGraphicsPipline.h"
 #include "GraphicsPipelines/SpotLightGraphicsPipline/SpotLightGraphicsPipline.h"
+#include "GraphicsPipelines/ContrastGraphicsPipeline/ContrastGraphicsPipeline.h"
 
 enum class BlendMode
 {
@@ -33,6 +34,7 @@ public:
 		PARTICLE,
 		POINT_LIGHT,
 		SPOT_LIGHT,
+		CONTRAST,
 		COUNT_PIPLINE_TYPE,
 	};
 
@@ -64,6 +66,7 @@ private:
 	ParticleGraphicsPipeline* particlePSO_ = nullptr;
 	PointLightGraphicsPipline* pointLightPSO_ = nullptr;
 	SpotLightGraphicsPipline* spotLightPSO_ = nullptr;
+	ContrastGraphicsPipeline* contrastPSO_ = nullptr;
 
 	PiplineType currentPiplineType_ = PiplineType::SPRITE;
 

@@ -166,6 +166,12 @@
     <Filter Include="Engine\PostEffect\Contrast">
       <UniqueIdentifier>{b838bf24-e500-43c1-8f8d-b9b9f1c98559}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Shaders\Contrast">
+      <UniqueIdentifier>{8e9a08f8-7f3f-4671-9005-05e4235afa90}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\GraphicsPipelines\ContrastGraphicsPipeline">
+      <UniqueIdentifier>{21daf958-b418-47d0-8266-70f092e3425d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -255,7 +261,7 @@
     <ClCompile Include="Engine\GraphicsPipelines\ModelGraphicsPipline\ModelGraphicsPipline.cpp">
       <Filter>Engine\GraphicsPipelines\ModelGraphicsPipline</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\GraphicsPipelines\SpirteGraphicsPipeline\SpriteGraphicsPipeline.cpp">
+    <ClCompile Include="Engine\GraphicsPipelines\SpriteGraphicsPipeline\SpriteGraphicsPipeline.cpp">
       <Filter>Engine\GraphicsPipelines\SpirteGraphicsPipeline</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Sprite\Sprite.cpp">
@@ -320,6 +326,9 @@
     </ClCompile>
     <ClCompile Include="Engine\PostEffect\Contrast\Contrast.cpp">
       <Filter>Engine\PostEffect\Contrast</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\GraphicsPipelines\ContrastGraphicsPipeline\ContrastGraphicsPipeline.cpp">
+      <Filter>Engine\GraphicsPipelines\ContrastGraphicsPipeline</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -422,7 +431,7 @@
     <ClInclude Include="Engine\GraphicsPipelines\ModelGraphicsPipline\ModelGraphicsPipline.h">
       <Filter>Engine\GraphicsPipelines\ModelGraphicsPipline</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\GraphicsPipelines\SpirteGraphicsPipeline\SpriteGraphicsPipeline.h">
+    <ClInclude Include="Engine\GraphicsPipelines\SpriteGraphicsPipeline\SpriteGraphicsPipeline.h">
       <Filter>Engine\GraphicsPipelines\SpirteGraphicsPipeline</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Sprite\Sprite.h">
@@ -506,54 +515,66 @@
     <ClInclude Include="Engine\PostEffect\Contrast\Contrast.h">
       <Filter>Engine\PostEffect\Contrast</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\GraphicsPipelines\ContrastGraphicsPipeline\ContrastGraphicsPipeline.h">
+      <Filter>Engine\GraphicsPipelines\ContrastGraphicsPipeline</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Resources\Shaders\Object3d.PS.hlsl">
+    <FxCompile Include="Resources\Shaders\Object3dShader\Object3d.PS.hlsl">
       <Filter>Engine\Shaders\Object3d</Filter>
     </FxCompile>
-    <FxCompile Include="Resources\Shaders\Object3d.VS.hlsl">
+    <FxCompile Include="Resources\Shaders\Object3dShader\Object3d.VS.hlsl">
       <Filter>Engine\Shaders\Object3d</Filter>
     </FxCompile>
-    <FxCompile Include="Resources\Shaders\Particle.PS.hlsl">
+    <FxCompile Include="Resources\Shaders\ParticleShader\Particle.PS.hlsl">
       <Filter>Engine\Shaders\Particle</Filter>
     </FxCompile>
-    <FxCompile Include="Resources\Shaders\Particle.VS.hlsl">
+    <FxCompile Include="Resources\Shaders\ParticleShader\Particle.VS.hlsl">
       <Filter>Engine\Shaders\Particle</Filter>
     </FxCompile>
-    <FxCompile Include="Resources\Shaders\PointLight.PS.hlsl">
+    <FxCompile Include="Resources\Shaders\PointLightShader\PointLight.PS.hlsl">
       <Filter>Engine\Shaders\PointLight</Filter>
     </FxCompile>
-    <FxCompile Include="Resources\Shaders\PointLight.VS.hlsl">
+    <FxCompile Include="Resources\Shaders\PointLightShader\PointLight.VS.hlsl">
       <Filter>Engine\Shaders\PointLight</Filter>
     </FxCompile>
-    <FxCompile Include="Resources\Shaders\Sprite.PS.hlsl">
+    <FxCompile Include="Resources\Shaders\SpriteShader\Sprite.PS.hlsl">
       <Filter>Engine\Shaders\Sprite</Filter>
     </FxCompile>
-    <FxCompile Include="Resources\Shaders\Sprite.VS.hlsl">
+    <FxCompile Include="Resources\Shaders\SpriteShader\Sprite.VS.hlsl">
       <Filter>Engine\Shaders\Sprite</Filter>
     </FxCompile>
-    <FxCompile Include="Resources\Shaders\SpotLight.PS.hlsl">
+    <FxCompile Include="Resources\Shaders\SpotLightShader\SpotLight.PS.hlsl">
       <Filter>Engine\Shaders\SpotLight</Filter>
     </FxCompile>
-    <FxCompile Include="Resources\Shaders\SpotLight.VS.hlsl">
+    <FxCompile Include="Resources\Shaders\SpotLightShader\SpotLight.VS.hlsl">
       <Filter>Engine\Shaders\SpotLight</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\ContrastShader\Contrast.PS.hlsl">
+      <Filter>Engine\Shaders\Contrast</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\ContrastShader\Contrast.VS.hlsl">
+      <Filter>Engine\Shaders\Contrast</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Shaders\Object3d.hlsli">
+    <None Include="Resources\Shaders\Object3dShader\Object3d.hlsli">
       <Filter>Engine\Shaders\Object3d</Filter>
     </None>
-    <None Include="Resources\Shaders\Particle.hlsli">
+    <None Include="Resources\Shaders\ParticleShader\Particle.hlsli">
       <Filter>Engine\Shaders\Particle</Filter>
     </None>
-    <None Include="Resources\Shaders\PointLight.hlsli">
+    <None Include="Resources\Shaders\PointLightShader\PointLight.hlsli">
       <Filter>Engine\Shaders\PointLight</Filter>
     </None>
-    <None Include="Resources\Shaders\Sprite.hlsli">
+    <None Include="Resources\Shaders\SpriteShader\Sprite.hlsli">
       <Filter>Engine\Shaders\Sprite</Filter>
     </None>
-    <None Include="Resources\Shaders\SpotLight.hlsli">
+    <None Include="Resources\Shaders\SpotLightShader\SpotLight.hlsli">
       <Filter>Engine\Shaders\SpotLight</Filter>
+    </None>
+    <None Include="Resources\Shaders\ContrastShader\Contrast.hlsli">
+      <Filter>Engine\Shaders\Contrast</Filter>
     </None>
   </ItemGroup>
 </Project>

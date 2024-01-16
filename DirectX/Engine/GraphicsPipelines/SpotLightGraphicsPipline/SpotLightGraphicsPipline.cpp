@@ -165,10 +165,10 @@ void SpotLightGraphicsPipline::InitializePSO()
 	rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
 
 	//Shaderをコンパイルする
-	vertexShaderBlob_ = CompileShader(L"Resources/Shaders/SpotLight.VS.hlsl", L"vs_6_0", dxcUtils_.Get(), dxcCompiler_.Get(), includeHandler_.Get());
+	vertexShaderBlob_ = CompileShader(L"Resources/Shaders/SpotLightShader/SpotLight.VS.hlsl", L"vs_6_0", dxcUtils_.Get(), dxcCompiler_.Get(), includeHandler_.Get());
 	assert(vertexShaderBlob_ != nullptr);
 
-	pixelShaderBlob_ = CompileShader(L"Resources/Shaders/SpotLight.PS.hlsl", L"ps_6_0", dxcUtils_.Get(), dxcCompiler_.Get(), includeHandler_.Get());
+	pixelShaderBlob_ = CompileShader(L"Resources/Shaders/SpotLightShader/SpotLight.PS.hlsl", L"ps_6_0", dxcUtils_.Get(), dxcCompiler_.Get(), includeHandler_.Get());
 	assert(pixelShaderBlob_ != nullptr);
 
 	//// DepthStencilStateの設定

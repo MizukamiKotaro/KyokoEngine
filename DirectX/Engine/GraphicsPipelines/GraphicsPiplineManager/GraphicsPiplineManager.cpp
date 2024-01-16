@@ -28,6 +28,9 @@ void GraphicsPiplineManager::Init()
 	spotLightPSO_ = SpotLightGraphicsPipline::GetInstance();
 	spotLightPSO_->Initialize();
 
+	contrastPSO_ = ContrastGraphicsPipeline::GetInstance();
+	contrastPSO_->Initialize();
+
 	spritePSO_->PreDraw();
 }
 
@@ -60,6 +63,9 @@ void GraphicsPiplineManager::PreDraw(PiplineType type)
 		case GraphicsPiplineManager::PiplineType::SPOT_LIGHT:
 			spotLightPSO_->PreDraw();
 			break;
+		case GraphicsPiplineManager::PiplineType::CONTRAST:
+			contrastPSO_->PreDraw();
+			break;
 		case GraphicsPiplineManager::PiplineType::COUNT_PIPLINE_TYPE:
 			break;
 		default:
@@ -86,6 +92,9 @@ void GraphicsPiplineManager::SetBlendMode(PiplineType type, uint32_t blendMode)
 		break;
 	case GraphicsPiplineManager::PiplineType::SPOT_LIGHT:
 		spotLightPSO_->SetBlendMode(blendMode);
+		break;
+	case GraphicsPiplineManager::PiplineType::CONTRAST:
+		contrastPSO_->SetBlendMode(blendMode);
 		break;
 	case GraphicsPiplineManager::PiplineType::COUNT_PIPLINE_TYPE:
 		break;

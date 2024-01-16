@@ -7,6 +7,10 @@ StageScene::StageScene()
 	FirstInit();
 
 	lights_ = std::make_unique<StageLights>();
+
+	puniru_ = std::make_unique<Sprite>("Resources/puniru.png");
+
+	contrast_ = std::make_unique<Contrast>();
 }
 
 void StageScene::Init()
@@ -25,11 +29,17 @@ void StageScene::Update()
 
 void StageScene::Draw()
 {
+	contrast_->PreDrawScene();
+
+
+	//lights_->Draw(camera_.get());
+	puniru_->Draw(*camera_.get());
+
+	contrast_->PostDrawScene();
 
 	Kyoko::PreDraw();
 
-
-	lights_->Draw(camera_.get());
+	contrast_->Draw(*camera_.get());
 	
 	BlackDraw();
 

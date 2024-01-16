@@ -89,6 +89,7 @@ void PostEffect::Draw(const Camera& camera, BlendMode blendMode)
 
 void PostEffect::PreDrawScene()
 {
+
 	ID3D12GraphicsCommandList* commandList = DirectXBase::GetInstance()->GetCommandList();
 
 	// バリアの変更
