@@ -13,7 +13,7 @@ SceneManager::SceneManager()
 	//IScene::sceneNo_ = TITLE;
 	IScene::sceneNo_ = STAGE;
 	currentSceneNo_ = IScene::sceneNo_;
-	IScene::stagrNo_ = 0;
+	IScene::stageNo_ = 0;
 
 	sceneArr_[currentSceneNo_]->Init();
 }
@@ -41,7 +41,7 @@ int SceneManager::Run()
 			sceneArr_[currentSceneNo_]->Init();
 		}
 
-		sceneArr_[currentSceneNo_]->Update();
+		sceneArr_[currentSceneNo_]->Play();
 
 		//Kyoko::PreDraw();
 

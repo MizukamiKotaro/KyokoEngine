@@ -2,7 +2,7 @@
 
 #include <cassert>
 #include "TextureManager/TextureManager.h"
-#include "Engine/Base/DirectXCommon/DirectXCommon.h"
+#include "Engine/Base/DirectXBase/DirectXBase.h"
 #include "Model/ModelData/ModelDataManager/ModelDataManager.h"
 #include "Engine/Base/DescriptorHeapManager/DescriptorHeapManager.h"
 #include "Utils/RandomGenerator/RandomGenerator.h"
@@ -138,7 +138,7 @@ void Particle::Draw(const Camera& camera, BlendMode blendMode)
 
 	GraphicsPiplineManager::GetInstance()->SetBlendMode(piplineType, static_cast<uint32_t>(blendMode));
 
-	ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
+	ID3D12GraphicsCommandList* commandList = DirectXBase::GetInstance()->GetCommandList();
 
 	//Spriteの描画。変更に必要なものだけ変更する
 	commandList->IASetVertexBuffers(0, 1, &modelData->mesh.vertexBufferView_); // VBVを設定
@@ -189,7 +189,7 @@ void Particle::CreateSRV()
 	srvCPUDescriptorHandle_ = DescriptorHeapManager::GetInstance()->GetNewSRVCPUDescriptorHandle();
 	srvGPUDescriptorHandle_ = DescriptorHeapManager::GetInstance()->GetNewSRVGPUDescriptorHandle();
 
-	DirectXCommon::GetInstance()->GetDevice()->CreateShaderResourceView(instancingResource_.Get(), &srvDesc, srvCPUDescriptorHandle_);
+	DirectXBase::GetInstance()->GetDevice()->CreateShaderResourceView(instancingResource_.Get(), &srvDesc, srvCPUDescriptorHandle_);
 
 }
 
@@ -202,7 +202,7 @@ void Particle::CreateResources()
 
 void Particle::CreateMaterialResource()
 {
-	materialResource_ = DirectXCommon::CreateBufferResource(sizeof(Material));
+	materialResource_ = DirectXBase::CreateBufferResource(sizeof(Material));
 
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 	*materialData_ = { Vector4(1.0f, 1.0f, 1.0f, 1.0f) , 0 };
@@ -213,7 +213,7 @@ void Particle::CreateInstancingResource()
 {
 	
 	//WVP用のリソースを作る。Matrix4x4　1つ分のサイズを用意する
-	instancingResource_ = DirectXCommon::CreateBufferResource(sizeof(ParticleForGPU) * kNumInstance);
+	instancingResource_ = DirectXBase::CreateBufferResource(sizeof(ParticleForGPU) * kNumInstance);
 	instancingData_ = nullptr;
 	instancingResource_->Map(0, nullptr, reinterpret_cast<void**>(&instancingData_));
 

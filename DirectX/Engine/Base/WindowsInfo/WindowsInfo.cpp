@@ -1,9 +1,9 @@
-#include "WinApp.h"
+#include "WindowsInfo.h"
 #include "Externals/imgui/imgui_impl_win32.h"
 #pragma comment(lib, "winmm.lib")
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-LRESULT CALLBACK WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
+LRESULT CALLBACK WindowsInfo::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
 #ifdef _DEBUG
 	if (ImGui_ImplWin32_WndProcHandler(hwnd, msg, wparam, lparam)) {
 		return true;
@@ -22,12 +22,12 @@ LRESULT CALLBACK WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
 	return DefWindowProc(hwnd, msg, wparam, lparam);
 }
 
-WinApp* WinApp::GetInstance() {
-	static WinApp instance;
+WindowsInfo* WindowsInfo::GetInstance() {
+	static WindowsInfo instance;
 	return &instance;
 }
 
-void WinApp::CreateGameWindow() {
+void WindowsInfo::CreateGameWindow() {
 	//COM(Component Object Model)の初期化
 
 	// システムタイマーの分解能を上げる
@@ -71,7 +71,7 @@ void WinApp::CreateGameWindow() {
 	ShowWindow(hwnd_, SW_SHOW);
 }
 
-bool WinApp::ProcessMessage() {
+bool WindowsInfo::ProcessMessage() {
 
 	MSG msg{};
 
@@ -87,7 +87,7 @@ bool WinApp::ProcessMessage() {
 	return false;
 }
 
-void WinApp::Finalize() {
+void WindowsInfo::Finalize() {
 	UnregisterClass(wndClass_.lpszClassName, wndClass_.hInstance);
 	CloseWindow(hwnd_);
 }

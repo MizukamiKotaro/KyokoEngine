@@ -3,18 +3,18 @@
 #include <d3d12.h>
 #include <dxgi1_6.h>
 #include <wrl.h>
-#include "Engine/Base/WinApp/WinApp.h"
+#include "Engine/Base/WindowsInfo/WindowsInfo.h"
 #include <vector>
 #include <chrono>
 
-class DirectXCommon
+class DirectXBase
 {
 public: // メンバ関数
 
 	// namespace省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 
-	static DirectXCommon* GetInstance();
+	static DirectXBase* GetInstance();
 
 	/// <summary>
 	/// 初期化
@@ -65,7 +65,7 @@ private:
 private: // メンバ変数
 
 	// ウィンドウズアプリケーション管理
-	WinApp* winApp_ = nullptr;
+	WindowsInfo* winApp_ = nullptr;
 	ComPtr<ID3D12Debug1> debugController_;
 	ComPtr<IDXGIFactory7> dxgiFactory_;
 	ComPtr<ID3D12Device> device_;
@@ -86,10 +86,10 @@ private: // メンバ変数
 	std::chrono::steady_clock::time_point reference_;
 
 private: // メンバ関数
-	DirectXCommon() = default;
-	~DirectXCommon() = default;
-	DirectXCommon(const DirectXCommon&) = delete;
-	const DirectXCommon& operator=(const DirectXCommon&) = delete;
+	DirectXBase() = default;
+	~DirectXBase() = default;
+	DirectXBase(const DirectXBase&) = delete;
+	const DirectXBase& operator=(const DirectXBase&) = delete;
 	/// <summary>
 	/// デバッグコントローラーの初期化
 	/// </summary>

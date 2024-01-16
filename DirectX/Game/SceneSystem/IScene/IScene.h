@@ -25,7 +25,7 @@ public:
 	// シーン番号を管理する変数
 	static int sceneNo_;
 	// ステージ番号を管理する変数
-	static int stagrNo_;
+	static int stageNo_;
 
 public:
 	// 継承先で実装される関数
@@ -42,12 +42,15 @@ public:
 	int GetStageNo();
 
 	// シーン遷移用
-	void FromBlackInitialize();
-	void FromBlackUpdate();
-	void ToBlackInitialize();
-	void ToBlackUpdate(int sceneNo);
+	virtual void FromBlackInitialize();
+	virtual void FromBlackUpdate();
+	virtual void Play();
+	virtual void ToBlackInitialize();
+	virtual void ToBlackUpdate();
 
-	void BlackDraw() { black_->Draw(*camera_.get()); }
+	void ChangeScene(int sceneNo);
+
+	virtual void BlackDraw() { black_->Draw(*camera_.get()); }
 
 protected:
 
@@ -65,6 +68,8 @@ protected:
 	Transition transition_ = Transition::kFromBlack;
 
 private:
+
+	int nextScene_ = 0;
 
 	float transitionTimeCount_ = 0.0f;
 

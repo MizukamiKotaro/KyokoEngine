@@ -1,4 +1,4 @@
-#include "DirectXCommon.h"
+#include "DirectXBase.h"
 
 #include <cassert>
 #include "../DebugLog/DebugLog.h"
@@ -11,12 +11,12 @@
 
 using namespace Microsoft::WRL;
 
-DirectXCommon* DirectXCommon::GetInstance() {
-	static DirectXCommon instance;
+DirectXBase* DirectXBase::GetInstance() {
+	static DirectXBase instance;
 	return &instance;
 }
 
-void DirectXCommon::Initialize() {
+void DirectXBase::Initialize() {
 
 	// デバッグコントローラーの初期化
 	InitializeDebugController();
@@ -24,7 +24,7 @@ void DirectXCommon::Initialize() {
 	// FPS固定初期化
 	InitializeFixFPS();
 
-	winApp_ = WinApp::GetInstance();
+	winApp_ = WindowsInfo::GetInstance();
 
 	// DXGIデバイス初期化
 	InitializeDXGIDevice();
@@ -48,12 +48,12 @@ void DirectXCommon::Initialize() {
 	CreateFence();
 }
 
-void DirectXCommon::Finalize()
+void DirectXBase::Finalize()
 {
 	depthStencilResource_->Release();
 }
 
-void DirectXCommon::PreDraw() {
+void DirectXBase::PreDraw() {
 	
 	//これから書き込むバックバッファのインデックスを取得
 	UINT backBufferIndex = swapChain_->GetCurrentBackBufferIndex();
@@ -88,8 +88,8 @@ void DirectXCommon::PreDraw() {
 	//ビューポート
 	D3D12_VIEWPORT viewport{};
 	//クライアント領域のサイズと一緒にして画面全体に表示
-	viewport.Width = WinApp::kWindowWidth;
-	viewport.Height = WinApp::kWindowHeight;
+	viewport.Width = WindowsInfo::kWindowWidth;
+	viewport.Height = WindowsInfo::kWindowHeight;
 	viewport.TopLeftX = 0;
 	viewport.TopLeftY = 0;
 	viewport.MinDepth = 0.0f;
@@ -101,9 +101,9 @@ void DirectXCommon::PreDraw() {
 	D3D12_RECT scissorRect{};
 	//基本的にビューポートと同じ矩形が構成されるようにする
 	scissorRect.left = 0;
-	scissorRect.right = WinApp::kWindowWidth;
+	scissorRect.right = WindowsInfo::kWindowWidth;
 	scissorRect.top = 0;
-	scissorRect.bottom = WinApp::kWindowHeight;
+	scissorRect.bottom = WindowsInfo::kWindowHeight;
 	commandList_->RSSetScissorRects(1, &scissorRect); //Scissorを設定
 
 	//描画用のDescriptorHeapの設定
@@ -111,7 +111,7 @@ void DirectXCommon::PreDraw() {
 	commandList_->SetDescriptorHeaps(1, descriptorHeaps);
 }
 
-void DirectXCommon::PostDraw() {
+void DirectXBase::PostDraw() {
 
 	HRESULT hr;
 
@@ -160,7 +160,7 @@ void DirectXCommon::PostDraw() {
 
 }
 
-ID3D12Resource* DirectXCommon::CreateBufferResource(size_t sizeInBytes)
+ID3D12Resource* DirectXBase::CreateBufferResource(size_t sizeInBytes)
 {
 	//頂点リソース用のヒープの設定
 	D3D12_HEAP_PROPERTIES uploadHeapProperties{};
@@ -186,14 +186,14 @@ ID3D12Resource* DirectXCommon::CreateBufferResource(size_t sizeInBytes)
 	return vertexResource;
 }
 
-void DirectXCommon::InitializeFixFPS() {
+void DirectXBase::InitializeFixFPS() {
 
 	// 現在の時間を記録する
 	reference_ = std::chrono::steady_clock::now();
 
 }
 
-void DirectXCommon::UpdateFixFPS() {
+void DirectXBase::UpdateFixFPS() {
 
 	// 1/60秒ピッタリの時間
 	const std::chrono::microseconds kMinTime(uint64_t(1000000.0f / 60.0f));
@@ -222,7 +222,7 @@ void DirectXCommon::UpdateFixFPS() {
 
 }
 
-void DirectXCommon::InitializeDebugController()
+void DirectXBase::InitializeDebugController()
 {
 #ifdef _DEBUG
 	if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(debugController_.GetAddressOf())))) {
@@ -234,7 +234,7 @@ void DirectXCommon::InitializeDebugController()
 #endif // DEBUG
 }
 
-void DirectXCommon::InitializeDXGIDevice() {
+void DirectXBase::InitializeDXGIDevice() {
 
 	//HRESULはwindows系のエラーコードであり、
 	//関数が成功したかどうかをSUCCEESESマクロで判断できる
@@ -282,11 +282,11 @@ void DirectXCommon::InitializeDXGIDevice() {
 	DebugLog::Log("Complete create D3D12Device!!!\n");// 初期化完了のログを出す
 }
 
-void DirectXCommon::CreateSwapChain() {
+void DirectXBase::CreateSwapChain() {
 	//スワップチェーンを生成する
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc{};
-	swapChainDesc.Width = WinApp::kWindowWidth;	  //画面の幅。ウィンドウのクライアント領域を同じものにしておく
-	swapChainDesc.Height = WinApp::kWindowHeight; //画面の高さ。ウィンドウのクライアント領域を同じものにしておく
+	swapChainDesc.Width = WindowsInfo::kWindowWidth;	  //画面の幅。ウィンドウのクライアント領域を同じものにしておく
+	swapChainDesc.Height = WindowsInfo::kWindowHeight; //画面の高さ。ウィンドウのクライアント領域を同じものにしておく
 	swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; //色の形式
 	swapChainDesc.SampleDesc.Count = 1; //マルチサンプルしない
 	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT; //描画のターゲットとして利用
@@ -306,7 +306,7 @@ void DirectXCommon::CreateSwapChain() {
 }
 
 
-void DirectXCommon::InitializeCommand() {
+void DirectXBase::InitializeCommand() {
 	//コマンドキューを生成する
 	D3D12_COMMAND_QUEUE_DESC commandQueueDesc{};
 	HRESULT hr = device_->CreateCommandQueue(&commandQueueDesc, IID_PPV_ARGS(commandQueue_.GetAddressOf()));
@@ -324,7 +324,7 @@ void DirectXCommon::InitializeCommand() {
 	assert(SUCCEEDED(hr));
 }
 
-void DirectXCommon::CreateFinalRenderTargets() {
+void DirectXBase::CreateFinalRenderTargets() {
 
 	rtvHeap_ = DescriptorHeapManager::GetInstance()->GetRTVHeap();
 
@@ -340,12 +340,12 @@ void DirectXCommon::CreateFinalRenderTargets() {
 	}
 }
 
-void DirectXCommon::CreateDepthBuffer() {
+void DirectXBase::CreateDepthBuffer() {
 
 	dsvHeap_ = DescriptorHeapManager::GetInstance()->GetDSVHeap();
 
 	//DepthStencilTextureをウィンドウのサイズで作成
-	depthStencilResource_ =  CreateDepthStencilTextureResource(device_.Get(), WinApp::kWindowWidth, WinApp::kWindowHeight);
+	depthStencilResource_ =  CreateDepthStencilTextureResource(device_.Get(), WindowsInfo::kWindowWidth, WindowsInfo::kWindowHeight);
 	//DSVの設定
 	D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc{};
 	dsvDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT; // Format。基本的にはResourceに合わせる
@@ -356,7 +356,7 @@ void DirectXCommon::CreateDepthBuffer() {
 
 }
 
-ID3D12Resource* DirectXCommon::CreateDepthStencilTextureResource(ID3D12Device* device_, int32_t width, int32_t height) {
+ID3D12Resource* DirectXBase::CreateDepthStencilTextureResource(ID3D12Device* device_, int32_t width, int32_t height) {
 	//生成するリソースの設定
 	D3D12_RESOURCE_DESC resourceDesc{};
 	resourceDesc.Width = width; // Textureの幅
@@ -391,7 +391,7 @@ ID3D12Resource* DirectXCommon::CreateDepthStencilTextureResource(ID3D12Device* d
 	return resource;
 }
 
-void DirectXCommon::CreateFence() {
+void DirectXBase::CreateFence() {
 	//初期値0でFenceを作る
 	HRESULT hr = device_->CreateFence(fenceValue_, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(fence_.GetAddressOf()));
 	assert(SUCCEEDED(hr));

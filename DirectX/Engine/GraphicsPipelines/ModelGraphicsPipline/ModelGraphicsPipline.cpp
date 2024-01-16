@@ -1,5 +1,5 @@
 #include "ModelGraphicsPipline.h"
-#include "Engine/Base/DirectXCommon/DirectXCommon.h"
+#include "Engine/Base/DirectXBase/DirectXBase.h"
 #include <cassert>
 #include "Engine/Base/DebugLog/DebugLog.h"
 #include <format>
@@ -16,8 +16,8 @@ ModelGraphicsPipline* ModelGraphicsPipline::GetInstance()
 void ModelGraphicsPipline::Initialize()
 {
 
-	device_ = DirectXCommon::GetInstance()->GetDevice();
-	commandList_ = DirectXCommon::GetInstance()->GetCommandList();
+	device_ = DirectXBase::GetInstance()->GetDevice();
+	commandList_ = DirectXBase::GetInstance()->GetCommandList();
 
 	InitializeDXC();
 

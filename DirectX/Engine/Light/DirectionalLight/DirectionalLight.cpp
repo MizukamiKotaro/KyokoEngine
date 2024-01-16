@@ -1,10 +1,10 @@
 #include "DirectionalLight.h"
-#include "DirectXCommon/DirectXCommon.h"
+#include "DirectXBase/DirectXBase.h"
 
 DirectionalLight::DirectionalLight()
 {
 	//平行光源用のリソースを作る。
-	resource_ = DirectXCommon::CreateBufferResource(sizeof(DirectionalLightData));
+	resource_ = DirectXBase::CreateBufferResource(sizeof(DirectionalLightData));
 	//データを書き込む
 	light_ = nullptr;
 	//書き込むためのアドレスを取得

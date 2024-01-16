@@ -1,5 +1,5 @@
 #include "GraphicsPiplineManager.h"
-#include "Engine/Base/DirectXCommon/DirectXCommon.h"
+#include "Engine/Base/DirectXBase/DirectXBase.h"
 #include <cassert>
 #include "Engine/Base/DebugLog/DebugLog.h"
 #include <format>

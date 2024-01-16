@@ -11,7 +11,7 @@
 
 #include <vector>
 #include "Utils/Math/Vector2.h"
-#include "WinApp/WinApp.h"
+#include "WindowsInfo/WindowsInfo.h"
 
 class Input
 {
@@ -158,7 +158,7 @@ private:
 	bool GetPreMouseButton(MouseButton button);
 
 private:
-	WinApp* winApp_ = nullptr;
+	WindowsInfo* winApp_ = nullptr;
 
 	ComPtr<IDirectInput8> dInput_;
 	ComPtr<IDirectInputDevice8> devKeyboard_;

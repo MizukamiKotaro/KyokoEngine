@@ -25,12 +25,6 @@
     <Filter Include="Engine\Base\DescriptorHeapManager">
       <UniqueIdentifier>{135ec753-fe7c-4a53-a1c8-c9e9e939d7f2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Base\DirectXCommon">
-      <UniqueIdentifier>{d6e681b2-d657-429c-b6d8-6302af791dc3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Base\WinApp">
-      <UniqueIdentifier>{252bb9a8-5252-4508-b5a6-6a9888718a3d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Audio">
       <UniqueIdentifier>{b3b23ed5-91b6-474a-83a0-d4ee5a65f6c5}</UniqueIdentifier>
     </Filter>
@@ -163,6 +157,15 @@
     <Filter Include="Engine\FrameInfo">
       <UniqueIdentifier>{802755d4-f355-47c7-a3df-6987f2f2d797}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Base\DirectXBase">
+      <UniqueIdentifier>{d6e681b2-d657-429c-b6d8-6302af791dc3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Base\WindowsInfo">
+      <UniqueIdentifier>{252bb9a8-5252-4508-b5a6-6a9888718a3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\PostEffect\Contrast">
+      <UniqueIdentifier>{b838bf24-e500-43c1-8f8d-b9b9f1c98559}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -218,12 +221,6 @@
     </ClCompile>
     <ClCompile Include="Engine\Base\DescriptorHeapManager\DescriptorHeapManager.cpp">
       <Filter>Engine\Base\DescriptorHeapManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Base\DirectXCommon\DirectXCommon.cpp">
-      <Filter>Engine\Base\DirectXCommon</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Base\WinApp\WinApp.cpp">
-      <Filter>Engine\Base\WinApp</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Audio\Audio.cpp">
       <Filter>Engine\Audio</Filter>
@@ -312,6 +309,18 @@
     <ClCompile Include="Engine\FrameInfo\FrameInfo.cpp">
       <Filter>Engine\FrameInfo</Filter>
     </ClCompile>
+    <ClCompile Include="Game\StageLights\StageLights.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Base\DirectXBase\DirectXBase.cpp">
+      <Filter>Engine\Base\DirectXBase</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Base\WindowsInfo\WindowsInfo.cpp">
+      <Filter>Engine\Base\WindowsInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PostEffect\Contrast\Contrast.cpp">
+      <Filter>Engine\PostEffect\Contrast</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Utils\Math\calc.h">
@@ -373,12 +382,6 @@
     </ClInclude>
     <ClInclude Include="Engine\Base\DescriptorHeapManager\DescriptorHeapManager.h">
       <Filter>Engine\Base\DescriptorHeapManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Base\DirectXCommon\DirectXCommon.h">
-      <Filter>Engine\Base\DirectXCommon</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Base\WinApp\WinApp.h">
-      <Filter>Engine\Base\WinApp</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Audio\Audio.h">
       <Filter>Engine\Audio</Filter>
@@ -490,6 +493,18 @@
     </ClInclude>
     <ClInclude Include="Engine\FrameInfo\FrameInfo.h">
       <Filter>Engine\FrameInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\StageLights\StageLights.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Base\DirectXBase\DirectXBase.h">
+      <Filter>Engine\Base\DirectXBase</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Base\WindowsInfo\WindowsInfo.h">
+      <Filter>Engine\Base\WindowsInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PostEffect\Contrast\Contrast.h">
+      <Filter>Engine\PostEffect\Contrast</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

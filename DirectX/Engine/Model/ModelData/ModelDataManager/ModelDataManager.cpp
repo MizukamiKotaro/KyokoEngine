@@ -1,5 +1,5 @@
 #include "ModelDataManager.h"
-#include "Engine/Base/DirectXCommon/DirectXCommon.h"
+#include "Engine/Base/DirectXBase/DirectXBase.h"
 #include <cassert>
 #include "Engine/Base/DebugLog/DebugLog.h"
 #include <format>
@@ -133,7 +133,7 @@ void ModelDataManager::LoadObjFile(const std::string& directoryPath, const std::
 
 	modelDatas_.back().textureHundle_ = TextureManager::GetInstance()->LoadTexture(modelDatas_.back().material.textureFilePath);
 
-	modelDatas_.back().mesh.vertexResource_ = DirectXCommon::CreateBufferResource(sizeof(VertexData) * modelDatas_.back().mesh.verteces.size());
+	modelDatas_.back().mesh.vertexResource_ = DirectXBase::CreateBufferResource(sizeof(VertexData) * modelDatas_.back().mesh.verteces.size());
 
 	//VertexBufferViewを作成する
 	//頂点バッファビューを作成する
@@ -304,7 +304,7 @@ void ModelDataManager::LoadGLTFFile(const std::string& directoryPath, const std:
 
 	modelDatas_.back().textureHundle_ = TextureManager::GetInstance()->LoadTexture(modelDatas_.back().material.textureFilePath);
 
-	modelDatas_.back().mesh.vertexResource_ = DirectXCommon::CreateBufferResource(sizeof(VertexData) * modelDatas_.back().mesh.verteces.size());
+	modelDatas_.back().mesh.vertexResource_ = DirectXBase::CreateBufferResource(sizeof(VertexData) * modelDatas_.back().mesh.verteces.size());
 
 	//VertexBufferViewを作成する
 	//頂点バッファビューを作成する

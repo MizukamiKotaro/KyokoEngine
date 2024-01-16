@@ -1,7 +1,7 @@
 #include "Kyoko.h"
-#include "Engine/Base/WinApp/WinApp.h"
+#include "Engine/Base/WindowsInfo/WindowsInfo.h"
 #include "Engine/Base/ResourceLeakChecker.h"
-#include "Engine/Base/DirectXCommon/DirectXCommon.h"
+#include "Engine/Base/DirectXBase/DirectXBase.h"
 #include "Input/Input.h"
 #include "TextureManager/TextureManager.h"
 #include "ImGuiManager/ImGuiManager.h"
@@ -23,9 +23,9 @@ void Kyoko::Init()
 
 #pragma region 基盤システムの初期化
 
-	WinApp::GetInstance()->CreateGameWindow();
+	WindowsInfo::GetInstance()->CreateGameWindow();
 
-	DirectXCommon* dxCommon = DirectXCommon::GetInstance();
+	DirectXBase* dxCommon = DirectXBase::GetInstance();
 	dxCommon->Initialize();
 
 	TextureManager::GetInstance()->Initialize();
@@ -80,7 +80,7 @@ void Kyoko::Init()
 
 const bool Kyoko::ProcessMessage()
 {
-	return WinApp::GetInstance()->ProcessMessage();
+	return WindowsInfo::GetInstance()->ProcessMessage();
 }
 
 void Kyoko::FirstUpdateInLoop()
@@ -97,7 +97,7 @@ void Kyoko::PreDraw()
 	ImGuiManager::End();
 
 	// 描画前処理
-	DirectXCommon::GetInstance()->PreDraw();
+	DirectXBase::GetInstance()->PreDraw();
 
 	GraphicsPiplineManager::GetInstance()->PreDraw();
 }
@@ -107,7 +107,7 @@ void Kyoko::PostDraw()
 	ImGuiManager::Draw();
 
 	// 描画後処理
-	DirectXCommon::GetInstance()->PostDraw();
+	DirectXBase::GetInstance()->PostDraw();
 }
 
 void Kyoko::Finalize()
@@ -120,8 +120,8 @@ void Kyoko::Finalize()
 	TextureManager::GetInstance()->Finalize();
 	ModelDataManager::GetInstance()->Finalize();
 	DescriptorHeapManager::GetInstance()->Finalize();
-	DirectXCommon::GetInstance()->Finalize();
-	WinApp::GetInstance()->Finalize();
+	DirectXBase::GetInstance()->Finalize();
+	WindowsInfo::GetInstance()->Finalize();
 
 #pragma endregion 基盤システムの終了
 

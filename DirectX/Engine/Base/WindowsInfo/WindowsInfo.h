@@ -3,7 +3,7 @@
 #include <Windows.h>
 #include <cstdint>
 
-class WinApp
+class WindowsInfo
 {
 public: // 静的メンバ変数
 	// ウィンドウサイズ
@@ -12,7 +12,7 @@ public: // 静的メンバ変数
 
 public: // 静的メンバ関数
 
-	static WinApp* GetInstance();
+	static WindowsInfo* GetInstance();
 
 	//ウィンドウプロシャープ
 	static LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
@@ -31,10 +31,10 @@ public: // メンバ関数
 	HINSTANCE GetHInstance() const { return wndClass_.hInstance; }
 
 private: // メンバ関数
-	WinApp() = default;
-	~WinApp() = default;
-	WinApp(const WinApp&) = delete;
-	const WinApp& operator=(const WinApp&) = delete;
+	WindowsInfo() = default;
+	~WindowsInfo() = default;
+	WindowsInfo(const WindowsInfo&) = delete;
+	const WindowsInfo& operator=(const WindowsInfo&) = delete;
 
 private: // メンバ変数
 	// Window関連

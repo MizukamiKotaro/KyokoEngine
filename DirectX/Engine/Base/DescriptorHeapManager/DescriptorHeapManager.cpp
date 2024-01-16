@@ -3,7 +3,7 @@
 #include "Engine/Base/DebugLog/DebugLog.h"
 #include <format>
 #include "Externals/DirectXTex/d3dx12.h"
-#include "Engine/Base/DirectXCommon/DirectXCommon.h"
+#include "Engine/Base/DirectXBase/DirectXBase.h"
 
 DescriptorHeapManager* DescriptorHeapManager::GetInstance()
 {
@@ -13,7 +13,7 @@ DescriptorHeapManager* DescriptorHeapManager::GetInstance()
 
 void DescriptorHeapManager::Initialize()
 {
-	device_ = DirectXCommon::GetInstance()->GetDevice();
+	device_ = DirectXBase::GetInstance()->GetDevice();
 	// ImGui用
 	srvCPUDescriptorHandleCount_ = 1;
 	srvGPUDescriptorHandleCount_ = 1;

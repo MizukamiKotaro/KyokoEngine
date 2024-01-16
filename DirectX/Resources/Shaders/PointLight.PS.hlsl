@@ -41,7 +41,7 @@ PixelShaderOutput main(VertexShaderOutput input) {
 	float32_t3 specularPL = gPointLight.color.rgb * gPointLight.intensity * specularPow * factor;
 
 	output.color.rgb = diffusePL + specularPL;
-	output.color.a = (output.color.r + output.color.g + output.color.b) / 3.0f * 0.6f;
+	output.color.a = (output.color.r * 0.299f + output.color.g * 0.587f + output.color.b * 0.114f) * 0.6f;
 
 	if (output.color.a == 0) {
 		discard;

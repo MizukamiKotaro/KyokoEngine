@@ -1,5 +1,5 @@
 #include "SpotLight.h"
-#include "DirectXCommon/DirectXCommon.h"
+#include "DirectXBase/DirectXBase.h"
 #include <algorithm>
 #include "Camera.h"
 #include "ModelDataManager.h"
@@ -12,7 +12,7 @@ const Matrix4x4 SpotLight::scaleInverseMat_ = Matrix4x4::Inverse(SpotLight::scal
 
 SpotLight::SpotLight()
 {
-	resource_ = DirectXCommon::CreateBufferResource(sizeof(SpotLightData));
+	resource_ = DirectXBase::CreateBufferResource(sizeof(SpotLightData));
 	//データを書き込む
 	light_ = nullptr;
 	//書き込むためのアドレスを取得
@@ -88,7 +88,7 @@ void SpotLight::Draw(const Camera& camera, BlendMode blendMode)
 
 	GraphicsPiplineManager::GetInstance()->SetBlendMode(piplineType, static_cast<uint32_t>(blendMode));
 
-	ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
+	ID3D12GraphicsCommandList* commandList = DirectXBase::GetInstance()->GetCommandList();
 
 	const ModelData* modelData = ModelDataManager::GetInstance()->GetModelData(meshHundle_);
 
@@ -109,7 +109,7 @@ void SpotLight::Draw(const Camera& camera, BlendMode blendMode)
 
 void SpotLight::CreateTransformationResource()
 {
-	transformationResource_ = DirectXCommon::CreateBufferResource(sizeof(TransformationMatrix));
+	transformationResource_ = DirectXBase::CreateBufferResource(sizeof(TransformationMatrix));
 	transformationData_ = nullptr;
 	transformationResource_->Map(0, nullptr, reinterpret_cast<void**>(&transformationData_));
 	*transformationData_ = { Matrix4x4::MakeIdentity4x4() ,Matrix4x4::MakeIdentity4x4(), Matrix4x4::Inverse(Matrix4x4::MakeIdentity4x4()) };

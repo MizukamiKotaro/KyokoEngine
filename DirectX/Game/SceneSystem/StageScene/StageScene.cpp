@@ -6,7 +6,7 @@ StageScene::StageScene()
 {
 	FirstInit();
 
-	
+	lights_ = std::make_unique<StageLights>();
 }
 
 void StageScene::Init()
@@ -15,41 +15,12 @@ void StageScene::Init()
 
 void StageScene::Update()
 {
-	if (transitionRequest_) {
-		transition_ = transitionRequest_.value();
-
-		switch (transition_)
-		{
-		case Transition::kFromBlack:
-			FromBlackInitialize();
-			break;
-		case Transition::kOperation:
-			break;
-		case Transition::kToBlack:
-			ToBlackInitialize();
-			break;
-		default:
-			break;
-		}
-
-		transitionRequest_ = std::nullopt;
+	if (input_->PressedKey(DIK_RETURN)) {
+		// シーン切り替え
+		ChangeScene(CLEAR);
 	}
 
-	switch (transition_)
-	{
-	case Transition::kFromBlack:
-		FromBlackUpdate();
-		break;
-	case Transition::kOperation:
-		
-		break;
-	case Transition::kToBlack:
-		ToBlackUpdate(CLEAR);
-		break;
-	default:
-		break;
-	}
-
+	lights_->Update();
 }
 
 void StageScene::Draw()
@@ -58,7 +29,7 @@ void StageScene::Draw()
 	Kyoko::PreDraw();
 
 
-
+	lights_->Draw(camera_.get());
 	
 	BlackDraw();
 

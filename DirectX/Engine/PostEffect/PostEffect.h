@@ -16,10 +16,8 @@ class PostEffect
 {
 public:
 
-	PostEffect(const std::string& filePath, const Vector2& pos = { 0.0f,0.0f }, const Vector2& texLeftTop = {}, const Vector2& texSize = {1.0f,1.0f},
-		const Vector4 & color = { 1.0f,1.0f,1.0f,1.0f }, const Vector2& anchorPoint = { 0.5f,0.5f }, bool isFlipX = false, bool isFlipY = false);
-	PostEffect(uint32_t texHundle, const Vector2& pos = { 0.0f,0.0f }, const Vector2& texLeftTop = {}, const Vector2& texSize = {1.0f,1.0f},
-		const Vector4& color = { 1.0f,1.0f,1.0f,1.0f }, const Vector2& anchorPoint = { 0.5f,0.5f }, bool isFlipX = false, bool isFlipY = false);
+	PostEffect();
+	
 	~PostEffect();
 
 	struct VertexData
@@ -58,30 +56,19 @@ public:
 
 	const D3D12_GPU_DESCRIPTOR_HANDLE GetSRVGPUDescriptorHandle() const { return srvGPUDescriptorHandle_; };
 
-	void LoadTexture(const std::string& filePath);
-
-	void SetTextureHandle(uint32_t textureHundle);
+private:
 
 	void SetAnchorPoint(const Vector2& anchorpoint);
 
 	void SetColor(const Vector4& color);
 
-	void SetIsFlipX(bool isFlipX);
-
-	void SetIsFlipY(bool isFlipY);
-
 	void SetTextureTopLeft(const Vector2& texTopLeft);
 
 	void SetTextureSize(const Vector2& texSize);
 
-private:
-	PostEffect() = default;
-
 	void TransferSize();
 
 	void TransferUV();
-
-	void AdjustTextureSize();
 
 	void CreateVertexRes();
 
@@ -121,12 +108,6 @@ private:
 	D3D12_CPU_DESCRIPTOR_HANDLE dsvCPUDescriptorHandle_;
 	D3D12_GPU_DESCRIPTOR_HANDLE dsvGPUDescriptorHandle_;
 
-public:
-
-	float rotate_;
-	Vector2 pos_;
-	Vector2 size_;
-
 private:
 
 	static const GraphicsPiplineManager::PiplineType piplineType = GraphicsPiplineManager::PiplineType::SPRITE;
@@ -134,6 +115,10 @@ private:
 	static const float clearColor[4];
 
 	Matrix4x4 worldMat_;
+
+	float rotate_;
+	Vector2 pos_;
+	Vector2 size_;
 
 	Vector2 uvTranslate_;
 	Vector2 uvScale_;
@@ -147,13 +132,7 @@ private:
 
 	Vector2 textureSize_;
 
-	bool isFlipX_ = false;
-	bool isFlipY_ = false;
-
 	bool isInvisible_ = false;
-
-	bool isLoad_;
-	uint32_t textureHundle_;
 
 };
 

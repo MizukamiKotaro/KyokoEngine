@@ -2,7 +2,7 @@
 
 #include <cassert>
 #include "TextureManager/TextureManager.h"
-#include "Engine/Base/DirectXCommon/DirectXCommon.h"
+#include "Engine/Base/DirectXBase/DirectXBase.h"
 #include "ModelData/ModelDataManager/ModelDataManager.h"
 #include "Camera.h"
 #include "Externals/imgui/imgui.h"
@@ -73,7 +73,7 @@ void Model::Draw(const Camera& camera, BlendMode blendMode)
 
 	GraphicsPiplineManager::GetInstance()->SetBlendMode(piplineType, static_cast<uint32_t>(blendMode));
 
-	ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
+	ID3D12GraphicsCommandList* commandList = DirectXBase::GetInstance()->GetCommandList();
 
 	//Spriteの描画。変更に必要なものだけ変更する
 	commandList->IASetVertexBuffers(0, 1, &modelData->mesh.vertexBufferView_); // VBVを設定
@@ -121,7 +121,7 @@ void Model::CreateResources()
 
 void Model::CreateMaterialResource()
 {
-	materialResource_ = DirectXCommon::CreateBufferResource(sizeof(Material));
+	materialResource_ = DirectXBase::CreateBufferResource(sizeof(Material));
 
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 
@@ -135,7 +135,7 @@ void Model::CreateMaterialResource()
 void Model::CreateTransformationResource()
 {
 	//WVP用のリソースを作る。Matrix4x4　1つ分のサイズを用意する
-	transformationResource_ = DirectXCommon::CreateBufferResource(sizeof(TransformationMatrix));
+	transformationResource_ = DirectXBase::CreateBufferResource(sizeof(TransformationMatrix));
 	transformationData_ = nullptr;
 	transformationResource_->Map(0, nullptr, reinterpret_cast<void**>(&transformationData_));
 	*transformationData_ = { Matrix4x4::MakeIdentity4x4() ,Matrix4x4::MakeIdentity4x4(), Matrix4x4::Inverse(Matrix4x4::MakeIdentity4x4()) };

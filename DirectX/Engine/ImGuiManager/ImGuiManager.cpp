@@ -1,7 +1,7 @@
 #include "ImGuiManager.h"
 #pragma comment(lib, "winmm.lib")
-#include "Engine/Base/DirectXCommon/DirectXCommon.h"
-#include "Engine/Base/WinApp/WinApp.h"
+#include "Engine/Base/DirectXBase/DirectXBase.h"
+#include "Engine/Base/WindowsInfo/WindowsInfo.h"
 #include "Engine/Base/DescriptorHeapManager/DescriptorHeapManager.h"
 
 //ImGuiManager* ImGuiManager::GetInstance()
@@ -20,8 +20,8 @@ void ImGuiManager::Initialize()
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGui::StyleColorsDark();
-	ImGui_ImplWin32_Init(WinApp::GetInstance()->GetHwnd());
-	ImGui_ImplDX12_Init(DirectXCommon::GetInstance()->GetDevice(),
+	ImGui_ImplWin32_Init(WindowsInfo::GetInstance()->GetHwnd());
+	ImGui_ImplDX12_Init(DirectXBase::GetInstance()->GetDevice(),
 		2,
 		DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
 		srvHeap,
@@ -585,7 +585,7 @@ void ImGuiManager::Draw()
 {
 	//実際のcommandListのImGuiの描画コマンドを積む。描画処理の終わったタイミング
 #ifdef _DEBUG
-	ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), DirectXCommon::GetInstance()->GetCommandList());
+	ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), DirectXBase::GetInstance()->GetCommandList());
 #endif // _DEBUG
 
 }

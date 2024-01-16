@@ -3,7 +3,7 @@
 #include "Engine/Base/DebugLog/DebugLog.h"
 #include <format>
 #include "Externals/DirectXTex/d3dx12.h"
-#include "Engine/Base/DirectXCommon/DirectXCommon.h"
+#include "Engine/Base/DirectXBase/DirectXBase.h"
 #include "Engine/Base/DescriptorHeapManager/DescriptorHeapManager.h"
 
 TextureManager* TextureManager::GetInstance()
@@ -14,7 +14,7 @@ TextureManager* TextureManager::GetInstance()
 
 void TextureManager::Initialize()
 {
-	device_ = DirectXCommon::GetInstance()->GetDevice();
+	device_ = DirectXBase::GetInstance()->GetDevice();
 }
 
 void TextureManager::Finalize()
@@ -111,12 +111,12 @@ ID3D12Resource* TextureManager::CreateTextureResource(const DirectX::TexMetadata
 [[nodiscard]]
 ID3D12Resource* TextureManager::UploadTextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages) {
 
-	ID3D12GraphicsCommandList* commandList_ = DirectXCommon::GetInstance()->GetCommandList();
+	ID3D12GraphicsCommandList* commandList_ = DirectXBase::GetInstance()->GetCommandList();
 
 	std::vector<D3D12_SUBRESOURCE_DATA> subresources;
 	DirectX::PrepareUpload(device_, mipImages.GetImages(), mipImages.GetImageCount(), mipImages.GetMetadata(), subresources);
 	uint64_t intermediateSize = GetRequiredIntermediateSize(texture, 0, UINT(subresources.size()));
-	ID3D12Resource* intermediateResource = DirectXCommon::CreateBufferResource(intermediateSize);
+	ID3D12Resource* intermediateResource = DirectXBase::CreateBufferResource(intermediateSize);
 	UpdateSubresources(commandList_, texture, intermediateResource, 0, 0, UINT(subresources.size()), subresources.data());
 
 	//Textureへの転送後は利用できるよう、D3D12_RESOURCE_STATE_COPY_DESからD3D12_RESOURCE_STATE_GENERIC_READへResourceStateを変更する

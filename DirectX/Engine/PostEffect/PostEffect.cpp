@@ -2,35 +2,30 @@
 
 #include <cassert>
 #include "TextureManager/TextureManager.h"
-#include "Engine/Base/DirectXCommon/DirectXCommon.h"
+#include "Engine/Base/DirectXBase/DirectXBase.h"
 #include "Engine/Base/DescriptorHeapManager/DescriptorHeapManager.h"
 #include "Camera.h"
-#include "WinApp/WinApp.h"
+#include "WindowsInfo/WindowsInfo.h"
 #include "Externals/DirectXTex/d3dx12.h"
 
 const float PostEffect::clearColor[4] = { 0.25f,0.5f,0.1f,0.0f };
 
-PostEffect::PostEffect(const std::string& filePath, const Vector2& pos, const Vector2& texLeftTop, const Vector2& texSize, const Vector4& color, const Vector2& anchorPoint, bool isFlipX, bool isFlipY)
+PostEffect::PostEffect()
 {
-
 	CreateVertexRes();
 
-	LoadTexture(filePath);
-	AdjustTextureSize();
+	size_ = { float(WindowsInfo::kWindowWidth),float(WindowsInfo::kWindowHeight) };
 
 	CreateResources();
 
 	rotate_ = 0.0f;
-	pos_ = pos;
+	pos_ = { 0.0f,0.0f };
 
 	worldMat_ = Matrix4x4::MakeAffinMatrix({ 1.0f,1.0f,0.0f }, { 0.0f,0.0f,rotate_ }, { pos_.x,pos_.y,0.0f });
 
-	anchorPoint_ = anchorPoint;
-	textureLeftTop_ = texLeftTop;
-	textureSize_ = texSize;
-
-	isFlipX_ = isFlipX;
-	isFlipY_ = isFlipY;
+	anchorPoint_ = { 0.0f,0.0f };
+	textureLeftTop_ = { 0.0f,0.0f };
+	textureSize_ = { 1.0f,1.0f };
 
 	TransferSize();
 	TransferUV();
@@ -39,40 +34,7 @@ PostEffect::PostEffect(const std::string& filePath, const Vector2& pos, const Ve
 	uvScale_ = { 1.0f,1.0f };
 	uvRotate_ = 0.0f;
 
-	SetColor(color);
-
-	Update();
-}
-
-PostEffect::PostEffect(uint32_t texHundle, const Vector2& pos, const Vector2& texLeftTop, const Vector2& texSize, const Vector4& color, const Vector2& anchorPoint, bool isFlipX, bool isFlipY)
-{
-	CreateVertexRes();
-
-	textureHundle_ = texHundle;
-	AdjustTextureSize();
-
-	CreateResources();
-
-	rotate_ = 0.0f;
-	pos_ = pos;
-
-	worldMat_ = Matrix4x4::MakeAffinMatrix({ 1.0f,1.0f,0.0f }, { 0.0f,0.0f,rotate_ }, { pos_.x,pos_.y,0.0f });
-
-	anchorPoint_ = anchorPoint;
-	textureLeftTop_ = texLeftTop;
-	textureSize_ = texSize;
-
-	isFlipX_ = isFlipX;
-	isFlipY_ = isFlipY;
-
-	TransferSize();
-	TransferUV();
-
-	uvTranslate_ = {};
-	uvScale_ = { 1.0f,1.0f };
-	uvRotate_ = 0.0f;
-
-	SetColor(color);
+	SetColor({ 1.0f,1.0f,1.0f,1.0f });
 
 	Update();
 }
@@ -109,7 +71,7 @@ void PostEffect::Draw(const Camera& camera, BlendMode blendMode)
 
 	GraphicsPiplineManager::GetInstance()->SetBlendMode(piplineType, static_cast<uint32_t>(blendMode));
 
-	ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
+	ID3D12GraphicsCommandList* commandList = DirectXBase::GetInstance()->GetCommandList();
 
 	//Spriteの描画。変更に必要なものだけ変更する
 	commandList->IASetVertexBuffers(0, 1, &vertexBufferView_); // VBVを設定
@@ -127,7 +89,7 @@ void PostEffect::Draw(const Camera& camera, BlendMode blendMode)
 
 void PostEffect::PreDrawScene()
 {
-	ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
+	ID3D12GraphicsCommandList* commandList = DirectXBase::GetInstance()->GetCommandList();
 
 	// バリアの変更
 	CD3DX12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(texResource_.Get(),
@@ -138,11 +100,11 @@ void PostEffect::PreDrawScene()
 	commandList->OMSetRenderTargets(1, &rtvCPUDescriptorHandle_, false, &dsvCPUDescriptorHandle_);
 
 	// ビューポートの設定
-	CD3DX12_VIEWPORT viewport = CD3DX12_VIEWPORT(0.0f, 0.0f, WinApp::kWindowWidth, WinApp::kWindowHeight);
+	CD3DX12_VIEWPORT viewport = CD3DX12_VIEWPORT(0.0f, 0.0f, WindowsInfo::kWindowWidth, WindowsInfo::kWindowHeight);
 	commandList->RSSetViewports(1, &viewport);
 
 	// シザリング矩形の設定
-	CD3DX12_RECT rect = CD3DX12_RECT(0, 0, WinApp::kWindowWidth, WinApp::kWindowHeight);
+	CD3DX12_RECT rect = CD3DX12_RECT(0, 0, WindowsInfo::kWindowWidth, WindowsInfo::kWindowHeight);
 	commandList->RSSetScissorRects(1, &rect);
 
 	// 全画面クリア
@@ -160,28 +122,12 @@ void PostEffect::PreDrawScene()
 
 void PostEffect::PostDrawScene()
 {
-	ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
+	ID3D12GraphicsCommandList* commandList = DirectXBase::GetInstance()->GetCommandList();
 
 	// バリアの変更
 	CD3DX12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(texResource_.Get(),
 		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 	commandList->ResourceBarrier(1, &barrier);
-
-}
-
-void PostEffect::LoadTexture(const std::string& filePath)
-{
-
-	TextureManager* texManager = TextureManager::GetInstance();
-
-	textureHundle_ = texManager->LoadTexture(filePath);
-
-	isLoad_ = true;
-}
-
-void PostEffect::SetTextureHandle(uint32_t textureHundle)
-{
-	textureHundle_ = textureHundle;
 
 }
 
@@ -200,20 +146,6 @@ void PostEffect::SetColor(const Vector4& color)
 	color_.w = std::clamp<float>(color.w, 0.0f, 1.0f);
 
 	materialData_->color = color;
-}
-
-void PostEffect::SetIsFlipX(bool isFlipX)
-{
-	isFlipX_ = isFlipX;
-
-	TransferSize();
-}
-
-void PostEffect::SetIsFlipY(bool isFlipY)
-{
-	isFlipY_ = isFlipY;
-
-	TransferSize();
 }
 
 void PostEffect::SetTextureTopLeft(const Vector2& texTopLeft)
@@ -237,15 +169,6 @@ void PostEffect::TransferSize()
 	float top = (0.0f - anchorPoint_.y) * size_.y;
 	float bottom = (1.0f - anchorPoint_.y) * size_.y;
 
-	if (isFlipX_) {
-		left = -left;
-		right = -right;
-	}
-	if (isFlipY_) {
-		top = -top;
-		bottom = -bottom;
-	}
-
 	vertexData_[0].vertexPos = { left,bottom,0.0f,1.0f }; // 左下
 	vertexData_[1].vertexPos = { left,top,0.0f,1.0f }; // 左上
 	vertexData_[2].vertexPos = { right,bottom,0.0f,1.0f }; // 右下
@@ -266,17 +189,10 @@ void PostEffect::TransferUV()
 	vertexData_[5].texcoord = textureLeftTop_ + textureSize_; // 右下
 }
 
-void PostEffect::AdjustTextureSize()
-{
-	D3D12_RESOURCE_DESC resDesc = TextureManager::GetInstance()->GetTextureDesc(textureHundle_);
-
-	size_ = { static_cast<float>(resDesc.Width),static_cast<float>(resDesc.Height) };
-}
-
 void PostEffect::CreateVertexRes()
 {
 	//Sprite用の頂点リソースを作る
-	vertexResource_ = DirectXCommon::CreateBufferResource(sizeof(VertexData) * 6);
+	vertexResource_ = DirectXBase::CreateBufferResource(sizeof(VertexData) * 6);
 	//頂点バッファーを作成する
 	//リソースの先頭アドレスから使う
 	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
@@ -291,7 +207,7 @@ void PostEffect::CreateVertexRes()
 void PostEffect::CreateMaterialRes()
 {
 	//マテリアル用のリソースを作る。今回はcolor1つ分を用意する
-	materialResource_ = DirectXCommon::CreateBufferResource(sizeof(Material));
+	materialResource_ = DirectXBase::CreateBufferResource(sizeof(Material));
 	//マテリアルデータを書き込む
 	//書き込むためのアドレスを取得\l
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
@@ -304,7 +220,7 @@ void PostEffect::CreateMaterialRes()
 void PostEffect::CreateTranformRes()
 {
 	//Sprite用のTransformationMatrix用のリソースを作る。Matrix4x4　1つ分のサイズを用意する
-	transformResource_ = DirectXCommon::CreateBufferResource(sizeof(TransformationMatrix));
+	transformResource_ = DirectXBase::CreateBufferResource(sizeof(TransformationMatrix));
 	//データを書き込む
 	//書き込むためのアドレスを取得
 	transformResource_->Map(0, nullptr, reinterpret_cast<void**>(&transformData_));
@@ -318,8 +234,8 @@ void PostEffect::CreateTexRes()
 
 	CD3DX12_RESOURCE_DESC texDesc = CD3DX12_RESOURCE_DESC::Tex2D(
 		DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
-		WinApp::kWindowWidth,
-		(UINT)WinApp::kWindowHeight,
+		WindowsInfo::kWindowWidth,
+		(UINT)WindowsInfo::kWindowHeight,
 		1, 0, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET
 	);
 
@@ -327,7 +243,7 @@ void PostEffect::CreateTexRes()
 
 	CD3DX12_CLEAR_VALUE value = CD3DX12_CLEAR_VALUE(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, clearColor);
 
-	HRESULT hr = DirectXCommon::GetInstance()->GetDevice()->CreateCommittedResource(
+	HRESULT hr = DirectXBase::GetInstance()->GetDevice()->CreateCommittedResource(
 		&properties,
 		D3D12_HEAP_FLAG_NONE,
 		&texDesc,
@@ -340,11 +256,11 @@ void PostEffect::CreateTexRes()
 	// イメージデータの転送
 
 	// 画素数
-	const UINT pixelCount = WinApp::kWindowWidth * WinApp::kWindowHeight;
+	const UINT pixelCount = WindowsInfo::kWindowWidth * WindowsInfo::kWindowHeight;
 	// 画像1行分のデータ
-	const UINT rowPitch = sizeof(UINT) * WinApp::kWindowWidth;
+	const UINT rowPitch = sizeof(UINT) * WindowsInfo::kWindowWidth;
 	// 画像全体のデータサイズ
-	const UINT depthPitch = rowPitch * WinApp::kWindowHeight;
+	const UINT depthPitch = rowPitch * WindowsInfo::kWindowHeight;
 
 	// 画像イメージ
 	UINT* img = new UINT[pixelCount];
@@ -364,7 +280,7 @@ void PostEffect::CreateTexRes()
 	srvCPUDescriptorHandle_ = DescriptorHeapManager::GetInstance()->GetNewSRVCPUDescriptorHandle();
 	srvGPUDescriptorHandle_ = DescriptorHeapManager::GetInstance()->GetNewSRVGPUDescriptorHandle();
 
-	DirectXCommon::GetInstance()->GetDevice()->CreateShaderResourceView(texResource_.Get(), &srvDesc, srvCPUDescriptorHandle_);
+	DirectXBase::GetInstance()->GetDevice()->CreateShaderResourceView(texResource_.Get(), &srvDesc, srvCPUDescriptorHandle_);
 }
 
 void PostEffect::CreateRTV()
@@ -376,15 +292,15 @@ void PostEffect::CreateRTV()
 	rtvCPUDescriptorHandle_ = DescriptorHeapManager::GetInstance()->GetNewRTVCPUDescriptorHandle();
 	//rtvGPUDescriptorHandle_ = DescriptorHeapManager::GetInstance()->GetNewRTVGPUDescriptorHandle();
 
-	DirectXCommon::GetInstance()->GetDevice()->CreateRenderTargetView(texResource_.Get(), &rtvDesc, rtvCPUDescriptorHandle_);
+	DirectXBase::GetInstance()->GetDevice()->CreateRenderTargetView(texResource_.Get(), &rtvDesc, rtvCPUDescriptorHandle_);
 }
 
 void PostEffect::CreateDSV()
 {
 	CD3DX12_RESOURCE_DESC resourceDesc = CD3DX12_RESOURCE_DESC::Tex2D(
 		DXGI_FORMAT_D24_UNORM_S8_UINT,
-		WinApp::kWindowWidth,
-		(UINT)WinApp::kWindowHeight,
+		WindowsInfo::kWindowWidth,
+		(UINT)WindowsInfo::kWindowHeight,
 		1, 0, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL
 	);
 
@@ -392,7 +308,7 @@ void PostEffect::CreateDSV()
 
 	CD3DX12_CLEAR_VALUE value = CD3DX12_CLEAR_VALUE(DXGI_FORMAT_D24_UNORM_S8_UINT, 1.0f, 0);
 
-	HRESULT hr = DirectXCommon::GetInstance()->GetDevice()->CreateCommittedResource(
+	HRESULT hr = DirectXBase::GetInstance()->GetDevice()->CreateCommittedResource(
 		&properties,
 		D3D12_HEAP_FLAG_NONE,
 		&resourceDesc,
@@ -410,7 +326,7 @@ void PostEffect::CreateDSV()
 	dsvDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT; // Format。基本的にはResourceに合わせる
 	dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D; // 2dTexture
 	// DSVHeapの先頭にDSVを作る
-	DirectXCommon::GetInstance()->GetDevice()->CreateDepthStencilView(dsvResource_.Get(), &dsvDesc, dsvCPUDescriptorHandle_);
+	DirectXBase::GetInstance()->GetDevice()->CreateDepthStencilView(dsvResource_.Get(), &dsvDesc, dsvCPUDescriptorHandle_);
 }
 
 void PostEffect::CreateResources()

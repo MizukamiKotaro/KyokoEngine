@@ -13,7 +13,7 @@ BOOL CALLBACK DeviceFindCallBack(LPCDIDEVICEINSTANCE ipddi, LPVOID pvRef)
 
 void Input::Initialize() {
 
-	winApp_ = WinApp::GetInstance();
+	winApp_ = WindowsInfo::GetInstance();
 
 	HRESULT hr = DirectInput8Create(winApp_->GetHInstance(), DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&dInput_, nullptr);
 	assert(SUCCEEDED(hr));
@@ -175,7 +175,7 @@ Vector2 Input::GetMouseMove()
 Vector2 Input::GetMousePosition()
 {
 	GetCursorPos(&mousePos_);
-	ScreenToClient(WinApp::GetInstance()->GetHwnd(), &mousePos_);
+	ScreenToClient(WindowsInfo::GetInstance()->GetHwnd(), &mousePos_);
 
 	return Vector2(static_cast<float>(mousePos_.x), static_cast<float>(mousePos_.y));
 }
