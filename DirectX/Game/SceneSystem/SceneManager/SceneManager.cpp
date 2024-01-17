@@ -2,6 +2,7 @@
 #include "Kyoko.h"
 #include "Input.h"
 #include "FrameInfo/FrameInfo.h"
+#include "Externals/imgui/imgui.h"
 
 SceneManager::SceneManager()
 {
@@ -42,6 +43,28 @@ int SceneManager::Run()
 		}
 
 		sceneArr_[currentSceneNo_]->Play();
+
+#ifdef _DEBUG
+		ImGui::Begin("SCENE");
+		switch (currentSceneNo_)
+		{
+		case SCENE::SELECT:
+			ImGui::Text("SELECT");
+			break;
+		case SCENE::TITLE:
+			ImGui::Text("TITLE");
+			break;
+		case SCENE::STAGE:
+			ImGui::Text("STAGE");
+			break;
+		case SCENE::CLEAR:
+			ImGui::Text("CLEAR");
+			break;
+		default:
+			break;
+		}
+		ImGui::End();
+#endif // _DEBUG
 
 		//Kyoko::PreDraw();
 

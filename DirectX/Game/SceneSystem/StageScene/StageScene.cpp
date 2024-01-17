@@ -24,6 +24,8 @@ StageScene::StageScene()
 
 void StageScene::Init()
 {
+	slot_->Initialize();
+	slot_->PostEffectWright(camera_.get());
 }
 
 void StageScene::Update()
