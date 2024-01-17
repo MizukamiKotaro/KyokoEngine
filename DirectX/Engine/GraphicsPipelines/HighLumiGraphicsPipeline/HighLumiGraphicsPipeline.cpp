@@ -1,16 +1,16 @@
-#include "ContrastGraphicsPipeline.h"
+#include "HighLumiGraphicsPipeline.h"
 #include "Engine/Base/DirectXBase/DirectXBase.h"
 #include <cassert>
 #include "Engine/Base/DebugLog/DebugLog.h"
 #include <format>
 
-ContrastGraphicsPipeline* ContrastGraphicsPipeline::GetInstance()
+HighLumiGraphicsPipeline* HighLumiGraphicsPipeline::GetInstance()
 {
-	static ContrastGraphicsPipeline instance;
+	static HighLumiGraphicsPipeline instance;
 	return &instance;
 }
 
-void ContrastGraphicsPipeline::Initialize()
+void HighLumiGraphicsPipeline::Initialize()
 {
 
 	device_ = DirectXBase::GetInstance()->GetDevice();
@@ -22,7 +22,7 @@ void ContrastGraphicsPipeline::Initialize()
 
 }
 
-void ContrastGraphicsPipeline::PreDraw()
+void HighLumiGraphicsPipeline::PreDraw()
 {
 	blendMode_ = BlendMode::kBlendModeNormal;
 
@@ -34,7 +34,7 @@ void ContrastGraphicsPipeline::PreDraw()
 
 }
 
-void ContrastGraphicsPipeline::SetBlendMode(uint32_t blendMode)
+void HighLumiGraphicsPipeline::SetBlendMode(uint32_t blendMode)
 {
 	if (static_cast<uint32_t>(blendMode_) != blendMode) {
 
@@ -67,7 +67,7 @@ void ContrastGraphicsPipeline::SetBlendMode(uint32_t blendMode)
 	}
 }
 
-void ContrastGraphicsPipeline::InitializeDXC()
+void HighLumiGraphicsPipeline::InitializeDXC()
 {
 
 	//DXCの初期化
@@ -82,7 +82,7 @@ void ContrastGraphicsPipeline::InitializeDXC()
 
 }
 
-void ContrastGraphicsPipeline::InitializePSO()
+void HighLumiGraphicsPipeline::InitializePSO()
 {
 	//DescriptorRange
 	D3D12_DESCRIPTOR_RANGE descriptorRange[1] = {};
@@ -98,7 +98,7 @@ void ContrastGraphicsPipeline::InitializePSO()
 	descriptionRootSignature.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
 
 	//RootParameter作成。複数設定ができるので配列。
-	D3D12_ROOT_PARAMETER rootParameters[4] = {};
+	D3D12_ROOT_PARAMETER rootParameters[3] = {};
 	rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV; // CBVを使う
 	rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL; // PixelShaderで使う
 	rootParameters[0].Descriptor.ShaderRegister = 0; // レジスタ番号0とバインド
@@ -109,9 +109,9 @@ void ContrastGraphicsPipeline::InitializePSO()
 	rootParameters[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL; // PixelShaderで使う
 	rootParameters[2].DescriptorTable.pDescriptorRanges = descriptorRange; // Tableの中の配列を指定
 	rootParameters[2].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange); // Tableで利用する数
-	rootParameters[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV; // CBVを使う
-	rootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL; // PixelShaderで使う
-	rootParameters[3].Descriptor.ShaderRegister = 1; // レジスタ番号1を使う
+	//rootParameters[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV; // CBVを使う
+	//rootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL; // PixelShaderで使う
+	//rootParameters[3].Descriptor.ShaderRegister = 1; // レジスタ番号1を使う
 	descriptionRootSignature.pParameters = rootParameters; // ルートパラメータ配列へのポインタ
 	descriptionRootSignature.NumParameters = _countof(rootParameters); // 配列の長さ
 
@@ -148,6 +148,10 @@ void ContrastGraphicsPipeline::InitializePSO()
 	inputElementDescs[1].SemanticIndex = 0;
 	inputElementDescs[1].Format = DXGI_FORMAT_R32G32_FLOAT;
 	inputElementDescs[1].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
+	/*inputElementDescs[2].SemanticName = "NORMAL";
+	inputElementDescs[2].SemanticIndex = 0;
+	inputElementDescs[2].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+	inputElementDescs[2].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;*/
 	D3D12_INPUT_LAYOUT_DESC inputLayoutDesc{};
 	inputLayoutDesc.pInputElementDescs = inputElementDescs;
 	inputLayoutDesc.NumElements = _countof(inputElementDescs);
@@ -160,10 +164,10 @@ void ContrastGraphicsPipeline::InitializePSO()
 	rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
 
 	//Shaderをコンパイルする
-	vertexShaderBlob_ = CompileShader(L"Resources/Shaders/ContrastShader/Contrast.VS.hlsl", L"vs_6_0", dxcUtils_.Get(), dxcCompiler_.Get(), includeHandler_.Get());
+	vertexShaderBlob_ = CompileShader(L"Resources/Shaders/SpriteShader/Sprite.VS.hlsl", L"vs_6_0", dxcUtils_.Get(), dxcCompiler_.Get(), includeHandler_.Get());
 	assert(vertexShaderBlob_ != nullptr);
 
-	pixelShaderBlob_ = CompileShader(L"Resources/Shaders/ContrastShader/Contrast.PS.hlsl", L"ps_6_0", dxcUtils_.Get(), dxcCompiler_.Get(), includeHandler_.Get());
+	pixelShaderBlob_ = CompileShader(L"Resources/Shaders/HighLumiShader/HighLumi.PS.hlsl", L"ps_6_0", dxcUtils_.Get(), dxcCompiler_.Get(), includeHandler_.Get());
 	assert(pixelShaderBlob_ != nullptr);
 
 	//// DepthStencilStateの設定
@@ -251,7 +255,7 @@ void ContrastGraphicsPipeline::InitializePSO()
 
 }
 
-IDxcBlob* ContrastGraphicsPipeline::CompileShader(const std::wstring& filePath, const wchar_t* profile, IDxcUtils* dxcUtils, IDxcCompiler3* dxcCompiler, IDxcIncludeHandler* includeHandler)
+IDxcBlob* HighLumiGraphicsPipeline::CompileShader(const std::wstring& filePath, const wchar_t* profile, IDxcUtils* dxcUtils, IDxcCompiler3* dxcCompiler, IDxcIncludeHandler* includeHandler)
 {
 	// 1. hlslファイルを読む
 	//これからシェーダーをコンパイルする旨をログに出す

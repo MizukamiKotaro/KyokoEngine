@@ -17,6 +17,12 @@ StageScene::StageScene()
 
 	contrast_ = std::make_unique<Contrast>();
 
+	highLumi_ = std::make_unique<HighLumi>();
+
+	blur_ = std::make_unique<Blur>();
+
+	gaussianBlur_ = std::make_unique<GaussianBlur>();
+
 	pointLight_ = std::make_unique<PointLight>();
 
 	slot_ = std::make_unique<Slot>();
@@ -61,11 +67,33 @@ void StageScene::Draw()
 
 	contrast_->PostDrawScene();
 
+	highLumi_->PreDrawScene();
+
+	contrast_->Draw();
+	
+	highLumi_->PostDrawScene();
+
+	blur_->PreDrawScene();
+
+	highLumi_->Draw();
+
+	blur_->PostDrawScene();
+
+	gaussianBlur_->PreDrawScene();
+
+	highLumi_->Draw();
+
+	gaussianBlur_->PostDrawScene();
+
 	Kyoko::PreDraw();
 
-	//contrast_->Draw(*camera_.get());
+	contrast_->Draw();
 
-	slot_->Draw(camera_.get());
+	//blur_->Draw(BlendMode::kBlendModeAdd);
+	contrast_->Draw();
+	gaussianBlur_->Draw(BlendMode::kBlendModeAdd);
+
+	//slot_->Draw(camera_.get());
 
 	//pointLight_->Draw(*camera_.get());
 	

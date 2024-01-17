@@ -1,16 +1,16 @@
-#include "ContrastGraphicsPipeline.h"
+#include "BlurGraphicsPipeline.h"
 #include "Engine/Base/DirectXBase/DirectXBase.h"
 #include <cassert>
 #include "Engine/Base/DebugLog/DebugLog.h"
 #include <format>
 
-ContrastGraphicsPipeline* ContrastGraphicsPipeline::GetInstance()
+BlurGraphicsPipeline* BlurGraphicsPipeline::GetInstance()
 {
-	static ContrastGraphicsPipeline instance;
+	static BlurGraphicsPipeline instance;
 	return &instance;
 }
 
-void ContrastGraphicsPipeline::Initialize()
+void BlurGraphicsPipeline::Initialize()
 {
 
 	device_ = DirectXBase::GetInstance()->GetDevice();
@@ -22,7 +22,7 @@ void ContrastGraphicsPipeline::Initialize()
 
 }
 
-void ContrastGraphicsPipeline::PreDraw()
+void BlurGraphicsPipeline::PreDraw()
 {
 	blendMode_ = BlendMode::kBlendModeNormal;
 
@@ -34,7 +34,7 @@ void ContrastGraphicsPipeline::PreDraw()
 
 }
 
-void ContrastGraphicsPipeline::SetBlendMode(uint32_t blendMode)
+void BlurGraphicsPipeline::SetBlendMode(uint32_t blendMode)
 {
 	if (static_cast<uint32_t>(blendMode_) != blendMode) {
 
@@ -67,7 +67,7 @@ void ContrastGraphicsPipeline::SetBlendMode(uint32_t blendMode)
 	}
 }
 
-void ContrastGraphicsPipeline::InitializeDXC()
+void BlurGraphicsPipeline::InitializeDXC()
 {
 
 	//DXCの初期化
@@ -82,7 +82,7 @@ void ContrastGraphicsPipeline::InitializeDXC()
 
 }
 
-void ContrastGraphicsPipeline::InitializePSO()
+void BlurGraphicsPipeline::InitializePSO()
 {
 	//DescriptorRange
 	D3D12_DESCRIPTOR_RANGE descriptorRange[1] = {};
@@ -160,10 +160,10 @@ void ContrastGraphicsPipeline::InitializePSO()
 	rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
 
 	//Shaderをコンパイルする
-	vertexShaderBlob_ = CompileShader(L"Resources/Shaders/ContrastShader/Contrast.VS.hlsl", L"vs_6_0", dxcUtils_.Get(), dxcCompiler_.Get(), includeHandler_.Get());
+	vertexShaderBlob_ = CompileShader(L"Resources/Shaders/SpriteShader/Sprite.VS.hlsl", L"vs_6_0", dxcUtils_.Get(), dxcCompiler_.Get(), includeHandler_.Get());
 	assert(vertexShaderBlob_ != nullptr);
 
-	pixelShaderBlob_ = CompileShader(L"Resources/Shaders/ContrastShader/Contrast.PS.hlsl", L"ps_6_0", dxcUtils_.Get(), dxcCompiler_.Get(), includeHandler_.Get());
+	pixelShaderBlob_ = CompileShader(L"Resources/Shaders/BlurShader/Blur.PS.hlsl", L"ps_6_0", dxcUtils_.Get(), dxcCompiler_.Get(), includeHandler_.Get());
 	assert(pixelShaderBlob_ != nullptr);
 
 	//// DepthStencilStateの設定
@@ -251,7 +251,7 @@ void ContrastGraphicsPipeline::InitializePSO()
 
 }
 
-IDxcBlob* ContrastGraphicsPipeline::CompileShader(const std::wstring& filePath, const wchar_t* profile, IDxcUtils* dxcUtils, IDxcCompiler3* dxcCompiler, IDxcIncludeHandler* includeHandler)
+IDxcBlob* BlurGraphicsPipeline::CompileShader(const std::wstring& filePath, const wchar_t* profile, IDxcUtils* dxcUtils, IDxcCompiler3* dxcCompiler, IDxcIncludeHandler* includeHandler)
 {
 	// 1. hlslファイルを読む
 	//これからシェーダーをコンパイルする旨をログに出す

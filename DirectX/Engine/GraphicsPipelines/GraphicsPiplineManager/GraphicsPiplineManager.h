@@ -12,6 +12,9 @@
 #include "GraphicsPipelines/PointLightGraphicsPipline/PointLightGraphicsPipline.h"
 #include "GraphicsPipelines/SpotLightGraphicsPipline/SpotLightGraphicsPipline.h"
 #include "GraphicsPipelines/ContrastGraphicsPipeline/ContrastGraphicsPipeline.h"
+#include "GraphicsPipelines/HighLumiGraphicsPipeline/HighLumiGraphicsPipeline.h"
+#include "GraphicsPipelines/BlurGraphicsPipeline/BlurGraphicsPipeline.h"
+#include "GraphicsPipelines/GaussianBlurGraphicsPipeline/GaussianBlurGraphicsPipeline.h"
 
 enum class BlendMode
 {
@@ -35,6 +38,9 @@ public:
 		POINT_LIGHT,
 		SPOT_LIGHT,
 		CONTRAST,
+		HIGH_LUMI,
+		BLUR,
+		GAUSSIAN_BLUR,
 		COUNT_PIPLINE_TYPE,
 	};
 
@@ -67,6 +73,9 @@ private:
 	PointLightGraphicsPipline* pointLightPSO_ = nullptr;
 	SpotLightGraphicsPipline* spotLightPSO_ = nullptr;
 	ContrastGraphicsPipeline* contrastPSO_ = nullptr;
+	HighLumiGraphicsPipeline* highLumiPSO_ = nullptr;
+	BlurGraphicsPipeline* blurPSO_ = nullptr;
+	GaussianBlurGraphicsPipeline* gaussianBlurPSO_ = nullptr;
 
 	PiplineType currentPiplineType_ = PiplineType::SPRITE;
 

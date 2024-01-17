@@ -1,4 +1,4 @@
-#include "PostEffect.h"
+#include "GaussianBlur.h"
 
 #include <cassert>
 #include "TextureManager/TextureManager.h"
@@ -8,9 +8,9 @@
 #include "WindowsInfo/WindowsInfo.h"
 #include "Externals/DirectXTex/d3dx12.h"
 
-const float PostEffect::clearColor[4] = { 0.0f,0.0f,0.0f,0.0f };
+const float GaussianBlur::clearColor[4] = { 0.0f,0.0f,0.0f,0.0f };
 
-PostEffect::PostEffect()
+GaussianBlur::GaussianBlur()
 {
 	CreateVertexRes();
 
@@ -39,26 +39,33 @@ PostEffect::PostEffect()
 	Update();
 }
 
-PostEffect::~PostEffect()
+GaussianBlur::~GaussianBlur()
 {
 	vertexResource_->Release();
 	transformResource_->Release();
 	materialResource_->Release();
+	gaussianBlurResource_->Release();
 }
 
-void PostEffect::Initialize()
+void GaussianBlur::Initialize()
 {
-	
+
 }
 
-void PostEffect::Update()
+void GaussianBlur::Update()
 {
 	worldMat_ = Matrix4x4::MakeAffinMatrix({ 1.0f,1.0f,0.0f }, { 0.0f,0.0f,rotate_ }, { pos_.x,pos_.y,0.0f });
 	TransferSize();
 }
 
-void PostEffect::Draw(BlendMode blendMode)
+void GaussianBlur::Draw(BlendMode blendMode)
 {
+	if (gaussianBlurData_->pickRange <= 0.0f) {
+		gaussianBlurData_->pickRange = 0.001f;
+	}
+	if (gaussianBlurData_->stepWidth <= 0.0f) {
+		gaussianBlurData_->stepWidth = 0.0001f;
+	}
 
 	if (isInvisible_) {
 		return;
@@ -82,19 +89,20 @@ void PostEffect::Draw(BlendMode blendMode)
 
 	commandList->SetGraphicsRootDescriptorTable(2, srvGPUDescriptorHandle_);
 
+	commandList->SetGraphicsRootConstantBufferView(3, gaussianBlurResource_->GetGPUVirtualAddress());
+
 	//描画!!!!（DrawCall/ドローコール）
 	commandList->DrawInstanced(6, 1, 0, 0);
 
 }
 
-void PostEffect::PreDrawScene()
+void GaussianBlur::PreDrawScene()
 {
-
 	ID3D12GraphicsCommandList* commandList = DirectXBase::GetInstance()->GetCommandList();
 
 	// バリアの変更
 	CD3DX12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(texResource_.Get(),
-		D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE,D3D12_RESOURCE_STATE_RENDER_TARGET);
+		D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET);
 	commandList->ResourceBarrier(1, &barrier);
 
 	// レンダーターゲットのセット
@@ -121,7 +129,7 @@ void PostEffect::PreDrawScene()
 	GraphicsPiplineManager::GetInstance()->PreDraw();
 }
 
-void PostEffect::PostDrawScene()
+void GaussianBlur::PostDrawScene()
 {
 	ID3D12GraphicsCommandList* commandList = DirectXBase::GetInstance()->GetCommandList();
 
@@ -132,14 +140,14 @@ void PostEffect::PostDrawScene()
 
 }
 
-void PostEffect::SetAnchorPoint(const Vector2& anchorpoint)
+void GaussianBlur::SetAnchorPoint(const Vector2& anchorpoint)
 {
 	anchorPoint_ = anchorpoint;
 
 	TransferSize();
 }
 
-void PostEffect::SetColor(const Vector4& color)
+void GaussianBlur::SetColor(const Vector4& color)
 {
 	color_.x = std::clamp<float>(color.x, 0.0f, 1.0f);
 	color_.y = std::clamp<float>(color.y, 0.0f, 1.0f);
@@ -149,21 +157,21 @@ void PostEffect::SetColor(const Vector4& color)
 	materialData_->color = color;
 }
 
-void PostEffect::SetTextureTopLeft(const Vector2& texTopLeft)
+void GaussianBlur::SetTextureTopLeft(const Vector2& texTopLeft)
 {
 	textureLeftTop_ = textureLeftTop_;
 
 	TransferUV();
 }
 
-void PostEffect::SetTextureSize(const Vector2& texSize)
+void GaussianBlur::SetTextureSize(const Vector2& texSize)
 {
 	textureSize_ = texSize;
 
 	TransferUV();
 }
 
-void PostEffect::TransferSize()
+void GaussianBlur::TransferSize()
 {
 	float left = (0.0f - anchorPoint_.x) * size_.x;
 	float right = (1.0f - anchorPoint_.x) * size_.x;
@@ -179,7 +187,7 @@ void PostEffect::TransferSize()
 	vertexData_[5].vertexPos = { right,bottom,0.0f,1.0f }; // 右下
 }
 
-void PostEffect::TransferUV()
+void GaussianBlur::TransferUV()
 {
 	vertexData_[0].texcoord = { textureLeftTop_.x,textureLeftTop_.y + textureSize_.y }; // 左下
 	vertexData_[1].texcoord = textureLeftTop_; // 左上
@@ -190,7 +198,7 @@ void PostEffect::TransferUV()
 	vertexData_[5].texcoord = textureLeftTop_ + textureSize_; // 右下
 }
 
-void PostEffect::CreateVertexRes()
+void GaussianBlur::CreateVertexRes()
 {
 	//Sprite用の頂点リソースを作る
 	vertexResource_ = DirectXBase::CreateBufferResource(sizeof(VertexData) * 6);
@@ -205,7 +213,7 @@ void PostEffect::CreateVertexRes()
 	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
 }
 
-void PostEffect::CreateMaterialRes()
+void GaussianBlur::CreateMaterialRes()
 {
 	//マテリアル用のリソースを作る。今回はcolor1つ分を用意する
 	materialResource_ = DirectXBase::CreateBufferResource(sizeof(Material));
@@ -218,7 +226,7 @@ void PostEffect::CreateMaterialRes()
 	materialData_->uvTransform = Matrix4x4::MakeIdentity4x4();
 }
 
-void PostEffect::CreateTranformRes()
+void GaussianBlur::CreateTranformRes()
 {
 	//Sprite用のTransformationMatrix用のリソースを作る。Matrix4x4　1つ分のサイズを用意する
 	transformResource_ = DirectXBase::CreateBufferResource(sizeof(TransformationMatrix));
@@ -230,7 +238,18 @@ void PostEffect::CreateTranformRes()
 	//*transformationMatrixData_ = { Matrix4x4::MakeIdentity4x4() ,Matrix4x4::MakeIdentity4x4() };
 }
 
-void PostEffect::CreateTexRes()
+void GaussianBlur::CreateGaussianBlurRes()
+{
+	gaussianBlurResource_ = DirectXBase::CreateBufferResource(sizeof(GaussianBlurData));
+
+	gaussianBlurResource_->Map(0, nullptr, reinterpret_cast<void**>(&gaussianBlurData_));
+
+	gaussianBlurData_->pickRange = 0.005f;
+
+	gaussianBlurData_->stepWidth = 0.001f;
+}
+
+void GaussianBlur::CreateTexRes()
 {
 
 	CD3DX12_RESOURCE_DESC texDesc = CD3DX12_RESOURCE_DESC::Tex2D(
@@ -284,7 +303,7 @@ void PostEffect::CreateTexRes()
 	DirectXBase::GetInstance()->GetDevice()->CreateShaderResourceView(texResource_.Get(), &srvDesc, srvCPUDescriptorHandle_);
 }
 
-void PostEffect::CreateRTV()
+void GaussianBlur::CreateRTV()
 {
 	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
 	rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB; //出力結果をSRGBに変換して書き込む
@@ -296,7 +315,7 @@ void PostEffect::CreateRTV()
 	DirectXBase::GetInstance()->GetDevice()->CreateRenderTargetView(texResource_.Get(), &rtvDesc, rtvCPUDescriptorHandle_);
 }
 
-void PostEffect::CreateDSV()
+void GaussianBlur::CreateDSV()
 {
 	CD3DX12_RESOURCE_DESC resourceDesc = CD3DX12_RESOURCE_DESC::Tex2D(
 		DXGI_FORMAT_D24_UNORM_S8_UINT,
@@ -330,11 +349,13 @@ void PostEffect::CreateDSV()
 	DirectXBase::GetInstance()->GetDevice()->CreateDepthStencilView(dsvResource_.Get(), &dsvDesc, dsvCPUDescriptorHandle_);
 }
 
-void PostEffect::CreateResources()
+void GaussianBlur::CreateResources()
 {
 	CreateMaterialRes();
 
 	CreateTranformRes();
+
+	CreateGaussianBlurRes();
 
 	CreateTexRes();
 

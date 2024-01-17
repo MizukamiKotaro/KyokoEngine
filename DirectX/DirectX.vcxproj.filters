@@ -178,6 +178,33 @@
     <Filter Include="Game\StageLights">
       <UniqueIdentifier>{29fb222b-5f5f-49fb-aaf9-6e4a5730d7bc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\PostEffect\HighLumi">
+      <UniqueIdentifier>{039712e2-1b09-4348-a79f-61aa633b3e9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Shaders\HighLumi">
+      <UniqueIdentifier>{775e5f7a-3acb-43c4-891d-15db2ba97c8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\GraphicsPipelines\HighLumiGraphicsPipeline">
+      <UniqueIdentifier>{6a876953-5215-40c8-8a35-76f0bc4d574b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Shaders\Blur">
+      <UniqueIdentifier>{a0e6a961-5442-4338-948c-717ca0f31ab9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\GraphicsPipelines\BlurGraphicsPipeline">
+      <UniqueIdentifier>{d8077ef0-7063-44b0-9dbd-d45e7d53e593}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\PostEffect\Blur">
+      <UniqueIdentifier>{a9aea5a0-2a87-4a13-a65d-a202097c6103}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\PostEffect\GaussianBlur">
+      <UniqueIdentifier>{2c1b237b-c884-4448-a8b4-957073c15fc5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Shaders\GaussianBlur">
+      <UniqueIdentifier>{4ab55fbc-5957-4fcc-bea2-cbb128bd6e44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\GraphicsPipelines\GaussianBlurGraphicsPipeline">
+      <UniqueIdentifier>{bbe8e4d3-6a25-4c1e-a944-3c93974eb881}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -338,6 +365,24 @@
     </ClCompile>
     <ClCompile Include="Game\StageLights\StageLights.cpp">
       <Filter>Game\StageLights</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PostEffect\HighLumi\HighLumi.cpp">
+      <Filter>Engine\PostEffect\HighLumi</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\GraphicsPipelines\HighLumiGraphicsPipeline\HighLumiGraphicsPipeline.cpp">
+      <Filter>Engine\GraphicsPipelines\HighLumiGraphicsPipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\GraphicsPipelines\BlurGraphicsPipeline\BlurGraphicsPipeline.cpp">
+      <Filter>Engine\GraphicsPipelines\BlurGraphicsPipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PostEffect\Blur\Blur.cpp">
+      <Filter>Engine\PostEffect\Blur</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PostEffect\GaussianBlur\GaussianBlur.cpp">
+      <Filter>Engine\PostEffect\GaussianBlur</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\GraphicsPipelines\GaussianBlurGraphicsPipeline\GaussianBlurGraphicsPipeline.cpp">
+      <Filter>Engine\GraphicsPipelines\GaussianBlurGraphicsPipeline</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -530,6 +575,24 @@
     <ClInclude Include="Game\StageLights\StageLights.h">
       <Filter>Game\StageLights</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\PostEffect\HighLumi\HighLumi.h">
+      <Filter>Engine\PostEffect\HighLumi</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GraphicsPipelines\HighLumiGraphicsPipeline\HighLumiGraphicsPipeline.h">
+      <Filter>Engine\GraphicsPipelines\HighLumiGraphicsPipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GraphicsPipelines\BlurGraphicsPipeline\BlurGraphicsPipeline.h">
+      <Filter>Engine\GraphicsPipelines\BlurGraphicsPipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PostEffect\Blur\Blur.h">
+      <Filter>Engine\PostEffect\Blur</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PostEffect\GaussianBlur\GaussianBlur.h">
+      <Filter>Engine\PostEffect\GaussianBlur</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GraphicsPipelines\GaussianBlurGraphicsPipeline\GaussianBlurGraphicsPipeline.h">
+      <Filter>Engine\GraphicsPipelines\GaussianBlurGraphicsPipeline</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\Object3dShader\Object3d.PS.hlsl">
@@ -567,6 +630,15 @@
     </FxCompile>
     <FxCompile Include="Resources\Shaders\ContrastShader\Contrast.VS.hlsl">
       <Filter>Engine\Shaders\Contrast</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\HighLumiShader\HighLumi.PS.hlsl">
+      <Filter>Engine\Shaders\HighLumi</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\BlurShader\Blur.PS.hlsl">
+      <Filter>Engine\Shaders\Blur</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\GaussianBlurShader\GaussianBlur.PS.hlsl">
+      <Filter>Engine\Shaders\GaussianBlur</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

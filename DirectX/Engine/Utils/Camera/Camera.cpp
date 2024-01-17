@@ -2,6 +2,8 @@
 #include "Engine/Base/WindowsInfo/WindowsInfo.h"
 #include "DirectXBase/DirectXBase.h"
 
+Matrix4x4 Camera::orthographicMat_ = Matrix4x4::MakeOrthographicMatrix(0.0f, 0.0f, float(WindowsInfo::kWindowWidth), float(WindowsInfo::kWindowHeight), 0.0f, 1.0f);
+
 Camera::Camera()
 {
 	transform_.scale_ = { 1.0f,1.0f,1.0f };

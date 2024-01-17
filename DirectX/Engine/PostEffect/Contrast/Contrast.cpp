@@ -8,7 +8,7 @@
 #include "WindowsInfo/WindowsInfo.h"
 #include "Externals/DirectXTex/d3dx12.h"
 
-const float Contrast::clearColor[4] = { 0.25f,0.5f,0.1f,0.0f };
+const float Contrast::clearColor[4] = { 0.0f,0.0f,0.0f,0.0f };
 
 Contrast::Contrast()
 {
@@ -58,7 +58,7 @@ void Contrast::Update()
 	TransferSize();
 }
 
-void Contrast::Draw(const Camera& camera, BlendMode blendMode)
+void Contrast::Draw(BlendMode blendMode)
 {
 
 	if (isInvisible_) {
@@ -67,7 +67,7 @@ void Contrast::Draw(const Camera& camera, BlendMode blendMode)
 
 	PreDraw();
 
-	transformData_->WVP = worldMat_ * camera.GetOrthographicMat();
+	transformData_->WVP = worldMat_ * Camera::GetOrthographicMat();
 	materialData_->uvTransform = Matrix4x4::MakeAffinMatrix({ uvScale_.x,uvScale_.y,0.0f }, { 0.0f,0.0f,uvRotate_ }, { uvTranslate_.x,uvTranslate_.y,0.0f });
 
 	GraphicsPiplineManager::GetInstance()->SetBlendMode(piplineType, static_cast<uint32_t>(blendMode));

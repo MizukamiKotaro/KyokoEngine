@@ -9,8 +9,6 @@
 #include "Utils/Math/Matrix4x4.h"
 #include "GraphicsPipelines/GraphicsPiplineManager/GraphicsPiplineManager.h"
 
-class Camera;
-
 // スプライト
 class Contrast
 {
@@ -49,13 +47,15 @@ public:
 
 	void Update();
 
-	void Draw(const Camera& camera, BlendMode blendMode = BlendMode::kBlendModeNormal);
+	void Draw(BlendMode blendMode = BlendMode::kBlendModeNormal);
 
-	static void PreDraw() { GraphicsPiplineManager::GetInstance()->PreDraw(piplineType); }
 
 	void PreDrawScene();
 
 	void PostDrawScene();
+
+private:
+	static void PreDraw() { GraphicsPiplineManager::GetInstance()->PreDraw(piplineType); }
 
 public:
 

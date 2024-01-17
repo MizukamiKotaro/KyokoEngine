@@ -7,6 +7,9 @@
 #include "PostEffect/Contrast/Contrast.h"
 #include "Light/Light.h"
 #include "Slot/Slot.h"
+#include "PostEffect/HighLumi/HighLumi.h"
+#include "PostEffect/Blur/Blur.h"
+#include "PostEffect/GaussianBlur/GaussianBlur.h"
 
 class StageScene : public IScene
 {
@@ -25,6 +28,12 @@ private:
 	std::unique_ptr<Sprite> puniru_;
 
 	std::unique_ptr<Contrast> contrast_;
+
+	std::unique_ptr<HighLumi> highLumi_;
+
+	std::unique_ptr<Blur> blur_;
+
+	std::unique_ptr<GaussianBlur> gaussianBlur_;
 
 	std::unique_ptr<PointLight> pointLight_;
 
