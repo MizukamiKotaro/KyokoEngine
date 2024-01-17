@@ -140,6 +140,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Model\ModelData\ModelDataManager\ModelDataManager.cpp" />
     <ClCompile Include="Engine\Model\Model.cpp" />
     <ClCompile Include="Engine\Particle\Particle.cpp" />
+    <ClCompile Include="Engine\PostEffect\Bloom\Bloom.cpp" />
     <ClCompile Include="Engine\PostEffect\Blur\Blur.cpp" />
     <ClCompile Include="Engine\PostEffect\Contrast\Contrast.cpp" />
     <ClCompile Include="Engine\PostEffect\GaussianBlur\GaussianBlur.cpp" />
@@ -209,6 +210,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Model\ModelData\NodeData3D.h" />
     <ClInclude Include="Engine\Model\ModelData\VertexData3D.h" />
     <ClInclude Include="Engine\Particle\Particle.h" />
+    <ClInclude Include="Engine\PostEffect\Bloom\Bloom.h" />
     <ClInclude Include="Engine\PostEffect\Blur\Blur.h" />
     <ClInclude Include="Engine\PostEffect\Contrast\Contrast.h" />
     <ClInclude Include="Engine\PostEffect\GaussianBlur\GaussianBlur.h" />

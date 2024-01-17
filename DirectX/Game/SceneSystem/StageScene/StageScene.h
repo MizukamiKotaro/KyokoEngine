@@ -10,6 +10,7 @@
 #include "PostEffect/HighLumi/HighLumi.h"
 #include "PostEffect/Blur/Blur.h"
 #include "PostEffect/GaussianBlur/GaussianBlur.h"
+#include "PostEffect/Bloom/Bloom.h"
 
 class StageScene : public IScene
 {
@@ -34,6 +35,8 @@ private:
 	std::unique_ptr<Blur> blur_;
 
 	std::unique_ptr<GaussianBlur> gaussianBlur_;
+
+	std::unique_ptr<Bloom> bloom_;
 
 	std::unique_ptr<PointLight> pointLight_;
 

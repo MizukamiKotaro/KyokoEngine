@@ -205,6 +205,9 @@
     <Filter Include="Engine\GraphicsPipelines\GaussianBlurGraphicsPipeline">
       <UniqueIdentifier>{bbe8e4d3-6a25-4c1e-a944-3c93974eb881}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\PostEffect\Bloom">
+      <UniqueIdentifier>{7a34ef9e-5e89-44c0-a26b-b5d44c3359c0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -383,6 +386,9 @@
     </ClCompile>
     <ClCompile Include="Engine\GraphicsPipelines\GaussianBlurGraphicsPipeline\GaussianBlurGraphicsPipeline.cpp">
       <Filter>Engine\GraphicsPipelines\GaussianBlurGraphicsPipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PostEffect\Bloom\Bloom.cpp">
+      <Filter>Engine\PostEffect\Bloom</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -592,6 +598,9 @@
     </ClInclude>
     <ClInclude Include="Engine\GraphicsPipelines\GaussianBlurGraphicsPipeline\GaussianBlurGraphicsPipeline.h">
       <Filter>Engine\GraphicsPipelines\GaussianBlurGraphicsPipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PostEffect\Bloom\Bloom.h">
+      <Filter>Engine\PostEffect\Bloom</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
