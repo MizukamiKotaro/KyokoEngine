@@ -126,7 +126,6 @@ public:
 	BlurData* blurData_;
 
 	Vector4 color_;
-	Vector2 pos_;
 private:
 
 	static const GraphicsPiplineManager::PiplineType piplineType = GraphicsPiplineManager::PiplineType::BLUR;
@@ -136,6 +135,7 @@ private:
 	Matrix4x4 worldMat_;
 
 	float rotate_;
+	Vector2 pos_;
 	Vector2 size_;
 
 	Vector2 uvTranslate_;
