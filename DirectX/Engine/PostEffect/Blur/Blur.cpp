@@ -71,6 +71,8 @@ void Blur::Draw(BlendMode blendMode)
 		return;
 	}
 
+	materialData_->color = color_;
+
 	PreDraw();
 
 	transformData_->WVP = worldMat_ * Camera::GetOrthographicMat();
@@ -222,6 +224,7 @@ void Blur::CreateMaterialRes()
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 	//今回は赤を書き込んでいる
 	materialData_->color = { 1.0f,1.0f,1.0f,1.0f };
+	color_ = { 1.0f,1.0f,1.0f,1.0f };
 	//*materialData_ = { Vector4(1.0f, 1.0f, 1.0f, 1.0f) , false };
 	materialData_->uvTransform = Matrix4x4::MakeIdentity4x4();
 }
@@ -249,6 +252,8 @@ void Blur::CreateBlurRes()
 	blurData_->pickRange = 0.06f;
 
 	blurData_->stepWidth = 0.005f;
+
+	blurData_->isCenterBlur = 1;
 }
 
 void Blur::CreateTexRes()

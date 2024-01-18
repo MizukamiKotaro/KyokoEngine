@@ -18,6 +18,7 @@ struct BlurData {
 	float angle;
 	float pickRange;
 	float stepWidth;
+	int32_t isCenterBlur;
 };
 ConstantBuffer<BlurData> gBlur : register(b1);
 
@@ -34,7 +35,12 @@ PixelShaderOutput main(VertexShaderOutput input) {
 
 	for (float i = -gBlur.pickRange; i <= gBlur.pickRange; i += gBlur.stepWidth) {
 		float x = cos(angle) * i;
-		float y = sin(angle) * i;
+		float y = -sin(angle) * i;
+
+		if (gBlur.isCenterBlur != 1) {
+			x -= cos(angle) * gBlur.pickRange;
+			y += sin(angle) * gBlur.pickRange;
+		}
 		uv.x = transformedUV.x + x;
 		uv.y = transformedUV.y + y;
 
@@ -46,7 +52,7 @@ PixelShaderOutput main(VertexShaderOutput input) {
 		totalWeight += weight;
 	}
 
-	output.color = color / totalWeight;
+	output.color = color / totalWeight * gMaterial.color;
 
 	return output;
 }

@@ -63,7 +63,7 @@ void StageScene::Draw()
 {
 	contrast_->PreDrawScene();
 
-	sprite_->Draw(*camera_.get());
+	//sprite_->Draw(*camera_.get());
 	//lights_->Draw(camera_.get());
 	puniru_->Draw(*camera_.get());
 
@@ -77,8 +77,8 @@ void StageScene::Draw()
 
 	blur_->PreDrawScene();
 
-	highLumi_->Draw();
-
+	//highLumi_->Draw();
+	contrast_->Draw();
 	blur_->PostDrawScene();
 
 	gaussianBlur_->PreDrawScene();
@@ -102,18 +102,12 @@ void StageScene::Draw()
 
 	Kyoko::PreDraw();
 
-	//bloom_->Draw();
-
 	contrast_->Draw();
 
-	//blur_->Draw(BlendMode::kBlendModeAdd);
-	//contrast_->Draw();
-	//puniru_->Draw(*camera_.get());
-	//gaussianBlur_->Draw(BlendMode::kBlendModeAdd);
-
-	//slot_->Draw(camera_.get());
-
-	//pointLight_->Draw(*camera_.get());
+	blur_->blurData_->angle = 90;
+	blur_->blurData_->isCenterBlur = 0;
+	blur_->color_.z = 0.0f;
+	blur_->Draw(BlendMode::kBlendModeAdd);
 	
 	BlackDraw();
 

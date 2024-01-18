@@ -39,6 +39,7 @@ public:
 		float angle; // 角度。0だと横ブラー、90だと縦ブラー。
 		float pickRange; // 取得する色の幅。
 		float stepWidth; // 取得する色の位置変更の幅。0.0f < stepWidth < pickRange
+		int isCenterBlur; // 真ん中からブラーか。1=true,0=false;
 	};
 
 	// namespace省略
@@ -121,6 +122,7 @@ private:
 public:
 	BlurData* blurData_;
 
+	Vector4 color_;
 private:
 
 	static const GraphicsPiplineManager::PiplineType piplineType = GraphicsPiplineManager::PiplineType::BLUR;
@@ -137,7 +139,6 @@ private:
 	Vector2 uvScale_;
 	float uvRotate_;
 
-	Vector4 color_;
 
 	Vector2 anchorPoint_;
 
