@@ -19,6 +19,7 @@ struct BlurData {
 	float pickRange;
 	float stepWidth;
 	int32_t isCenterBlur;
+	int32_t isNormal;
 };
 ConstantBuffer<BlurData> gBlur : register(b1);
 
@@ -53,6 +54,12 @@ PixelShaderOutput main(VertexShaderOutput input) {
 	}
 
 	output.color = color / totalWeight * gMaterial.color;
+
+	if (gBlur.isNormal == 1) {
+		if (output.color.a <= 0.5f) {
+			discard;
+		}
+	}
 
 	return output;
 }

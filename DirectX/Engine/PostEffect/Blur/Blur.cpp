@@ -67,6 +67,13 @@ void Blur::Draw(BlendMode blendMode)
 		blurData_->stepWidth = 0.001f;
 	}
 
+	if (blendMode == BlendMode::kBlendModeNormal) {
+		blurData_->isNormal = 1;
+	}
+	else {
+		blurData_->isNormal = 0;
+	}
+
 	if (isInvisible_) {
 		return;
 	}
@@ -254,6 +261,8 @@ void Blur::CreateBlurRes()
 	blurData_->stepWidth = 0.005f;
 
 	blurData_->isCenterBlur = 1;
+
+	blurData_->isNormal = 1;
 }
 
 void Blur::CreateTexRes()

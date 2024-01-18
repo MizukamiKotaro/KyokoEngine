@@ -20,6 +20,9 @@ StageScene::StageScene()
 	highLumi_ = std::make_unique<HighLumi>();
 
 	blur_ = std::make_unique<Blur>();
+	blur2_ = std::make_unique<Blur>();
+
+	post_ = std::make_unique<PostEffect>();
 
 	gaussianBlur_ = std::make_unique<GaussianBlur>();
 
@@ -63,8 +66,6 @@ void StageScene::Draw()
 {
 	contrast_->PreDrawScene();
 
-	//sprite_->Draw(*camera_.get());
-	//lights_->Draw(camera_.get());
 	puniru_->Draw(*camera_.get());
 
 	contrast_->PostDrawScene();
@@ -77,9 +78,15 @@ void StageScene::Draw()
 
 	blur_->PreDrawScene();
 
+	highLumi_->Draw();
+	//contrast_->Draw();
+	blur_->PostDrawScene();
+
+	blur2_->PreDrawScene();
+
 	//highLumi_->Draw();
 	contrast_->Draw();
-	blur_->PostDrawScene();
+	blur2_->PostDrawScene();
 
 	gaussianBlur_->PreDrawScene();
 
@@ -87,28 +94,34 @@ void StageScene::Draw()
 
 	gaussianBlur_->PostDrawScene();
 
-	/*contrast_->PreDrawScene();
-
-	puniru_->Draw(*camera_.get());
-	gaussianBlur_->Draw(BlendMode::kBlendModeAdd);
-
-	contrast_->PostDrawScene();*/
-
 	bloom_->PreDrawScene();
 
 	puniru_->Draw(*camera_.get());
 
 	bloom_->PostDrawScene();
 
+
 	Kyoko::PreDraw();
+
+	slot_->Draw(camera_.get());
+
+	//bloom_->Draw();
+	
+	/*sprite_->Draw();
 
 	contrast_->Draw();
 
-	blur_->blurData_->angle = 90;
+	blur_->color_ = { 0.3f,0.5f,1.0f,1.0f };
+	blur_->blurData_->angle = 20.0f;
 	blur_->blurData_->isCenterBlur = 0;
-	blur_->color_.z = 0.0f;
 	blur_->Draw(BlendMode::kBlendModeAdd);
-	
+
+	blur2_->color_.x = 0.0f;
+	blur2_->blurData_->angle = 90.0f;
+	blur2_->pos_.x = -300.0f;
+	blur2_->Update();
+	blur2_->Draw();*/
+
 	BlackDraw();
 
 	// フレームの終了
