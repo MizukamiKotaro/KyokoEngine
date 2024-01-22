@@ -6,6 +6,7 @@
 #include "Engine/Base/WindowsInfo/WindowsInfo.h"
 #include <vector>
 #include <chrono>
+#include "DescriptorHeapManager/DescriptorHeap/DescriptorHeap.h"
 
 class DirectXBase
 {
@@ -71,7 +72,7 @@ private: // メンバ変数
 	ComPtr<ID3D12Device> device_;
 	ComPtr<IDXGIAdapter4> useAdapter_;
 	ComPtr<ID3D12CommandQueue> commandQueue_;
-	ComPtr<ID3D12CommandAllocator> commandAllocator_;
+	ComPtr<ID3D12CommandAllocator> commandAllocator_; 
 	ComPtr<ID3D12GraphicsCommandList> commandList_;
 	ComPtr<IDXGISwapChain4> swapChain_;
 	std::vector<ComPtr<ID3D12Resource>> backBuffers_;
@@ -79,8 +80,8 @@ private: // メンバ変数
 	ComPtr<ID3D12Fence> fence_;
 	uint64_t fenceValue_ = 0;
 
-	ID3D12DescriptorHeap* rtvHeap_ = nullptr;
-	ID3D12DescriptorHeap* dsvHeap_ = nullptr;
+	std::vector<const DescriptorHandles*> rtvHandles_;
+	const DescriptorHandles* dsvHandles_;
 
 	// 記録時間(FPS固定)
 	std::chrono::steady_clock::time_point reference_;

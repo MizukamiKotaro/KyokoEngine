@@ -45,6 +45,9 @@ Blur::~Blur()
 	transformResource_->Release();
 	materialResource_->Release();
 	blurResource_->Release();
+	DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->DeleteDescriptor(srvHandles_);
+	DescriptorHeapManager::GetInstance()->GetRTVDescriptorHeap()->DeleteDescriptor(rtvHandles_);
+	DescriptorHeapManager::GetInstance()->GetDSVDescriptorHeap()->DeleteDescriptor(dsvHandles_);
 }
 
 void Blur::Initialize()
@@ -96,7 +99,7 @@ void Blur::Draw(BlendMode blendMode)
 	//TransformationMatrixCBufferの場所を設定
 	commandList->SetGraphicsRootConstantBufferView(1, transformResource_->GetGPUVirtualAddress());
 
-	commandList->SetGraphicsRootDescriptorTable(2, srvGPUDescriptorHandle_);
+	commandList->SetGraphicsRootDescriptorTable(2, srvHandles_->gpuHandle);
 
 	commandList->SetGraphicsRootConstantBufferView(3, blurResource_->GetGPUVirtualAddress());
 
@@ -115,7 +118,7 @@ void Blur::PreDrawScene()
 	commandList->ResourceBarrier(1, &barrier);
 
 	// レンダーターゲットのセット
-	commandList->OMSetRenderTargets(1, &rtvCPUDescriptorHandle_, false, &dsvCPUDescriptorHandle_);
+	commandList->OMSetRenderTargets(1, &rtvHandles_->cpuHandle, false, &dsvHandles_->cpuHandle);
 
 	// ビューポートの設定
 	CD3DX12_VIEWPORT viewport = CD3DX12_VIEWPORT(0.0f, 0.0f, WindowsInfo::kWindowWidth, WindowsInfo::kWindowHeight);
@@ -126,13 +129,13 @@ void Blur::PreDrawScene()
 	commandList->RSSetScissorRects(1, &rect);
 
 	// 全画面クリア
-	commandList->ClearRenderTargetView(rtvCPUDescriptorHandle_, clearColor, 0, nullptr);
+	commandList->ClearRenderTargetView(rtvHandles_->cpuHandle, clearColor, 0, nullptr);
 
 	// 深度バッファクリア
-	commandList->ClearDepthStencilView(dsvCPUDescriptorHandle_, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
+	commandList->ClearDepthStencilView(dsvHandles_->cpuHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 
 	//描画用のDescriptorHeapの設定
-	ID3D12DescriptorHeap* descriptorHeaps[] = { DescriptorHeapManager::GetInstance()->GetSRVHeap() };
+	ID3D12DescriptorHeap* descriptorHeaps[] = { DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->GetHeap() };
 	commandList->SetDescriptorHeaps(1, descriptorHeaps);
 
 	GraphicsPiplineManager::GetInstance()->PreDraw();
@@ -313,10 +316,9 @@ void Blur::CreateTexRes()
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D; // 2Dテクスチャ
 	srvDesc.Texture2D.MipLevels = 1;
 
-	srvCPUDescriptorHandle_ = DescriptorHeapManager::GetInstance()->GetNewSRVCPUDescriptorHandle();
-	srvGPUDescriptorHandle_ = DescriptorHeapManager::GetInstance()->GetNewSRVGPUDescriptorHandle();
+	srvHandles_ = DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->GetNewDescriptorHandles();
 
-	DirectXBase::GetInstance()->GetDevice()->CreateShaderResourceView(texResource_.Get(), &srvDesc, srvCPUDescriptorHandle_);
+	DirectXBase::GetInstance()->GetDevice()->CreateShaderResourceView(texResource_.Get(), &srvDesc, srvHandles_->cpuHandle);
 }
 
 void Blur::CreateRTV()
@@ -325,10 +327,9 @@ void Blur::CreateRTV()
 	rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB; //出力結果をSRGBに変換して書き込む
 	rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D; //2dテクスチャとして書き込む
 
-	rtvCPUDescriptorHandle_ = DescriptorHeapManager::GetInstance()->GetNewRTVCPUDescriptorHandle();
-	//rtvGPUDescriptorHandle_ = DescriptorHeapManager::GetInstance()->GetNewRTVGPUDescriptorHandle();
+	rtvHandles_ = DescriptorHeapManager::GetInstance()->GetRTVDescriptorHeap()->GetNewDescriptorHandles();
 
-	DirectXBase::GetInstance()->GetDevice()->CreateRenderTargetView(texResource_.Get(), &rtvDesc, rtvCPUDescriptorHandle_);
+	DirectXBase::GetInstance()->GetDevice()->CreateRenderTargetView(texResource_.Get(), &rtvDesc, rtvHandles_->cpuHandle);
 }
 
 void Blur::CreateDSV()
@@ -354,15 +355,14 @@ void Blur::CreateDSV()
 	);
 	assert(SUCCEEDED(hr));
 
-	dsvCPUDescriptorHandle_ = DescriptorHeapManager::GetInstance()->GetNewDSVCPUDescriptorHandle();
-	//dsvGPUDescriptorHandle_ = DescriptorHeapManager::GetInstance()->GetNewDSVGPUDescriptorHandle();
+	dsvHandles_ = DescriptorHeapManager::GetInstance()->GetDSVDescriptorHeap()->GetNewDescriptorHandles();
 
 	//DSVの設定
 	D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc{};
 	dsvDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT; // Format。基本的にはResourceに合わせる
 	dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D; // 2dTexture
 	// DSVHeapの先頭にDSVを作る
-	DirectXBase::GetInstance()->GetDevice()->CreateDepthStencilView(dsvResource_.Get(), &dsvDesc, dsvCPUDescriptorHandle_);
+	DirectXBase::GetInstance()->GetDevice()->CreateDepthStencilView(dsvResource_.Get(), &dsvDesc, dsvHandles_->cpuHandle);
 }
 
 void Blur::CreateResources()

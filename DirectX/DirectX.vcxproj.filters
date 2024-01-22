@@ -208,6 +208,9 @@
     <Filter Include="Engine\PostEffect\Bloom">
       <UniqueIdentifier>{7a34ef9e-5e89-44c0-a26b-b5d44c3359c0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Base\DescriptorHeapManager\DescriptorHeap">
+      <UniqueIdentifier>{0726e4ee-bd27-4bce-828b-ffcbbee33815}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -389,6 +392,9 @@
     </ClCompile>
     <ClCompile Include="Engine\PostEffect\Bloom\Bloom.cpp">
       <Filter>Engine\PostEffect\Bloom</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Base\DescriptorHeapManager\DescriptorHeap\DescriptorHeap.cpp">
+      <Filter>Engine\Base\DescriptorHeapManager\DescriptorHeap</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -601,6 +607,9 @@
     </ClInclude>
     <ClInclude Include="Engine\PostEffect\Bloom\Bloom.h">
       <Filter>Engine\PostEffect\Bloom</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Base\DescriptorHeapManager\DescriptorHeap\DescriptorHeap.h">
+      <Filter>Engine\Base\DescriptorHeapManager\DescriptorHeap</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

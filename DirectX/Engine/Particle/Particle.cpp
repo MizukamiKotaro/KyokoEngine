@@ -146,7 +146,7 @@ void Particle::Draw(const Camera& camera, BlendMode blendMode)
 	commandList->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 	//TransformationMatrixCBufferの場所を設定
 	//commandList->SetGraphicsRootConstantBufferView(1, instancingResource_->GetGPUVirtualAddress());
-	commandList->SetGraphicsRootDescriptorTable(1, srvGPUDescriptorHandle_);
+	commandList->SetGraphicsRootDescriptorTable(1, srvHandles_->gpuHandle);
 	//平行光源CBufferの場所を設定
 	commandList->SetGraphicsRootConstantBufferView(3, light_.GetDirectionalLightGPUVirtualAddress());
 
@@ -186,10 +186,9 @@ void Particle::CreateSRV()
 	srvDesc.Buffer.NumElements = kNumInstance;
 	srvDesc.Buffer.StructureByteStride = sizeof(ParticleForGPU);
 
-	srvCPUDescriptorHandle_ = DescriptorHeapManager::GetInstance()->GetNewSRVCPUDescriptorHandle();
-	srvGPUDescriptorHandle_ = DescriptorHeapManager::GetInstance()->GetNewSRVGPUDescriptorHandle();
+	srvHandles_ = DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->GetNewDescriptorHandles();
 
-	DirectXBase::GetInstance()->GetDevice()->CreateShaderResourceView(instancingResource_.Get(), &srvDesc, srvCPUDescriptorHandle_);
+	DirectXBase::GetInstance()->GetDevice()->CreateShaderResourceView(instancingResource_.Get(), &srvDesc, srvHandles_->cpuHandle);
 
 }
 
