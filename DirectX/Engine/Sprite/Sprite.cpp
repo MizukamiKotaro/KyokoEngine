@@ -6,12 +6,14 @@
 #include "Engine/Base/DescriptorHeapManager/DescriptorHeapManager.h"
 #include "Camera.h"
 
+const std::string Sprite::directoryPath_ = "Resources/Texture/";
+
 Sprite::Sprite(const std::string& filePath, const Vector2& pos, const Vector2& texLeftTop, const Vector2& texSize, const Vector4& color, const Vector2& anchorPoint, bool isFlipX, bool isFlipY)
 {
 
 	CreateVertexRes();
 
-	LoadTexture(filePath);
+	LoadTexture(directoryPath_ + filePath);
 	AdjustTextureSize();
 
 	CreateMaterialRes();
@@ -123,7 +125,7 @@ void Sprite::Draw(const Camera& camera, BlendMode blendMode)
 		commandList->SetGraphicsRootDescriptorTable(2, texManager->GetSRVGPUDescriptorHandle(textureHundle_));
 	}
 	else {
-		this->LoadTexture("Resources/white.png");
+		this->LoadTexture(directoryPath_ + "white.png");
 		commandList->SetGraphicsRootDescriptorTable(2, texManager->GetSRVGPUDescriptorHandle(textureHundle_));
 	}
 	//描画!!!!（DrawCall/ドローコール）
@@ -158,7 +160,7 @@ void Sprite::Draw(BlendMode blendMode)
 		commandList->SetGraphicsRootDescriptorTable(2, texManager->GetSRVGPUDescriptorHandle(textureHundle_));
 	}
 	else {
-		this->LoadTexture("Resources/white.png");
+		this->LoadTexture(directoryPath_ + "white.png");
 		commandList->SetGraphicsRootDescriptorTable(2, texManager->GetSRVGPUDescriptorHandle(textureHundle_));
 	}
 	//描画!!!!（DrawCall/ドローコール）

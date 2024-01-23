@@ -18,7 +18,7 @@ Particle::Particle(const std::string& fileName)
 
 	meshHundle_ = modelManager->LoadObj("Plane");
 
-	textureHundle_ = TextureManager::GetInstance()->LoadTexture("Resources/"+ fileName);
+	textureHundle_ = modelManager->GetTextureHundle(meshHundle_);
 
 	CreateResources();
 

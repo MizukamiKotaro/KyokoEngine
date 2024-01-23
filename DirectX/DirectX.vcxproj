@@ -155,7 +155,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\SceneSystem\SelectScene\SelectScene.cpp" />
     <ClCompile Include="Game\SceneSystem\StageScene\StageScene.cpp" />
     <ClCompile Include="Game\SceneSystem\TitleScene\TitleScene.cpp" />
-    <ClCompile Include="Game\Slot\Slot.cpp" />
     <ClCompile Include="Game\StageLights\StageLights.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Engine\Utils\Camera\Camera.cpp" />
@@ -245,7 +244,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\SceneSystem\SelectScene\SelectScene.h" />
     <ClInclude Include="Game\SceneSystem\StageScene\StageScene.h" />
     <ClInclude Include="Game\SceneSystem\TitleScene\TitleScene.h" />
-    <ClInclude Include="Game\Slot\Slot.h" />
     <ClInclude Include="Game\StageLights\StageLights.h" />
   </ItemGroup>
   <ItemGroup>

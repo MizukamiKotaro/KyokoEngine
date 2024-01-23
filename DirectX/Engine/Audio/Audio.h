@@ -132,5 +132,7 @@ private:
 	std::vector<SoundData> soundDatas_;
 	//std::vector<std::unique_ptr<Voice>> voices_;
 	std::array<std::unique_ptr<Voice>, kSoundVoiceMaxNum> voices_;
+
+	const std::string directoryPath_ = "Resources/Audio/";
 };
 

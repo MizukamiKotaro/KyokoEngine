@@ -6,7 +6,6 @@
 #include "Sprite.h"
 #include "PostEffect/Contrast/Contrast.h"
 #include "Light/Light.h"
-#include "Slot/Slot.h"
 #include "PostEffect/HighLumi/HighLumi.h"
 #include "PostEffect/Blur/Blur.h"
 #include "PostEffect/GaussianBlur/GaussianBlur.h"
@@ -46,6 +45,4 @@ private:
 	std::unique_ptr<PointLight> pointLight_;
 
 	std::unique_ptr<Sprite> sprite_;
-
-	std::unique_ptr<Slot> slot_;
 };

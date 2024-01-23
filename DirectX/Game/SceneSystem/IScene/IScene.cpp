@@ -19,7 +19,7 @@ void IScene::FirstInit()
 	camera_ = std::make_unique<Camera>();
 	camera_->Initialize();
 
-	black_ = std::make_unique<Sprite>("Resources/white.png");
+	black_ = std::make_unique<Sprite>("white.png");
 	black_->size_ = { 1280.0f,720.0f };
 	black_->pos_ = { 640.0f,360.0f };
 	black_->SetColor(Vector4{ 0.0f,0.0f,0.0f,1.0f });

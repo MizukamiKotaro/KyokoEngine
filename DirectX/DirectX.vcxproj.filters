@@ -172,9 +172,6 @@
     <Filter Include="Engine\GraphicsPipelines\ContrastGraphicsPipeline">
       <UniqueIdentifier>{21daf958-b418-47d0-8266-70f092e3425d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Slot">
-      <UniqueIdentifier>{32b949ed-6485-439a-9ee8-3951033c60e7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\StageLights">
       <UniqueIdentifier>{29fb222b-5f5f-49fb-aaf9-6e4a5730d7bc}</UniqueIdentifier>
     </Filter>
@@ -365,9 +362,6 @@
     </ClCompile>
     <ClCompile Include="Engine\GraphicsPipelines\ContrastGraphicsPipeline\ContrastGraphicsPipeline.cpp">
       <Filter>Engine\GraphicsPipelines\ContrastGraphicsPipeline</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Slot\Slot.cpp">
-      <Filter>Game\Slot</Filter>
     </ClCompile>
     <ClCompile Include="Game\StageLights\StageLights.cpp">
       <Filter>Game\StageLights</Filter>
@@ -580,9 +574,6 @@
     </ClInclude>
     <ClInclude Include="Engine\GraphicsPipelines\ContrastGraphicsPipeline\ContrastGraphicsPipeline.h">
       <Filter>Engine\GraphicsPipelines\ContrastGraphicsPipeline</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Slot\Slot.h">
-      <Filter>Game\Slot</Filter>
     </ClInclude>
     <ClInclude Include="Game\StageLights\StageLights.h">
       <Filter>Game\StageLights</Filter>

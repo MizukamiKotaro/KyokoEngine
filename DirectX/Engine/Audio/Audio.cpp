@@ -39,9 +39,11 @@ void Audio::Finalize() {
 
 uint32_t Audio::LoadWave(const std::string& filename) {
 
+	std::string fileName = directoryPath_ + filename;
+
 	for (uint32_t soundDataNum = 0; soundDataNum < static_cast<uint32_t>(soundDatas_.size()); soundDataNum++) {
 
-		if (soundDatas_[soundDataNum].name == filename) {
+		if (soundDatas_[soundDataNum].name == fileName) {
 			return soundDataNum;
 		}
 	}
@@ -49,7 +51,7 @@ uint32_t Audio::LoadWave(const std::string& filename) {
 
 	std::ifstream file;
 
-	file.open(filename, std::ios_base::binary);
+	file.open(fileName, std::ios_base::binary);
 
 	assert(file.is_open());
 
@@ -101,7 +103,7 @@ uint32_t Audio::LoadWave(const std::string& filename) {
 	soundData.wfex = fmt.fmt;
 	soundData.pBuffer = pBuffer;
 	soundData.bufferSize = data.size;
-	soundData.name = filename;
+	soundData.name = fileName;
 
 	soundDatas_.push_back(soundData);
 

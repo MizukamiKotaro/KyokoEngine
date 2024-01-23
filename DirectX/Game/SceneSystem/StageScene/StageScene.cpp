@@ -8,9 +8,9 @@ StageScene::StageScene()
 
 	lights_ = std::make_unique<StageLights>();
 
-	puniru_ = std::make_unique<Sprite>("Resources/puniru.png");
+	puniru_ = std::make_unique<Sprite>("puniru.png");
 
-	sprite_ = std::make_unique<Sprite>("Resources/white.png");
+	sprite_ = std::make_unique<Sprite>("white.png");
 	sprite_->size_ = { 1280.0f,720.0f };
 	sprite_->SetColor({ 0.0f,0.0f,0.0f,1.0f });
 	sprite_->Update();
@@ -29,14 +29,11 @@ StageScene::StageScene()
 	bloom_ = std::make_unique<Bloom>();
 
 	pointLight_ = std::make_unique<PointLight>();
-
-	slot_ = std::make_unique<Slot>();
 }
 
 void StageScene::Init()
 {
-	slot_->Initialize();
-	slot_->PostEffectWright(camera_.get());
+
 }
 
 void StageScene::Update()
@@ -56,8 +53,6 @@ void StageScene::Update()
 	ImGui::End();
 
 #endif // _DEBUG
-
-	slot_->Update(camera_.get());
 
 	lights_->Update();
 }
@@ -102,8 +97,6 @@ void StageScene::Draw()
 
 
 	Kyoko::PreDraw();
-
-	slot_->Draw(camera_.get());
 
 	//bloom_->Draw();
 	

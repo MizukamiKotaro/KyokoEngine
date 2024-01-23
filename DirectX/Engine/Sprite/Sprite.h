@@ -109,6 +109,8 @@ private:
 
 	static const GraphicsPiplineManager::PiplineType piplineType = GraphicsPiplineManager::PiplineType::SPRITE;
 
+	static const std::string directoryPath_;
+
 	Matrix4x4 worldMat_;
 
 	Vector2 uvTranslate_;
