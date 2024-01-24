@@ -10,6 +10,8 @@
 #include "Utils/Transform/Transform.h"
 #include "GraphicsPipelines/GraphicsPiplineManager/GraphicsPiplineManager.h"
 #include "Light/Light.h"
+#include "ModelData/ModelData.h"
+#include "Texture.h"
 
 class Camera;
 
@@ -35,7 +37,7 @@ public:
 	/// モデルの生成
 	/// </summary>
 	/// <param name="meshHundle">モデルデータのハンドル( ModelDataManager::GetInstance()->LoadObj("Cube") 等)</param>
-	Model(uint32_t meshHundle);
+	Model(const ModelData* modelData);
 	~Model();
 
 	struct Material
@@ -69,11 +71,11 @@ private:
 
 public:
 
-	void SetTex(uint32_t hundle);
+	void SetTexture(const Texture* texture);
 
-	void SetSRVGPUDescriptorHandle_(D3D12_GPU_DESCRIPTOR_HANDLE srvGPUDescriptorHandle) { srvGPUDescriptorHandle_ = srvGPUDescriptorHandle; }
+	void SetSRVGPUDescriptorHandle_(const D3D12_GPU_DESCRIPTOR_HANDLE& srvGPUDescriptorHandle) { srvGPUDescriptorHandle_ = srvGPUDescriptorHandle; }
 
-	void SetMesh(uint32_t hundle);
+	void SetModelData(const ModelData* modelData);
 
 	void SetDirectionalLight(const DirectionalLight* light) { light_.SetDirectionalLight(light); }
 
@@ -119,9 +121,11 @@ private:
 	Vector3 uvRotate_;
 	Vector3 uvPos_;
 
-	uint32_t meshHundle_;
+	const ModelData* modelData_;
 
-	uint32_t textureHundle_;
+	// texture変えたい時用
+	const Texture* texture_;
 
+	// ポストエフェクト用
 	D3D12_GPU_DESCRIPTOR_HANDLE srvGPUDescriptorHandle_;
 };

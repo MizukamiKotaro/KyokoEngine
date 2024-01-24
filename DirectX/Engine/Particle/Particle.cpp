@@ -16,9 +16,9 @@ Particle::Particle(const std::string& fileName)
 
 	ModelDataManager* modelManager = ModelDataManager::GetInstance();
 
-	meshHundle_ = modelManager->LoadObj("Plane");
+	modelData_ = modelManager->LoadObj("Plane");
 
-	textureHundle_ = modelManager->GetTextureHundle(meshHundle_);
+	texture_ = modelData_->texture;
 
 	CreateResources();
 
@@ -27,13 +27,13 @@ Particle::Particle(const std::string& fileName)
 	InitVariables();
 }
 
-Particle::Particle(uint32_t textureHundle)
+Particle::Particle(const Texture* texture)
 {
 	ModelDataManager* modelManager = ModelDataManager::GetInstance();
 
-	meshHundle_ = modelManager->LoadObj("Plane");
+	modelData_ = modelManager->LoadObj("Plane");
 
-	textureHundle_ = textureHundle;
+	texture_ = texture;
 
 	CreateResources();
 
@@ -132,16 +132,12 @@ void Particle::Draw(const Camera& camera, BlendMode blendMode)
 
 	materialData_->uvTransform = uvMatrix_;
 
-	TextureManager* texManager = TextureManager::GetInstance();
-
-	const ModelData* modelData = ModelDataManager::GetInstance()->GetModelData(meshHundle_);
-
 	GraphicsPiplineManager::GetInstance()->SetBlendMode(piplineType, static_cast<uint32_t>(blendMode));
 
 	ID3D12GraphicsCommandList* commandList = DirectXBase::GetInstance()->GetCommandList();
 
 	//Spriteの描画。変更に必要なものだけ変更する
-	commandList->IASetVertexBuffers(0, 1, &modelData->mesh.vertexBufferView_); // VBVを設定
+	commandList->IASetVertexBuffers(0, 1, &modelData_->mesh.vertexBufferView_); // VBVを設定
 	//マテリアルCBufferの場所を設定
 	commandList->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 	//TransformationMatrixCBufferの場所を設定
@@ -150,9 +146,9 @@ void Particle::Draw(const Camera& camera, BlendMode blendMode)
 	//平行光源CBufferの場所を設定
 	commandList->SetGraphicsRootConstantBufferView(3, light_.GetDirectionalLightGPUVirtualAddress());
 
-	commandList->SetGraphicsRootDescriptorTable(2, texManager->GetSRVGPUDescriptorHandle(textureHundle_));
+	commandList->SetGraphicsRootDescriptorTable(2, texture_->handles_->gpuHandle);
 	//描画!!!!（DrawCall/ドローコール）
-	commandList->DrawInstanced(UINT(modelData->mesh.verteces.size()), instaceNum, 0, 0);
+	commandList->DrawInstanced(UINT(modelData_->mesh.verteces.size()), instaceNum, 0, 0);
 
 }
 

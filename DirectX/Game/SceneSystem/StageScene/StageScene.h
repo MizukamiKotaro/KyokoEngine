@@ -2,7 +2,6 @@
 
 #include <memory>
 #include "SceneSystem/IScene/IScene.h"
-#include "Game/StageLights/StageLights.h"
 #include "Sprite.h"
 #include "PostEffect/Contrast/Contrast.h"
 #include "Light/Light.h"
@@ -23,8 +22,6 @@ public:
 	void Draw() override;
 
 private:
-
-	std::unique_ptr<StageLights> lights_;
 
 	std::unique_ptr<Sprite> puniru_;
 

@@ -12,7 +12,7 @@ public:
 
 	void Initialize();
 
-	void Update();
+	void Update(float time);
 
 	void Draw(Camera* camera);
 

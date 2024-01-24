@@ -27,7 +27,7 @@ SpotLight::SpotLight()
 	light_->cosAngle = 0.7f;
 	light_->cosFalloffStart = 0.8f;
 
-	meshHundle_ = ModelDataManager::GetInstance()->LoadObj("Plane");
+	modelData_ = ModelDataManager::GetInstance()->LoadObj("Plane");
 
 	CreateTransformationResource();
 
@@ -90,10 +90,8 @@ void SpotLight::Draw(const Camera& camera, BlendMode blendMode)
 
 	ID3D12GraphicsCommandList* commandList = DirectXBase::GetInstance()->GetCommandList();
 
-	const ModelData* modelData = ModelDataManager::GetInstance()->GetModelData(meshHundle_);
-
 	//Spriteの描画。変更に必要なものだけ変更する
-	commandList->IASetVertexBuffers(0, 1, &modelData->mesh.vertexBufferView_); // VBVを設定
+	commandList->IASetVertexBuffers(0, 1, &modelData_->mesh.vertexBufferView_); // VBVを設定
 
 	//TransformationMatrixCBufferの場所を設定
 	commandList->SetGraphicsRootConstantBufferView(1, transformationResource_->GetGPUVirtualAddress());
@@ -104,7 +102,7 @@ void SpotLight::Draw(const Camera& camera, BlendMode blendMode)
 	commandList->SetGraphicsRootConstantBufferView(0, resource_->GetGPUVirtualAddress());
 
 	//描画!!!!（DrawCall/ドローコール）
-	commandList->DrawInstanced(UINT(modelData->mesh.verteces.size()), 1, 0, 0);
+	commandList->DrawInstanced(UINT(modelData_->mesh.verteces.size()), 1, 0, 0);
 }
 
 void SpotLight::CreateTransformationResource()

@@ -5,6 +5,7 @@
 #include "NodeData3D.h"
 #include "AnimationData3D.h"
 #include "BoneData3D.h"
+#include "Texture.h"
 
 struct ModelData
 {
@@ -14,5 +15,5 @@ struct ModelData
 	BoneData boneData;
 	AnimationData animationData;
 	std::string fileName;
-	uint32_t textureHundle_;
+	const Texture* texture;
 };

@@ -5,6 +5,7 @@
 #include "Engine/Base/DirectXBase/DirectXBase.h"
 #include "Engine/Base/DescriptorHeapManager/DescriptorHeapManager.h"
 #include "Camera.h"
+#include <algorithm>
 
 const std::string Sprite::directoryPath_ = "Resources/Texture/";
 
@@ -44,11 +45,11 @@ Sprite::Sprite(const std::string& filePath, const Vector2& pos, const Vector2& t
 	Update();
 }
 
-Sprite::Sprite(uint32_t texHundle, const Vector2& pos, const Vector2& texLeftTop, const Vector2& texSize, const Vector4& color, const Vector2& anchorPoint, bool isFlipX, bool isFlipY)
+Sprite::Sprite(const Texture* texture, const Vector2& pos, const Vector2& texLeftTop, const Vector2& texSize, const Vector4& color, const Vector2& anchorPoint, bool isFlipX, bool isFlipY)
 {
 	CreateVertexRes();
 
-	textureHundle_ = texHundle;
+	texture_ = texture;
 	AdjustTextureSize();
 
 	CreateMaterialRes();
@@ -109,8 +110,6 @@ void Sprite::Draw(const Camera& camera, BlendMode blendMode)
 	transformData_->WVP = worldMat_ * camera.GetOrthographicMat();
 	materialData_->uvTransform = Matrix4x4::MakeAffinMatrix({ uvScale_.x,uvScale_.y,0.0f }, { 0.0f,0.0f,uvRotate_ }, { uvTranslate_.x,uvTranslate_.y,0.0f });
 
-	TextureManager* texManager = TextureManager::GetInstance();
-
 	GraphicsPiplineManager::GetInstance()->SetBlendMode(piplineType, static_cast<uint32_t>(blendMode));
 
 	ID3D12GraphicsCommandList* commandList = DirectXBase::GetInstance()->GetCommandList();
@@ -122,11 +121,11 @@ void Sprite::Draw(const Camera& camera, BlendMode blendMode)
 	//TransformationMatrixCBufferの場所を設定
 	commandList->SetGraphicsRootConstantBufferView(1, transformResource_->GetGPUVirtualAddress());
 	if (isLoad_) {
-		commandList->SetGraphicsRootDescriptorTable(2, texManager->GetSRVGPUDescriptorHandle(textureHundle_));
+		commandList->SetGraphicsRootDescriptorTable(2, texture_->handles_->gpuHandle);
 	}
 	else {
 		this->LoadTexture(directoryPath_ + "white.png");
-		commandList->SetGraphicsRootDescriptorTable(2, texManager->GetSRVGPUDescriptorHandle(textureHundle_));
+		commandList->SetGraphicsRootDescriptorTable(2, texture_->handles_->gpuHandle);
 	}
 	//描画!!!!（DrawCall/ドローコール）
 	commandList->DrawInstanced(6, 1, 0, 0);
@@ -144,8 +143,6 @@ void Sprite::Draw(BlendMode blendMode)
 	transformData_->WVP = worldMat_ * Camera::GetOrthographicMat();
 	materialData_->uvTransform = Matrix4x4::MakeAffinMatrix({ uvScale_.x,uvScale_.y,0.0f }, { 0.0f,0.0f,uvRotate_ }, { uvTranslate_.x,uvTranslate_.y,0.0f });
 
-	TextureManager* texManager = TextureManager::GetInstance();
-
 	GraphicsPiplineManager::GetInstance()->SetBlendMode(piplineType, static_cast<uint32_t>(blendMode));
 
 	ID3D12GraphicsCommandList* commandList = DirectXBase::GetInstance()->GetCommandList();
@@ -157,11 +154,11 @@ void Sprite::Draw(BlendMode blendMode)
 	//TransformationMatrixCBufferの場所を設定
 	commandList->SetGraphicsRootConstantBufferView(1, transformResource_->GetGPUVirtualAddress());
 	if (isLoad_) {
-		commandList->SetGraphicsRootDescriptorTable(2, texManager->GetSRVGPUDescriptorHandle(textureHundle_));
+		commandList->SetGraphicsRootDescriptorTable(2, texture_->handles_->gpuHandle);
 	}
 	else {
 		this->LoadTexture(directoryPath_ + "white.png");
-		commandList->SetGraphicsRootDescriptorTable(2, texManager->GetSRVGPUDescriptorHandle(textureHundle_));
+		commandList->SetGraphicsRootDescriptorTable(2, texture_->handles_->gpuHandle);
 	}
 	//描画!!!!（DrawCall/ドローコール）
 	commandList->DrawInstanced(6, 1, 0, 0);
@@ -172,14 +169,14 @@ void Sprite::LoadTexture(const std::string& filePath)
 
 	TextureManager* texManager = TextureManager::GetInstance();
 
-	textureHundle_ = texManager->LoadTexture(filePath);
+	texture_ = texManager->LoadTexture(filePath);
 
 	isLoad_ = true;
 }
 
-void Sprite::SetTextureHandle(uint32_t textureHundle)
+void Sprite::SetTexture(const Texture* texture)
 {
-	textureHundle_ = textureHundle;
+	texture_ = texture;
 
 	AdjustTextureSize();
 }
@@ -221,7 +218,7 @@ void Sprite::SetTextureTopLeft(const Vector2& texTopLeft)
 		textureLeftTop_ = textureLeftTop_;
 	}
 	else {
-		D3D12_RESOURCE_DESC resDesc = TextureManager::GetInstance()->GetTextureDesc(textureHundle_);
+		D3D12_RESOURCE_DESC resDesc = texture_->resource_->GetDesc();
 
 		Vector2 size = { static_cast<float>(resDesc.Width),static_cast<float>(resDesc.Height) };
 
@@ -237,7 +234,7 @@ void Sprite::SetTextureSize(const Vector2& texSize)
 		textureSize_ = texSize;
 	}
 	else {
-		D3D12_RESOURCE_DESC resDesc = TextureManager::GetInstance()->GetTextureDesc(textureHundle_);
+		D3D12_RESOURCE_DESC resDesc = texture_->resource_->GetDesc();
 
 		Vector2 size = { static_cast<float>(resDesc.Width),static_cast<float>(resDesc.Height) };
 
@@ -285,7 +282,7 @@ void Sprite::TransferUV()
 
 void Sprite::AdjustTextureSize()
 {
-	D3D12_RESOURCE_DESC resDesc = TextureManager::GetInstance()->GetTextureDesc(textureHundle_);
+	D3D12_RESOURCE_DESC resDesc = texture_->resource_->GetDesc();
 
 	size_ = { static_cast<float>(resDesc.Width),static_cast<float>(resDesc.Height) };
 }

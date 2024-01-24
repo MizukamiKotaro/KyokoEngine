@@ -13,8 +13,5 @@ public:
 
 private:
 
-	std::vector<uint32_t> soundHandles_;
-	std::vector<uint32_t> voiceHandles_;
-
 };
 

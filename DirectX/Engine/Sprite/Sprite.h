@@ -8,6 +8,7 @@
 #include "Utils/Math/Vector4.h"
 #include "Utils/Math/Matrix4x4.h"
 #include "GraphicsPipelines/GraphicsPiplineManager/GraphicsPiplineManager.h"
+#include "Texture.h"
 
 class Camera;
 
@@ -18,7 +19,7 @@ public:
 
 	Sprite(const std::string& filePath, const Vector2& pos = { 640.0f,360.0f }, const Vector2& texLeftTop = {}, const Vector2& texSize = {1.0f,1.0f},
 		const Vector4 & color = { 1.0f,1.0f,1.0f,1.0f }, const Vector2& anchorPoint = { 0.5f,0.5f }, bool isFlipX = false, bool isFlipY = false);
-	Sprite(uint32_t texHundle, const Vector2& pos = { 640.0f,360.0f }, const Vector2& texLeftTop = {}, const Vector2& texSize = {1.0f,1.0f},
+	Sprite(const Texture* texture, const Vector2& pos = { 640.0f,360.0f }, const Vector2& texLeftTop = {}, const Vector2& texSize = {1.0f,1.0f},
 		const Vector4& color = { 1.0f,1.0f,1.0f,1.0f }, const Vector2& anchorPoint = { 0.5f,0.5f }, bool isFlipX = false, bool isFlipY = false);
 	~Sprite();
 
@@ -58,7 +59,7 @@ public:
 
 	void LoadTexture(const std::string& filePath);
 
-	void SetTextureHandle(uint32_t textureHundle);
+	void SetTexture(const Texture* texture);
 
 	void SetAnchorPoint(const Vector2& anchorpoint);
 
@@ -131,7 +132,7 @@ private:
 	bool isInvisible_ = false;
 
 	bool isLoad_;
-	uint32_t textureHundle_;
+	const Texture* texture_;
 
 };
 

@@ -14,6 +14,8 @@
 #include "Utils/Shape/AABB.h"
 #include "Light/Light.h"
 #include "DescriptorHeapManager/DescriptorHeap/DescriptorHeap.h"
+#include "ModelData/ModelData.h"
+#include "Texture.h"
 
 class Camera;
 
@@ -24,7 +26,7 @@ public:
 	static const uint32_t kNumInstance = 256;
 
 	Particle(const std::string& fileName);
-	Particle(uint32_t textureHundle);
+	Particle(const Texture* texture);
 	~Particle();
 
 	struct Material
@@ -142,9 +144,9 @@ private:
 	Vector3 uvRotate_;
 	Vector3 uvPos_;
 
-	uint32_t meshHundle_;
+	const ModelData* modelData_;
 
-	uint32_t textureHundle_;
+	const Texture* texture_;
 
 	const DescriptorHandles* srvHandles_;
 };

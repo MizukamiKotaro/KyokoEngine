@@ -20,18 +20,18 @@ void ModelDataManager::Finalize()
 	}
 }
 
-uint32_t ModelDataManager::LoadObj(const std::string& fileName)
+const ModelData* ModelDataManager::LoadObj(const std::string& fileName)
 {
 	for (uint32_t modelNum = 0; modelNum < static_cast<uint32_t>(modelDatas_.size()); modelNum++) {
 
 		if (modelDatas_[modelNum]->fileName == fileName) {
-			return modelNum;
+			return modelDatas_[modelNum].get();
 		}
 	}
 
 	LoadObjFile(directoryPath_, fileName);
 
-	return static_cast<uint32_t>(modelDatas_.size()) - 1;
+	return modelDatas_.back().get();
 }
 
 uint32_t ModelDataManager::LoadGLTF(const std::string& fileName)
@@ -131,7 +131,7 @@ void ModelDataManager::LoadObjFile(const std::string& directoryPath, const std::
 		}
 	}
 
-	modelDatas_.back()->textureHundle_ = TextureManager::GetInstance()->LoadTexture(modelDatas_.back()->material.textureFilePath);
+	modelDatas_.back()->texture = TextureManager::GetInstance()->LoadTexture(modelDatas_.back()->material.textureFilePath);
 
 	modelDatas_.back()->mesh.vertexResource_ = DirectXBase::CreateBufferResource(sizeof(VertexData) * modelDatas_.back()->mesh.verteces.size());
 
@@ -302,7 +302,7 @@ void ModelDataManager::LoadGLTFFile(const std::string& directoryPath, const std:
 
 
 
-	modelDatas_.back()->textureHundle_ = TextureManager::GetInstance()->LoadTexture(modelDatas_.back()->material.textureFilePath);
+	modelDatas_.back()->texture = TextureManager::GetInstance()->LoadTexture(modelDatas_.back()->material.textureFilePath);
 
 	modelDatas_.back()->mesh.vertexResource_ = DirectXBase::CreateBufferResource(sizeof(VertexData) * modelDatas_.back()->mesh.verteces.size());
 

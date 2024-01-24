@@ -29,7 +29,7 @@ public:
 	/// </summary>
 	/// <param name="fileName">.objが入っているフォルダの名前( "Cube" 等)</param>
 	/// <returns>モデルデータのハンドル</returns>
-	uint32_t LoadObj(const std::string& fileName);
+	const ModelData* LoadObj(const std::string& fileName);
 
 	/// <summary>
 	/// glTFファイルの読み込み
@@ -37,20 +37,6 @@ public:
 	/// <param name="fileName">.glTFが入っているフォルダの名前( "Cube" 等)</param>
 	/// <returns>モデルデータのハンドル</returns>
 	uint32_t LoadGLTF(const std::string& fileName);
-
-	/// <summary>
-	/// テクスチャーハンドルの取得
-	/// </summary>
-	/// <param name="hundle">モデルハンドル( 0 等)</param>
-	/// <returns>テクスチャーハンドル</returns>
-	const uint32_t& GetTextureHundle(uint32_t hundle) { return modelDatas_[hundle]->textureHundle_; }
-
-	/// <summary>
-	/// モデルデータの取得
-	/// </summary>
-	/// <param name="hundle">モデルハンドル( 0 等)</param>
-	/// <returns>モデルデータ</returns>
-	const ModelData* GetModelData(uint32_t hundle) { return modelDatas_[hundle].get(); }
 
 private:
 	ModelDataManager() = default;

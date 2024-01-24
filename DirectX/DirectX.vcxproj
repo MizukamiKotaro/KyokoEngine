@@ -61,7 +61,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)/Engine;$(ProjectDir)/Engine/Base;$(ProjectDir)/Engine/Audio;$(ProjectDir)/Engine/Input;$(ProjectDir)/Engine/Model;$(ProjectDir)/Engine/Model/ModelData/ModelDataManager;$(ProjectDir)/Engine/Sprite;$(ProjectDir)/Engine/TextureManager;$(ProjectDir)/Engine/Utils/Math;$(ProjectDir)/Engine/Utils/Transfrom;$(ProjectDir)/Engine/Utils/Camera;$(ProjectDir)/Engine/Particle;$(ProjectDir)/Engine/Utils;$(ProjectDir)/Game;$(ProjectDir)/Externals\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)/Engine;$(ProjectDir)/Engine/Base;$(ProjectDir)/Engine/Audio;$(ProjectDir)/Engine/Input;$(ProjectDir)/Engine/Model;$(ProjectDir)/Engine/Model/ModelData/ModelDataManager;$(ProjectDir)/Engine/Sprite;$(ProjectDir)/Engine/TextureManager;$(ProjectDir)/Engine/Utils/Math;$(ProjectDir)/Engine/Utils/Transfrom;$(ProjectDir)/Engine/Utils/Camera;$(ProjectDir)/Engine/Particle;$(ProjectDir)/Engine/Utils;$(ProjectDir)/Game;$(ProjectDir)/Externals\assimp\include;$(ProjectDir)/Engine/TextureManager/Texture;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PreprocessorDefinitions>_ITERATOR_DEBUG_LEVEL=2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -90,7 +90,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)/Engine;$(ProjectDir)/Engine/Base;$(ProjectDir)/Engine/Audio;$(ProjectDir)/Engine/Input;$(ProjectDir)/Engine/Model;$(ProjectDir)/Engine/Model/ModelData/ModelDataManager;$(ProjectDir)/Engine/Sprite;$(ProjectDir)/Engine/TextureManager;$(ProjectDir)/Engine/Utils/Math;$(ProjectDir)/Engine/Utils/Transfrom;$(ProjectDir)/Engine/Utils/Camera;$(ProjectDir)/Engine/Particle;$(ProjectDir)/Engine/Utils;$(ProjectDir)/Game;$(ProjectDir)/Externals\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)/Engine;$(ProjectDir)/Engine/Base;$(ProjectDir)/Engine/Audio;$(ProjectDir)/Engine/Input;$(ProjectDir)/Engine/Model;$(ProjectDir)/Engine/Model/ModelData/ModelDataManager;$(ProjectDir)/Engine/Sprite;$(ProjectDir)/Engine/TextureManager;$(ProjectDir)/Engine/Utils/Math;$(ProjectDir)/Engine/Utils/Transfrom;$(ProjectDir)/Engine/Utils/Camera;$(ProjectDir)/Engine/Particle;$(ProjectDir)/Engine/Utils;$(ProjectDir)/Game;$(ProjectDir)/Externals\assimp\include;$(ProjectDir)/Engine/TextureManager/Texture;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <Optimization>MinSpace</Optimization>
@@ -149,13 +149,21 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\PostEffect\PostEffect.cpp" />
     <ClCompile Include="Engine\Sprite\Sprite.cpp" />
     <ClCompile Include="Engine\TextureManager\TextureManager.cpp" />
+    <ClCompile Include="Game\GameElement\Game.cpp" />
+    <ClCompile Include="Game\GameElement\Live\Dome\Dome.cpp" />
+    <ClCompile Include="Game\GameElement\Live\Live.cpp" />
+    <ClCompile Include="Game\GameElement\Live\Screen\Screen.cpp" />
+    <ClCompile Include="Game\GameElement\Live\StageLights\StageLights.cpp" />
+    <ClCompile Include="Game\GameElement\Live\Stage\Stage.cpp" />
+    <ClCompile Include="Game\GameElement\Notes\Notes.cpp" />
+    <ClCompile Include="Game\GameElement\Pause\Pause.cpp" />
+    <ClCompile Include="Game\GameElement\Score\Score.cpp" />
     <ClCompile Include="Game\SceneSystem\ClearScene\ClearScene.cpp" />
     <ClCompile Include="Game\SceneSystem\IScene\IScene.cpp" />
     <ClCompile Include="Game\SceneSystem\SceneManager\SceneManager.cpp" />
     <ClCompile Include="Game\SceneSystem\SelectScene\SelectScene.cpp" />
     <ClCompile Include="Game\SceneSystem\StageScene\StageScene.cpp" />
     <ClCompile Include="Game\SceneSystem\TitleScene\TitleScene.cpp" />
-    <ClCompile Include="Game\StageLights\StageLights.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Engine\Utils\Camera\Camera.cpp" />
     <ClCompile Include="Engine\Utils\Collision\Collision.cpp" />
@@ -219,6 +227,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\PostEffect\PostEffect.h" />
     <ClInclude Include="Engine\Sprite\Sprite.h" />
     <ClInclude Include="Engine\TextureManager\TextureManager.h" />
+    <ClInclude Include="Engine\TextureManager\Texture\Texture.h" />
     <ClInclude Include="Engine\Utils\Camera\Camera.h" />
     <ClInclude Include="Engine\Utils\Collision\Collision.h" />
     <ClInclude Include="Engine\Utils\Ease\Ease.h" />
@@ -238,13 +247,21 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Utils\Shape\Sphere.h" />
     <ClInclude Include="Engine\Utils\Shape\Triangle.h" />
     <ClInclude Include="Engine\Utils\Transform\Transform.h" />
+    <ClInclude Include="Game\GameElement\Game.h" />
+    <ClInclude Include="Game\GameElement\Live\Dome\Dome.h" />
+    <ClInclude Include="Game\GameElement\Live\Live.h" />
+    <ClInclude Include="Game\GameElement\Live\Screen\Screen.h" />
+    <ClInclude Include="Game\GameElement\Live\StageLights\StageLights.h" />
+    <ClInclude Include="Game\GameElement\Live\Stage\Stage.h" />
+    <ClInclude Include="Game\GameElement\Notes\Notes.h" />
+    <ClInclude Include="Game\GameElement\Pause\Pause.h" />
+    <ClInclude Include="Game\GameElement\Score\Score.h" />
     <ClInclude Include="Game\SceneSystem\ClearScene\ClearScene.h" />
     <ClInclude Include="Game\SceneSystem\IScene\IScene.h" />
     <ClInclude Include="Game\SceneSystem\SceneManager\SceneManager.h" />
     <ClInclude Include="Game\SceneSystem\SelectScene\SelectScene.h" />
     <ClInclude Include="Game\SceneSystem\StageScene\StageScene.h" />
     <ClInclude Include="Game\SceneSystem\TitleScene\TitleScene.h" />
-    <ClInclude Include="Game\StageLights\StageLights.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">

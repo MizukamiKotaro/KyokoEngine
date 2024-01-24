@@ -5,7 +5,7 @@
 // タイトルシーンで初期化
 int IScene::sceneNo_ = TITLE;
 
-int IScene::stageNo_ = 0;
+int IScene::stageNo_ = SHINING_STAR;
 
 IScene::~IScene(){}
 

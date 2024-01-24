@@ -172,9 +172,6 @@
     <Filter Include="Engine\GraphicsPipelines\ContrastGraphicsPipeline">
       <UniqueIdentifier>{21daf958-b418-47d0-8266-70f092e3425d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\StageLights">
-      <UniqueIdentifier>{29fb222b-5f5f-49fb-aaf9-6e4a5730d7bc}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\PostEffect\HighLumi">
       <UniqueIdentifier>{039712e2-1b09-4348-a79f-61aa633b3e9d}</UniqueIdentifier>
     </Filter>
@@ -207,6 +204,39 @@
     </Filter>
     <Filter Include="Engine\Base\DescriptorHeapManager\DescriptorHeap">
       <UniqueIdentifier>{0726e4ee-bd27-4bce-828b-ffcbbee33815}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameElement">
+      <UniqueIdentifier>{11d71cdf-0a7d-4dfd-bb29-1e2571632408}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameElement\Score">
+      <UniqueIdentifier>{ddea225d-8c06-4482-9672-5393f986e70c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameElement\Pause">
+      <UniqueIdentifier>{d62e42e8-2980-44a7-a607-0efd3d948a91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameElement\Notes">
+      <UniqueIdentifier>{24e02324-6b01-4e75-a744-09f2543bda73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\TextureManager\Texture">
+      <UniqueIdentifier>{463e904d-2b48-47c8-a525-e5e10063094e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameElement\Live">
+      <UniqueIdentifier>{16b956d7-d216-4166-bfb4-641a3efa38c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameElement\Live\Dome">
+      <UniqueIdentifier>{e698f7de-6f82-4747-af58-896a5d0fb367}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameElement\Live\Screen">
+      <UniqueIdentifier>{63062d91-384a-46ce-98a4-778f14094bf9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameElement\Live\Stage">
+      <UniqueIdentifier>{98beaa94-b472-486a-a19c-1fc3483fcc9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameElement\Live\StageLights">
+      <UniqueIdentifier>{29fb222b-5f5f-49fb-aaf9-6e4a5730d7bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameElement\Game">
+      <UniqueIdentifier>{b62ba53c-214c-4b0d-8fdd-cf6a835a99f1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -363,9 +393,6 @@
     <ClCompile Include="Engine\GraphicsPipelines\ContrastGraphicsPipeline\ContrastGraphicsPipeline.cpp">
       <Filter>Engine\GraphicsPipelines\ContrastGraphicsPipeline</Filter>
     </ClCompile>
-    <ClCompile Include="Game\StageLights\StageLights.cpp">
-      <Filter>Game\StageLights</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\PostEffect\HighLumi\HighLumi.cpp">
       <Filter>Engine\PostEffect\HighLumi</Filter>
     </ClCompile>
@@ -389,6 +416,33 @@
     </ClCompile>
     <ClCompile Include="Engine\Base\DescriptorHeapManager\DescriptorHeap\DescriptorHeap.cpp">
       <Filter>Engine\Base\DescriptorHeapManager\DescriptorHeap</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameElement\Score\Score.cpp">
+      <Filter>Game\GameElement\Score</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameElement\Pause\Pause.cpp">
+      <Filter>Game\GameElement\Pause</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameElement\Notes\Notes.cpp">
+      <Filter>Game\GameElement\Notes</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameElement\Live\Live.cpp">
+      <Filter>Game\GameElement\Live</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameElement\Live\Dome\Dome.cpp">
+      <Filter>Game\GameElement\Live\Dome</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameElement\Live\Screen\Screen.cpp">
+      <Filter>Game\GameElement\Live\Screen</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameElement\Live\Stage\Stage.cpp">
+      <Filter>Game\GameElement\Live\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameElement\Live\StageLights\StageLights.cpp">
+      <Filter>Game\GameElement\Live\StageLights</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameElement\Game.cpp">
+      <Filter>Game\GameElement\Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -575,9 +629,6 @@
     <ClInclude Include="Engine\GraphicsPipelines\ContrastGraphicsPipeline\ContrastGraphicsPipeline.h">
       <Filter>Engine\GraphicsPipelines\ContrastGraphicsPipeline</Filter>
     </ClInclude>
-    <ClInclude Include="Game\StageLights\StageLights.h">
-      <Filter>Game\StageLights</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\PostEffect\HighLumi\HighLumi.h">
       <Filter>Engine\PostEffect\HighLumi</Filter>
     </ClInclude>
@@ -601,6 +652,36 @@
     </ClInclude>
     <ClInclude Include="Engine\Base\DescriptorHeapManager\DescriptorHeap\DescriptorHeap.h">
       <Filter>Engine\Base\DescriptorHeapManager\DescriptorHeap</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameElement\Score\Score.h">
+      <Filter>Game\GameElement\Score</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameElement\Pause\Pause.h">
+      <Filter>Game\GameElement\Pause</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameElement\Notes\Notes.h">
+      <Filter>Game\GameElement\Notes</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\TextureManager\Texture\Texture.h">
+      <Filter>Engine\TextureManager\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameElement\Live\Live.h">
+      <Filter>Game\GameElement\Live</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameElement\Live\Dome\Dome.h">
+      <Filter>Game\GameElement\Live\Dome</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameElement\Live\Screen\Screen.h">
+      <Filter>Game\GameElement\Live\Screen</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameElement\Live\Stage\Stage.h">
+      <Filter>Game\GameElement\Live\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameElement\Live\StageLights\StageLights.h">
+      <Filter>Game\GameElement\Live\StageLights</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameElement\Game.h">
+      <Filter>Game\GameElement\Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

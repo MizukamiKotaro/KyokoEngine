@@ -6,8 +6,6 @@ StageScene::StageScene()
 {
 	FirstInit();
 
-	lights_ = std::make_unique<StageLights>();
-
 	puniru_ = std::make_unique<Sprite>("puniru.png");
 
 	sprite_ = std::make_unique<Sprite>("white.png");
@@ -54,7 +52,7 @@ void StageScene::Update()
 
 #endif // _DEBUG
 
-	lights_->Update();
+	//lights_->Update();
 }
 
 void StageScene::Draw()
@@ -98,7 +96,7 @@ void StageScene::Draw()
 
 	Kyoko::PreDraw();
 
-	//bloom_->Draw();
+	bloom_->Draw();
 	
 	/*sprite_->Draw();
 

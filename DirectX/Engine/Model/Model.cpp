@@ -12,26 +12,26 @@ Model::Model(const std::string& fileName)
 
 	ModelDataManager* modelManager = ModelDataManager::GetInstance();
 
-	meshHundle_ = modelManager->LoadObj(fileName);
+	modelData_ = modelManager->LoadObj(fileName);
 
-	textureHundle_ = modelManager->GetModelData(meshHundle_)->textureHundle_;
+	texture_ = modelData_->texture;
 
-	srvGPUDescriptorHandle_ = TextureManager::GetInstance()->GetSRVGPUDescriptorHandle(textureHundle_);
+	srvGPUDescriptorHandle_ = texture_->handles_->gpuHandle;
 
 	CreateResources();
 
 	InitVariables();
 }
 
-Model::Model(uint32_t meshHundle)
+Model::Model(const ModelData* modelData)
 {
 	ModelDataManager* modelManager = ModelDataManager::GetInstance();
 
-	meshHundle_ = meshHundle;
+	modelData_ = modelData;
 
-	textureHundle_ = modelManager->GetModelData(meshHundle_)->textureHundle_;
+	texture_ = modelData_->texture;
 
-	srvGPUDescriptorHandle_ = TextureManager::GetInstance()->GetSRVGPUDescriptorHandle(textureHundle_);
+	srvGPUDescriptorHandle_ = texture_->handles_->gpuHandle;
 
 	CreateResources();
 
@@ -67,16 +67,12 @@ void Model::Draw(const Camera& camera, BlendMode blendMode)
 		Matrix4x4::MakeRotateXYZMatrix(transform_.rotate_) * Matrix4x4::MakeTranslateMatrix(transform_.translate_);
 	materialData_->uvTransform = uvMatrix_;
 
-	TextureManager* texManager = TextureManager::GetInstance();
-
-	const ModelData* modelData = ModelDataManager::GetInstance()->GetModelData(meshHundle_);
-
 	GraphicsPiplineManager::GetInstance()->SetBlendMode(piplineType, static_cast<uint32_t>(blendMode));
 
 	ID3D12GraphicsCommandList* commandList = DirectXBase::GetInstance()->GetCommandList();
 
 	//Spriteの描画。変更に必要なものだけ変更する
-	commandList->IASetVertexBuffers(0, 1, &modelData->mesh.vertexBufferView_); // VBVを設定
+	commandList->IASetVertexBuffers(0, 1, &modelData_->mesh.vertexBufferView_); // VBVを設定
 	//マテリアルCBufferの場所を設定
 	commandList->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 	//TransformationMatrixCBufferの場所を設定
@@ -93,23 +89,24 @@ void Model::Draw(const Camera& camera, BlendMode blendMode)
 
 	commandList->SetGraphicsRootDescriptorTable(2, srvGPUDescriptorHandle_);
 	//描画!!!!（DrawCall/ドローコール）
-	commandList->DrawInstanced(UINT(modelData->mesh.verteces.size()), 1, 0, 0);
+	commandList->DrawInstanced(UINT(modelData_->mesh.verteces.size()), 1, 0, 0);
 
 }
 
-void Model::SetTex(uint32_t hundle)
+void Model::SetTexture(const Texture* texture)
 {
-	textureHundle_ = hundle;
-	srvGPUDescriptorHandle_ = TextureManager::GetInstance()->GetSRVGPUDescriptorHandle(textureHundle_);
+	texture_ = texture;
+
+	srvGPUDescriptorHandle_ = texture_->handles_->gpuHandle;
 }
 
-void Model::SetMesh(uint32_t hundle)
+void Model::SetModelData(const ModelData* modelData)
 {
-	meshHundle_ = hundle;
+	modelData_ = modelData;
 
-	textureHundle_ = ModelDataManager::GetInstance()->GetTextureHundle(hundle);
+	texture_ = modelData_->texture;
 
-	srvGPUDescriptorHandle_ = TextureManager::GetInstance()->GetSRVGPUDescriptorHandle(textureHundle_);
+	srvGPUDescriptorHandle_ = texture_->handles_->gpuHandle;
 }
 
 void Model::CreateResources()

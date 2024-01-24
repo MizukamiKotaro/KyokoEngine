@@ -25,13 +25,13 @@ void TextureManager::Finalize()
 	}
 }
 
-uint32_t TextureManager::LoadTexture(const std::string& filePath)
+const Texture* TextureManager::LoadTexture(const std::string& filePath)
 {
 	
 	for (uint32_t texNum = 0; texNum < static_cast<uint32_t>(textures_.size()); texNum++) {
 
 		if (textures_[texNum]->filePath_ == filePath) {
-			return texNum;
+			return textures_[texNum].get();
 		}
 	}
 
@@ -55,7 +55,7 @@ uint32_t TextureManager::LoadTexture(const std::string& filePath)
 
 	device_->CreateShaderResourceView(textures_.back()->resource_.Get(), &srvDesc, textures_.back()->handles_->cpuHandle);
 
-	return static_cast<uint32_t>(textures_.size()) - 1;
+	return textures_.back().get();
 }
 
 DirectX::ScratchImage TextureManager::Load(const std::string& filePath)

@@ -12,6 +12,8 @@
 
 enum SCENE { TITLE, SELECT, STAGE, CLEAR };
 
+enum STAGE { SHINING_STAR, COUNT_STAGE };
+
 enum class Transition{
 	kFromBlack,
 	kOperation,

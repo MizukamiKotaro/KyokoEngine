@@ -7,6 +7,7 @@
 #include <memory>
 #include "Matrix4x4.h"
 #include "GraphicsPipelines/GraphicsPiplineManager/GraphicsPiplineManager.h"
+#include "ModelData/ModelData.h"
 
 class Camera;
 
@@ -54,7 +55,7 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12Resource> transformationResource_;
 	TransformationMatrix* transformationData_;
 
-	uint32_t meshHundle_;
+	const ModelData* modelData_;
 
 	static const Matrix4x4 scaleMat_;
 
