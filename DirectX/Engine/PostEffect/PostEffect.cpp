@@ -13,31 +13,9 @@ const float PostEffect::clearColor[4] = { 0.0f,0.0f,0.0f,0.0f };
 
 PostEffect::PostEffect()
 {
-	CreateVertexRes();
+	piplineType_ = GraphicsPiplineManager::PiplineType::SPRITE;
 
-	size_ = { float(WindowsInfo::kWindowWidth),float(WindowsInfo::kWindowHeight) };
-
-	CreateResources();
-
-	rotate_ = 0.0f;
-	pos_ = { 0.0f,0.0f };
-
-	worldMat_ = Matrix4x4::MakeAffinMatrix({ 1.0f,1.0f,0.0f }, { 0.0f,0.0f,rotate_ }, { pos_.x,pos_.y,0.0f });
-
-	anchorPoint_ = { 0.0f,0.0f };
-	textureLeftTop_ = { 0.0f,0.0f };
-	textureSize_ = { 1.0f,1.0f };
-
-	TransferSize();
-	TransferUV();
-
-	uvTranslate_ = {};
-	uvScale_ = { 1.0f,1.0f };
-	uvRotate_ = 0.0f;
-
-	SetColor({ 1.0f,1.0f,1.0f,1.0f });
-
-	Update();
+	CreatePostEffect();
 }
 
 PostEffect::~PostEffect()
@@ -73,7 +51,7 @@ void PostEffect::Draw(BlendMode blendMode)
 	transformData_->WVP = worldMat_ * Camera::GetOrthographicMat();
 	materialData_->uvTransform = Matrix4x4::MakeAffinMatrix({ uvScale_.x,uvScale_.y,0.0f }, { 0.0f,0.0f,uvRotate_ }, { uvTranslate_.x,uvTranslate_.y,0.0f });
 
-	GraphicsPiplineManager::GetInstance()->SetBlendMode(piplineType, static_cast<uint32_t>(blendMode));
+	GraphicsPiplineManager::GetInstance()->SetBlendMode(piplineType_, static_cast<uint32_t>(blendMode));
 
 	ID3D12GraphicsCommandList* commandList = DirectXBase::GetInstance()->GetCommandList();
 
@@ -105,11 +83,11 @@ void PostEffect::PreDrawScene()
 	commandList->OMSetRenderTargets(1, &rtvHandles_->cpuHandle, false, &dsvHandles_->cpuHandle);
 
 	// ビューポートの設定
-	CD3DX12_VIEWPORT viewport = CD3DX12_VIEWPORT(0.0f, 0.0f, WindowsInfo::kWindowWidth, WindowsInfo::kWindowHeight);
+	CD3DX12_VIEWPORT viewport = CD3DX12_VIEWPORT(0.0f, 0.0f, size_.x, size_.y);
 	commandList->RSSetViewports(1, &viewport);
 
 	// シザリング矩形の設定
-	CD3DX12_RECT rect = CD3DX12_RECT(0, 0, WindowsInfo::kWindowWidth, WindowsInfo::kWindowHeight);
+	CD3DX12_RECT rect = CD3DX12_RECT(0, 0, (UINT)size_.x, (UINT)size_.y);
 	commandList->RSSetScissorRects(1, &rect);
 
 	// 全画面クリア
@@ -214,7 +192,7 @@ void PostEffect::CreateMaterialRes()
 	//マテリアル用のリソースを作る。今回はcolor1つ分を用意する
 	materialResource_ = DirectXBase::CreateBufferResource(sizeof(Material));
 	//マテリアルデータを書き込む
-	//書き込むためのアドレスを取得\l
+	//書き込むためのアドレスを取得l
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 	//今回は赤を書き込んでいる
 	materialData_->color = { 1.0f,1.0f,1.0f,1.0f };
@@ -239,8 +217,8 @@ void PostEffect::CreateTexRes()
 
 	CD3DX12_RESOURCE_DESC texDesc = CD3DX12_RESOURCE_DESC::Tex2D(
 		DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
-		WindowsInfo::kWindowWidth,
-		(UINT)WindowsInfo::kWindowHeight,
+		(UINT)size_.x,
+		(UINT)size_.y,
 		1, 0, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET
 	);
 
@@ -261,15 +239,15 @@ void PostEffect::CreateTexRes()
 	// イメージデータの転送
 
 	// 画素数
-	const UINT pixelCount = WindowsInfo::kWindowWidth * WindowsInfo::kWindowHeight;
+	const UINT pixelCount = (UINT)size_.x * (UINT)size_.y;
 	// 画像1行分のデータ
-	const UINT rowPitch = sizeof(UINT) * WindowsInfo::kWindowWidth;
+	const UINT rowPitch = sizeof(UINT) * (UINT)size_.x;
 	// 画像全体のデータサイズ
-	const UINT depthPitch = rowPitch * WindowsInfo::kWindowHeight;
+	const UINT depthPitch = rowPitch * (UINT)size_.y;
 
 	// 画像イメージ
 	UINT* img = new UINT[pixelCount];
-	for (int i = 0; i < pixelCount; i++) { img[i] = 0xFF0000FF; }
+	for (UINT i = 0; i < pixelCount; i++) { img[i] = 0xFF0000FF; }
 
 	// データの転送
 	hr = texResource_->WriteToSubresource(0, nullptr, img, rowPitch, depthPitch);
@@ -302,8 +280,8 @@ void PostEffect::CreateDSV()
 {
 	CD3DX12_RESOURCE_DESC resourceDesc = CD3DX12_RESOURCE_DESC::Tex2D(
 		DXGI_FORMAT_D24_UNORM_S8_UINT,
-		WindowsInfo::kWindowWidth,
-		(UINT)WindowsInfo::kWindowHeight,
+		(UINT)size_.x,
+		(UINT)size_.y,
 		1, 0, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL
 	);
 
@@ -333,6 +311,8 @@ void PostEffect::CreateDSV()
 
 void PostEffect::CreateResources()
 {
+	CreateVertexRes();
+
 	CreateMaterialRes();
 
 	CreateTranformRes();
@@ -342,6 +322,33 @@ void PostEffect::CreateResources()
 	CreateRTV();
 
 	CreateDSV();
+}
+
+void PostEffect::CreatePostEffect()
+{
+	size_ = WindowsInfo::GetInstance()->GetWindowSize();
+
+	CreateResources();
+
+	rotate_ = 0.0f;
+	pos_ = { 0.0f,0.0f };
+
+	worldMat_ = Matrix4x4::MakeAffinMatrix({ 1.0f,1.0f,0.0f }, { 0.0f,0.0f,rotate_ }, { pos_.x,pos_.y,0.0f });
+
+	anchorPoint_ = { 0.0f,0.0f };
+	textureLeftTop_ = { 0.0f,0.0f };
+	textureSize_ = { 1.0f,1.0f };
+
+	TransferSize();
+	TransferUV();
+
+	uvTranslate_ = {};
+	uvScale_ = { 1.0f,1.0f };
+	uvRotate_ = 0.0f;
+
+	SetColor({ 1.0f,1.0f,1.0f,1.0f });
+
+	Update();
 }
 
 

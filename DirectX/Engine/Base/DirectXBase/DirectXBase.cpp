@@ -25,7 +25,7 @@ void DirectXBase::Initialize() {
 	// FPS固定初期化
 	InitializeFixFPS();
 
-	winApp_ = WindowsInfo::GetInstance();
+	windowInfo_ = WindowsInfo::GetInstance();
 
 	// DXGIデバイス初期化
 	InitializeDXGIDevice();
@@ -84,8 +84,9 @@ void DirectXBase::PreDraw() {
 	//ビューポート
 	D3D12_VIEWPORT viewport{};
 	//クライアント領域のサイズと一緒にして画面全体に表示
-	viewport.Width = WindowsInfo::kWindowWidth;
-	viewport.Height = WindowsInfo::kWindowHeight;
+	Vector2 windowSize = windowInfo_->GetWindowSize();
+	viewport.Width = windowSize.x;
+	viewport.Height = windowSize.y;
 	viewport.TopLeftX = 0;
 	viewport.TopLeftY = 0;
 	viewport.MinDepth = 0.0f;
@@ -97,9 +98,9 @@ void DirectXBase::PreDraw() {
 	D3D12_RECT scissorRect{};
 	//基本的にビューポートと同じ矩形が構成されるようにする
 	scissorRect.left = 0;
-	scissorRect.right = WindowsInfo::kWindowWidth;
+	scissorRect.right = (UINT)windowSize.x;
 	scissorRect.top = 0;
-	scissorRect.bottom = WindowsInfo::kWindowHeight;
+	scissorRect.bottom = (UINT)windowSize.y;
 	commandList_->RSSetScissorRects(1, &scissorRect); //Scissorを設定
 
 	//描画用のDescriptorHeapの設定
@@ -281,15 +282,16 @@ void DirectXBase::InitializeDXGIDevice() {
 void DirectXBase::CreateSwapChain() {
 	//スワップチェーンを生成する
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc{};
-	swapChainDesc.Width = WindowsInfo::kWindowWidth;	  //画面の幅。ウィンドウのクライアント領域を同じものにしておく
-	swapChainDesc.Height = WindowsInfo::kWindowHeight; //画面の高さ。ウィンドウのクライアント領域を同じものにしておく
+	Vector2 windowSize = windowInfo_->GetWindowSize();
+	swapChainDesc.Width = static_cast<int>(windowSize.x);	  //画面の幅。ウィンドウのクライアント領域を同じものにしておく
+	swapChainDesc.Height = static_cast<int>(windowSize.y); //画面の高さ。ウィンドウのクライアント領域を同じものにしておく
 	swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; //色の形式
 	swapChainDesc.SampleDesc.Count = 1; //マルチサンプルしない
 	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT; //描画のターゲットとして利用
 	swapChainDesc.BufferCount = 2; //ダブルバッファ
 	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD; //モニタにうつしたら中身破棄
 	//コマンドキュー、ウィンドウハンドル、設定を渡して生成する
-	HRESULT hr = dxgiFactory_->CreateSwapChainForHwnd(commandQueue_.Get(), winApp_->GetHwnd(), &swapChainDesc, nullptr, nullptr, reinterpret_cast<IDXGISwapChain1**>(swapChain_.GetAddressOf()));
+	HRESULT hr = dxgiFactory_->CreateSwapChainForHwnd(commandQueue_.Get(), windowInfo_->GetHwnd(), &swapChainDesc, nullptr, nullptr, reinterpret_cast<IDXGISwapChain1**>(swapChain_.GetAddressOf()));
 	assert(SUCCEEDED(hr));
 
 	backBuffers_.resize(swapChainDesc.BufferCount);
@@ -344,7 +346,8 @@ void DirectXBase::CreateDepthBuffer() {
 	dsvHandles_ = heap->GetNewDescriptorHandles();
 
 	//DepthStencilTextureをウィンドウのサイズで作成
-	depthStencilResource_ =  CreateDepthStencilTextureResource(device_.Get(), WindowsInfo::kWindowWidth, WindowsInfo::kWindowHeight);
+	Vector2 windowSize = windowInfo_->GetWindowSize();
+	depthStencilResource_ =  CreateDepthStencilTextureResource(device_.Get(), (UINT)windowSize.x, (UINT)windowSize.y);
 	//DSVの設定
 	D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc{};
 	dsvDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT; // Format。基本的にはResourceに合わせる

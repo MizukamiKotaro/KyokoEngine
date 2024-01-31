@@ -49,7 +49,7 @@ public:
 	// namespace省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 
-	void Init();
+	void Initialize();
 
 	void PreDraw();
 

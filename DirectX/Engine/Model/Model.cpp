@@ -140,7 +140,7 @@ void Model::CreateTransformationResource()
 
 void Model::InitVariables()
 {
-	light_.Init();
+	light_.Initialize();
 
 	transform_ = Transform();
 

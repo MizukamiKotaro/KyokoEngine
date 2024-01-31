@@ -2,7 +2,7 @@
 #include "Engine/Base/WindowsInfo/WindowsInfo.h"
 #include "DirectXBase/DirectXBase.h"
 
-Matrix4x4 Camera::orthographicMat_ = Matrix4x4::MakeOrthographicMatrix(0.0f, 0.0f, float(WindowsInfo::kWindowWidth), float(WindowsInfo::kWindowHeight), 0.0f, 1.0f);
+Matrix4x4 Camera::orthographicMat_ = Matrix4x4::MakeOrthographicMatrix(0.0f, 0.0f, 1280.0f, 720.0f, 0.0f, 1.0f);
 
 Camera::Camera()
 {
@@ -14,10 +14,12 @@ Camera::Camera()
 	CreateResource();
 	
 	Matrix4x4 viewMatrix = Matrix4x4::Inverse(transform_.worldMat_);
-	projectionMatrix_ = Matrix4x4::MakePerspectiveFovMatrix(0.45f, float(WindowsInfo::kWindowWidth) / float(WindowsInfo::kWindowHeight), 0.1f, 1050.0f);
+
+	Vector2 windowSize = WindowsInfo::GetInstance()->GetWindowSize();
+	projectionMatrix_ = Matrix4x4::MakePerspectiveFovMatrix(0.45f, windowSize.x / windowSize.y, 0.1f, 1050.0f);
 	viewProjectionMatrix_ = viewMatrix * projectionMatrix_;
 
-	orthographicMat_ = Matrix4x4::MakeOrthographicMatrix(0.0f, 0.0f, float(WindowsInfo::kWindowWidth), float(WindowsInfo::kWindowHeight), 0.0f, 1.0f);
+	orthographicMat_ = Matrix4x4::MakeOrthographicMatrix(0.0f, 0.0f, windowSize.x, windowSize.y, 0.0f, 1.0f);
 }
 
 Camera::~Camera()
@@ -35,7 +37,8 @@ void Camera::Initialize()
 	transform_.UpdateMatrix();
 
 	Matrix4x4 viewMatrix = Matrix4x4::Inverse(transform_.worldMat_);
-	projectionMatrix_ = Matrix4x4::MakePerspectiveFovMatrix(0.45f, float(WindowsInfo::kWindowWidth) / float(WindowsInfo::kWindowHeight), 0.1f, 1050.0f);
+	Vector2 windowSize = WindowsInfo::GetInstance()->GetWindowSize();
+	projectionMatrix_ = Matrix4x4::MakePerspectiveFovMatrix(0.45f, windowSize.x / windowSize.y, 0.1f, 1050.0f);
 	viewProjectionMatrix_ = viewMatrix * projectionMatrix_;
 }
 

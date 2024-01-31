@@ -66,7 +66,7 @@ private:
 private: // メンバ変数
 
 	// ウィンドウズアプリケーション管理
-	WindowsInfo* winApp_ = nullptr;
+	WindowsInfo* windowInfo_ = nullptr;
 	ComPtr<ID3D12Debug1> debugController_;
 	ComPtr<IDXGIFactory7> dxgiFactory_;
 	ComPtr<ID3D12Device> device_;

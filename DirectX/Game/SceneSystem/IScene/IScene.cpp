@@ -13,7 +13,7 @@ void IScene::FirstInit()
 {
 	textureManager_ = TextureManager::GetInstance();
 	modelDataManager_ = ModelDataManager::GetInstance();
-	audio_ = Audio::GetInstance();
+	audio_ = AudioManager::GetInstance();
 	input_ = Input::GetInstance();
 
 	camera_ = std::make_unique<Camera>();
@@ -35,7 +35,7 @@ void IScene::FromBlackInitialize()
 {
 	if (sameScene_) {
 		sameScene_ = false;
-		Init();
+		Initialize();
 	}
 
 	transitionTimeCount_ = 0.0f;

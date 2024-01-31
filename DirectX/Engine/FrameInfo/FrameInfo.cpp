@@ -6,7 +6,7 @@ FrameInfo* FrameInfo::GetInstance()
 	return &instance;
 }
 
-void FrameInfo::Init()
+void FrameInfo::Initialize()
 {
 	frameStartTime_ = std::chrono::steady_clock::now();
 }

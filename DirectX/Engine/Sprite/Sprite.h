@@ -17,6 +17,9 @@ class Sprite
 {
 public:
 
+	Sprite(const Vector2& pos = { 640.0f,360.0f }, const Vector2& texLeftTop = {}, const Vector2& texSize = { 1.0f,1.0f },
+		const Vector4& color = { 1.0f,1.0f,1.0f,1.0f }, const Vector2& anchorPoint = { 0.5f,0.5f }, bool isFlipX = false, bool isFlipY = false);
+
 	Sprite(const std::string& filePath, const Vector2& pos = { 640.0f,360.0f }, const Vector2& texLeftTop = {}, const Vector2& texSize = {1.0f,1.0f},
 		const Vector4 & color = { 1.0f,1.0f,1.0f,1.0f }, const Vector2& anchorPoint = { 0.5f,0.5f }, bool isFlipX = false, bool isFlipY = false);
 	Sprite(const Texture* texture, const Vector2& pos = { 640.0f,360.0f }, const Vector2& texLeftTop = {}, const Vector2& texSize = {1.0f,1.0f},
@@ -57,6 +60,8 @@ private:
 
 public:
 
+	void SetSRVGPUDescriptorHandle_(D3D12_GPU_DESCRIPTOR_HANDLE srvGPUDescriptorHandle);
+
 	void LoadTexture(const std::string& filePath);
 
 	void SetTexture(const Texture* texture);
@@ -74,7 +79,6 @@ public:
 	void SetTextureSize(const Vector2& texSize);
 
 private:
-	Sprite() = default;
 
 	void TransferSize();
 
@@ -131,8 +135,8 @@ private:
 
 	bool isInvisible_ = false;
 
-	bool isLoad_;
 	const Texture* texture_;
 
+	D3D12_GPU_DESCRIPTOR_HANDLE srvGPUDescriptorHandle_;
 };
 

@@ -18,6 +18,7 @@ void DescriptorHeap::DeleteDescriptor(const DescriptorHandles* handles)
 		for (std::unique_ptr<Descriptor>& descriptor : descriptors_) {
 			if (descriptor->handles.no == handles->no) {
 				descriptor->isUse = false;
+				break;
 			}
 		}
 	}

@@ -1,7 +1,11 @@
 #include "WindowsInfo.h"
-#include "Externals/imgui/imgui_impl_win32.h"
+#include "DebugLog/DebugLog.h"
 #pragma comment(lib, "winmm.lib")
+
+#ifdef _DEBUG
+#include "Externals/imgui/imgui_impl_win32.h"
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+#endif // _DEBUG
 
 LRESULT CALLBACK WindowsInfo::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
 #ifdef _DEBUG
@@ -27,7 +31,7 @@ WindowsInfo* WindowsInfo::GetInstance() {
 	return &instance;
 }
 
-void WindowsInfo::CreateGameWindow() {
+void WindowsInfo::CreateGameWindow(const std::string& windowName, int width, int height) {
 	//COM(Component Object Model)の初期化
 
 	// システムタイマーの分解能を上げる
@@ -38,7 +42,9 @@ void WindowsInfo::CreateGameWindow() {
 	//ウィンドウプロシージャ
 	wndClass_.lpfnWndProc = WindowProc;
 	//ウィンドウクラス名(なんでも良い)
-	wndClass_.lpszClassName = L"DirectXGame";
+
+	const std::wstring&& titleName = DebugLog::ConvertString(windowName);
+	wndClass_.lpszClassName = titleName.c_str();
 	//インスタンスハンドル
 	wndClass_.hInstance = GetModuleHandle(nullptr);
 	//カーソル
@@ -48,7 +54,8 @@ void WindowsInfo::CreateGameWindow() {
 	RegisterClass(&wndClass_);
 
 	//ウィンドウサイズを表す構造体にクライアント領域を入れる
-	RECT wrc = { 0,0,kWindowWidth,kWindowHeight };
+	windowSize_ = { float(width),float(height) };
+	RECT wrc = { 0,0, width ,height };
 
 	//クライアント領域を元に実際のサイズにwrcを変更してもらう
 	AdjustWindowRect(&wrc, WS_OVERLAPPEDWINDOW, false);
@@ -56,7 +63,7 @@ void WindowsInfo::CreateGameWindow() {
 	//ウィンドウの生成
 	hwnd_ = CreateWindow(
 		wndClass_.lpszClassName,      // 利用するクラス名
-		L"LE2A_21_ミズカミ_コタロウ",	               // タイトルバーの文字(何でもいい)
+		titleName.c_str(),	               // タイトルバーの文字(何でもいい)
 		WS_OVERLAPPEDWINDOW,   // よく見るウィンドウスタイル
 		CW_USEDEFAULT,         // 表示x座標(windowsに任せる)
 		CW_USEDEFAULT,         // 表示y座標(windowsに任せる)

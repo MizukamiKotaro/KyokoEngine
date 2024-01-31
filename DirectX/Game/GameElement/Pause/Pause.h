@@ -7,7 +7,7 @@
 class Pause {
 public:
 	Pause();
-	void Init();
+	void Initialize();
 	void Update();
 	void Draw();
 	void DrawBackground();

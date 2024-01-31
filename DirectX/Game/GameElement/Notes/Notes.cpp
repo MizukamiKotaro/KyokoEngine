@@ -32,7 +32,7 @@ Notes::Notes(float frame, int type)
 		break;
 	}
 
-	firstPos_ = { 1000.0f,-speed_ * time_ + 500.0f };
+	firstPos_ = { 1100.0f,-speed_ * time_ + 500.0f };
 
 	sprite_->pos_ = firstPos_;
 	sprite_->Update();
@@ -64,17 +64,17 @@ NotesList* NotesList::GetInstance()
 	return &instance;
 }
 
-void NotesList::Init()
+void NotesList::Initialize()
 {
-	lane_ = std::make_unique<Sprite>("Resources/white.png");
+	lane_ = std::make_unique<Sprite>();
 	lane_->size_ = { 128.0f,720.0f };
-	lane_->pos_ = { 1000.0f,360.0f };
+	lane_->pos_ = { 1100.0f,360.0f };
 	lane_->SetColor({ 0.1f,0.1f,0.1f,0.5f });
 	lane_->Update();
 
-	indication_= std::make_unique<Sprite>("Resources/white.png");
+	indication_= std::make_unique<Sprite>();
 	indication_->size_ = { 128.0f,8.0f };
-	indication_->pos_ = { 1000.0f,500.0f };
+	indication_->pos_ = { 1100.0f,500.0f };
 	indication_->SetColor({ 0.9f,0.9f,0.9f,0.9f });
 	indication_->Update();
 }
@@ -145,10 +145,10 @@ void NotesList::LoadPopData()
 	switch (IScene::stageNo_)
 	{
 	case SHINING_STAR:
-		file.open("./Resources/shiningStar.csv");
+		file.open("Resources/CSV/shiningStar.csv");
 		break;
 	default:
-		file.open("./Resources/shiningStar.csv");
+		file.open("Resources/CSV/shiningStar.csv");
 		break;
 	}
 

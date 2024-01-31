@@ -94,9 +94,6 @@
     <Filter Include="Engine\Utils\Transform">
       <UniqueIdentifier>{3c62a5ac-6b1b-4641-986b-f847f3d0e65f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\GlobalVariables">
-      <UniqueIdentifier>{0a592cc4-062e-46c2-9959-23f4ade47001}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game">
       <UniqueIdentifier>{0c4869a2-4a82-4407-a35f-be26dbc2a1e8}</UniqueIdentifier>
     </Filter>
@@ -237,6 +234,24 @@
     </Filter>
     <Filter Include="Game\GameElement\Game">
       <UniqueIdentifier>{b62ba53c-214c-4b0d-8fdd-cf6a835a99f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\GraphicsPipelines\GraphicsPipeline">
+      <UniqueIdentifier>{f61115e8-d269-46e8-ba89-33089100e29f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\GlobalVariables">
+      <UniqueIdentifier>{0a592cc4-062e-46c2-9959-23f4ade47001}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameElement\HitSystem">
+      <UniqueIdentifier>{d16ca458-babf-46cd-b895-58db3de3f10d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameElement\StageUI">
+      <UniqueIdentifier>{7bac8e11-8f42-4480-b59b-fae6f1114358}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameElement\ScoreManager">
+      <UniqueIdentifier>{56106861-2199-4701-8013-ddae4760b656}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameElement\ClearUI">
+      <UniqueIdentifier>{d7b47301-01d0-488d-b602-f02b7231750e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -443,6 +458,21 @@
     </ClCompile>
     <ClCompile Include="Game\GameElement\Game.cpp">
       <Filter>Game\GameElement\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\GraphicsPipelines\GraphicsPipeline\GraphicsPipeline.cpp">
+      <Filter>Engine\GraphicsPipelines\GraphicsPipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameElement\HitSystem\HitSystem.cpp">
+      <Filter>Game\GameElement\HitSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameElement\StageUI\StageUI.cpp">
+      <Filter>Game\GameElement\StageUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameElement\ScoreManager\ScoreManager.cpp">
+      <Filter>Game\GameElement\ScoreManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameElement\ClearUI\ClearUI.cpp">
+      <Filter>Game\GameElement\ClearUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -682,6 +712,21 @@
     </ClInclude>
     <ClInclude Include="Game\GameElement\Game.h">
       <Filter>Game\GameElement\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GraphicsPipelines\GraphicsPipeline\GraphicsPipeline.h">
+      <Filter>Engine\GraphicsPipelines\GraphicsPipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameElement\HitSystem\HitSystem.h">
+      <Filter>Game\GameElement\HitSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameElement\StageUI\StageUI.h">
+      <Filter>Game\GameElement\StageUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameElement\ScoreManager\ScoreManager.h">
+      <Filter>Game\GameElement\ScoreManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameElement\ClearUI\ClearUI.h">
+      <Filter>Game\GameElement\ClearUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -28,7 +28,6 @@ public:
 
 	void Draw(BlendMode blendMode = BlendMode::kBlendModeNormal);
 
-
 	void PreDrawScene();
 
 	void PostDrawScene();

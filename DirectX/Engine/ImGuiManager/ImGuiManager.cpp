@@ -1,14 +1,13 @@
 #include "ImGuiManager.h"
+
+#ifdef _DEBUG
 #pragma comment(lib, "winmm.lib")
 #include "Engine/Base/DirectXBase/DirectXBase.h"
 #include "Engine/Base/WindowsInfo/WindowsInfo.h"
 #include "Engine/Base/DescriptorHeapManager/DescriptorHeapManager.h"
-
-//ImGuiManager* ImGuiManager::GetInstance()
-//{
-//	static ImGuiManager instance;
-//	return &instance;
-//}
+#include "Externals/imgui/imgui_impl_dx12.h"
+#include "Externals/imgui/imgui_impl_win32.h"
+#endif // _DEBUG
 
 void ImGuiManager::Initialize()
 {

@@ -58,7 +58,7 @@ public:
 
 	static NotesList* GetInstance();
 
-	void Init();
+	void Initialize();
 
 	void Draw(Camera* camera);
 

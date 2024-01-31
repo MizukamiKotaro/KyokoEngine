@@ -13,9 +13,9 @@ BOOL CALLBACK DeviceFindCallBack(LPCDIDEVICEINSTANCE ipddi, LPVOID pvRef)
 
 void Input::Initialize() {
 
-	winApp_ = WindowsInfo::GetInstance();
+	windowInfo_ = WindowsInfo::GetInstance();
 
-	HRESULT hr = DirectInput8Create(winApp_->GetHInstance(), DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&dInput_, nullptr);
+	HRESULT hr = DirectInput8Create(windowInfo_->GetHInstance(), DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&dInput_, nullptr);
 	assert(SUCCEEDED(hr));
 
 	hr = dInput_->CreateDevice(GUID_SysKeyboard, &devKeyboard_, NULL);
@@ -24,7 +24,7 @@ void Input::Initialize() {
 	hr = devKeyboard_->SetDataFormat(&c_dfDIKeyboard);
 	assert(SUCCEEDED(hr));
 
-	hr = devKeyboard_->SetCooperativeLevel(winApp_->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
+	hr = devKeyboard_->SetCooperativeLevel(windowInfo_->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
 	assert(SUCCEEDED(hr));
 
 
@@ -34,7 +34,7 @@ void Input::Initialize() {
 	hr = devMouse_->SetDataFormat(&c_dfDIMouse);
 	assert(SUCCEEDED(hr));
 
-	hr = devMouse_->SetCooperativeLevel(winApp_->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
+	hr = devMouse_->SetCooperativeLevel(windowInfo_->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
 	assert(SUCCEEDED(hr));
 }
 
@@ -162,12 +162,12 @@ bool Input::ReleasedMouse(MouseButton button)
 	return false;
 }
 
-int32_t Input::GetWheel()
+const int32_t Input::GetWheel() const
 {
 	return static_cast<int32_t>(mouse_.lZ);
 }
 
-Vector2 Input::GetMouseMove()
+const Vector2 Input::GetMouseMove() const
 {
 	return { (float)mouse_.lX,(float)mouse_.lY };
 }
@@ -180,7 +180,7 @@ Vector2 Input::GetMousePosition()
 	return Vector2(static_cast<float>(mousePos_.x), static_cast<float>(mousePos_.y));
 }
 
-bool Input::GetGamePadButton(GamePadButton button)
+const bool Input::GetGamePadButton(GamePadButton button) const
 {
 
 	switch (button)
@@ -262,7 +262,7 @@ bool Input::GetGamePadButton(GamePadButton button)
 	return false;
 }
 
-bool Input::GetPreGamePadButton(GamePadButton button)
+const bool Input::GetPreGamePadButton(GamePadButton button) const
 {
 
 	switch (button)
@@ -344,7 +344,7 @@ bool Input::GetPreGamePadButton(GamePadButton button)
 	return false;
 }
 
-bool Input::GetMouseButton(MouseButton button)
+const bool Input::GetMouseButton(MouseButton button) const
 {
 	uint32_t key = static_cast<uint32_t>(button);
 
@@ -366,7 +366,7 @@ bool Input::GetMouseButton(MouseButton button)
 	return false;
 }
 
-bool Input::GetPreMouseButton(MouseButton button)
+const bool Input::GetPreMouseButton(MouseButton button) const
 {
 	uint32_t key = static_cast<uint32_t>(button);
 

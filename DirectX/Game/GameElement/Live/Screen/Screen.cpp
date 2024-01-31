@@ -12,9 +12,9 @@ Screen::Screen()
 	screen_->transform_.rotate_.y = std::numbers::pi_v<float>;
 	screen_->Update();
 	screen_->UnUsedLight();
-	screen_->SetColor(Vector4{ 0.0f,0.0f,0.0f,1.0f });
+	screen_->SetColor(Vector4{ 1.0f,1.0f,1.0f,1.0f });
 
-	screenSprite_ = std::make_unique<Sprite>("Resources/Texture/screen.png");
+	screenSprite_ = std::make_unique<Sprite>("screen.png");
 	screenSprite_->pos_ = { 640.0f,360.0f };
 	screenSprite_->Update();
 
@@ -48,7 +48,7 @@ void Screen::PostDrawScene()
 	postEffect_->PreDrawScene();
 
 	bloom_->Draw();
-	screenSprite_->Draw();
+	screenSprite_->Draw(BlendMode::kBlendModeMultiply);
 
 	postEffect_->PostDrawScene();
 }

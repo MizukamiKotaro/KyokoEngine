@@ -221,7 +221,7 @@ void Particle::CreateInstancingResource()
 
 void Particle::InitVariables()
 {
-	light_.Init();
+	light_.Initialize();
 
 	uvScale_ = { 1.0f,1.0f,1.0f };
 	uvRotate_ = { 0.0f,0.0f,0.0f };

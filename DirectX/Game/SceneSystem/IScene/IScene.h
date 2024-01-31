@@ -32,7 +32,7 @@ public:
 public:
 	// 継承先で実装される関数
 	// 抽象クラスなので純粋仮想関数とする
-	virtual void Init() = 0;
+	virtual void Initialize() = 0;
 	virtual void Update() = 0;
 	virtual void Draw() = 0;
 	
@@ -58,7 +58,7 @@ protected:
 
 	TextureManager* textureManager_ = nullptr;
 	ModelDataManager* modelDataManager_ = nullptr;
-	Audio* audio_ = nullptr;
+	AudioManager* audio_ = nullptr;
 	Input* input_ = nullptr;
 
 protected:

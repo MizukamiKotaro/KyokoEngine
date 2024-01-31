@@ -1,9 +1,21 @@
 #pragma once
 
+#include <array>
 
 class Score {
 
 public:
+
+	enum Parameter {
+		SCORE,
+		COMBO,
+		HIGH_COMBO,
+		PERFECT,
+		GREAT,
+		GOOD,
+		MISS,
+		END_PARAMETER,
+	};
 
 	void Reset();
 
@@ -11,63 +23,69 @@ public:
 
 	void SetUpdate(const Score& score);
 
-	void AddScore(int score) { score_ += score; }
+	void SetScore(const Score& score);
+
+	void AddScore(int score) { parameters_[SCORE] += score; }
 
 	void AddPer() {
-		perfectNum_++;
+		parameters_[PERFECT]++;
 		AddCom();
-		AddScore(200 * (combo_ / 10 + 1));
+		AddScore(200 * (parameters_[COMBO] / 10 + 1));
 	}
 
 	void AddGre() {
-		greatNum_++;
+		parameters_[GREAT]++;
 		AddCom();
-		AddScore(100 * (combo_ / 10 + 1));
+		AddScore(100 * (parameters_[COMBO] / 10 + 1));
 	}
 
 	void AddGood() {
-		goodNum_++;
+		parameters_[GOOD]++;
 		ComboReset();
 		AddScore(50);
 	}
 
 	void AddMiss() {
-		missNum_++;
+		parameters_[MISS]++;
 		ComboReset();
 	}
 
 	void AddCom();
 
-	void ComboReset() { combo_ = 0; }
+	void ComboReset() { parameters_[COMBO] = 0; }
 
 	void IsFullComUpdate();
 
-	int GetScore() { return score_; }
+	const int GetScore() const { return parameters_[SCORE]; }
 
-	int GetCom() { return combo_; }
+	const int GetCom() const { return parameters_[COMBO]; }
 
-	int GetHiCombo() { return hiCombo_; }
+	const int GetHiCombo() const { return parameters_[HIGH_COMBO]; }
 
-	int GetPer() { return perfectNum_; }
+	const int GetPer() const { return parameters_[PERFECT]; }
 
-	int GetGre() { return greatNum_; }
+	const int GetGre() const { return parameters_[GREAT]; }
 
-	int GetGood() { return goodNum_; }
+	const int GetGood() const { return parameters_[GOOD]; }
 
-	int GetMiss() { return missNum_; }
+	const int GetMiss() const { return parameters_[MISS]; }
 
-	bool IsFullCom() { return isFullCom_; }
+	const bool IsFullCom() const { return isFullCom_; }
+
+	const bool IsAP() const { return isAP_; }
 
 private:
 
-	int score_ = 0;
+	/*int score_ = 0;
 	int combo_ = 0;
 	int perfectNum_ = 0;
 	int greatNum_ = 0;
 	int goodNum_ = 0;
 	int missNum_ = 0;
+	int hiCombo_ = 0;*/
 
-	int hiCombo_ = 0;
+	std::array<int, END_PARAMETER> parameters_;
+
 	bool isFullCom_ = false;
-
+	bool isAP_ = false;
 };

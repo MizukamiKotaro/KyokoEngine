@@ -10,6 +10,7 @@
 #include "PostEffect/GaussianBlur/GaussianBlur.h"
 #include "PostEffect/Bloom/Bloom.h"
 #include "PostEffect/PostEffect.h"
+#include "GameElement/Game.h"
 
 class StageScene : public IScene
 {
@@ -17,29 +18,11 @@ public:
 
 	StageScene();
 
-	void Init() override;
+	void Initialize() override;
 	void Update() override;
 	void Draw() override;
 
 private:
 
-	std::unique_ptr<Sprite> puniru_;
-
-	std::unique_ptr<Contrast> contrast_;
-
-	std::unique_ptr<HighLumi> highLumi_;
-
-	std::unique_ptr<Blur> blur_;
-
-	std::unique_ptr<Blur> blur2_;
-
-	std::unique_ptr<PostEffect> post_;
-
-	std::unique_ptr<GaussianBlur> gaussianBlur_;
-
-	std::unique_ptr<Bloom> bloom_;
-
-	std::unique_ptr<PointLight> pointLight_;
-
-	std::unique_ptr<Sprite> sprite_;
+	std::unique_ptr<Game> game_;
 };

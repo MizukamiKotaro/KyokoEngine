@@ -11,7 +11,7 @@ public:
 
 	static LightSingleton* GetInstance();
 
-	void Init();
+	void Initialize();
 
 	const DirectionalLight* GetDirectionaLight() const { return directionalLight_.get(); }
 
@@ -37,7 +37,7 @@ private:
 class Light 
 {
 public:
-	void Init();
+	void Initialize();
 
 	void SetDirectionalLight(const DirectionalLight* light) { directionalLight_ = light; }
 

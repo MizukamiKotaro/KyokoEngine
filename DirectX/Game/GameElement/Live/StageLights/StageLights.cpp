@@ -1,7 +1,7 @@
 #include "StageLights.h"
 #include "Camera.h"
 #include "TextureManager.h"
-#include "Externals/imgui/imgui.h"
+#include "ImGuiManager/ImGuiManager.h"
 #include "RandomGenerator/RandomGenerator.h"
 
 StageLights::StageLights()

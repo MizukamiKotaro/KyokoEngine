@@ -14,7 +14,7 @@
 #include "Light/Light.h"
 #include "FrameInfo/FrameInfo.h"
 
-void Kyoko::Init()
+void Kyoko::Initialize(const char* windowName, int width, int height)
 {
 	static ResourceLeackChecker leakCheck;
 
@@ -23,24 +23,24 @@ void Kyoko::Init()
 
 #pragma region 基盤システムの初期化
 
-	WindowsInfo::GetInstance()->CreateGameWindow();
+	WindowsInfo::GetInstance()->CreateGameWindow(windowName, width, height);
 
 	DirectXBase* dxCommon = DirectXBase::GetInstance();
 	dxCommon->Initialize();
 
 	TextureManager::GetInstance()->Initialize();
 
-	GraphicsPiplineManager::GetInstance()->Init();
+	GraphicsPiplineManager::GetInstance()->Initialize();
 
-	Audio::GetInstance()->Initialize();
+	AudioManager::GetInstance()->Initialize();
 
 	Input::GetInstance()->Initialize();
 
-	LightSingleton::GetInstance()->Init();
+	LightSingleton::GetInstance()->Initialize();
 
 	GlobalVariables::GetInstance()->LoadFiles();
 
-	FrameInfo::GetInstance()->Init();
+	FrameInfo::GetInstance()->Initialize();
 
 	ImGuiManager::Initialize();
 
@@ -87,7 +87,7 @@ void Kyoko::FirstUpdateInLoop()
 {
 	ImGuiManager::Begin();
 	Input::GetInstance()->Update();
-	Audio::GetInstance()->Update();
+	AudioManager::GetInstance()->Update();
 
 	GlobalVariables::GetInstance()->Update();
 }
@@ -116,7 +116,7 @@ void Kyoko::Finalize()
 	ImGuiManager::Finalize();
 
 	CoUninitialize();
-	Audio::GetInstance()->Finalize();
+	AudioManager::GetInstance()->Finalize();
 	TextureManager::GetInstance()->Finalize();
 	ModelDataManager::GetInstance()->Finalize();
 	DescriptorHeapManager::GetInstance()->Finalize();

@@ -129,13 +129,13 @@ public:
 	/// マウスホイールのスクロール量を取得する
 	/// </summary>
 	/// <returns>ホイールのスクロール量</returns>
-	int32_t GetWheel();
+	const int32_t GetWheel() const;
 
 	/// <summary>
 	/// マウスの動量を取得する
 	/// </summary>
 	/// <returns>マウスの移動量</returns>
-	Vector2 GetMouseMove();
+	const Vector2 GetMouseMove() const;
 
 	/// <summary>
 	/// マウスの座標を取得
@@ -149,16 +149,16 @@ private:
 	Input(const Input&) = delete;
 	const Input& operator=(const Input&) = delete;
 
-	bool GetGamePadButton(GamePadButton button);
+	const bool GetGamePadButton(GamePadButton button) const;
 
-	bool GetPreGamePadButton(GamePadButton button);
+	const bool GetPreGamePadButton(GamePadButton button) const;
 
-	bool GetMouseButton(MouseButton button);
+	const bool GetMouseButton(MouseButton button) const;
 
-	bool GetPreMouseButton(MouseButton button);
+	const bool GetPreMouseButton(MouseButton button) const;
 
 private:
-	WindowsInfo* winApp_ = nullptr;
+	WindowsInfo* windowInfo_ = nullptr;
 
 	ComPtr<IDirectInput8> dInput_;
 	ComPtr<IDirectInputDevice8> devKeyboard_;

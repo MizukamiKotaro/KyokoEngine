@@ -9,6 +9,41 @@
 
 const std::string Sprite::directoryPath_ = "Resources/Texture/";
 
+Sprite::Sprite(const Vector2& pos, const Vector2& texLeftTop, const Vector2& texSize, const Vector4& color, const Vector2& anchorPoint, bool isFlipX, bool isFlipY)
+{
+	CreateVertexRes();
+
+	LoadTexture(directoryPath_ + "white.png");
+	AdjustTextureSize();
+
+	CreateMaterialRes();
+
+	CreateTranformRes();
+
+	rotate_ = 0.0f;
+	pos_ = pos;
+
+	worldMat_ = Matrix4x4::MakeAffinMatrix({ 1.0f,1.0f,0.0f }, { 0.0f,0.0f,rotate_ }, { pos_.x,pos_.y,0.0f });
+
+	anchorPoint_ = anchorPoint;
+	textureLeftTop_ = texLeftTop;
+	textureSize_ = texSize;
+
+	isFlipX_ = isFlipX;
+	isFlipY_ = isFlipY;
+
+	TransferSize();
+	TransferUV();
+
+	uvTranslate_ = {};
+	uvScale_ = { 1.0f,1.0f };
+	uvRotate_ = 0.0f;
+
+	SetColor(color);
+
+	Update();
+}
+
 Sprite::Sprite(const std::string& filePath, const Vector2& pos, const Vector2& texLeftTop, const Vector2& texSize, const Vector4& color, const Vector2& anchorPoint, bool isFlipX, bool isFlipY)
 {
 
@@ -50,6 +85,7 @@ Sprite::Sprite(const Texture* texture, const Vector2& pos, const Vector2& texLef
 	CreateVertexRes();
 
 	texture_ = texture;
+	srvGPUDescriptorHandle_ = texture_->handles_->gpuHandle;
 	AdjustTextureSize();
 
 	CreateMaterialRes();
@@ -120,13 +156,8 @@ void Sprite::Draw(const Camera& camera, BlendMode blendMode)
 	commandList->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 	//TransformationMatrixCBufferの場所を設定
 	commandList->SetGraphicsRootConstantBufferView(1, transformResource_->GetGPUVirtualAddress());
-	if (isLoad_) {
-		commandList->SetGraphicsRootDescriptorTable(2, texture_->handles_->gpuHandle);
-	}
-	else {
-		this->LoadTexture(directoryPath_ + "white.png");
-		commandList->SetGraphicsRootDescriptorTable(2, texture_->handles_->gpuHandle);
-	}
+
+	commandList->SetGraphicsRootDescriptorTable(2, srvGPUDescriptorHandle_);
 	//描画!!!!（DrawCall/ドローコール）
 	commandList->DrawInstanced(6, 1, 0, 0);
 
@@ -153,30 +184,29 @@ void Sprite::Draw(BlendMode blendMode)
 	commandList->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 	//TransformationMatrixCBufferの場所を設定
 	commandList->SetGraphicsRootConstantBufferView(1, transformResource_->GetGPUVirtualAddress());
-	if (isLoad_) {
-		commandList->SetGraphicsRootDescriptorTable(2, texture_->handles_->gpuHandle);
-	}
-	else {
-		this->LoadTexture(directoryPath_ + "white.png");
-		commandList->SetGraphicsRootDescriptorTable(2, texture_->handles_->gpuHandle);
-	}
+
+	commandList->SetGraphicsRootDescriptorTable(2, srvGPUDescriptorHandle_);
 	//描画!!!!（DrawCall/ドローコール）
 	commandList->DrawInstanced(6, 1, 0, 0);
 }
 
+void Sprite::SetSRVGPUDescriptorHandle_(D3D12_GPU_DESCRIPTOR_HANDLE srvGPUDescriptorHandle)
+{
+	srvGPUDescriptorHandle_ = srvGPUDescriptorHandle;
+	size_ = WindowsInfo::GetInstance()->GetWindowSize();
+	TransferSize();
+}
+
 void Sprite::LoadTexture(const std::string& filePath)
 {
-
-	TextureManager* texManager = TextureManager::GetInstance();
-
-	texture_ = texManager->LoadTexture(filePath);
-
-	isLoad_ = true;
+	SetTexture(TextureManager::GetInstance()->LoadTexture(filePath));
 }
 
 void Sprite::SetTexture(const Texture* texture)
 {
 	texture_ = texture;
+
+	srvGPUDescriptorHandle_ = texture_->handles_->gpuHandle;
 
 	AdjustTextureSize();
 }
@@ -215,7 +245,7 @@ void Sprite::SetIsFlipY(bool isFlipY)
 void Sprite::SetTextureTopLeft(const Vector2& texTopLeft)
 {
 	if (texTopLeft.x < 1.0f && texTopLeft.y < 1.0f) {
-		textureLeftTop_ = textureLeftTop_;
+		textureLeftTop_ = texTopLeft;
 	}
 	else {
 		D3D12_RESOURCE_DESC resDesc = texture_->resource_->GetDesc();

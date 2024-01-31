@@ -6,14 +6,14 @@ LightSingleton* LightSingleton::GetInstance()
 	return &instance;
 }
 
-void LightSingleton::Init()
+void LightSingleton::Initialize()
 {
 	directionalLight_ = std::make_unique<DirectionalLight>();
 	pointLight_ = std::make_unique<PointLight>();
 	spotLight_ = std::make_unique<SpotLight>();
 }
 
-void Light::Init()
+void Light::Initialize()
 {
 	LightSingleton* light = LightSingleton::GetInstance();
 

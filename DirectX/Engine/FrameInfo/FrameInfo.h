@@ -7,7 +7,7 @@ public:
 
 	static FrameInfo* GetInstance();
 
-	void Init();
+	void Initialize();
 
 	void End();
 

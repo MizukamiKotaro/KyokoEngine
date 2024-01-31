@@ -3,20 +3,26 @@
 #include "Input.h"
 #include "FrameInfo/FrameInfo.h"
 #include "Externals/imgui/imgui.h"
+#include "GameElement/ScoreManager/ScoreManager.h"
 
 SceneManager::SceneManager()
 {
+	ScoreManager::GetInstance()->Initialize();
+
+
 	sceneArr_[TITLE] = std::make_unique<TitleScene>();
 	sceneArr_[SELECT] = std::make_unique<SelectScene>();
 	sceneArr_[STAGE] = std::make_unique<StageScene>();
 	sceneArr_[CLEAR] = std::make_unique<ClearScene>();
 
-	//IScene::sceneNo_ = TITLE;
-	IScene::sceneNo_ = STAGE;
+	IScene::sceneNo_ = TITLE;
+	//IScene::sceneNo_ = STAGE;
 	currentSceneNo_ = IScene::sceneNo_;
+	preSceneNo_ = currentSceneNo_;
 	IScene::stageNo_ = 0;
 
-	sceneArr_[currentSceneNo_]->Init();
+	sceneArr_[currentSceneNo_]->Initialize();
+
 }
 
 SceneManager::~SceneManager()
@@ -39,7 +45,7 @@ int SceneManager::Run()
 		currentSceneNo_ = sceneArr_[currentSceneNo_]->GetSceneNo();
 
 		if (preSceneNo_ != currentSceneNo_) {
-			sceneArr_[currentSceneNo_]->Init();
+			sceneArr_[currentSceneNo_]->Initialize();
 		}
 
 		sceneArr_[currentSceneNo_]->Play();

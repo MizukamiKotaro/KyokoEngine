@@ -8,7 +8,7 @@
 #include <memory>
 #include <array>
 
-class Audio
+class AudioManager
 {
 public:
 
@@ -46,7 +46,7 @@ public:
 		IXAudio2SourceVoice* sourceVoice = nullptr;
 	};
 
-	static Audio* GetInstance();
+	static AudioManager* GetInstance();
 
 	/// <summary>
 	/// 初期化
@@ -121,10 +121,10 @@ private:
 
 private:
 
-	Audio() = default;
-	~Audio() = default;
-	Audio(const Audio&) = delete;
-	const Audio& operator=(const Audio&) = delete;
+	AudioManager() = default;
+	~AudioManager() = default;
+	AudioManager(const AudioManager&) = delete;
+	const AudioManager& operator=(const AudioManager&) = delete;
 
 	Microsoft::WRL::ComPtr<IXAudio2> xAudio2_;
 	IXAudio2MasteringVoice* masterVoice_ = nullptr;
@@ -136,3 +136,25 @@ private:
 	const std::string directoryPath_ = "Resources/Audio/";
 };
 
+class Audio
+{
+public:
+
+	void LoadWave(const std::string& filename) { soundHandle_ = AudioManager::GetInstance()->LoadWave(filename); }
+
+	void Play(bool loopFlag = false, float volume = 1.0f) { voiseHandle_ = AudioManager::GetInstance()->Play(soundHandle_, loopFlag, volume); }
+
+	void Stop() const { AudioManager::GetInstance()->Stop(voiseHandle_); }
+
+	bool IsPlaying() const { return AudioManager::GetInstance()->IsPlaying(voiseHandle_); }
+
+	void Pause() const { AudioManager::GetInstance()->Pause(voiseHandle_); }
+
+	void ReStart() const { AudioManager::GetInstance()->ReStart(voiseHandle_); }
+
+	void SetVolume(float volume) const { AudioManager::GetInstance()->SetVolume(voiseHandle_, volume); }
+
+private:
+	uint32_t soundHandle_;
+	uint32_t voiseHandle_;
+};

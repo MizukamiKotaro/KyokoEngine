@@ -17,7 +17,33 @@ public:
 
 	PostEffect();
 	
-	~PostEffect();
+	virtual ~PostEffect();
+
+	// namespace省略
+	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
+
+	virtual void Initialize();
+
+	virtual void Update();
+
+	virtual void Draw(BlendMode blendMode = BlendMode::kBlendModeNormal);
+
+
+	void PreDrawScene();
+
+	void PostDrawScene();
+
+
+protected:
+	void PreDraw() const { GraphicsPiplineManager::GetInstance()->PreDraw(piplineType_); }
+
+	virtual void CreateResources();
+
+public:
+
+	const D3D12_GPU_DESCRIPTOR_HANDLE GetSRVGPUDescriptorHandle() const { return srvHandles_->gpuHandle; };
+
+protected:
 
 	struct VertexData
 	{
@@ -35,29 +61,6 @@ public:
 		Matrix4x4 WVP;
 		//Matrix4x4 World;
 	};
-
-	// namespace省略
-	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-
-	void Initialize();
-
-	void Update();
-
-	void Draw(BlendMode blendMode = BlendMode::kBlendModeNormal);
-
-
-	void PreDrawScene();
-
-	void PostDrawScene();
-
-private:
-	static void PreDraw() { GraphicsPiplineManager::GetInstance()->PreDraw(piplineType); }
-
-public:
-
-	const D3D12_GPU_DESCRIPTOR_HANDLE GetSRVGPUDescriptorHandle() const { return srvHandles_->gpuHandle; };
-
-private:
 
 	void SetAnchorPoint(const Vector2& anchorpoint);
 
@@ -83,9 +86,9 @@ private:
 
 	void CreateDSV();
 
-	void CreateResources();
+	void CreatePostEffect();
 
-private:
+protected:
 
 	ComPtr<ID3D12Resource> vertexResource_;
 	VertexData* vertexData_;
@@ -106,9 +109,9 @@ private:
 	ComPtr<ID3D12Resource> dsvResource_;
 	const DescriptorHandles* dsvHandles_;
 
-private:
+protected:
 
-	static const GraphicsPiplineManager::PiplineType piplineType = GraphicsPiplineManager::PiplineType::SPRITE;
+	GraphicsPiplineManager::PiplineType piplineType_;
 
 	static const float clearColor[4];
 

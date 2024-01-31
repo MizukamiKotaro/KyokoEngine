@@ -124,6 +124,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\GraphicsPipelines\BlurGraphicsPipeline\BlurGraphicsPipeline.cpp" />
     <ClCompile Include="Engine\GraphicsPipelines\ContrastGraphicsPipeline\ContrastGraphicsPipeline.cpp" />
     <ClCompile Include="Engine\GraphicsPipelines\GaussianBlurGraphicsPipeline\GaussianBlurGraphicsPipeline.cpp" />
+    <ClCompile Include="Engine\GraphicsPipelines\GraphicsPipeline\GraphicsPipeline.cpp" />
     <ClCompile Include="Engine\GraphicsPipelines\GraphicsPiplineManager\GraphicsPiplineManager.cpp" />
     <ClCompile Include="Engine\GraphicsPipelines\HighLumiGraphicsPipeline\HighLumiGraphicsPipeline.cpp" />
     <ClCompile Include="Engine\GraphicsPipelines\ModelGraphicsPipline\ModelGraphicsPipline.cpp" />
@@ -149,7 +150,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\PostEffect\PostEffect.cpp" />
     <ClCompile Include="Engine\Sprite\Sprite.cpp" />
     <ClCompile Include="Engine\TextureManager\TextureManager.cpp" />
+    <ClCompile Include="Game\GameElement\ClearUI\ClearUI.cpp" />
     <ClCompile Include="Game\GameElement\Game.cpp" />
+    <ClCompile Include="Game\GameElement\HitSystem\HitSystem.cpp" />
     <ClCompile Include="Game\GameElement\Live\Dome\Dome.cpp" />
     <ClCompile Include="Game\GameElement\Live\Live.cpp" />
     <ClCompile Include="Game\GameElement\Live\Screen\Screen.cpp" />
@@ -157,7 +160,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\GameElement\Live\Stage\Stage.cpp" />
     <ClCompile Include="Game\GameElement\Notes\Notes.cpp" />
     <ClCompile Include="Game\GameElement\Pause\Pause.cpp" />
+    <ClCompile Include="Game\GameElement\ScoreManager\ScoreManager.cpp" />
     <ClCompile Include="Game\GameElement\Score\Score.cpp" />
+    <ClCompile Include="Game\GameElement\StageUI\StageUI.cpp" />
     <ClCompile Include="Game\SceneSystem\ClearScene\ClearScene.cpp" />
     <ClCompile Include="Game\SceneSystem\IScene\IScene.cpp" />
     <ClCompile Include="Game\SceneSystem\SceneManager\SceneManager.cpp" />
@@ -195,6 +200,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\GraphicsPipelines\BlurGraphicsPipeline\BlurGraphicsPipeline.h" />
     <ClInclude Include="Engine\GraphicsPipelines\ContrastGraphicsPipeline\ContrastGraphicsPipeline.h" />
     <ClInclude Include="Engine\GraphicsPipelines\GaussianBlurGraphicsPipeline\GaussianBlurGraphicsPipeline.h" />
+    <ClInclude Include="Engine\GraphicsPipelines\GraphicsPipeline\GraphicsPipeline.h" />
     <ClInclude Include="Engine\GraphicsPipelines\GraphicsPiplineManager\GraphicsPiplineManager.h" />
     <ClInclude Include="Engine\GraphicsPipelines\HighLumiGraphicsPipeline\HighLumiGraphicsPipeline.h" />
     <ClInclude Include="Engine\GraphicsPipelines\ModelGraphicsPipline\ModelGraphicsPipline.h" />
@@ -247,7 +253,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Utils\Shape\Sphere.h" />
     <ClInclude Include="Engine\Utils\Shape\Triangle.h" />
     <ClInclude Include="Engine\Utils\Transform\Transform.h" />
+    <ClInclude Include="Game\GameElement\ClearUI\ClearUI.h" />
     <ClInclude Include="Game\GameElement\Game.h" />
+    <ClInclude Include="Game\GameElement\HitSystem\HitSystem.h" />
     <ClInclude Include="Game\GameElement\Live\Dome\Dome.h" />
     <ClInclude Include="Game\GameElement\Live\Live.h" />
     <ClInclude Include="Game\GameElement\Live\Screen\Screen.h" />
@@ -255,7 +263,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\GameElement\Live\Stage\Stage.h" />
     <ClInclude Include="Game\GameElement\Notes\Notes.h" />
     <ClInclude Include="Game\GameElement\Pause\Pause.h" />
+    <ClInclude Include="Game\GameElement\ScoreManager\ScoreManager.h" />
     <ClInclude Include="Game\GameElement\Score\Score.h" />
+    <ClInclude Include="Game\GameElement\StageUI\StageUI.h" />
     <ClInclude Include="Game\SceneSystem\ClearScene\ClearScene.h" />
     <ClInclude Include="Game\SceneSystem\IScene\IScene.h" />
     <ClInclude Include="Game\SceneSystem\SceneManager\SceneManager.h" />
