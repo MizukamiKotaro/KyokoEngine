@@ -62,7 +62,7 @@ void Game::Update()
 {
 	if (!isStartMusic_) {
 		isStartMusic_ = true;
-		music_->Play(false, 0.5f);
+		music_->Play(false, 0.3f);
 	}
 
 	if (!music_->IsPlaying()) {

@@ -42,7 +42,7 @@ void TitleScene::Update()
 	if (input_->PressedGamePadButton(Input::GamePadButton::A)) {
 		// シーン切り替え
 		ChangeScene(SELECT);
-		se_.Play(false, 0.5f);
+		se_.Play(false, 0.9f);
 	}
 }
 
