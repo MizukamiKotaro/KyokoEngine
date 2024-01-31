@@ -15,7 +15,7 @@ public:
 
 	void Initialize(Camera* camera);
 
-	void Update();
+	void Update(float time);
 
 	void Draw(Camera* camera);
 

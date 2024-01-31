@@ -71,6 +71,8 @@ void Game::Update()
 
 	time_ += FrameInfo::GetInstance()->GetDeltaTime();
 
+	live_->Update(time_);
+
 	HitSystem::Update(time_);
 
 	if (isMusicFinish_) {

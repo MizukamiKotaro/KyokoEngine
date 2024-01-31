@@ -18,12 +18,12 @@ void Live::Initialize(Camera* camera)
 	WriteScreen(camera);
 }
 
-void Live::Update()
+void Live::Update(float time)
 {
 	dome_->Update();
 	screen_->Update();
 	stage_->Update();
-
+	stageLights_->Update(time);
 }
 
 void Live::Draw(Camera* camera)
