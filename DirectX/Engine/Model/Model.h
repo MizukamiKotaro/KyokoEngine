@@ -11,6 +11,7 @@
 #include "GraphicsPipelines/GraphicsPiplineManager/GraphicsPiplineManager.h"
 #include "Light/Light.h"
 #include "ModelData/ModelData.h"
+#include "ModelDataManager.h"
 #include "Texture.h"
 
 class Camera;
@@ -59,6 +60,8 @@ public:
 	// namespace省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 
+	static void FirstInitialize();
+
 	void Initialize();
 
 	void Update();
@@ -67,7 +70,7 @@ public:
 
 
 private:
-	static void PreDraw() { GraphicsPiplineManager::GetInstance()->PreDraw(piplineType); }
+	static void PreDraw() { gpoManager_->PreDraw(piplineType); }
 
 public:
 
@@ -112,6 +115,12 @@ public:
 private:
 
 	static const GraphicsPiplineManager::PiplineType piplineType = GraphicsPiplineManager::PiplineType::MODEL;
+
+	static ID3D12GraphicsCommandList* commandList_;
+
+	static ModelDataManager* modelDataManager_;
+
+	static GraphicsPiplineManager* gpoManager_;
 
 	Light light_;
 

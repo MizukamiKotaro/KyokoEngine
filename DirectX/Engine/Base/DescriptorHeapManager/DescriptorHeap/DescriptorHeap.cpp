@@ -5,7 +5,6 @@
 #include "Externals/DirectXTex/d3dx12.h"
 #include "Engine/Base/DirectXBase/DirectXBase.h"
 
-
 DescriptorHeap::~DescriptorHeap()
 {
 	descriptors_.clear();

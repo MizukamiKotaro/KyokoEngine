@@ -75,9 +75,6 @@ uint32_t AudioManager::LoadWave(const std::string& filename) {
 		// 再読み込み
 		file.read((char*)&fmt.chunk, sizeof(ChunkHeader));
 	}
-	/*if (strncmp(fmt.chunk.id, "fmt", 4) != 0) {
-		assert(0);
-	}*/
 
 	std::vector<char> fmtData(fmt.chunk.size);
 	file.read(fmtData.data(), fmt.chunk.size);

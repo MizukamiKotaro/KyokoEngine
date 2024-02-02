@@ -44,7 +44,7 @@ void ClearScene::Draw()
 	ui_->Draw();
 	screen_->PostDrawScene();
 
-	Kyoko::PreDraw();
+	Kyoko::Engine::PreDraw();
 
 	dome_->Draw(camera_.get());
 	stage_->Draw(camera_.get());
@@ -56,7 +56,7 @@ void ClearScene::Draw()
 
 	BlackDraw();
 
-	Kyoko::PostDraw();
+	Kyoko::Engine::PostDraw();
 }
 
 

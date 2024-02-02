@@ -11,6 +11,8 @@
 #include <algorithm>
 #include "TextureManager.h"
 
+const std::string Particle::directoryPath_ = "Resources/Texture/";
+
 Particle::Particle(const std::string& fileName)
 {
 
@@ -18,7 +20,7 @@ Particle::Particle(const std::string& fileName)
 
 	modelData_ = modelManager->LoadObj("Plane");
 
-	texture_ = modelData_->texture;
+	texture_ = TextureManager::GetInstance()->LoadTexture(directoryPath_ + fileName);
 
 	CreateResources();
 

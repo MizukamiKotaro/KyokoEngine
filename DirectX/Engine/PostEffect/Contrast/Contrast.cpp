@@ -3,24 +3,19 @@
 #include "Engine/Base/DirectXBase/DirectXBase.h"
 #include "Engine/Base/DescriptorHeapManager/DescriptorHeapManager.h"
 #include "Camera.h"
-#include "WindowsInfo/WindowsInfo.h"
 
 Contrast::Contrast()
 {
 	piplineType_ = GraphicsPiplineManager::PiplineType::CONTRAST;
 
-	CreateContrastRes();
+	contrastData_ = nullptr;
+
+	CreatePostEffect();
 }
 
 Contrast::~Contrast()
 {
-	vertexResource_->Release();
-	transformResource_->Release();
-	materialResource_->Release();
 	contrastResource_->Release();
-	DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->DeleteDescriptor(srvHandles_);
-	DescriptorHeapManager::GetInstance()->GetRTVDescriptorHeap()->DeleteDescriptor(rtvHandles_);
-	DescriptorHeapManager::GetInstance()->GetDSVDescriptorHeap()->DeleteDescriptor(dsvHandles_);
 }
 
 void Contrast::Draw(BlendMode blendMode)
@@ -64,5 +59,12 @@ void Contrast::CreateContrastRes()
 	contrastData_->brightness_ = 0.2f;
 
 	contrastData_->contrast_ = 3.0f;
+}
+
+void Contrast::CreateResources()
+{
+	BasePostEffect::CreateResources();
+
+	CreateContrastRes();
 }
 

@@ -253,6 +253,24 @@
     <Filter Include="Game\GameElement\ClearUI">
       <UniqueIdentifier>{d7b47301-01d0-488d-b602-f02b7231750e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\GameElement\Charactor">
+      <UniqueIdentifier>{aef80c23-6a51-48fd-8a00-8ec79c1849aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\PostEffect\PostEffect">
+      <UniqueIdentifier>{655c2fbd-b883-466c-b888-d3ad799293d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\PostEffect\BasePostEffect">
+      <UniqueIdentifier>{a2873dab-3de2-4122-a40a-8cfb3ac7c2e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Utils\RandomGenerator">
+      <UniqueIdentifier>{f44f0203-caba-4b5b-9d47-6fe2fb704a31}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Light\LightSingleton">
+      <UniqueIdentifier>{e6309c28-4837-4a49-b468-736bfc6db153}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Light\Light">
+      <UniqueIdentifier>{b33755c4-2ca6-4ca0-84fe-54f4e066b387}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -318,9 +336,6 @@
     <ClCompile Include="Engine\Input\Input.cpp">
       <Filter>Engine\Input</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Light\Light.cpp">
-      <Filter>Engine\Light</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Particle\Particle.cpp">
       <Filter>Engine\Particle</Filter>
     </ClCompile>
@@ -332,9 +347,6 @@
     </ClCompile>
     <ClCompile Include="Engine\Model\ModelData\ModelDataManager\ModelDataManager.cpp">
       <Filter>Engine\Model\ModelData\ModelDataManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Utils\RandomGenerator\RandomGenerator.cpp">
-      <Filter>Engine\Utils</Filter>
     </ClCompile>
     <ClCompile Include="Engine\GraphicsPipelines\ParticleGraphicsPipeline\ParticleGraphicsPipeline.cpp">
       <Filter>Engine\GraphicsPipelines\ParticleGraphicsPipeline</Filter>
@@ -386,9 +398,6 @@
     </ClCompile>
     <ClCompile Include="Engine\GraphicsPipelines\SpotLightGraphicsPipline\SpotLightGraphicsPipline.cpp">
       <Filter>Engine\GraphicsPipelines\SpotLightGraphicsPipline</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\PostEffect\PostEffect.cpp">
-      <Filter>Engine\PostEffect</Filter>
     </ClCompile>
     <ClCompile Include="Game\SceneSystem\SelectScene\SelectScene.cpp">
       <Filter>Game\SceneSystem\SelectScene</Filter>
@@ -474,6 +483,24 @@
     <ClCompile Include="Game\GameElement\ClearUI\ClearUI.cpp">
       <Filter>Game\GameElement\ClearUI</Filter>
     </ClCompile>
+    <ClCompile Include="Game\GameElement\Charactor\Charactor.cpp">
+      <Filter>Game\GameElement\Charactor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PostEffect\PostEffect\PostEffect.cpp">
+      <Filter>Engine\PostEffect\PostEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PostEffect\BasePostEffect\BasePostEffect.cpp">
+      <Filter>Engine\PostEffect\BasePostEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Utils\RandomGenerator\RandomGenerator.cpp">
+      <Filter>Engine\Utils\RandomGenerator</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Light\Light\Light.cpp">
+      <Filter>Engine\Light\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Light\LightSingleton\LightSingleton.cpp">
+      <Filter>Engine\Light\LightSingleton</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Utils\Math\calc.h">
@@ -545,9 +572,6 @@
     <ClInclude Include="Engine\Input\Input.h">
       <Filter>Engine\Input</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Light\Light.h">
-      <Filter>Engine\Light</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Particle\Particle.h">
       <Filter>Engine\Particle</Filter>
     </ClInclude>
@@ -565,9 +589,6 @@
     </ClInclude>
     <ClInclude Include="Engine\Base\ResourceLeakChecker.h">
       <Filter>Engine\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Utils\RandomGenerator\RandomGenerator.h">
-      <Filter>Engine\Utils</Filter>
     </ClInclude>
     <ClInclude Include="Engine\GraphicsPipelines\ParticleGraphicsPipeline\ParticleGraphicsPipeline.h">
       <Filter>Engine\GraphicsPipelines\ParticleGraphicsPipeline</Filter>
@@ -619,9 +640,6 @@
     </ClInclude>
     <ClInclude Include="Engine\GraphicsPipelines\SpotLightGraphicsPipline\SpotLightGraphicsPipline.h">
       <Filter>Engine\GraphicsPipelines\SpotLightGraphicsPipline</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\PostEffect\PostEffect.h">
-      <Filter>Engine\PostEffect</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Model\ModelData\MaterialData3D.h">
       <Filter>Engine\Model\ModelData</Filter>
@@ -727,6 +745,24 @@
     </ClInclude>
     <ClInclude Include="Game\GameElement\ClearUI\ClearUI.h">
       <Filter>Game\GameElement\ClearUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameElement\Charactor\Charactor.h">
+      <Filter>Game\GameElement\Charactor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PostEffect\PostEffect\PostEffect.h">
+      <Filter>Engine\PostEffect\PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PostEffect\BasePostEffect\BasePostEffect.h">
+      <Filter>Engine\PostEffect\BasePostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Utils\RandomGenerator\RandomGenerator.h">
+      <Filter>Engine\Utils\RandomGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Light\Light\Light.h">
+      <Filter>Engine\Light\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Light\LightSingleton\LightSingleton.h">
+      <Filter>Engine\Light\LightSingleton</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

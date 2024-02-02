@@ -1,17 +1,17 @@
 #pragma once
 
-class Kyoko {
-public:
+namespace Kyoko {
+	namespace Engine {
+		void Initialize(const char* windowName = "LE2A_21_ミズカミ_コタロウ", int width = 1280, int height = 720);
 
-	static void Initialize(const char* windowName = "LE2A_21_ミズカミ_コタロウ", int width = 1280, int height = 720);
+		const bool ProcessMessage();
 
-	static const bool ProcessMessage();
+		void FirstUpdateInLoop();
 
-	static void FirstUpdateInLoop();
+		void PreDraw();
 
-	static void PreDraw();
+		void PostDraw();
 
-	static void PostDraw();
-
-	static void Finalize();
-};
+		void Finalize();
+	}
+}

@@ -13,42 +13,52 @@
 #include "Audio.h"
 #include "Light/Light.h"
 #include "FrameInfo/FrameInfo.h"
+#include "Model.h"
 
-void Kyoko::Initialize(const char* windowName, int width, int height)
+static ResourceLeackChecker leakCheck;
+
+DirectXBase* dxBase;
+WindowsInfo* winInfo;
+GraphicsPiplineManager* gpoManager;
+AudioManager* audioManager;
+Input* inputManager;
+GlobalVariables* globalVariables;
+
+void Kyoko::Engine::Initialize(const char* windowName, int width, int height)
 {
-	static ResourceLeackChecker leakCheck;
-
 	HRESULT hr = CoInitializeEx(0, COINIT_MULTITHREADED);
 	SUCCEEDED(hr);
+	winInfo = WindowsInfo::GetInstance();
+	winInfo->CreateGameWindow(windowName, width, height);
 
-#pragma region 基盤システムの初期化
-
-	WindowsInfo::GetInstance()->CreateGameWindow(windowName, width, height);
-
-	DirectXBase* dxCommon = DirectXBase::GetInstance();
-	dxCommon->Initialize();
+	dxBase = DirectXBase::GetInstance();
+	dxBase->Initialize();
 
 	TextureManager::GetInstance()->Initialize();
 
-	GraphicsPiplineManager::GetInstance()->Initialize();
+	gpoManager = GraphicsPiplineManager::GetInstance();
+	gpoManager->Initialize();
 
-	AudioManager::GetInstance()->Initialize();
+	Model::FirstInitialize();
 
-	Input::GetInstance()->Initialize();
+	audioManager = AudioManager::GetInstance();
+	audioManager->Initialize();
+
+	inputManager = Input::GetInstance();
+	inputManager->Initialize();
 
 	LightSingleton::GetInstance()->Initialize();
 
-	GlobalVariables::GetInstance()->LoadFiles();
+	globalVariables = GlobalVariables::GetInstance();
+	globalVariables->LoadFiles();
 
 	FrameInfo::GetInstance()->Initialize();
 
-	ImGuiManager::Initialize();
-
-#pragma endregion 基盤システムの初期化
+	Kyoko::ImGuiManager::Initialize();
 
 #ifdef _DEBUG
 	ID3D12InfoQueue* infoQueue = nullptr;
-	if (SUCCEEDED(dxCommon->GetDevice()->QueryInterface(IID_PPV_ARGS(&infoQueue)))) {
+	if (SUCCEEDED(dxBase->GetDevice()->QueryInterface(IID_PPV_ARGS(&infoQueue)))) {
 		//ヤバいエラーの時に止まる
 		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_CORRUPTION, true);
 		//エラーのときに止まる
@@ -78,50 +88,50 @@ void Kyoko::Initialize(const char* windowName, int width, int height)
 #endif // _DEBUG
 }
 
-const bool Kyoko::ProcessMessage()
+const bool Kyoko::Engine::ProcessMessage()
 {
-	return WindowsInfo::GetInstance()->ProcessMessage();
+	return winInfo->ProcessMessage();
 }
 
-void Kyoko::FirstUpdateInLoop()
+void Kyoko::Engine::FirstUpdateInLoop()
 {
 	ImGuiManager::Begin();
-	Input::GetInstance()->Update();
-	AudioManager::GetInstance()->Update();
+	inputManager->Update();
+	audioManager->Update();
 
-	GlobalVariables::GetInstance()->Update();
+	globalVariables->Update();
 }
 
-void Kyoko::PreDraw()
+void Kyoko::Engine::PreDraw()
 {
 	ImGuiManager::End();
 
 	// 描画前処理
-	DirectXBase::GetInstance()->PreDraw();
+	dxBase->PreDraw();
 
-	GraphicsPiplineManager::GetInstance()->PreDraw();
+	gpoManager->PreDraw();
 }
 
-void Kyoko::PostDraw()
+void Kyoko::Engine::PostDraw()
 {
 	ImGuiManager::Draw();
 
 	// 描画後処理
-	DirectXBase::GetInstance()->PostDraw();
+	dxBase->PostDraw();
 }
 
-void Kyoko::Finalize()
+void Kyoko::Engine::Finalize()
 {
 #pragma region 基盤システムの終了
 	ImGuiManager::Finalize();
 
 	CoUninitialize();
-	AudioManager::GetInstance()->Finalize();
+	audioManager->Finalize();
 	TextureManager::GetInstance()->Finalize();
 	ModelDataManager::GetInstance()->Finalize();
 	DescriptorHeapManager::GetInstance()->Finalize();
-	DirectXBase::GetInstance()->Finalize();
-	WindowsInfo::GetInstance()->Finalize();
+	dxBase->Finalize();
+	winInfo->Finalize();
 
 #pragma endregion 基盤システムの終了
 

@@ -46,9 +46,6 @@ public:
 
 	static GraphicsPiplineManager* GetInstance();
 
-	// namespace省略
-	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-
 	void Initialize();
 
 	void PreDraw();

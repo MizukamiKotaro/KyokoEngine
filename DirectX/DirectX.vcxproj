@@ -55,13 +55,13 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)/Engine;$(ProjectDir)/Engine/Base;$(ProjectDir)/Engine/Audio;$(ProjectDir)/Engine/Input;$(ProjectDir)/Engine/Model;$(ProjectDir)/Engine/Model/ModelData/ModelDataManager;$(ProjectDir)/Engine/Sprite;$(ProjectDir)/Engine/TextureManager;$(ProjectDir)/Engine/Utils/Math;$(ProjectDir)/Engine/Utils/Transfrom;$(ProjectDir)/Engine/Utils/Camera;$(ProjectDir)/Engine/Particle;$(ProjectDir)/Engine/Utils;$(ProjectDir)/Game;$(ProjectDir)/Externals\assimp\include;$(ProjectDir)/Engine/TextureManager/Texture;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)/Engine;$(ProjectDir)/Engine/Base;$(ProjectDir)/Engine/Audio;$(ProjectDir)/Engine/Input;$(ProjectDir)/Engine/Model;$(ProjectDir)/Engine/Model/ModelData/ModelDataManager;$(ProjectDir)/Engine/Sprite;$(ProjectDir)/Engine/TextureManager;$(ProjectDir)/Engine/Utils/Math;$(ProjectDir)/Engine/Utils/Transfrom;$(ProjectDir)/Engine/Utils/Camera;$(ProjectDir)/Engine/Particle;$(ProjectDir)/Engine/Utils;$(ProjectDir)/Game;$(ProjectDir)/Externals\assimp\include;$(ProjectDir)/Engine/TextureManager/Texture;$(ProjectDir)/Engine/PostEffect;$(ProjectDir)/Engine/Light;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PreprocessorDefinitions>_ITERATOR_DEBUG_LEVEL=2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -82,7 +82,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
@@ -90,7 +90,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)/Engine;$(ProjectDir)/Engine/Base;$(ProjectDir)/Engine/Audio;$(ProjectDir)/Engine/Input;$(ProjectDir)/Engine/Model;$(ProjectDir)/Engine/Model/ModelData/ModelDataManager;$(ProjectDir)/Engine/Sprite;$(ProjectDir)/Engine/TextureManager;$(ProjectDir)/Engine/Utils/Math;$(ProjectDir)/Engine/Utils/Transfrom;$(ProjectDir)/Engine/Utils/Camera;$(ProjectDir)/Engine/Particle;$(ProjectDir)/Engine/Utils;$(ProjectDir)/Game;$(ProjectDir)/Externals\assimp\include;$(ProjectDir)/Engine/TextureManager/Texture;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)/Engine;$(ProjectDir)/Engine/Base;$(ProjectDir)/Engine/Audio;$(ProjectDir)/Engine/Input;$(ProjectDir)/Engine/Model;$(ProjectDir)/Engine/Model/ModelData/ModelDataManager;$(ProjectDir)/Engine/Sprite;$(ProjectDir)/Engine/TextureManager;$(ProjectDir)/Engine/Utils/Math;$(ProjectDir)/Engine/Utils/Transfrom;$(ProjectDir)/Engine/Utils/Camera;$(ProjectDir)/Engine/Particle;$(ProjectDir)/Engine/Utils;$(ProjectDir)/Game;$(ProjectDir)/Externals\assimp\include;$(ProjectDir)/Engine/TextureManager/Texture;$(ProjectDir)/Engine/PostEffect;$(ProjectDir)/Engine/Light;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <Optimization>MinSpace</Optimization>
@@ -136,20 +136,23 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Input\Input.cpp" />
     <ClCompile Include="Engine\Kyoko.cpp" />
     <ClCompile Include="Engine\Light\DirectionalLight\DirectionalLight.cpp" />
-    <ClCompile Include="Engine\Light\Light.cpp" />
+    <ClCompile Include="Engine\Light\LightSingleton\LightSingleton.cpp" />
+    <ClCompile Include="Engine\Light\Light\Light.cpp" />
     <ClCompile Include="Engine\Light\PointLight\PointLight.cpp" />
     <ClCompile Include="Engine\Light\SpotLight\SpotLight.cpp" />
     <ClCompile Include="Engine\Model\ModelData\ModelDataManager\ModelDataManager.cpp" />
     <ClCompile Include="Engine\Model\Model.cpp" />
     <ClCompile Include="Engine\Particle\Particle.cpp" />
+    <ClCompile Include="Engine\PostEffect\BasePostEffect\BasePostEffect.cpp" />
     <ClCompile Include="Engine\PostEffect\Bloom\Bloom.cpp" />
     <ClCompile Include="Engine\PostEffect\Blur\Blur.cpp" />
     <ClCompile Include="Engine\PostEffect\Contrast\Contrast.cpp" />
     <ClCompile Include="Engine\PostEffect\GaussianBlur\GaussianBlur.cpp" />
     <ClCompile Include="Engine\PostEffect\HighLumi\HighLumi.cpp" />
-    <ClCompile Include="Engine\PostEffect\PostEffect.cpp" />
+    <ClCompile Include="Engine\PostEffect\PostEffect\PostEffect.cpp" />
     <ClCompile Include="Engine\Sprite\Sprite.cpp" />
     <ClCompile Include="Engine\TextureManager\TextureManager.cpp" />
+    <ClCompile Include="Game\GameElement\Charactor\Charactor.cpp" />
     <ClCompile Include="Game\GameElement\ClearUI\ClearUI.cpp" />
     <ClCompile Include="Game\GameElement\Game.cpp" />
     <ClCompile Include="Game\GameElement\HitSystem\HitSystem.cpp" />
@@ -212,7 +215,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Input\Input.h" />
     <ClInclude Include="Engine\Kyoko.h" />
     <ClInclude Include="Engine\Light\DirectionalLight\DirectionalLight.h" />
-    <ClInclude Include="Engine\Light\Light.h" />
+    <ClInclude Include="Engine\Light\LightSingleton\LightSingleton.h" />
+    <ClInclude Include="Engine\Light\Light\Light.h" />
     <ClInclude Include="Engine\Light\PointLight\PointLight.h" />
     <ClInclude Include="Engine\Light\SpotLight\SpotLight.h" />
     <ClInclude Include="Engine\Model\ModelData\AnimationData3D.h" />
@@ -225,12 +229,13 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Model\ModelData\NodeData3D.h" />
     <ClInclude Include="Engine\Model\ModelData\VertexData3D.h" />
     <ClInclude Include="Engine\Particle\Particle.h" />
+    <ClInclude Include="Engine\PostEffect\BasePostEffect\BasePostEffect.h" />
     <ClInclude Include="Engine\PostEffect\Bloom\Bloom.h" />
     <ClInclude Include="Engine\PostEffect\Blur\Blur.h" />
     <ClInclude Include="Engine\PostEffect\Contrast\Contrast.h" />
     <ClInclude Include="Engine\PostEffect\GaussianBlur\GaussianBlur.h" />
     <ClInclude Include="Engine\PostEffect\HighLumi\HighLumi.h" />
-    <ClInclude Include="Engine\PostEffect\PostEffect.h" />
+    <ClInclude Include="Engine\PostEffect\PostEffect\PostEffect.h" />
     <ClInclude Include="Engine\Sprite\Sprite.h" />
     <ClInclude Include="Engine\TextureManager\TextureManager.h" />
     <ClInclude Include="Engine\TextureManager\Texture\Texture.h" />
@@ -253,6 +258,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Utils\Shape\Sphere.h" />
     <ClInclude Include="Engine\Utils\Shape\Triangle.h" />
     <ClInclude Include="Engine\Utils\Transform\Transform.h" />
+    <ClInclude Include="Game\GameElement\Charactor\Charactor.h" />
     <ClInclude Include="Game\GameElement\ClearUI\ClearUI.h" />
     <ClInclude Include="Game\GameElement\Game.h" />
     <ClInclude Include="Game\GameElement\HitSystem\HitSystem.h" />

@@ -121,7 +121,7 @@ private: // メンバ関数
 	/// </summary>
 	void CreateDepthBuffer();
 
-	ID3D12Resource* CreateDepthStencilTextureResource(ID3D12Device* device_, int32_t width, int32_t height);
+	ID3D12Resource* CreateDepthStencilTextureResource(int32_t width, int32_t height);
 
 	/// <summary>
 	/// フェンス生成

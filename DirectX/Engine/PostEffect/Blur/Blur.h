@@ -1,9 +1,9 @@
 #pragma once
 
-#include "PostEffect/PostEffect.h"
+#include "BasePostEffect/BasePostEffect.h"
 
 // スプライト
-class Blur : public PostEffect
+class Blur : public BasePostEffect
 {
 public:
 
@@ -30,6 +30,8 @@ public:
 private:
 
 	void CreateBlurRes();
+
+	void CreateResources() override;
 
 private:
 

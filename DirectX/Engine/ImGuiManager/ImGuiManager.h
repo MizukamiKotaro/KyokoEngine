@@ -4,19 +4,16 @@
 #include "Externals/imgui/imgui.h"
 #endif // _DEBUG
 
-class ImGuiManager
-{
-public:
+namespace Kyoko {
+	namespace ImGuiManager {
+		void Initialize();
 
-	static void Initialize();
+		void Finalize();
 
-	static void Finalize();
+		void Begin();
 
-	static void Begin();
+		void End();
 
-	static void End();
-
-	static void Draw();
-
-};
-
+		void Draw();
+	}
+}

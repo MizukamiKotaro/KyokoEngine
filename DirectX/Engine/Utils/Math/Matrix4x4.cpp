@@ -271,7 +271,6 @@ Matrix4x4 Matrix4x4::MakeRotateMatrix(const Vector3& rotate, RotateType rotateOr
 		return result;
 		break;
 	}
-	return result;
 }
 
 Matrix4x4 Matrix4x4::MakeAffinMatrix(

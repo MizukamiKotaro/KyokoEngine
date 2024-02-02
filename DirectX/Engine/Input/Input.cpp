@@ -6,11 +6,6 @@ Input* Input::GetInstance() {
 	return &instance;
 }
 
-BOOL CALLBACK DeviceFindCallBack(LPCDIDEVICEINSTANCE ipddi, LPVOID pvRef)
-{
-	return DIENUM_CONTINUE;
-}
-
 void Input::Initialize() {
 
 	windowInfo_ = WindowsInfo::GetInstance();
@@ -36,6 +31,10 @@ void Input::Initialize() {
 
 	hr = devMouse_->SetCooperativeLevel(windowInfo_->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
 	assert(SUCCEEDED(hr));
+
+	devMouse_->GetDeviceState(sizeof(DIMOUSESTATE), &mouse_);
+
+	mousePre_ = mouse_;
 }
 
 void Input::Update() {

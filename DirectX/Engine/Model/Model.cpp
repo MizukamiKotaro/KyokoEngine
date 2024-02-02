@@ -7,12 +7,14 @@
 #include "Camera.h"
 #include "Externals/imgui/imgui.h"
 
+ID3D12GraphicsCommandList* Model::commandList_ = nullptr;
+ModelDataManager* Model::modelDataManager_ = nullptr;
+GraphicsPiplineManager* Model::gpoManager_ = nullptr;
+
 Model::Model(const std::string& fileName)
 {
 
-	ModelDataManager* modelManager = ModelDataManager::GetInstance();
-
-	modelData_ = modelManager->LoadObj(fileName);
+	modelData_ = modelDataManager_->LoadObj(fileName);
 
 	texture_ = modelData_->texture;
 
@@ -25,8 +27,6 @@ Model::Model(const std::string& fileName)
 
 Model::Model(const ModelData* modelData)
 {
-	ModelDataManager* modelManager = ModelDataManager::GetInstance();
-
 	modelData_ = modelData;
 
 	texture_ = modelData_->texture;
@@ -42,6 +42,13 @@ Model::~Model()
 {
 	transformationResource_->Release();
 	materialResource_->Release();
+}
+
+void Model::FirstInitialize()
+{
+	modelDataManager_ = ModelDataManager::GetInstance();
+	commandList_ = DirectXBase::GetInstance()->GetCommandList();
+	gpoManager_ = GraphicsPiplineManager::GetInstance();
 }
 
 void Model::Initialize()
@@ -67,29 +74,27 @@ void Model::Draw(const Camera& camera, BlendMode blendMode)
 		Matrix4x4::MakeRotateXYZMatrix(transform_.rotate_) * Matrix4x4::MakeTranslateMatrix(transform_.translate_);
 	materialData_->uvTransform = uvMatrix_;
 
-	GraphicsPiplineManager::GetInstance()->SetBlendMode(piplineType, static_cast<uint32_t>(blendMode));
-
-	ID3D12GraphicsCommandList* commandList = DirectXBase::GetInstance()->GetCommandList();
+	gpoManager_->SetBlendMode(piplineType, static_cast<uint32_t>(blendMode));
 
 	//Spriteの描画。変更に必要なものだけ変更する
-	commandList->IASetVertexBuffers(0, 1, &modelData_->mesh.vertexBufferView_); // VBVを設定
+	commandList_->IASetVertexBuffers(0, 1, &modelData_->mesh.vertexBufferView_); // VBVを設定
 	//マテリアルCBufferの場所を設定
-	commandList->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 	//TransformationMatrixCBufferの場所を設定
-	commandList->SetGraphicsRootConstantBufferView(1, transformationResource_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(1, transformationResource_->GetGPUVirtualAddress());
 
 	//平行光源CBufferの場所を設定
-	commandList->SetGraphicsRootConstantBufferView(3, light_.GetDirectionalLightGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(3, light_.GetDirectionalLightGPUVirtualAddress());
 	// カメラの設定
-	commandList->SetGraphicsRootConstantBufferView(4, camera.GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(4, camera.GetGPUVirtualAddress());
 	// pointLight の設定
-	commandList->SetGraphicsRootConstantBufferView(5, light_.GetPointLightGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(5, light_.GetPointLightGPUVirtualAddress());
 	// spotLight の設定
-	commandList->SetGraphicsRootConstantBufferView(6, light_.GetSpotLightGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(6, light_.GetSpotLightGPUVirtualAddress());
 
-	commandList->SetGraphicsRootDescriptorTable(2, srvGPUDescriptorHandle_);
+	commandList_->SetGraphicsRootDescriptorTable(2, srvGPUDescriptorHandle_);
 	//描画!!!!（DrawCall/ドローコール）
-	commandList->DrawInstanced(UINT(modelData_->mesh.verteces.size()), 1, 0, 0);
+	commandList_->DrawInstanced(UINT(modelData_->mesh.verteces.size()), 1, 0, 0);
 
 }
 

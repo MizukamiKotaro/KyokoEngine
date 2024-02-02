@@ -7,8 +7,6 @@
 #include <list>
 #include <memory>
 
-static const size_t kNumDescriptors_ = 256;
-
 struct DescriptorHandles
 {
 	D3D12_CPU_DESCRIPTOR_HANDLE cpuHandle;

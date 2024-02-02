@@ -53,10 +53,10 @@ void Notes::Draw(Camera* camera)
 	}
 }
 
-void Notes::SetSpeed(float index)
-{
-
-}
+//void Notes::SetSpeed(float index)
+//{
+//
+//}
 
 NotesList* NotesList::GetInstance()
 {

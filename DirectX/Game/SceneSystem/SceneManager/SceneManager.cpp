@@ -34,11 +34,11 @@ int SceneManager::Run()
 	// ウィンドウの×ボタンが押されるまでループ
 	while (true) {
 		// フレームの開始
-		if (Kyoko::ProcessMessage() || (Input::GetInstance()->PressedKey(DIK_ESCAPE) && IScene::sceneNo_ == TITLE)) {
+		if (Kyoko::Engine::ProcessMessage() || (Input::GetInstance()->PressedKey(DIK_ESCAPE) && IScene::sceneNo_ == TITLE)) {
 			break;
 		}
 
-		Kyoko::FirstUpdateInLoop();
+		Kyoko::Engine::FirstUpdateInLoop();
 
 		// 更新処理
 		preSceneNo_ = currentSceneNo_;

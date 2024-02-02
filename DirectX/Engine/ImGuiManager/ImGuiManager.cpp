@@ -9,7 +9,7 @@
 #include "Externals/imgui/imgui_impl_win32.h"
 #endif // _DEBUG
 
-void ImGuiManager::Initialize()
+void Kyoko::ImGuiManager::Initialize()
 {
 #ifdef _DEBUG
 
@@ -545,15 +545,14 @@ void ImGuiManager::Initialize()
 	0x9F0E, 0x9F0E, 0x9F13, 0x9F13, 0x9F15, 0x9F15, 0x9F20, 0x9F21, 0x9F2C, 0x9F2C, 0x9F3B, 0x9F3B, 0x9F3E, 0x9F3E, 0x9F4A, 0x9F4B,
 	0x9F4E, 0x9F4F, 0x9F52, 0x9F52, 0x9F54, 0x9F54, 0x9F5F, 0x9F63, 0x9F66, 0x9F67, 0x9F6A, 0x9F6A, 0x9F6C, 0x9F6C, 0x9F72, 0x9F72,
 	0x9F76, 0x9F77, 0x9F8D, 0x9F8D, 0x9F95, 0x9F95, 0x9F9C, 0x9F9D, 0x9FA0, 0x9FA0, 0xFF01, 0xFF01, 0xFF03, 0xFF06, 0xFF08, 0xFF0C,
-	0xFF0E, 0xFF3B, 0xFF3D, 0xFF5D, 0xFF61, 0xFF9F, 0xFFE3, 0xFFE3, 0xFFE5, 0xFFE5, 0xFFFF, 0xFFFF, 0,
-	};
+	0xFF0E, 0xFF3B, 0xFF3D, 0xFF5D, 0xFF61, 0xFF9F, 0xFFE3, 0xFFE3, 0xFFE5, 0xFFE5, 0xFFFF, 0xFFFF, 0,};
 
 	ImGuiIO& io = ImGui::GetIO();
 	io.Fonts->AddFontFromFileTTF("Resources/Font/GenShinGothic-Heavy.ttf", 16.0f, nullptr, glyphRangesJapanese);
 #endif // _DEBUG
 }
 
-void ImGuiManager::Finalize()
+void Kyoko::ImGuiManager::Finalize()
 {
 #ifdef _DEBUG
 	//解放処理
@@ -563,7 +562,7 @@ void ImGuiManager::Finalize()
 #endif // _DEBUG
 }
 
-void ImGuiManager::Begin()
+void Kyoko::ImGuiManager::Begin()
 {
 #ifdef _DEBUG
 
@@ -574,7 +573,7 @@ void ImGuiManager::Begin()
 #endif // _DEBUG
 }
 
-void ImGuiManager::End()
+void Kyoko::ImGuiManager::End()
 {
 #ifdef _DEBUG
 	//ImGuiの内部コマンドを生成する
@@ -582,7 +581,7 @@ void ImGuiManager::End()
 #endif // _DEBUG
 }
 
-void ImGuiManager::Draw()
+void Kyoko::ImGuiManager::Draw()
 {
 	//実際のcommandListのImGuiの描画コマンドを積む。描画処理の終わったタイミング
 #ifdef _DEBUG
@@ -590,4 +589,3 @@ void ImGuiManager::Draw()
 #endif // _DEBUG
 
 }
-

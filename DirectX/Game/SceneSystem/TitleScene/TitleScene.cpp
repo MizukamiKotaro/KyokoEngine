@@ -50,7 +50,7 @@ void TitleScene::Draw()
 {
 	WrightPostEffect();
 
-	Kyoko::PreDraw();
+	Kyoko::Engine::PreDraw();
 
 	dome_->Draw(camera_.get());
 	stage_->Draw(camera_.get());
@@ -61,7 +61,7 @@ void TitleScene::Draw()
 
 	BlackDraw();
 
-	Kyoko::PostDraw();
+	Kyoko::Engine::PostDraw();
 }
 
 void TitleScene::WrightPostEffect()

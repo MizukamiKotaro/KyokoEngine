@@ -1,9 +1,9 @@
 #pragma once
 
-#include "PostEffect/PostEffect.h"
+#include "BasePostEffect/BasePostEffect.h"
 
 // スプライト
-class Contrast : public PostEffect
+class Contrast : public BasePostEffect
 {
 public:
 
@@ -24,6 +24,8 @@ private:
 	};
 
 	void CreateContrastRes();
+
+	void CreateResources() override;
 
 private:
 

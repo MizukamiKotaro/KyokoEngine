@@ -3,24 +3,19 @@
 #include "Engine/Base/DirectXBase/DirectXBase.h"
 #include "Engine/Base/DescriptorHeapManager/DescriptorHeapManager.h"
 #include "Camera.h"
-#include "WindowsInfo/WindowsInfo.h"
 
 GaussianBlur::GaussianBlur()
 {
 	piplineType_ = GraphicsPiplineManager::PiplineType::GAUSSIAN_BLUR;
 
-	CreateGaussianBlurRes();
+	gaussianBlurData_ = nullptr;
+
+	CreatePostEffect();
 }
 
 GaussianBlur::~GaussianBlur()
 {
-	vertexResource_->Release();
-	transformResource_->Release();
-	materialResource_->Release();
 	gaussianBlurResource_->Release();
-	DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->DeleteDescriptor(srvHandles_);
-	DescriptorHeapManager::GetInstance()->GetRTVDescriptorHeap()->DeleteDescriptor(rtvHandles_);
-	DescriptorHeapManager::GetInstance()->GetDSVDescriptorHeap()->DeleteDescriptor(dsvHandles_);
 }
 
 void GaussianBlur::Draw(BlendMode blendMode)
@@ -70,6 +65,13 @@ void GaussianBlur::CreateGaussianBlurRes()
 	gaussianBlurData_->pickRange = 0.005f;
 
 	gaussianBlurData_->stepWidth = 0.001f;
+}
+
+void GaussianBlur::CreateResources()
+{
+	BasePostEffect::CreateResources();
+
+	CreateGaussianBlurRes();
 }
 
 

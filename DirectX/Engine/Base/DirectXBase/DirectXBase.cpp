@@ -347,7 +347,7 @@ void DirectXBase::CreateDepthBuffer() {
 
 	//DepthStencilTextureをウィンドウのサイズで作成
 	Vector2 windowSize = windowInfo_->GetWindowSize();
-	depthStencilResource_ =  CreateDepthStencilTextureResource(device_.Get(), (UINT)windowSize.x, (UINT)windowSize.y);
+	depthStencilResource_ =  CreateDepthStencilTextureResource((UINT)windowSize.x, (UINT)windowSize.y);
 	//DSVの設定
 	D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc{};
 	dsvDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT; // Format。基本的にはResourceに合わせる
@@ -356,7 +356,7 @@ void DirectXBase::CreateDepthBuffer() {
 	device_->CreateDepthStencilView(depthStencilResource_.Get(), &dsvDesc, dsvHandles_->cpuHandle);
 }
 
-ID3D12Resource* DirectXBase::CreateDepthStencilTextureResource(ID3D12Device* device_, int32_t width, int32_t height) {
+ID3D12Resource* DirectXBase::CreateDepthStencilTextureResource(int32_t width, int32_t height) {
 	//生成するリソースの設定
 	D3D12_RESOURCE_DESC resourceDesc{};
 	resourceDesc.Width = width; // Textureの幅

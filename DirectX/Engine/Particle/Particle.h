@@ -133,6 +133,8 @@ private:
 
 	static const GraphicsPiplineManager::PiplineType piplineType = GraphicsPiplineManager::PiplineType::PARTICLE;
 
+	static const std::string directoryPath_;
+
 	Light light_;
 
 	std::optional<BillboardType> billboardTypeOpt_ = BillboardType::Y;

@@ -1,6 +1,8 @@
 #include "DescriptorHeapManager.h"
 #include "Engine/Base/DirectXBase/DirectXBase.h"
 
+const size_t kNumDescriptors_ = 256;
+
 SRVDescriptorHeap::SRVDescriptorHeap()
 {
 	heapType_ = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;

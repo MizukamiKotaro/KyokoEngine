@@ -1,30 +1,23 @@
 #include "Blur.h"
 
-#include <cassert>
-#include "TextureManager/TextureManager.h"
 #include "Engine/Base/DirectXBase/DirectXBase.h"
 #include "Engine/Base/DescriptorHeapManager/DescriptorHeapManager.h"
 #include "Camera.h"
-#include "WindowsInfo/WindowsInfo.h"
-#include "Externals/DirectXTex/d3dx12.h"
-#include <algorithm>
 
 Blur::Blur()
 {
 	piplineType_ = GraphicsPiplineManager::PiplineType::BLUR;
 
-	CreateBlurRes();
+	blurData_ = nullptr;
+
+	color_ = { 1.0f,1.0f,1.0f,1.0f };
+
+	CreatePostEffect();
 }
 
 Blur::~Blur()
 {
-	vertexResource_->Release();
-	transformResource_->Release();
-	materialResource_->Release();
 	blurResource_->Release();
-	DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->DeleteDescriptor(srvHandles_);
-	DescriptorHeapManager::GetInstance()->GetRTVDescriptorHeap()->DeleteDescriptor(rtvHandles_);
-	DescriptorHeapManager::GetInstance()->GetDSVDescriptorHeap()->DeleteDescriptor(dsvHandles_);
 }
 
 void Blur::Draw(BlendMode blendMode)
@@ -89,4 +82,11 @@ void Blur::CreateBlurRes()
 	blurData_->isCenterBlur = 1;
 
 	blurData_->isNormal = 1;
+}
+
+void Blur::CreateResources()
+{
+	BasePostEffect::CreateResources();
+
+	CreateBlurRes();
 }

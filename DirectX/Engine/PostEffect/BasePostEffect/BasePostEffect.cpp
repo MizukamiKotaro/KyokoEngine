@@ -1,4 +1,4 @@
-#include "PostEffect.h"
+#include "BasePostEffect.h"
 
 #include <cassert>
 #include "TextureManager/TextureManager.h"
@@ -9,16 +9,9 @@
 #include "Externals/DirectXTex/d3dx12.h"
 #include <algorithm>
 
-const float PostEffect::clearColor[4] = { 0.0f,0.0f,0.0f,0.0f };
+const float BasePostEffect::clearColor[4] = { 0.0f,0.0f,0.0f,0.0f };
 
-PostEffect::PostEffect()
-{
-	piplineType_ = GraphicsPiplineManager::PiplineType::SPRITE;
-
-	CreatePostEffect();
-}
-
-PostEffect::~PostEffect()
+BasePostEffect::~BasePostEffect()
 {
 	vertexResource_->Release();
 	transformResource_->Release();
@@ -28,18 +21,18 @@ PostEffect::~PostEffect()
 	DescriptorHeapManager::GetInstance()->GetDSVDescriptorHeap()->DeleteDescriptor(dsvHandles_);
 }
 
-void PostEffect::Initialize()
+void BasePostEffect::Initialize()
 {
 	
 }
 
-void PostEffect::Update()
+void BasePostEffect::Update()
 {
 	worldMat_ = Matrix4x4::MakeAffinMatrix({ 1.0f,1.0f,0.0f }, { 0.0f,0.0f,rotate_ }, { pos_.x,pos_.y,0.0f });
 	TransferSize();
 }
 
-void PostEffect::Draw(BlendMode blendMode)
+void BasePostEffect::Draw(BlendMode blendMode)
 {
 
 	if (isInvisible_) {
@@ -69,7 +62,7 @@ void PostEffect::Draw(BlendMode blendMode)
 
 }
 
-void PostEffect::PreDrawScene()
+void BasePostEffect::PreDrawScene()
 {
 
 	ID3D12GraphicsCommandList* commandList = DirectXBase::GetInstance()->GetCommandList();
@@ -103,7 +96,7 @@ void PostEffect::PreDrawScene()
 	GraphicsPiplineManager::GetInstance()->PreDraw();
 }
 
-void PostEffect::PostDrawScene()
+void BasePostEffect::PostDrawScene()
 {
 	ID3D12GraphicsCommandList* commandList = DirectXBase::GetInstance()->GetCommandList();
 
@@ -114,14 +107,14 @@ void PostEffect::PostDrawScene()
 
 }
 
-void PostEffect::SetAnchorPoint(const Vector2& anchorpoint)
+void BasePostEffect::SetAnchorPoint(const Vector2& anchorpoint)
 {
 	anchorPoint_ = anchorpoint;
 
 	TransferSize();
 }
 
-void PostEffect::SetColor(const Vector4& color)
+void BasePostEffect::SetColor(const Vector4& color)
 {
 	color_.x = std::clamp<float>(color.x, 0.0f, 1.0f);
 	color_.y = std::clamp<float>(color.y, 0.0f, 1.0f);
@@ -131,21 +124,21 @@ void PostEffect::SetColor(const Vector4& color)
 	materialData_->color = color;
 }
 
-void PostEffect::SetTextureTopLeft(const Vector2& texTopLeft)
+void BasePostEffect::SetTextureTopLeft(const Vector2& texTopLeft)
 {
-	textureLeftTop_ = textureLeftTop_;
+	textureLeftTop_ = texTopLeft;
 
 	TransferUV();
 }
 
-void PostEffect::SetTextureSize(const Vector2& texSize)
+void BasePostEffect::SetTextureSize(const Vector2& texSize)
 {
 	textureSize_ = texSize;
 
 	TransferUV();
 }
 
-void PostEffect::TransferSize()
+void BasePostEffect::TransferSize()
 {
 	float left = (0.0f - anchorPoint_.x) * size_.x;
 	float right = (1.0f - anchorPoint_.x) * size_.x;
@@ -161,7 +154,7 @@ void PostEffect::TransferSize()
 	vertexData_[5].vertexPos = { right,bottom,0.0f,1.0f }; // 右下
 }
 
-void PostEffect::TransferUV()
+void BasePostEffect::TransferUV()
 {
 	vertexData_[0].texcoord = { textureLeftTop_.x,textureLeftTop_.y + textureSize_.y }; // 左下
 	vertexData_[1].texcoord = textureLeftTop_; // 左上
@@ -172,7 +165,7 @@ void PostEffect::TransferUV()
 	vertexData_[5].texcoord = textureLeftTop_ + textureSize_; // 右下
 }
 
-void PostEffect::CreateVertexRes()
+void BasePostEffect::CreateVertexRes()
 {
 	//Sprite用の頂点リソースを作る
 	vertexResource_ = DirectXBase::CreateBufferResource(sizeof(VertexData) * 6);
@@ -187,7 +180,7 @@ void PostEffect::CreateVertexRes()
 	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
 }
 
-void PostEffect::CreateMaterialRes()
+void BasePostEffect::CreateMaterialRes()
 {
 	//マテリアル用のリソースを作る。今回はcolor1つ分を用意する
 	materialResource_ = DirectXBase::CreateBufferResource(sizeof(Material));
@@ -200,7 +193,7 @@ void PostEffect::CreateMaterialRes()
 	materialData_->uvTransform = Matrix4x4::MakeIdentity4x4();
 }
 
-void PostEffect::CreateTranformRes()
+void BasePostEffect::CreateTranformRes()
 {
 	//Sprite用のTransformationMatrix用のリソースを作る。Matrix4x4　1つ分のサイズを用意する
 	transformResource_ = DirectXBase::CreateBufferResource(sizeof(TransformationMatrix));
@@ -212,7 +205,7 @@ void PostEffect::CreateTranformRes()
 	//*transformationMatrixData_ = { Matrix4x4::MakeIdentity4x4() ,Matrix4x4::MakeIdentity4x4() };
 }
 
-void PostEffect::CreateTexRes()
+void BasePostEffect::CreateTexRes()
 {
 
 	CD3DX12_RESOURCE_DESC texDesc = CD3DX12_RESOURCE_DESC::Tex2D(
@@ -265,7 +258,7 @@ void PostEffect::CreateTexRes()
 	DirectXBase::GetInstance()->GetDevice()->CreateShaderResourceView(texResource_.Get(), &srvDesc, srvHandles_->cpuHandle);
 }
 
-void PostEffect::CreateRTV()
+void BasePostEffect::CreateRTV()
 {
 	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
 	rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB; //出力結果をSRGBに変換して書き込む
@@ -276,7 +269,7 @@ void PostEffect::CreateRTV()
 	DirectXBase::GetInstance()->GetDevice()->CreateRenderTargetView(texResource_.Get(), &rtvDesc, rtvHandles_->cpuHandle);
 }
 
-void PostEffect::CreateDSV()
+void BasePostEffect::CreateDSV()
 {
 	CD3DX12_RESOURCE_DESC resourceDesc = CD3DX12_RESOURCE_DESC::Tex2D(
 		DXGI_FORMAT_D24_UNORM_S8_UINT,
@@ -309,7 +302,7 @@ void PostEffect::CreateDSV()
 	DirectXBase::GetInstance()->GetDevice()->CreateDepthStencilView(dsvResource_.Get(), &dsvDesc, dsvHandles_->cpuHandle);
 }
 
-void PostEffect::CreateResources()
+void BasePostEffect::CreateResources()
 {
 	CreateVertexRes();
 
@@ -324,7 +317,7 @@ void PostEffect::CreateResources()
 	CreateDSV();
 }
 
-void PostEffect::CreatePostEffect()
+void BasePostEffect::CreatePostEffect()
 {
 	size_ = WindowsInfo::GetInstance()->GetWindowSize();
 

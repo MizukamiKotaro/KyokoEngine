@@ -11,13 +11,11 @@
 #include "DescriptorHeapManager/DescriptorHeap/DescriptorHeap.h"
 
 // スプライト
-class PostEffect
+class BasePostEffect
 {
 public:
-
-	PostEffect();
 	
-	virtual ~PostEffect();
+	virtual ~BasePostEffect();
 
 	// namespace省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
@@ -27,7 +25,6 @@ public:
 	virtual void Update();
 
 	virtual void Draw(BlendMode blendMode = BlendMode::kBlendModeNormal);
-
 
 	void PreDrawScene();
 
@@ -74,6 +71,10 @@ protected:
 
 	void TransferUV();
 
+	void CreatePostEffect();
+
+private:
+
 	void CreateVertexRes();
 
 	void CreateMaterialRes();
@@ -86,7 +87,6 @@ protected:
 
 	void CreateDSV();
 
-	void CreatePostEffect();
 
 protected:
 

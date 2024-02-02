@@ -1,5 +1,6 @@
 #include "WindowsInfo.h"
 #include "DebugLog/DebugLog.h"
+#include <cassert>
 #pragma comment(lib, "winmm.lib")
 
 #ifdef _DEBUG
@@ -38,6 +39,7 @@ void WindowsInfo::CreateGameWindow(const std::string& windowName, int width, int
 	timeBeginPeriod(1);
 
 	HRESULT hr = CoInitializeEx(0, COINIT_MULTITHREADED);
+	assert(SUCCEEDED(hr));
 
 	//ウィンドウプロシージャ
 	wndClass_.lpfnWndProc = WindowProc;

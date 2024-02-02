@@ -1,9 +1,9 @@
 #pragma once
 
-#include "PostEffect/PostEffect.h"
+#include "BasePostEffect/BasePostEffect.h"
 
 // スプライト
-class GaussianBlur : public PostEffect
+class GaussianBlur : public BasePostEffect
 {
 public:
 
@@ -25,6 +25,8 @@ private:
 private:
 
 	void CreateGaussianBlurRes();
+
+	void CreateResources() override;
 
 private:
 

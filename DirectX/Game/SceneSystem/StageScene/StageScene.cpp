@@ -33,13 +33,13 @@ void StageScene::Draw()
 {
 
 
-	Kyoko::PreDraw();
+	Kyoko::Engine::PreDraw();
 
 	game_->Draw();
 
 	BlackDraw();
 
 	// フレームの終了
-	Kyoko::PostDraw();
+	Kyoko::Engine::PostDraw();
 }
 

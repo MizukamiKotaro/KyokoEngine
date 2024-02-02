@@ -1,13 +1,5 @@
 #include "Bloom.h"
 
-#include <cassert>
-#include "TextureManager/TextureManager.h"
-#include "Engine/Base/DirectXBase/DirectXBase.h"
-#include "Engine/Base/DescriptorHeapManager/DescriptorHeapManager.h"
-#include "Camera.h"
-#include "WindowsInfo/WindowsInfo.h"
-#include "Externals/DirectXTex/d3dx12.h"
-
 Bloom::Bloom()
 {
 	postEffect_ = std::make_unique<PostEffect>();
@@ -35,7 +27,7 @@ void Bloom::Update()
 	
 }
 
-void Bloom::Draw(BlendMode blendMode)
+void Bloom::Draw()
 {
 	postEffect_->Draw();
 	gaussianBlur_->Draw(BlendMode::kBlendModeAdd);

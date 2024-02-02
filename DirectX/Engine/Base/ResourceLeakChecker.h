@@ -3,9 +3,7 @@
 #include <dxgi1_6.h>
 #include <dxgidebug.h>
 #include <wrl.h>
-
-struct ResourceLeackChecker
-{
+struct ResourceLeackChecker {
 	~ResourceLeackChecker() {
 		Microsoft::WRL::ComPtr<IDXGIDebug1> debug;
 		if (SUCCEEDED(DXGIGetDebugInterface1(0, IID_PPV_ARGS(&debug)))) {

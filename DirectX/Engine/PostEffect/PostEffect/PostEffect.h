@@ -3,13 +3,10 @@
 #include "BasePostEffect/BasePostEffect.h"
 
 // スプライト
-class HighLumi : public BasePostEffect
+class PostEffect : public BasePostEffect
 {
 public:
 
-	HighLumi();
-
-	~HighLumi() override;
-
+	PostEffect();
 };
 
