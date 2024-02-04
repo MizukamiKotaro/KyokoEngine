@@ -123,6 +123,10 @@ void TitleScene::WrightPostEffect()
 void TitleScene::LightsUpdate()
 {
 #ifdef _DEBUG
+	ImGui::Begin("モデル");
+	ImGui::SliderFloat3("モデルのスケール", &model_->transform_.scale_.x, 0.0f, 10.0f);
+	ImGui::End();
+	model_->Update();
 
 	ImGui::Begin("ライト");
 	for (int i = 0; i < 2; i++) {
@@ -162,7 +166,6 @@ void TitleScene::LightsUpdate()
 			ImGui::TreePop();
 		}
 	}
-
 	ImGui::Checkbox("平行光源の切り替え", &is0_[0]);
 	ImGui::Checkbox("点光源の切り替え", &is0_[1]);
 	ImGui::Checkbox("スポットライトの切り替え", &is0_[2]);
