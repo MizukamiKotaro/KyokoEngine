@@ -1,9 +1,9 @@
 #pragma once
 
 #include <memory>
+#include "SceneSystem/IScene/IScene.h"
+#include "SceneSystem/ISceneFactory/ISceneFactory.h"
 
-class IScene;
-class SceneFactory;
 class Input;
 
 class SceneManager
@@ -16,7 +16,7 @@ private:
 	int currentSceneNo_; // 現在のシーン
 	int preSceneNo_; // 前のシーン
 
-	std::unique_ptr<SceneFactory> sceneFactory_;
+	std::unique_ptr<ISceneFactory> sceneFactory_;
 
 	Input* inputManager_;
 

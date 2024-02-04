@@ -16,11 +16,11 @@ public:
 
 	void Draw(BlendMode blendMode = BlendMode::kBlendModeNormal) override;
 
-private:
 	struct GaussianBlurData {
 		float pickRange; // 取得する色の幅。
 		float stepWidth; // 取得する色の位置変更の幅。0.0f < stepWidth < pickRange
 	};
+private:
 
 private:
 
