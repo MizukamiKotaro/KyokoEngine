@@ -1,9 +1,9 @@
 #pragma once
 
 #include <memory>
+#include "SceneSystem/SceneFactory/SceneFactory.h"
+#include "SceneSystem/IScene/IScene.h"
 
-class IScene;
-class SceneFactory;
 class Input;
 
 class SceneManager

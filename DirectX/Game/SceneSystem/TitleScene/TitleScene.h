@@ -6,6 +6,10 @@
 #include "GameElement/Live/Screen/Screen.h"
 #include "Sprite.h"
 #include "PostEffect/HighLumi/HighLumi.h"
+#include <array>
+#include "DirectionalLight/DirectionalLight.h"
+#include "SpotLight/SpotLight.h"
+#include "PointLight/PointLight.h"
 
 class TitleScene : public IScene
 {
@@ -19,6 +23,9 @@ public:
 	void WrightPostEffect();
 
 private:
+	void LightsUpdate();
+
+private:
 
 	std::unique_ptr<HighLumi> highLumi_;
 	std::unique_ptr<PostEffect> post_;
@@ -29,6 +36,18 @@ private:
 	std::unique_ptr<Stage> stage_;
 	std::unique_ptr<Screen> screen_;
 
+	std::unique_ptr<Model> model_;
+	std::array<std::unique_ptr<DirectionalLight>, 2> directionals_;
+	std::array<std::unique_ptr<SpotLight>, 2> spots_;
+	std::array<std::unique_ptr<PointLight>, 2> points_;
+
+	std::array<bool, 2> isSpotDraws_;
+	std::array<bool, 2> isPointDraws_;
+
+	std::array<bool, 3> is0_;
+
+	bool isBloom_;
+	std::unique_ptr<Bloom> bloom_;
 
 	std::unique_ptr<Sprite> title_;
 	std::unique_ptr<Sprite> space_;

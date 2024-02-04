@@ -1,13 +1,10 @@
 #include "SceneManager.h"
 
-#include "SceneSystem/IScene/IScene.h"
-
 #include "Kyoko.h"
 #include "Input.h"
 #include "FrameInfo/FrameInfo.h"
 #include "ImGuiManager/ImGuiManager.h"
 #include "GameElement/ScoreManager/ScoreManager.h"
-#include "SceneSystem/SceneFactory/SceneFactory.h"
 
 SceneManager::SceneManager()
 {
