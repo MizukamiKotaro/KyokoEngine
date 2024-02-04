@@ -42,15 +42,12 @@ TitleScene::TitleScene()
 		is0_[i] = true;
 	}
 
-	isBloom_ = false;
-
 	model_->SetPointLight(points_[0].get());
 	model_->SetDirectionalLight(directionals_[0].get());
 	model_->SetSpotLight(spots_[0].get());
 	model_->transform_.translate_.y = 1.0f;
 	model_->Update();
 
-	bloom_ = std::make_unique<Bloom>();
 }
 
 void TitleScene::Initialize()
@@ -88,17 +85,12 @@ void TitleScene::Draw()
 
 	model_->Draw(*camera_.get());
 
-	if (isBloom_ && (isSpotDraws_[0] || isSpotDraws_[1] || isPointDraws_[0] || isPointDraws_[1])) {
-		bloom_->Draw();
-	}
-	else {
-		for (int i = 0; i < 2; i++) {
-			if (isSpotDraws_[i]) {
-				spots_[i]->Draw(*camera_.get());
-			}
-			if (isPointDraws_[i]) {
-				points_[i]->Draw(*camera_.get());
-			}
+	for (int i = 0; i < 2; i++) {
+		if (isSpotDraws_[i]) {
+			spots_[i]->Draw(*camera_.get());
+		}
+		if (isPointDraws_[i]) {
+			points_[i]->Draw(*camera_.get());
 		}
 	}
 
@@ -126,21 +118,6 @@ void TitleScene::WrightPostEffect()
 	post_->Draw();
 
 	screen_->PostDrawScene();
-
-	if (isBloom_ && (isSpotDraws_[0] || isSpotDraws_[1] || isPointDraws_[0] || isPointDraws_[1])) {
-		bloom_->PreDrawScene();
-
-		for (int i = 0; i < 2; i++) {
-			if (isSpotDraws_[i]) {
-				spots_[i]->Draw(*camera_.get());
-			}
-			if (isPointDraws_[i]) {
-				points_[i]->Draw(*camera_.get());
-			}
-		}
-
-		bloom_->PostDrawScene();
-	}
 }
 
 void TitleScene::LightsUpdate()
@@ -173,7 +150,7 @@ void TitleScene::LightsUpdate()
 		name = "スポットライト" + std::to_string(i);
 		if (ImGui::TreeNode(name.c_str())) {
 			ImGui::SliderFloat3("位置", &spots_[i]->light_->position.x, -50.0f, 50.0f);
-			ImGui::SliderFloat("方向", &spots_[i]->light_->direction.x, -1.0f, 1.0f);
+			ImGui::SliderFloat3("方向", &spots_[i]->light_->direction.x, -1.0f, 1.0f);
 			ImGui::SliderFloat("距離", &spots_[i]->light_->distance, 0.0f, 100.0f);
 			ImGui::SliderFloat("輝度", &spots_[i]->light_->intensity, 0.0f, 100.0f);
 			ImGui::SliderFloat("減衰率", &spots_[i]->light_->decay, 0.0f, 100.0f);
@@ -189,7 +166,6 @@ void TitleScene::LightsUpdate()
 	ImGui::Checkbox("平行光源の切り替え", &is0_[0]);
 	ImGui::Checkbox("点光源の切り替え", &is0_[1]);
 	ImGui::Checkbox("スポットライトの切り替え", &is0_[2]);
-	ImGui::Checkbox("ブルームをかける", &isBloom_);
 	ImGui::End();
 
 	if (is0_[0]) {

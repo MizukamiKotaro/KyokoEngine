@@ -46,9 +46,6 @@ private:
 
 	std::array<bool, 3> is0_;
 
-	bool isBloom_;
-	std::unique_ptr<Bloom> bloom_;
-
 	std::unique_ptr<Sprite> title_;
 	std::unique_ptr<Sprite> space_;
 
