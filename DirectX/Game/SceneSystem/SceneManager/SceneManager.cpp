@@ -5,7 +5,7 @@
 #include "Kyoko.h"
 #include "Input.h"
 #include "FrameInfo/FrameInfo.h"
-#include "Externals/imgui/imgui.h"
+#include "ImGuiManager/ImGuiManager.h"
 #include "GameElement/ScoreManager/ScoreManager.h"
 #include "SceneSystem/SceneFactory/SceneFactory.h"
 
@@ -24,10 +24,8 @@ SceneManager::SceneManager()
 	IScene::stageNo_ = 0;
 
 	scene_->Initialize();
-}
 
-SceneManager::~SceneManager()
-{
+	inputManager_ = Input::GetInstance();
 }
 
 int SceneManager::Run()
@@ -35,7 +33,7 @@ int SceneManager::Run()
 	// ウィンドウの×ボタンが押されるまでループ
 	while (true) {
 		// フレームの開始
-		if (Kyoko::Engine::ProcessMessage() || (Input::GetInstance()->PressedKey(DIK_ESCAPE) && IScene::sceneNo_ == TITLE)) {
+		if (Kyoko::Engine::ProcessMessage() || (inputManager_->PressedKey(DIK_ESCAPE) && IScene::sceneNo_ == TITLE)) {
 			break;
 		}
 
@@ -43,7 +41,7 @@ int SceneManager::Run()
 
 		// 更新処理
 		preSceneNo_ = currentSceneNo_;
-		currentSceneNo_ = scene_->GetSceneNo();
+		currentSceneNo_ = IScene::sceneNo_;
 
 		if (preSceneNo_ != currentSceneNo_) {
 			scene_.reset(sceneFactory_->CreateScene(IScene::sceneNo_));

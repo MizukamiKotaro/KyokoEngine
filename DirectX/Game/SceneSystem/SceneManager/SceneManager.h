@@ -4,6 +4,7 @@
 
 class IScene;
 class SceneFactory;
+class Input;
 
 class SceneManager
 {
@@ -17,9 +18,10 @@ private:
 
 	std::unique_ptr<SceneFactory> sceneFactory_;
 
+	Input* inputManager_;
+
 public:
 	SceneManager();
-	~SceneManager();
 
 	int Run(); //この関数でゲームループを呼び出す
 
