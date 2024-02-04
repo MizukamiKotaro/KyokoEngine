@@ -5,6 +5,7 @@
 #include "FrameInfo/FrameInfo.h"
 #include "ImGuiManager/ImGuiManager.h"
 #include "GameElement/ScoreManager/ScoreManager.h"
+#include "SceneSystem/SceneFactory/SceneFactory.h"
 
 SceneManager::SceneManager()
 {
