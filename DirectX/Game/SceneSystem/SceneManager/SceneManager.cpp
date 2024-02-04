@@ -1,11 +1,6 @@
 #include "SceneManager.h"
 
 #include "SceneSystem/IScene/IScene.h"
-#include "SceneSystem/TitleScene/TitleScene.h"
-#include "SceneSystem/StageScene/StageScene.h"
-#include "SceneSystem/ClearScene/ClearScene.h"
-#include "SceneSystem/SelectScene/SelectScene.h"
-#include "Camera.h"
 
 #include "Kyoko.h"
 #include "Input.h"
@@ -24,7 +19,6 @@ SceneManager::SceneManager()
 
 	scene_.reset(sceneFactory_->CreateScene(IScene::sceneNo_));
 
-	//IScene::sceneNo_ = STAGE;
 	currentSceneNo_ = IScene::sceneNo_;
 	preSceneNo_ = currentSceneNo_;
 	IScene::stageNo_ = 0;
@@ -79,15 +73,8 @@ int SceneManager::Run()
 		}
 		ImGui::End();
 #endif // _DEBUG
-
-		//Kyoko::PreDraw();
-
-		// 描画処理ここから
 		
 		scene_->Draw();
-
-		// フレームの終了
-		//Kyoko::PostDraw();
 
 		FrameInfo::GetInstance()->End();
 	}
