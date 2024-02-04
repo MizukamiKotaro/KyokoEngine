@@ -24,6 +24,8 @@ public:
 
 	void PostDrawScene();
 
+	HighLumi::HighLumiData* GetHighLumiData() const { return highLumi_->highLumiData_; }
+
 private:
 
 	std::unique_ptr<PostEffect> postEffect_;

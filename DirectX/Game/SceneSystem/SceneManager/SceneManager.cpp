@@ -1,7 +1,5 @@
 #include "SceneManager.h"
 
-#include "SceneSystem/IScene/IScene.h"
-
 #include "Kyoko.h"
 #include "Input.h"
 #include "FrameInfo/FrameInfo.h"

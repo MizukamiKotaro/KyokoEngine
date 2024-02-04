@@ -16,12 +16,12 @@ public:
 
 	void Draw(BlendMode blendMode = BlendMode::kBlendModeNormal) override;
 
-private:
-
 	struct ContrastData {
 		float brightness_;
 		float contrast_;
 	};
+private:
+
 
 	void CreateContrastRes();
 
