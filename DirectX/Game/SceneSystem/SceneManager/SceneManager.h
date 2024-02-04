@@ -1,22 +1,21 @@
 #pragma once
 
 #include <memory>
-#include "SceneSystem/IScene/IScene.h"
-#include "SceneSystem/TitleScene/TitleScene.h"
-#include "SceneSystem/StageScene/StageScene.h"
-#include "SceneSystem/ClearScene/ClearScene.h"
-#include "SceneSystem/SelectScene/SelectScene.h"
-#include "Camera.h"
+
+class IScene;
+class SceneFactory;
 
 class SceneManager
 {
 private:
 	// シーンを保持するメンバ変数
-	std::unique_ptr<IScene> sceneArr_[4];
+	std::unique_ptr<IScene> scene_;
 
 	// どのステージを呼び出すかを管理する変数
 	int currentSceneNo_; // 現在のシーン
 	int preSceneNo_; // 前のシーン
+
+	std::unique_ptr<SceneFactory> sceneFactory_;
 
 public:
 	SceneManager();

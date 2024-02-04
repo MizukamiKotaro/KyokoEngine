@@ -167,7 +167,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\GameElement\Score\Score.cpp" />
     <ClCompile Include="Game\GameElement\StageUI\StageUI.cpp" />
     <ClCompile Include="Game\SceneSystem\ClearScene\ClearScene.cpp" />
+    <ClCompile Include="Game\SceneSystem\ISceneFactory\ISceneFactory.cpp" />
     <ClCompile Include="Game\SceneSystem\IScene\IScene.cpp" />
+    <ClCompile Include="Game\SceneSystem\SceneFactory\SceneFactory.cpp" />
     <ClCompile Include="Game\SceneSystem\SceneManager\SceneManager.cpp" />
     <ClCompile Include="Game\SceneSystem\SelectScene\SelectScene.cpp" />
     <ClCompile Include="Game\SceneSystem\StageScene\StageScene.cpp" />
@@ -273,7 +275,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\GameElement\Score\Score.h" />
     <ClInclude Include="Game\GameElement\StageUI\StageUI.h" />
     <ClInclude Include="Game\SceneSystem\ClearScene\ClearScene.h" />
+    <ClInclude Include="Game\SceneSystem\ISceneFactory\ISceneFactory.h" />
     <ClInclude Include="Game\SceneSystem\IScene\IScene.h" />
+    <ClInclude Include="Game\SceneSystem\SceneFactory\SceneFactory.h" />
     <ClInclude Include="Game\SceneSystem\SceneManager\SceneManager.h" />
     <ClInclude Include="Game\SceneSystem\SelectScene\SelectScene.h" />
     <ClInclude Include="Game\SceneSystem\StageScene\StageScene.h" />

@@ -271,6 +271,12 @@
     <Filter Include="Engine\Light\Light">
       <UniqueIdentifier>{b33755c4-2ca6-4ca0-84fe-54f4e066b387}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\SceneSystem\ISceneFactory">
+      <UniqueIdentifier>{c396c76b-91df-4726-b69c-8c5df3c0b1ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\SceneSystem\SceneFactory">
+      <UniqueIdentifier>{a23dbc92-c0b7-43d8-9bf3-80ee674c5738}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -500,6 +506,12 @@
     </ClCompile>
     <ClCompile Include="Engine\Light\LightSingleton\LightSingleton.cpp">
       <Filter>Engine\Light\LightSingleton</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\SceneSystem\ISceneFactory\ISceneFactory.cpp">
+      <Filter>Game\SceneSystem\ISceneFactory</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\SceneSystem\SceneFactory\SceneFactory.cpp">
+      <Filter>Game\SceneSystem\SceneFactory</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -763,6 +775,12 @@
     </ClInclude>
     <ClInclude Include="Engine\Light\LightSingleton\LightSingleton.h">
       <Filter>Engine\Light\LightSingleton</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\SceneSystem\ISceneFactory\ISceneFactory.h">
+      <Filter>Game\SceneSystem\ISceneFactory</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\SceneSystem\SceneFactory\SceneFactory.h">
+      <Filter>Game\SceneSystem\SceneFactory</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

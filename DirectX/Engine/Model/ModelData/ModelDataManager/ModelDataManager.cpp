@@ -86,12 +86,12 @@ void ModelDataManager::LoadObjFile(const std::string& directoryPath, const std::
 
 	Assimp::Importer importer;
 	std::string filePath = directoryPath + "/" + fileName + "/" + fileName + ".obj";
-	const aiScene* scene = importer.ReadFile(filePath.c_str(), aiProcess_FlipWindingOrder | aiProcess_FlipUVs);
-	assert(scene->HasMeshes());
+	const aiScene* scene_ = importer.ReadFile(filePath.c_str(), aiProcess_FlipWindingOrder | aiProcess_FlipUVs);
+	assert(scene_->HasMeshes());
 
 	// meshを解析する
-	for (uint32_t meshIndex = 0; meshIndex < scene->mNumMeshes; meshIndex++) {
-		aiMesh* mesh = scene->mMeshes[meshIndex];
+	for (uint32_t meshIndex = 0; meshIndex < scene_->mNumMeshes; meshIndex++) {
+		aiMesh* mesh = scene_->mMeshes[meshIndex];
 		assert(mesh->HasNormals()); // 法線がないmeshは非対応
 		assert(mesh->HasTextureCoords(0)); // texCoordがないmeshは非対応
 
@@ -122,8 +122,8 @@ void ModelDataManager::LoadObjFile(const std::string& directoryPath, const std::
 	}
 
 	// materialを解析する
-	for (uint32_t materialIndex = 0; materialIndex < scene->mNumMaterials; materialIndex++) {
-		aiMaterial* material = scene->mMaterials[materialIndex];
+	for (uint32_t materialIndex = 0; materialIndex < scene_->mNumMaterials; materialIndex++) {
+		aiMaterial* material = scene_->mMaterials[materialIndex];
 		if (material->GetTextureCount(aiTextureType_DIFFUSE) != 0) {
 			aiString textureFilePath;
 			material->GetTexture(aiTextureType_DIFFUSE, 0, &textureFilePath);
@@ -180,12 +180,12 @@ void ModelDataManager::LoadGLTFFile(const std::string& directoryPath, const std:
 
 	Assimp::Importer importer;
 	std::string filePath = directoryPath + "/" + fileName + "/" + fileName + ".gltf";
-	const aiScene* scene = importer.ReadFile(filePath.c_str(), aiProcess_FlipWindingOrder | aiProcess_FlipUVs);
-	assert(scene->HasMeshes());
+	const aiScene* scene_ = importer.ReadFile(filePath.c_str(), aiProcess_FlipWindingOrder | aiProcess_FlipUVs);
+	assert(scene_->HasMeshes());
 
 	// meshを解析する
-	for (uint32_t meshIndex = 0; meshIndex < scene->mNumMeshes; meshIndex++) {
-		aiMesh* mesh = scene->mMeshes[meshIndex];
+	for (uint32_t meshIndex = 0; meshIndex < scene_->mNumMeshes; meshIndex++) {
+		aiMesh* mesh = scene_->mMeshes[meshIndex];
 		assert(mesh->HasNormals()); // 法線がないmeshは非対応
 		assert(mesh->HasTextureCoords(0)); // texCoordがないmeshは非対応
 
@@ -245,8 +245,8 @@ void ModelDataManager::LoadGLTFFile(const std::string& directoryPath, const std:
 
 	// materialを解析する
 	// ここ間違い
-	for (uint32_t materialIndex = 0; materialIndex < scene->mNumMaterials; materialIndex++) {
-		aiMaterial* material = scene->mMaterials[materialIndex];
+	for (uint32_t materialIndex = 0; materialIndex < scene_->mNumMaterials; materialIndex++) {
+		aiMaterial* material = scene_->mMaterials[materialIndex];
 		if (material->GetTextureCount(aiTextureType_DIFFUSE) != 0) {
 			aiString textureFilePath;
 			material->GetTexture(aiTextureType_DIFFUSE, 0, &textureFilePath);
@@ -255,12 +255,12 @@ void ModelDataManager::LoadGLTFFile(const std::string& directoryPath, const std:
 	}
 
 	// rootNodeの解析
-	modelDatas_.back()->rootNode = ReadNode(scene->mRootNode);
+	modelDatas_.back()->rootNode = ReadNode(scene_->mRootNode);
 
 	// animationの解析
-	if (scene->HasAnimations()) {
-		for (uint32_t animationIndex = 0; animationIndex < scene->mNumAnimations; animationIndex++) {
-			aiAnimation* animation = scene->mAnimations[animationIndex];
+	if (scene_->HasAnimations()) {
+		for (uint32_t animationIndex = 0; animationIndex < scene_->mNumAnimations; animationIndex++) {
+			aiAnimation* animation = scene_->mAnimations[animationIndex];
 			modelDatas_.back()->animationData.duration = static_cast<float>(animation->mDuration);
 			modelDatas_.back()->animationData.ticksPerSecond = static_cast<float>(animation->mTicksPerSecond);
 

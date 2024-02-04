@@ -1,28 +1,35 @@
 #include "SceneManager.h"
+
+#include "SceneSystem/IScene/IScene.h"
+#include "SceneSystem/TitleScene/TitleScene.h"
+#include "SceneSystem/StageScene/StageScene.h"
+#include "SceneSystem/ClearScene/ClearScene.h"
+#include "SceneSystem/SelectScene/SelectScene.h"
+#include "Camera.h"
+
 #include "Kyoko.h"
 #include "Input.h"
 #include "FrameInfo/FrameInfo.h"
 #include "Externals/imgui/imgui.h"
 #include "GameElement/ScoreManager/ScoreManager.h"
+#include "SceneSystem/SceneFactory/SceneFactory.h"
 
 SceneManager::SceneManager()
 {
 	ScoreManager::GetInstance()->Initialize();
 
-
-	sceneArr_[TITLE] = std::make_unique<TitleScene>();
-	sceneArr_[SELECT] = std::make_unique<SelectScene>();
-	sceneArr_[STAGE] = std::make_unique<StageScene>();
-	sceneArr_[CLEAR] = std::make_unique<ClearScene>();
-
 	IScene::sceneNo_ = TITLE;
+
+	sceneFactory_ = std::make_unique<SceneFactory>();
+
+	scene_.reset(sceneFactory_->CreateScene(IScene::sceneNo_));
+
 	//IScene::sceneNo_ = STAGE;
 	currentSceneNo_ = IScene::sceneNo_;
 	preSceneNo_ = currentSceneNo_;
 	IScene::stageNo_ = 0;
 
-	sceneArr_[currentSceneNo_]->Initialize();
-
+	scene_->Initialize();
 }
 
 SceneManager::~SceneManager()
@@ -42,13 +49,14 @@ int SceneManager::Run()
 
 		// 更新処理
 		preSceneNo_ = currentSceneNo_;
-		currentSceneNo_ = sceneArr_[currentSceneNo_]->GetSceneNo();
+		currentSceneNo_ = scene_->GetSceneNo();
 
 		if (preSceneNo_ != currentSceneNo_) {
-			sceneArr_[currentSceneNo_]->Initialize();
+			scene_.reset(sceneFactory_->CreateScene(IScene::sceneNo_));
+			scene_->Initialize();
 		}
 
-		sceneArr_[currentSceneNo_]->Play();
+		scene_->Play();
 
 #ifdef _DEBUG
 		ImGui::Begin("SCENE");
@@ -76,13 +84,16 @@ int SceneManager::Run()
 
 		// 描画処理ここから
 		
-		sceneArr_[currentSceneNo_]->Draw();
+		scene_->Draw();
 
 		// フレームの終了
 		//Kyoko::PostDraw();
 
 		FrameInfo::GetInstance()->End();
 	}
+
+	scene_.reset();
+	sceneFactory_.reset();
 
 	return 0;
 }

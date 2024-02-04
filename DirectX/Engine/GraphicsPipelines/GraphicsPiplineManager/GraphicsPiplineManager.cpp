@@ -12,7 +12,6 @@ GraphicsPiplineManager* GraphicsPiplineManager::GetInstance()
 
 void GraphicsPiplineManager::Initialize()
 {
-
 	spritePSO_ = SpriteGraphicsPipeline::GetInstance();
 	spritePSO_->Initialize();
 

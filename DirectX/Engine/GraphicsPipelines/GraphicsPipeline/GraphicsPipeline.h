@@ -10,8 +10,6 @@
 class GraphicsPipeline
 {
 public:
-
-
 	// namespace省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 
@@ -22,9 +20,7 @@ public:
 	void SetBlendMode(uint32_t blendMode);
 
 	virtual ~GraphicsPipeline() = default;
-
 protected:
-
 	enum BlendMode {
 		kBlendModeNone, // ブレンドなし
 		kBlendModeNormal, // デフォルト
@@ -49,7 +45,6 @@ protected:
 		IDxcUtils* dxcUtils,
 		IDxcCompiler3* dxcCompiler,
 		IDxcIncludeHandler* includeHandler);
-	
 protected:
 
 	ID3D12Device* device_ = nullptr;
@@ -69,7 +64,5 @@ protected:
 	std::array<ComPtr<ID3D12PipelineState>, kCountOfBlendMode> graphicsPipelineStates_;
 
 	BlendMode blendMode_ = BlendMode::kBlendModeNormal;
-
-
 };
 

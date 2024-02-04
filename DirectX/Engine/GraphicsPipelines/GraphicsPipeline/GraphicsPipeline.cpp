@@ -65,7 +65,6 @@ void GraphicsPipeline::SetBlendMode(uint32_t blendMode)
 
 void GraphicsPipeline::InitializeDXC()
 {
-
 	//DXCの初期化
 	HRESULT hr = DxcCreateInstance(CLSID_DxcUtils, IID_PPV_ARGS(dxcUtils_.GetAddressOf()));
 	assert(SUCCEEDED(hr));
@@ -75,7 +74,6 @@ void GraphicsPipeline::InitializeDXC()
 	//現時点ではincludeはしないが、includeに対応するための設定を行っておく
 	hr = dxcUtils_->CreateDefaultIncludeHandler(includeHandler_.GetAddressOf());
 	assert(SUCCEEDED(hr));
-
 }
 
 IDxcBlob* GraphicsPipeline::CompileShader(const std::wstring& filePath, const wchar_t* profile, IDxcUtils* dxcUtils, IDxcCompiler3* dxcCompiler, IDxcIncludeHandler* includeHandler)
