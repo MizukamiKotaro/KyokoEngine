@@ -119,6 +119,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Base\DescriptorHeapManager\DescriptorHeap\DescriptorHeap.cpp" />
     <ClCompile Include="Engine\Base\DirectXBase\DirectXBase.cpp" />
     <ClCompile Include="Engine\Base\WindowsInfo\WindowsInfo.cpp" />
+    <ClCompile Include="Engine\CollisionSystem\BaseColliderShapeType\BaseColliderShapeType.cpp" />
+    <ClCompile Include="Engine\CollisionSystem\ColliderShapes\ColliderShapeBox2D\ColliderShapeBox2D.cpp" />
+    <ClCompile Include="Engine\CollisionSystem\ColliderShapes\ColliderShapeMapChip2D\ColliderShapeMapChip2D.cpp" />
+    <ClCompile Include="Engine\CollisionSystem\Collider\Collider.cpp" />
+    <ClCompile Include="Engine\CollisionSystem\CollisionManager\CollisionManager.cpp" />
     <ClCompile Include="Engine\FrameInfo\FrameInfo.cpp" />
     <ClCompile Include="Engine\GlobalVariables\GlobalVariables.cpp" />
     <ClCompile Include="Engine\GraphicsPipelines\BlurGraphicsPipeline\BlurGraphicsPipeline.cpp" />
@@ -200,6 +205,12 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Base\DirectXBase\DirectXBase.h" />
     <ClInclude Include="Engine\Base\ResourceLeakChecker.h" />
     <ClInclude Include="Engine\Base\WindowsInfo\WindowsInfo.h" />
+    <ClInclude Include="Engine\CollisionSystem\BaseColliderShapeType\BaseColliderShapeType.h" />
+    <ClInclude Include="Engine\CollisionSystem\ColliderShapes\ColliderShapeBox2D\ColliderShapeBox2D.h" />
+    <ClInclude Include="Engine\CollisionSystem\ColliderShapes\ColliderShapeMapChip2D\ColliderShapeMapChip2D.h" />
+    <ClInclude Include="Engine\CollisionSystem\Collider\Collider.h" />
+    <ClInclude Include="Engine\CollisionSystem\CollisionConfig\CollisionConfig.h" />
+    <ClInclude Include="Engine\CollisionSystem\CollisionManager\CollisionManager.h" />
     <ClInclude Include="Engine\FrameInfo\FrameInfo.h" />
     <ClInclude Include="Engine\GlobalVariables\GlobalVariables.h" />
     <ClInclude Include="Engine\GraphicsPipelines\BlurGraphicsPipeline\BlurGraphicsPipeline.h" />

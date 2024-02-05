@@ -8,14 +8,12 @@
 
 void GraphicsPipeline::Initialize()
 {
-
 	device_ = DirectXBase::GetInstance()->GetDevice();
 	commandList_ = DirectXBase::GetInstance()->GetCommandList();
 
 	InitializeDXC();
 
 	InitializePSO();
-
 }
 
 void GraphicsPipeline::PreDraw()

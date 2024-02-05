@@ -1,8 +1,14 @@
 #include "GraphicsPiplineManager.h"
-#include "Engine/Base/DirectXBase/DirectXBase.h"
-#include <cassert>
-#include "Engine/Base/DebugLog/DebugLog.h"
-#include <format>
+
+#include "GraphicsPipelines/ModelGraphicsPipline/ModelGraphicsPipline.h"
+#include "GraphicsPipelines/ParticleGraphicsPipeline/ParticleGraphicsPipeline.h"
+#include "GraphicsPipelines/SpriteGraphicsPipeline/SpriteGraphicsPipeline.h"
+#include "GraphicsPipelines/PointLightGraphicsPipline/PointLightGraphicsPipline.h"
+#include "GraphicsPipelines/SpotLightGraphicsPipline/SpotLightGraphicsPipline.h"
+#include "GraphicsPipelines/ContrastGraphicsPipeline/ContrastGraphicsPipeline.h"
+#include "GraphicsPipelines/HighLumiGraphicsPipeline/HighLumiGraphicsPipeline.h"
+#include "GraphicsPipelines/BlurGraphicsPipeline/BlurGraphicsPipeline.h"
+#include "GraphicsPipelines/GaussianBlurGraphicsPipeline/GaussianBlurGraphicsPipeline.h"
 
 GraphicsPiplineManager* GraphicsPiplineManager::GetInstance()
 {
@@ -12,32 +18,23 @@ GraphicsPiplineManager* GraphicsPiplineManager::GetInstance()
 
 void GraphicsPiplineManager::Initialize()
 {
-	spritePSO_ = SpriteGraphicsPipeline::GetInstance();
-	spritePSO_->Initialize();
+	spritePSO_ = std::make_unique<SpriteGraphicsPipeline>();
 
-	modelPSO_ = ModelGraphicsPipline::GetInstance();
-	modelPSO_->Initialize();
+	modelPSO_ = std::make_unique<ModelGraphicsPipline>();
 
-	particlePSO_ = ParticleGraphicsPipeline::GetInstance();
-	particlePSO_->Initialize();
+	particlePSO_ = std::make_unique<ParticleGraphicsPipeline>();
 
-	pointLightPSO_ = PointLightGraphicsPipline::GetInstance();
-	pointLightPSO_->Initialize();
+	pointLightPSO_ = std::make_unique<PointLightGraphicsPipline>();
 
-	spotLightPSO_ = SpotLightGraphicsPipline::GetInstance();
-	spotLightPSO_->Initialize();
+	spotLightPSO_ = std::make_unique<SpotLightGraphicsPipline>();
 
-	contrastPSO_ = ContrastGraphicsPipeline::GetInstance();
-	contrastPSO_->Initialize();
+	contrastPSO_ = std::make_unique<ContrastGraphicsPipeline>();
 
-	highLumiPSO_ = HighLumiGraphicsPipeline::GetInstance();
-	highLumiPSO_->Initialize();
+	highLumiPSO_ = std::make_unique<HighLumiGraphicsPipeline>();
 
-	blurPSO_ = BlurGraphicsPipeline::GetInstance();
-	blurPSO_->Initialize();
+	blurPSO_ = std::make_unique<BlurGraphicsPipeline>();
 
-	gaussianBlurPSO_ = GaussianBlurGraphicsPipeline::GetInstance();
-	gaussianBlurPSO_->Initialize();
+	gaussianBlurPSO_ = std::make_unique<GaussianBlurGraphicsPipeline>();
 
 	spritePSO_->PreDraw();
 }

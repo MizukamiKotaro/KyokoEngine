@@ -1,31 +1,14 @@
 #include "Collider.h"
 
-void Collider::ShapeCircle::SetInfo(const Vector2& pos, float radius)
+Collider::Collider()
 {
-	pos_ = pos;
-	radius_ = radius;
-}
+	collisionAttribute_ = 0x00000000;
 
-void Collider::ShapeCircle::SetPos(const Vector2& pos)
-{
-	pos_ = pos;
-}
+	collisionMask_ = 0x00000000;
 
-void Collider::ShapeCircle::SetRadius(float radius)
-{
-	radius_ = radius;
-}
-
-void Collider::InitCircle(const Vector2& pos, float radius)
-{
-	shapeType_ = ShapeType::CIRCLE;
-
-	circle_.pos_ = pos;
-	circle_.radius_ = radius;
-}
-
-void Collider::OnCollision()
-{
+	for (int i = 0; i < EditInfo::EditEnumV2::V2COUNT; i++) {
+		editInfo_.v2Paras_.push_back(Vector2());
+	}
 }
 
 uint32_t Collider::GetCollisionAttribute() const
@@ -48,12 +31,24 @@ void Collider::SetCollisionMask(uint32_t mask)
 	collisionMask_ = collisionMask_ | mask;
 }
 
-Collider::ShapeType Collider::GetShapeType() const
+void Collider::EditInfo::SetI32Info(uint32_t info)
 {
-	return shapeType_;
+	for (uint32_t num : i32Info_) {
+		if (num == info) {
+			return;
+		}
+	}
+
+	i32Info_.push_back(info);
 }
 
-Collider::ShapeCircle Collider::GetCircle_() const
+void Collider::EditInfo::SetPairIInfo(std::pair<int, int> info)
 {
-	return circle_;
+	for (std::pair<int, int> num : pairIInfo_) {
+		if (num == info) {
+			return;
+		}
+	}
+
+	pairIInfo_.push_back(info);
 }

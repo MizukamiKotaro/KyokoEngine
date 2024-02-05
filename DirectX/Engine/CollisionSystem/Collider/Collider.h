@@ -1,27 +1,38 @@
 #pragma once
-#include "Vector2.h"
-#include <stdint.h>
+#include "CollisionSystem/BaseColliderShapeType/BaseColliderShapeType.h"
+#include <vector>
+#include <memory>
 
-class Collider
-{
+class Collider {
 public:
-	enum class ShapeType
+
+	Collider();
+
+	struct EditInfo
 	{
-		CIRCLE
+		enum EditEnumV2 {
+			V2POS,
+			V2VELOCITY,
+			V2MASKPOS,
+			V2COUNT,
+		};
+
+		BaseColliderShapeType::ColliderType colliderTypeMask_;
+
+		void SetI32Info(uint32_t info);
+		void SetPairIInfo(std::pair<int, int> info);
+
+		uint32_t collisionMask_;
+		std::vector<uint32_t> i32Info_;
+		std::vector<std::pair<int, int>> pairIInfo_;
+
+		std::vector<int> iParas_;
+		std::vector<float> fParas_;
+		std::vector<Vector2> v2Paras_;
+		std::vector<Vector3> v3Paras_;
 	};
 
-	struct ShapeCircle {
-		Vector2 pos_;
-		float radius_;
-
-		void SetInfo(const Vector2& pos, float radius);
-		void SetPos(const Vector2& pos);
-		void SetRadius(float radius);
-	};
-
-	void InitCircle(const Vector2& pos, float radius);
-
-	virtual void OnCollision();
+	virtual void OnCollision() = 0;
 
 	uint32_t GetCollisionAttribute() const;
 
@@ -31,21 +42,14 @@ public:
 
 	void SetCollisionMask(uint32_t mask);
 
-	ShapeType GetShapeType() const;
+	std::unique_ptr<BaseColliderShapeType> shapeType_;
 
-	ShapeCircle GetCircle_() const;
+	EditInfo editInfo_;
 
-protected:
-
-	ShapeType shapeType_;
-
-	ShapeCircle circle_;
-
-private:
+public:
 
 	uint32_t collisionAttribute_ = 0x00000000;
 
 	uint32_t collisionMask_ = 0x00000000;
 
 };
-

@@ -43,7 +43,6 @@ private:
 
 private:
 
-
 	using Item = std::variant<int32_t, float, Vector2, Vector3>;
 
 	using Group = std::map<std::string, Item>;

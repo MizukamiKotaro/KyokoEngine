@@ -1,20 +1,6 @@
 #pragma once
-
-#include <wrl.h>
-#include <dxcapi.h>
-#pragma comment(lib, "dxcompiler.lib")
-#include <string>
-#include <d3d12.h>
-#include <array>
-#include "GraphicsPipelines/ModelGraphicsPipline/ModelGraphicsPipline.h"
-#include "GraphicsPipelines/ParticleGraphicsPipeline/ParticleGraphicsPipeline.h"
-#include "GraphicsPipelines/SpriteGraphicsPipeline/SpriteGraphicsPipeline.h"
-#include "GraphicsPipelines/PointLightGraphicsPipline/PointLightGraphicsPipline.h"
-#include "GraphicsPipelines/SpotLightGraphicsPipline/SpotLightGraphicsPipline.h"
-#include "GraphicsPipelines/ContrastGraphicsPipeline/ContrastGraphicsPipeline.h"
-#include "GraphicsPipelines/HighLumiGraphicsPipeline/HighLumiGraphicsPipeline.h"
-#include "GraphicsPipelines/BlurGraphicsPipeline/BlurGraphicsPipeline.h"
-#include "GraphicsPipelines/GaussianBlurGraphicsPipeline/GaussianBlurGraphicsPipeline.h"
+#include "GraphicsPipelines/GraphicsPipeline/GraphicsPipeline.h"
+#include <memory>
 
 enum class BlendMode
 {
@@ -26,7 +12,6 @@ enum class BlendMode
 	kBlendModeScreen, // スクリーン
 };
 
-// スプライト共通部分
 class GraphicsPiplineManager
 {
 public:
@@ -55,26 +40,22 @@ public:
 	void SetBlendMode(PiplineType type, uint32_t blendMode);
 
 private:
-
-private:
 	GraphicsPiplineManager() = default;
 	~GraphicsPiplineManager() = default;
 	GraphicsPiplineManager(const GraphicsPiplineManager&) = delete;
 	GraphicsPiplineManager& operator=(const GraphicsPiplineManager&) = delete;
 
 private:
-
-	SpriteGraphicsPipeline* spritePSO_ = nullptr;
-	ModelGraphicsPipline* modelPSO_ = nullptr;
-	ParticleGraphicsPipeline* particlePSO_ = nullptr;
-	PointLightGraphicsPipline* pointLightPSO_ = nullptr;
-	SpotLightGraphicsPipline* spotLightPSO_ = nullptr;
-	ContrastGraphicsPipeline* contrastPSO_ = nullptr;
-	HighLumiGraphicsPipeline* highLumiPSO_ = nullptr;
-	BlurGraphicsPipeline* blurPSO_ = nullptr;
-	GaussianBlurGraphicsPipeline* gaussianBlurPSO_ = nullptr;
+	std::unique_ptr<GraphicsPipeline> spritePSO_;
+	std::unique_ptr<GraphicsPipeline> modelPSO_;
+	std::unique_ptr<GraphicsPipeline> particlePSO_;
+	std::unique_ptr<GraphicsPipeline> pointLightPSO_;
+	std::unique_ptr<GraphicsPipeline> spotLightPSO_;
+	std::unique_ptr<GraphicsPipeline> contrastPSO_;
+	std::unique_ptr<GraphicsPipeline> highLumiPSO_;
+	std::unique_ptr<GraphicsPipeline> blurPSO_;
+	std::unique_ptr<GraphicsPipeline> gaussianBlurPSO_;
 
 	PiplineType currentPiplineType_ = PiplineType::SPRITE;
-
 };
 

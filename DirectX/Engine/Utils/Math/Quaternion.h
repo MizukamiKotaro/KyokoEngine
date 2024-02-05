@@ -1,13 +1,11 @@
 #pragma once
-#include "Vector3.h"
 
-struct Matrix4x4;
+class Vector3;
+class Matrix4x4;
 
-struct Quaternion
+class Quaternion
 {
 public:
-
-
 	Quaternion& operator=(const Quaternion& obj) {
 		x = obj.x;
 		y = obj.y;

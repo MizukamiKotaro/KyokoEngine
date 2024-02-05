@@ -1,5 +1,7 @@
-#include "Matrix3x3.h"
 #include "Matrix4x4.h"
+#include "Matrix3x3.h"
+#include "Vector3.h"
+#include "Quaternion.h"
 #include "calc.h"
 #include "../Transform/Transform.h"
 #include <assert.h>
@@ -427,6 +429,11 @@ Matrix4x4 Matrix4x4::MakeRotateMatrix(const Quaternion& quaternion)
 	};
 
 	return result;
+}
+
+Vector3 Matrix4x4::RotateVector(const Vector3& vector, const Quaternion& quaternion)
+{
+	return Matrix4x4::Multiply(vector, MakeRotateMatrix(quaternion));
 }
 
 Matrix4x4 operator+(const Matrix4x4 m1, const Matrix4x4& m2) {
