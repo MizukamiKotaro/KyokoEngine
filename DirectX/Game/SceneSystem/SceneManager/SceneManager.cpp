@@ -21,13 +21,13 @@ SceneManager::SceneManager()
 	preSceneNo_ = currentSceneNo_;
 	IScene::stageNo_ = 0;
 
-	scene_->Initialize();
-
 	inputManager_ = Input::GetInstance();
 }
 
 int SceneManager::Run()
 {
+	scene_->Initialize();
+
 	// ウィンドウの×ボタンが押されるまでループ
 	while (true) {
 		// フレームの開始
