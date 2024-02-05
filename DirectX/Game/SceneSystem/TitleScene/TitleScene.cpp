@@ -8,27 +8,15 @@ TitleScene::TitleScene()
 {
 	FirstInit();
 
-	dome_ = std::make_unique<Dome>();
-	stage_ = std::make_unique<Stage>();
-	screen_ = std::make_unique<Screen>();
-
-	title_ = std::make_unique<Sprite>("title.png");
-	title_->pos_ = { 630.0f,360.0f };
-	title_->size_ *= 2;
-	title_->Update();
-
-	space_ = std::make_unique<Sprite>("space.png");
-	space_->pos_ = { 640.0f,560.0f };
-	space_->Update();
-
-	rainbow_ = std::make_unique<Sprite>("rainbow.png");
-	highLumi_ = std::make_unique<HighLumi>();
-	post_ = std::make_unique<PostEffect>();
-	texcoodY_ = 0.0f;
-
 	se_.LoadWave("SE/select.wav");
 
 	model_ = std::make_unique<Model>("Sphere");
+
+	data0_ = ModelDataManager::GetInstance()->LoadObj("Sphere");
+	data1_ = ModelDataManager::GetInstance()->LoadObj("Cube");
+
+	hoge0_ = textureManager_->LoadTexture("Resources/Texture/uvChecker.png");
+	hoge1_ = textureManager_->LoadTexture("Resources/Texture/rainbow.png");
 
 	for (int i = 0; i < 2; i++) {
 		directionals_[i] = std::make_unique<DirectionalLight>();
@@ -57,19 +45,53 @@ void TitleScene::Initialize()
 
 void TitleScene::Update()
 {
-	texcoodY_ += 10.0f;
-	if (texcoodY_ >= 720.0f) {
-		texcoodY_ -= 720.0f;
-	}
-	rainbow_->SetTextureTopLeft({ 0.0f,texcoodY_ });
-
 	LightsUpdate();
 
-	if (input_->PressedGamePadButton(Input::GamePadButton::A)) {
-		// シーン切り替え
+#ifdef _DEBUG
+	ImGui::Begin("カメラ");
+	ImGui::DragFloat3("位置", &camera_->transform_.translate_.x, 0.01f);
+	ImGui::DragFloat3("向き", &camera_->transform_.rotate_.x, 0.01f);
+	ImGui::End();
+
+	ImGui::Begin("モデル");
+	ImGui::DragFloat3("位置", &model_->transform_.translate_.x, 0.01f);
+	ImGui::DragFloat3("向き", &model_->transform_.rotate_.x, 0.01f);
+	ImGui::DragFloat3("スケール", &model_->transform_.scale_.x, 0.01f);
+	ImGui::Checkbox("モデル切り替え", &a);
+	ImGui::Checkbox("テクスチャ切り替え", &b);
+	ImGui::End();
+#endif // _DEBUG
+
+	if (a && ishoge) {
+		model_->SetModelData(data1_);
+		ishoge = false;
+	}
+	else if (!a && !ishoge) {
+		model_->SetModelData(data0_);
+		ishoge = true;
+	}
+
+	if (b && isAho) {
+		model_->SetTexture(hoge0_);
+		isAho = false;
+	}
+	else if (!b && !isAho) {
+		model_->SetTexture(hoge1_);
+		isAho = true;
+	}
+
+	model_->Update();
+	camera_->Update();
+
+	if (input_->PressedKey(DIK_1) || input_->PressedGamePadButton(Input::GamePadButton::X)) {
 		ChangeScene(SELECT);
 		se_.Play(false, 0.9f);
 	}
+	else if (input_->PressedKey(DIK_3) || input_->PressedGamePadButton(Input::GamePadButton::B)) {
+		ChangeScene(STAGE);
+		se_.Play(false, 0.9f);
+	}
+
 }
 
 void TitleScene::Draw()
@@ -77,11 +99,6 @@ void TitleScene::Draw()
 	WrightPostEffect();
 
 	Kyoko::Engine::PreDraw();
-
-	dome_->Draw(camera_.get());
-	stage_->Draw(camera_.get());
-	screen_->Draw(camera_.get());
-	//title_->Draw();
 
 	model_->Draw(*camera_.get());
 
@@ -94,8 +111,6 @@ void TitleScene::Draw()
 		}
 	}
 
-	space_->Draw();
-
 	BlackDraw();
 
 	Kyoko::Engine::PostDraw();
@@ -103,30 +118,12 @@ void TitleScene::Draw()
 
 void TitleScene::WrightPostEffect()
 {
-	highLumi_->PreDrawScene();
-	title_->Draw();
-	highLumi_->PostDrawScene();
-
-	post_->PreDrawScene();
-	rainbow_->Draw();
-	highLumi_->Draw(BlendMode::kBlendModeMultiply);
-	post_->PostDrawScene();
-
-	screen_->PreDrawScene();
-
-	title_->Draw();
-	post_->Draw();
-
-	screen_->PostDrawScene();
+	
 }
 
 void TitleScene::LightsUpdate()
 {
 #ifdef _DEBUG
-	ImGui::Begin("モデル");
-	ImGui::SliderFloat3("モデルのスケール", &model_->transform_.scale_.x, 0.0f, 10.0f);
-	ImGui::End();
-	model_->Update();
 
 	ImGui::Begin("ライト");
 	for (int i = 0; i < 2; i++) {

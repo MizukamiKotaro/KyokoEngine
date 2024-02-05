@@ -24,5 +24,25 @@ public:
 
 private:
 
-	std::unique_ptr<Game> game_;
+	std::unique_ptr<Model> model_;
+	std::unique_ptr<Sprite> sprite_;
+
+	std::unique_ptr<Sprite> back_;
+	float hogeY_ = 0.0f;
+
+	Audio se_;
+
+	std::unique_ptr<Sprite> title_;
+
+	std::unique_ptr<PostEffect> post_;
+	std::unique_ptr<PostEffect> post2_;
+	std::unique_ptr<HighLumi> highLumi_;
+	std::unique_ptr<GaussianBlur> gaussian_;
+	std::unique_ptr<Blur> blur_;
+
+	Vector4 titleColor_ = { 1.0f,1.0f,1.0f,1.0f };
+	bool isBlur_ = false;
+	bool isGaussianBlur_ = false;
+	bool isHighLumi_ = false;
+	bool isHoge_ = false;
 };

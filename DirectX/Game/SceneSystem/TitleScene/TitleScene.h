@@ -27,27 +27,27 @@ private:
 
 private:
 
-	std::unique_ptr<HighLumi> highLumi_;
-	std::unique_ptr<PostEffect> post_;
-	std::unique_ptr<Sprite> rainbow_;
-	float texcoodY_;
-
-	std::unique_ptr<Dome> dome_;
-	std::unique_ptr<Stage> stage_;
-	std::unique_ptr<Screen> screen_;
-
 	std::unique_ptr<Model> model_;
 	std::array<std::unique_ptr<DirectionalLight>, 2> directionals_;
 	std::array<std::unique_ptr<SpotLight>, 2> spots_;
 	std::array<std::unique_ptr<PointLight>, 2> points_;
 
+	const ModelData* data0_;
+	const ModelData* data1_;
+
+	const Texture* hoge0_;
+	const Texture* hoge1_;
+
+	bool a = false;
+	bool b = false;
+
+	bool ishoge = false;
+	bool isAho = false;
+
 	std::array<bool, 2> isSpotDraws_;
 	std::array<bool, 2> isPointDraws_;
 
 	std::array<bool, 3> is0_;
-
-	std::unique_ptr<Sprite> title_;
-	std::unique_ptr<Sprite> space_;
 
 	Audio se_;
 };

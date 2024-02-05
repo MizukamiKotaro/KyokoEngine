@@ -6,6 +6,7 @@
 #include "GameElement/Live/Screen/Screen.h"
 #include "Sprite.h"
 #include <array>
+#include "Particle.h"
 
 class SelectScene : public IScene
 {
@@ -18,14 +19,21 @@ public:
 
 private:
 
-	std::unique_ptr<Dome> dome_;
-	std::unique_ptr<Stage> stage_;
-	std::unique_ptr<Screen> screen_;
+	std::unique_ptr<Particle> pa_;
 
-	std::array<std::unique_ptr<Sprite>, COUNT_STAGE> musicSprites_;
+	std::unique_ptr<Sprite> sp_;
+	const Texture* tex0;
+	const Texture* tex1;
+	bool is1 = false;
+	bool a = false;
 
-	std::unique_ptr<Sprite> space_;
+	bool x = false;
+	bool y = false;
 
+	Vector2 l = { 0.0f,0.0f };
+	Vector2 s = { 1.0f,1.0f };
+	Vector4 c = { 1.0f,1.0f,1.0f,1.0f };
+	
 	Audio se_;
 };
 

@@ -76,7 +76,7 @@ private:
 	float transitionTimeCount_ = 0.0f;
 
 	std::unique_ptr<Sprite> black_;
-	const float kTransitionTime = 0.5f;
+	const float kTransitionTime = 0.2f;
 
 	bool sameScene_ = false;
 };

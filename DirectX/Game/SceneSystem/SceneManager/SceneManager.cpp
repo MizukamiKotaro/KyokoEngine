@@ -11,7 +11,7 @@ SceneManager::SceneManager()
 {
 	ScoreManager::GetInstance()->Initialize();
 
-	IScene::sceneNo_ = TITLE;
+	IScene::sceneNo_ = SELECT;
 
 	sceneFactory_ = std::make_unique<SceneFactory>();
 
@@ -49,24 +49,10 @@ int SceneManager::Run()
 		scene_->Play();
 
 #ifdef _DEBUG
-		ImGui::Begin("SCENE");
-		switch (currentSceneNo_)
-		{
-		case SCENE::SELECT:
-			ImGui::Text("SELECT");
-			break;
-		case SCENE::TITLE:
-			ImGui::Text("TITLE");
-			break;
-		case SCENE::STAGE:
-			ImGui::Text("STAGE");
-			break;
-		case SCENE::CLEAR:
-			ImGui::Text("CLEAR");
-			break;
-		default:
-			break;
-		}
+		ImGui::Begin("シーン切り替え");
+		ImGui::Text("スプライトとパーティクル ： キーボードの1 or ゲームパッドのX");
+		ImGui::Text("モデルとライト ： キーボードの2 or ゲームパッドのY");
+		ImGui::Text("ポストエフェクト ： キーボードの3 or ゲームパッドのB");
 		ImGui::End();
 #endif // _DEBUG
 		

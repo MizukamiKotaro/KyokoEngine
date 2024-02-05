@@ -158,7 +158,7 @@ void Particle::GenerateParticle()
 {
 	if (emitter.countTime_ >= emitter.generateCoolTime_) {
 
-		for (uint32_t index = 0; index < emitter.generateParticleNum_; index++) {
+		for (int index = 0; index < emitter.generateParticleNum_; index++) {
 
 			if (actives_.size() >= kNumInstance) {
 				break;
