@@ -7,7 +7,6 @@ class AudioManager;
 class Audio
 {
 public:
-
 	static void StaticInitialize();
 
 	void LoadWave(const std::string& filename);

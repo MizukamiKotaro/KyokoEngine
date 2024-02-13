@@ -6,6 +6,8 @@
 #include "Engine/Base/DescriptorHeapManager/DescriptorHeapManager.h"
 #include "Camera.h"
 #include <algorithm>
+#include "DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
+#include "WindowsInfo/WindowsInfo.h"
 
 const std::string Sprite::directoryPath_ = "Resources/Texture/";
 

@@ -5,7 +5,7 @@
 #include "Engine/Base/DirectXBase/DirectXBase.h"
 #include "ModelData/ModelDataManager/ModelDataManager.h"
 #include "Camera.h"
-#include "Externals/imgui/imgui.h"
+#include "DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
 
 ID3D12GraphicsCommandList* Model::commandList_ = nullptr;
 ModelDataManager* Model::modelDataManager_ = nullptr;

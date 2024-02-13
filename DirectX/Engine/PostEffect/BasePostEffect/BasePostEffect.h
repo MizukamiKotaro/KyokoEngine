@@ -12,6 +12,7 @@
 
 #include "GraphicsPipelines/BlendModeConfig.h"
 #include "GraphicsPipelines/PipelineTypeConfig.h"
+#include "DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
 
 class BasePostEffect
 {

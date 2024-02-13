@@ -283,6 +283,15 @@
     <Filter Include="Engine\Audio\AudioManager">
       <UniqueIdentifier>{b4cbcc5e-532a-4bf6-858b-85cf0eed0e46}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Base\DescriptorHeapManager\DescriptorHeaps">
+      <UniqueIdentifier>{d8aae76e-4da8-4522-bfcf-da135fab7f81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Base\DescriptorHeapManager\DescriptorHandles">
+      <UniqueIdentifier>{edc29bb7-fff4-4ff5-9fae-8622f90bb767}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Base\DescriptorHeapManager\Descriptor">
+      <UniqueIdentifier>{8ad1c504-0a5b-4b51-9de9-a4f6ed7da697}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -536,6 +545,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Audio\AudioManager\AudioManager.cpp">
       <Filter>Engine\Audio\AudioManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Base\DescriptorHeapManager\DescriptorHeaps\DescriptorHeaps.cpp">
+      <Filter>Engine\Base\DescriptorHeapManager\DescriptorHeaps</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -829,6 +841,15 @@
     </ClInclude>
     <ClInclude Include="Engine\GraphicsPipelines\PipelineTypeConfig.h">
       <Filter>Engine\GraphicsPipelines</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Base\DescriptorHeapManager\DescriptorHeaps\DescriptorHeaps.h">
+      <Filter>Engine\Base\DescriptorHeapManager\DescriptorHeaps</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Base\DescriptorHeapManager\DescriptorHandles\DescriptorHandles.h">
+      <Filter>Engine\Base\DescriptorHeapManager\DescriptorHandles</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Base\DescriptorHeapManager\Descriptor\Descriptor.h">
+      <Filter>Engine\Base\DescriptorHeapManager\Descriptor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

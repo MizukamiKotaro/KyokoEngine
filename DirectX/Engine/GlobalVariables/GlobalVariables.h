@@ -1,9 +1,10 @@
 #pragma once
-#include "../Utils/Math/Vector2.h"
-#include "../Utils/Math/Vector3.h"
 #include <variant>
 #include <map>
 #include <string>
+
+class Vector2;
+class Vector3;
 
 class GlobalVariables {
 public:

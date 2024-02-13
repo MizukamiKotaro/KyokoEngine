@@ -10,6 +10,7 @@
 #include <numbers>
 #include <algorithm>
 #include "TextureManager.h"
+#include "DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
 
 const std::string Particle::directoryPath_ = "Resources/Texture/";
 

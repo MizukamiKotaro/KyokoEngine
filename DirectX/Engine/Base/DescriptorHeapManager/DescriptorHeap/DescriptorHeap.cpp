@@ -1,9 +1,7 @@
 #include "DescriptorHeap.h"
 #include <cassert>
-#include "Engine/Base/DebugLog/DebugLog.h"
-#include <format>
-#include "Externals/DirectXTex/d3dx12.h"
 #include "Engine/Base/DirectXBase/DirectXBase.h"
+#include "DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
 
 DescriptorHeap::~DescriptorHeap()
 {

@@ -3,10 +3,11 @@
 #include <d3d12.h>
 #include <dxgi1_6.h>
 #include <wrl.h>
-#include "Engine/Base/WindowsInfo/WindowsInfo.h"
 #include <vector>
 #include <chrono>
-#include "DescriptorHeapManager/DescriptorHeap/DescriptorHeap.h"
+
+class WindowsInfo;
+class DescriptorHandles;
 
 class DirectXBase
 {
@@ -81,7 +82,7 @@ private: // メンバ変数
 	uint64_t fenceValue_ = 0;
 
 	std::vector<const DescriptorHandles*> rtvHandles_;
-	const DescriptorHandles* dsvHandles_;
+	const DescriptorHandles* dsvHandles_ = nullptr;
 
 	// 記録時間(FPS固定)
 	std::chrono::steady_clock::time_point reference_;

@@ -9,7 +9,6 @@
 #include "GraphicsPipelines/HighLumiGraphicsPipeline/HighLumiGraphicsPipeline.h"
 #include "GraphicsPipelines/BlurGraphicsPipeline/BlurGraphicsPipeline.h"
 #include "GraphicsPipelines/GaussianBlurGraphicsPipeline/GaussianBlurGraphicsPipeline.h"
-
 #include "GraphicsPipelines/PipelineTypeConfig.h"
 
 GraphicsPipelineManager* GraphicsPipelineManager::GetInstance()
