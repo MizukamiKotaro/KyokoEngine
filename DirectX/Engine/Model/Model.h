@@ -13,6 +13,8 @@
 #include "ModelData/ModelData.h"
 #include "ModelDataManager.h"
 #include "Texture.h"
+#include "GraphicsPipelines/BlendModeConfig.h"
+#include "GraphicsPipelines/PipelineTypeConfig.h"
 
 class Camera;
 
@@ -114,13 +116,13 @@ public:
 
 private:
 
-	static const GraphicsPiplineManager::PiplineType piplineType = GraphicsPiplineManager::PiplineType::MODEL;
+	static const PipelineType piplineType = PipelineType::MODEL;
 
 	static ID3D12GraphicsCommandList* commandList_;
 
 	static ModelDataManager* modelDataManager_;
 
-	static GraphicsPiplineManager* gpoManager_;
+	static GraphicsPipelineManager* gpoManager_;
 
 	Light light_;
 

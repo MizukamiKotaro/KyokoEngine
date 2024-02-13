@@ -4,8 +4,9 @@
 #include <string>
 #include "Matrix4x4.h"
 
-struct NodeData
+class NodeData
 {
+public:
 	Matrix4x4 localMatrix;
 	std::string name;
 	std::vector<NodeData> children;

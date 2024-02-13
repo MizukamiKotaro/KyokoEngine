@@ -10,14 +10,18 @@
 #include "GraphicsPipelines/BlurGraphicsPipeline/BlurGraphicsPipeline.h"
 #include "GraphicsPipelines/GaussianBlurGraphicsPipeline/GaussianBlurGraphicsPipeline.h"
 
-GraphicsPiplineManager* GraphicsPiplineManager::GetInstance()
+#include "GraphicsPipelines/PipelineTypeConfig.h"
+
+GraphicsPipelineManager* GraphicsPipelineManager::GetInstance()
 {
-	static GraphicsPiplineManager instance;
+	static GraphicsPipelineManager instance;
 	return &instance;
 }
 
-void GraphicsPiplineManager::Initialize()
+void GraphicsPipelineManager::Initialize()
 {
+	currentPiplineType_ = PipelineType::SPRITE;
+
 	spritePSO_ = std::make_unique<SpriteGraphicsPipeline>();
 
 	modelPSO_ = std::make_unique<ModelGraphicsPipline>();
@@ -39,48 +43,48 @@ void GraphicsPiplineManager::Initialize()
 	spritePSO_->PreDraw();
 }
 
-void GraphicsPiplineManager::PreDraw()
+void GraphicsPipelineManager::PreDraw()
 {
-	currentPiplineType_ = PiplineType::SPRITE;
+	currentPiplineType_ = PipelineType::SPRITE;
 
 	spritePSO_->PreDraw();
 }
 
-void GraphicsPiplineManager::PreDraw(PiplineType type)
+void GraphicsPipelineManager::PreDraw(PipelineType type)
 {
 	if (currentPiplineType_ != type) {
 		currentPiplineType_ = type;
 
 		switch (type)
 		{
-		case GraphicsPiplineManager::PiplineType::SPRITE:
+		case PipelineType::SPRITE:
 			spritePSO_->PreDraw();
 			break;
-		case GraphicsPiplineManager::PiplineType::MODEL:
+		case PipelineType::MODEL:
 			modelPSO_->PreDraw();
 			break;
-		case GraphicsPiplineManager::PiplineType::PARTICLE:
+		case PipelineType::PARTICLE:
 			particlePSO_->PreDraw();
 			break;
-		case GraphicsPiplineManager::PiplineType::POINT_LIGHT:
+		case PipelineType::POINT_LIGHT:
 			pointLightPSO_->PreDraw();
 			break;
-		case GraphicsPiplineManager::PiplineType::SPOT_LIGHT:
+		case PipelineType::SPOT_LIGHT:
 			spotLightPSO_->PreDraw();
 			break;
-		case GraphicsPiplineManager::PiplineType::CONTRAST:
+		case PipelineType::CONTRAST:
 			contrastPSO_->PreDraw();
 			break;
-		case GraphicsPiplineManager::PiplineType::HIGH_LUMI:
+		case PipelineType::HIGH_LUMI:
 			highLumiPSO_->PreDraw();
 			break;
-		case GraphicsPiplineManager::PiplineType::BLUR:
+		case PipelineType::BLUR:
 			blurPSO_->PreDraw();
 			break;
-		case GraphicsPiplineManager::PiplineType::GAUSSIAN_BLUR:
+		case PipelineType::GAUSSIAN_BLUR:
 			gaussianBlurPSO_->PreDraw();
 			break;
-		case GraphicsPiplineManager::PiplineType::COUNT_PIPLINE_TYPE:
+		case PipelineType::COUNT_PIPLINE_TYPE:
 			break;
 		default:
 			break;
@@ -88,38 +92,38 @@ void GraphicsPiplineManager::PreDraw(PiplineType type)
 	}
 }
 
-void GraphicsPiplineManager::SetBlendMode(PiplineType type, uint32_t blendMode)
+void GraphicsPipelineManager::SetBlendMode(PipelineType type, uint32_t blendMode)
 {
 	switch (type)
 	{
-	case GraphicsPiplineManager::PiplineType::SPRITE:
+	case PipelineType::SPRITE:
 		spritePSO_->SetBlendMode(blendMode);
 		break;
-	case GraphicsPiplineManager::PiplineType::MODEL:
+	case PipelineType::MODEL:
 		modelPSO_->SetBlendMode(blendMode);
 		break;
-	case GraphicsPiplineManager::PiplineType::PARTICLE:
+	case PipelineType::PARTICLE:
 		particlePSO_->SetBlendMode(blendMode);
 		break;
-	case GraphicsPiplineManager::PiplineType::POINT_LIGHT:
+	case PipelineType::POINT_LIGHT:
 		pointLightPSO_->SetBlendMode(blendMode);
 		break;
-	case GraphicsPiplineManager::PiplineType::SPOT_LIGHT:
+	case PipelineType::SPOT_LIGHT:
 		spotLightPSO_->SetBlendMode(blendMode);
 		break;
-	case GraphicsPiplineManager::PiplineType::CONTRAST:
+	case PipelineType::CONTRAST:
 		contrastPSO_->SetBlendMode(blendMode);
 		break;
-	case GraphicsPiplineManager::PiplineType::HIGH_LUMI:
+	case PipelineType::HIGH_LUMI:
 		highLumiPSO_->SetBlendMode(blendMode);
 		break;
-	case GraphicsPiplineManager::PiplineType::BLUR:
+	case PipelineType::BLUR:
 		blurPSO_->SetBlendMode(blendMode);
 		break;
-	case GraphicsPiplineManager::PiplineType::GAUSSIAN_BLUR:
+	case PipelineType::GAUSSIAN_BLUR:
 		gaussianBlurPSO_->SetBlendMode(blendMode);
 		break;
-	case GraphicsPiplineManager::PiplineType::COUNT_PIPLINE_TYPE:
+	case PipelineType::COUNT_PIPLINE_TYPE:
 		break;
 	default:
 		break;

@@ -1,49 +1,28 @@
 #pragma once
-#include "GraphicsPipelines/GraphicsPipeline/GraphicsPipeline.h"
 #include <memory>
 
-enum class BlendMode
-{
-	kBlendModeNone, // ブレンドなし
-	kBlendModeNormal, // デフォルト
-	kBlendModeAdd, // 加算
-	kBlendModeSubtract, // 減算
-	kBlendModeMultiply, // 乗算
-	kBlendModeScreen, // スクリーン
-};
+class GraphicsPipeline;
+enum class PipelineType;
 
-class GraphicsPiplineManager
+class GraphicsPipelineManager
 {
 public:
 
-	enum class PiplineType {
-		SPRITE,
-		MODEL,
-		PARTICLE,
-		POINT_LIGHT,
-		SPOT_LIGHT,
-		CONTRAST,
-		HIGH_LUMI,
-		BLUR,
-		GAUSSIAN_BLUR,
-		COUNT_PIPLINE_TYPE,
-	};
-
-	static GraphicsPiplineManager* GetInstance();
+	static GraphicsPipelineManager* GetInstance();
 
 	void Initialize();
 
 	void PreDraw();
 
-	void PreDraw(PiplineType type);
+	void PreDraw(PipelineType type);
 
-	void SetBlendMode(PiplineType type, uint32_t blendMode);
+	void SetBlendMode(PipelineType type, uint32_t blendMode);
 
 private:
-	GraphicsPiplineManager() = default;
-	~GraphicsPiplineManager() = default;
-	GraphicsPiplineManager(const GraphicsPiplineManager&) = delete;
-	GraphicsPiplineManager& operator=(const GraphicsPiplineManager&) = delete;
+	GraphicsPipelineManager() = default;
+	~GraphicsPipelineManager() = default;
+	GraphicsPipelineManager(const GraphicsPipelineManager&) = delete;
+	GraphicsPipelineManager& operator=(const GraphicsPipelineManager&) = delete;
 
 private:
 	std::unique_ptr<GraphicsPipeline> spritePSO_;
@@ -56,6 +35,6 @@ private:
 	std::unique_ptr<GraphicsPipeline> blurPSO_;
 	std::unique_ptr<GraphicsPipeline> gaussianBlurPSO_;
 
-	PiplineType currentPiplineType_ = PiplineType::SPRITE;
+	PipelineType currentPiplineType_;
 };
 

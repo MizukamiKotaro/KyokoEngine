@@ -5,7 +5,9 @@
 #include <format>
 #include <fstream>
 #include <sstream>
+#include <filesystem>
 #include "TextureManager/TextureManager.h"
+#include "Model/ModelData/ModelData.h"
 
 ModelDataManager* ModelDataManager::GetInstance()
 {
@@ -46,35 +48,6 @@ uint32_t ModelDataManager::LoadGLTF(const std::string& fileName)
 	LoadGLTFFile(directoryPath_, fileName);
 
 	return static_cast<uint32_t>(modelDatas_.size()) - 1;
-}
-
-MaterialData ModelDataManager::LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& fileName)
-{
-	// 1. 中で必要となる変数の宣言
-	MaterialData materialData_; // 構築するMaterialData
-	std::string line; // ファイルから読んだ１行を格納するもの
-
-	// 2. ファイルを開く
-	std::ifstream file(directoryPath + "/" + fileName); // ファイルを開く
-	assert(file.is_open());
-
-	// 3. 実際にファイルを読み、MaterialDataを構築していく
-	while (std::getline(file, line)) {
-		std::string identifier;
-		std::istringstream s(line);
-		s >> identifier;
-
-		// identifierに応じた処理
-		if (identifier == "map_Kd") {
-			std::string textureFileName;
-			s >> textureFileName;
-			// 連結してファイルパスにする
-			materialData_.textureFilePath = directoryPath + "/" + textureFileName;
-		}
-	}
-
-	// 4. MaterialDataを返す
-	return materialData_;
 }
 
 void ModelDataManager::LoadObjFile(const std::string& directoryPath, const std::string& fileName)
@@ -127,11 +100,15 @@ void ModelDataManager::LoadObjFile(const std::string& directoryPath, const std::
 		if (material->GetTextureCount(aiTextureType_DIFFUSE) != 0) {
 			aiString textureFilePath;
 			material->GetTexture(aiTextureType_DIFFUSE, 0, &textureFilePath);
-			modelDatas_.back()->material.textureFilePath = directoryPath + "/" + fileName + "/" + textureFilePath.C_Str();
+			std::string texFilePath = textureFilePath.C_Str();
+			std::filesystem::path filePathName(texFilePath);
+			texFilePath = filePathName.filename().string();
+
+			texFilePath = directoryPath + "/" + fileName + "/" + texFilePath.c_str();
+
+			modelDatas_.back()->texture = TextureManager::GetInstance()->LoadTexture(texFilePath);
 		}
 	}
-
-	modelDatas_.back()->texture = TextureManager::GetInstance()->LoadTexture(modelDatas_.back()->material.textureFilePath);
 
 	modelDatas_.back()->mesh.vertexResource_ = DirectXBase::CreateBufferResource(sizeof(VertexData) * modelDatas_.back()->mesh.verteces.size());
 
@@ -250,7 +227,14 @@ void ModelDataManager::LoadGLTFFile(const std::string& directoryPath, const std:
 		if (material->GetTextureCount(aiTextureType_DIFFUSE) != 0) {
 			aiString textureFilePath;
 			material->GetTexture(aiTextureType_DIFFUSE, 0, &textureFilePath);
-			modelDatas_.back()->material.textureFilePath = directoryPath + "/" + fileName + "/" + textureFilePath.C_Str();
+
+			std::string texFilePath = textureFilePath.C_Str();
+			std::filesystem::path filePathName(texFilePath);
+			texFilePath = filePathName.filename().string();
+
+			texFilePath = directoryPath + "/" + fileName + "/" + texFilePath.c_str();
+
+			modelDatas_.back()->texture = TextureManager::GetInstance()->LoadTexture(texFilePath);
 		}
 	}
 
@@ -299,10 +283,6 @@ void ModelDataManager::LoadGLTFFile(const std::string& directoryPath, const std:
 			}
 		}
 	}
-
-
-
-	modelDatas_.back()->texture = TextureManager::GetInstance()->LoadTexture(modelDatas_.back()->material.textureFilePath);
 
 	modelDatas_.back()->mesh.vertexResource_ = DirectXBase::CreateBufferResource(sizeof(VertexData) * modelDatas_.back()->mesh.verteces.size());
 

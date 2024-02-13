@@ -9,7 +9,7 @@
 
 ID3D12GraphicsCommandList* Model::commandList_ = nullptr;
 ModelDataManager* Model::modelDataManager_ = nullptr;
-GraphicsPiplineManager* Model::gpoManager_ = nullptr;
+GraphicsPipelineManager* Model::gpoManager_ = nullptr;
 
 Model::Model(const std::string& fileName)
 {
@@ -48,7 +48,7 @@ void Model::FirstInitialize()
 {
 	modelDataManager_ = ModelDataManager::GetInstance();
 	commandList_ = DirectXBase::GetInstance()->GetCommandList();
-	gpoManager_ = GraphicsPiplineManager::GetInstance();
+	gpoManager_ = GraphicsPipelineManager::GetInstance();
 }
 
 void Model::Initialize()

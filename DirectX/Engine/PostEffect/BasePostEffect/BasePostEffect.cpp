@@ -44,7 +44,7 @@ void BasePostEffect::Draw(BlendMode blendMode)
 	transformData_->WVP = worldMat_ * Camera::GetOrthographicMat();
 	materialData_->uvTransform = Matrix4x4::MakeAffinMatrix({ uvScale_.x,uvScale_.y,0.0f }, { 0.0f,0.0f,uvRotate_ }, { uvTranslate_.x,uvTranslate_.y,0.0f });
 
-	GraphicsPiplineManager::GetInstance()->SetBlendMode(piplineType_, static_cast<uint32_t>(blendMode));
+	GraphicsPipelineManager::GetInstance()->SetBlendMode(piplineType_, static_cast<uint32_t>(blendMode));
 
 	ID3D12GraphicsCommandList* commandList = DirectXBase::GetInstance()->GetCommandList();
 
@@ -93,7 +93,7 @@ void BasePostEffect::PreDrawScene()
 	ID3D12DescriptorHeap* descriptorHeaps[] = { DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->GetHeap() };
 	commandList->SetDescriptorHeaps(1, descriptorHeaps);
 
-	GraphicsPiplineManager::GetInstance()->PreDraw();
+	GraphicsPipelineManager::GetInstance()->PreDraw();
 }
 
 void BasePostEffect::PostDrawScene()

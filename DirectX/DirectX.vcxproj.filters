@@ -280,6 +280,9 @@
     <Filter Include="Engine\Utils\CollisionSystem\Collision">
       <UniqueIdentifier>{27227e56-f856-4b67-b9e9-02e2c9ee02ec}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Audio\AudioManager">
+      <UniqueIdentifier>{b4cbcc5e-532a-4bf6-858b-85cf0eed0e46}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -531,6 +534,9 @@
     <ClCompile Include="Engine\CollisionSystem\CollisionManager\CollisionManager.cpp">
       <Filter>Engine\Utils\CollisionSystem</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Audio\AudioManager\AudioManager.cpp">
+      <Filter>Engine\Audio\AudioManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Utils\Math\calc.h">
@@ -670,9 +676,6 @@
     </ClInclude>
     <ClInclude Include="Engine\GraphicsPipelines\SpotLightGraphicsPipline\SpotLightGraphicsPipline.h">
       <Filter>Engine\GraphicsPipelines\SpotLightGraphicsPipline</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Model\ModelData\MaterialData3D.h">
-      <Filter>Engine\Model\ModelData</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Model\ModelData\MeshData3D.h">
       <Filter>Engine\Model\ModelData</Filter>
@@ -817,6 +820,15 @@
     </ClInclude>
     <ClInclude Include="Engine\CollisionSystem\CollisionManager\CollisionManager.h">
       <Filter>Engine\Utils\CollisionSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Audio\AudioManager\AudioManager.h">
+      <Filter>Engine\Audio\AudioManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GraphicsPipelines\BlendModeConfig.h">
+      <Filter>Engine\GraphicsPipelines</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GraphicsPipelines\PipelineTypeConfig.h">
+      <Filter>Engine\GraphicsPipelines</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

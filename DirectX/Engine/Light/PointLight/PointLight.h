@@ -6,10 +6,11 @@
 #include <d3d12.h>
 #include <memory>
 #include "Matrix4x4.h"
-#include "GraphicsPipelines/GraphicsPiplineManager/GraphicsPiplineManager.h"
-#include "ModelData/ModelData.h"
+#include "GraphicsPipelines/BlendModeConfig.h"
+#include "GraphicsPipelines/PipelineTypeConfig.h"
 
 class Camera;
+class ModelData;
 
 class PointLight
 {
@@ -48,7 +49,7 @@ public:
 
 private:
 
-	static const GraphicsPiplineManager::PiplineType piplineType = GraphicsPiplineManager::PiplineType::POINT_LIGHT;
+	static const PipelineType piplineType = PipelineType::POINT_LIGHT;
 
 	Microsoft::WRL::ComPtr<ID3D12Resource> resource_;
 

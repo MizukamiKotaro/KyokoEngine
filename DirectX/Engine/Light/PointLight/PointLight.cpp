@@ -3,6 +3,8 @@
 #include "ModelDataManager.h"
 #include "Camera.h"
 #include <numbers>
+#include "GraphicsPipelines/GraphicsPiplineManager/GraphicsPiplineManager.h"
+#include "ModelData/ModelData.h"
 
 const Matrix4x4 PointLight::scaleMat_ = Matrix4x4::MakeScaleMatrix({ 1000.0f,1000.0f,1000.0f });
 
@@ -45,7 +47,7 @@ void PointLight::Update()
 
 void PointLight::Draw(const Camera& camera, BlendMode blendMode)
 {
-	GraphicsPiplineManager::GetInstance()->PreDraw(piplineType);
+	GraphicsPipelineManager::GetInstance()->PreDraw(piplineType);
 
 	Matrix4x4 billboardMat{};
 
@@ -63,7 +65,7 @@ void PointLight::Draw(const Camera& camera, BlendMode blendMode)
 
 	transformationData_->WorldInverse = scaleInverseMat_ * billboardMat * translateMat;
 
-	GraphicsPiplineManager::GetInstance()->SetBlendMode(piplineType, static_cast<uint32_t>(blendMode));
+	GraphicsPipelineManager::GetInstance()->SetBlendMode(piplineType, static_cast<uint32_t>(blendMode));
 
 	ID3D12GraphicsCommandList* commandList = DirectXBase::GetInstance()->GetCommandList();
 

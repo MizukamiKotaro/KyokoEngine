@@ -10,7 +10,7 @@
 #include "ModelDataManager.h"
 #include "Utils/RandomGenerator/RandomGenerator.h"
 #include "GraphicsPipelines/GraphicsPiplineManager/GraphicsPiplineManager.h"
-#include "Audio.h"
+#include "AudioManager/AudioManager.h"
 #include "Light/Light.h"
 #include "FrameInfo/FrameInfo.h"
 #include "Model.h"
@@ -19,7 +19,7 @@ static ResourceLeackChecker leakCheck;
 
 DirectXBase* dxBase;
 WindowsInfo* winInfo;
-GraphicsPiplineManager* gpoManager;
+GraphicsPipelineManager* gpoManager;
 AudioManager* audioManager;
 Input* inputManager;
 GlobalVariables* globalVariables;
@@ -36,7 +36,7 @@ void Kyoko::Engine::Initialize(const char* windowName, int width, int height)
 
 	TextureManager::GetInstance()->Initialize();
 
-	gpoManager = GraphicsPiplineManager::GetInstance();
+	gpoManager = GraphicsPipelineManager::GetInstance();
 	gpoManager->Initialize();
 
 	Model::FirstInitialize();

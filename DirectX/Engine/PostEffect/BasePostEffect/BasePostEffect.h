@@ -10,7 +10,9 @@
 #include "GraphicsPipelines/GraphicsPiplineManager/GraphicsPiplineManager.h"
 #include "DescriptorHeapManager/DescriptorHeap/DescriptorHeap.h"
 
-// スプライト
+#include "GraphicsPipelines/BlendModeConfig.h"
+#include "GraphicsPipelines/PipelineTypeConfig.h"
+
 class BasePostEffect
 {
 public:
@@ -32,7 +34,7 @@ public:
 
 
 protected:
-	void PreDraw() const { GraphicsPiplineManager::GetInstance()->PreDraw(piplineType_); }
+	void PreDraw() const { GraphicsPipelineManager::GetInstance()->PreDraw(piplineType_); }
 
 	virtual void CreateResources();
 
@@ -111,7 +113,7 @@ protected:
 
 protected:
 
-	GraphicsPiplineManager::PiplineType piplineType_;
+	PipelineType piplineType_;
 
 	static const float clearColor[4];
 

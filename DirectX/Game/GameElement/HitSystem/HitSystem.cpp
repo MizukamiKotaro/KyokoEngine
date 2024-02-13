@@ -66,7 +66,7 @@ void HitSystem::HitTest(float time)
 				hitCount_ = 1;
 				hitNum_ = PERFECT;
 
-				se_.Play(false, 0.6f);
+				se_.Play(0.6f);
 				break;
 			}
 			else if (errorFrame <= kHitErrorFrame_[GREAT]) {
@@ -76,7 +76,7 @@ void HitSystem::HitTest(float time)
 				score_->AddGre();
 				hitCount_ = 1;
 				hitNum_ = GREAT;
-				se_.Play(false, 0.6f);
+				se_.Play(0.6f);
 				break;
 			}
 			else if (errorFrame <= kHitErrorFrame_[GOOD]) {
@@ -87,7 +87,7 @@ void HitSystem::HitTest(float time)
 
 				hitCount_ = 1;
 				hitNum_ = GOOD;
-				se_.Play(false, 0.6f);
+				se_.Play(0.6f);
 				break;
 			}
 		}

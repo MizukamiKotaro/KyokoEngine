@@ -16,6 +16,8 @@
 #include "DescriptorHeapManager/DescriptorHeap/DescriptorHeap.h"
 #include "ModelData/ModelData.h"
 #include "Texture.h"
+#include "GraphicsPipelines/BlendModeConfig.h"
+#include "GraphicsPipelines/PipelineTypeConfig.h"
 
 class Camera;
 
@@ -78,7 +80,7 @@ public:
 
 
 private:
-	static void PreDraw() { GraphicsPiplineManager::GetInstance()->PreDraw(piplineType); }
+	static void PreDraw() { GraphicsPipelineManager::GetInstance()->PreDraw(piplineType); }
 
 public:
 
@@ -131,7 +133,7 @@ public:
 
 private:
 
-	static const GraphicsPiplineManager::PiplineType piplineType = GraphicsPiplineManager::PiplineType::PARTICLE;
+	static const PipelineType piplineType = PipelineType::PARTICLE;
 
 	static const std::string directoryPath_;
 

@@ -1,16 +1,15 @@
 #pragma once
 
 #include "MeshData3D.h"
-#include "MaterialData3D.h"
 #include "NodeData3D.h"
 #include "AnimationData3D.h"
 #include "BoneData3D.h"
 #include "Texture.h"
 
-struct ModelData
+class ModelData
 {
+public:
 	MeshData mesh;
-	MaterialData material;
 	NodeData rootNode;
 	BoneData boneData;
 	AnimationData animationData;

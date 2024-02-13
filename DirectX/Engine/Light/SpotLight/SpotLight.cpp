@@ -5,6 +5,7 @@
 #include "ModelDataManager.h"
 #include "calc.h"
 #include <numbers>
+#include "GraphicsPipelines/GraphicsPiplineManager/GraphicsPiplineManager.h"
 
 const Matrix4x4 SpotLight::scaleMat_ = Matrix4x4::MakeScaleMatrix({ 1000.0f,1000.0f,1000.0f });
 
@@ -58,7 +59,7 @@ void SpotLight::Draw(const Camera& camera, BlendMode blendMode)
 		return;
 	}
 
-	GraphicsPiplineManager::GetInstance()->PreDraw(piplineType);
+	GraphicsPipelineManager::GetInstance()->PreDraw(piplineType);
 
 	Matrix4x4 billboardMat{};
 
@@ -86,7 +87,7 @@ void SpotLight::Draw(const Camera& camera, BlendMode blendMode)
 
 	transformationData_->WorldInverse = scaleInverseMat_ * billboardMat * translateMat;
 
-	GraphicsPiplineManager::GetInstance()->SetBlendMode(piplineType, static_cast<uint32_t>(blendMode));
+	GraphicsPipelineManager::GetInstance()->SetBlendMode(piplineType, static_cast<uint32_t>(blendMode));
 
 	ID3D12GraphicsCommandList* commandList = DirectXBase::GetInstance()->GetCommandList();
 

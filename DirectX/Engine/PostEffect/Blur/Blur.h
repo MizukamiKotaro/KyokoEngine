@@ -24,7 +24,7 @@ public:
 	// namespace省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 
-	void Draw(BlendMode blendMode = BlendMode::kBlendModeNormal);
+	void Draw(BlendMode blendMode = BlendMode::kBlendModeNormal) override;
 
 
 private:

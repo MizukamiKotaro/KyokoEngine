@@ -2,7 +2,7 @@
 
 PostEffect::PostEffect()
 {
-	piplineType_ = GraphicsPiplineManager::PiplineType::SPRITE;
+	piplineType_ = PipelineType::SPRITE;
 
 	CreatePostEffect();
 }
