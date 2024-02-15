@@ -2,11 +2,9 @@
 
 #include "Vector3.h"
 #include "Vector4.h"
-#include <wrl.h>
-#include <d3d12.h>
-#include <memory>
+#include "ILight/ILight.h"
 
-class DirectionalLight
+class DirectionalLight : public ILight
 {
 public:
 	struct DirectionalLightData
@@ -17,16 +15,10 @@ public:
 	};
 
 	DirectionalLight();
-	~DirectionalLight();
+	~DirectionalLight() override;
 
-	void Update();
-
-	const D3D12_GPU_VIRTUAL_ADDRESS GetGPUVirtualAddress() const { return resource_->GetGPUVirtualAddress(); }
+	void Update() override;
 
 public:
 	DirectionalLightData* light_ = nullptr;
-
-private:
-
-	Microsoft::WRL::ComPtr<ID3D12Resource> resource_;
 };

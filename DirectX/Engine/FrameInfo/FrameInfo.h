@@ -4,14 +4,13 @@
 class FrameInfo
 {
 public:
-
 	static FrameInfo* GetInstance();
 
 	void Initialize();
 
 	void End();
 
-	float GetDeltaTime() { return deltaTime_; }
+	float GetDeltaTime() const { return deltaTime_; }
 
 private:
 	FrameInfo() = default;

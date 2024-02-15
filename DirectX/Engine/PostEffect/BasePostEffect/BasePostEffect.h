@@ -7,12 +7,13 @@
 #include "Utils/Math/Vector2.h"
 #include "Utils/Math/Vector4.h"
 #include "Utils/Math/Matrix4x4.h"
-#include "GraphicsPipelines/GraphicsPiplineManager/GraphicsPiplineManager.h"
-#include "DescriptorHeapManager/DescriptorHeap/DescriptorHeap.h"
 
 #include "GraphicsPipelines/BlendModeConfig.h"
-#include "GraphicsPipelines/PipelineTypeConfig.h"
-#include "DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
+
+class DescriptorHandles;
+enum class PipelineType;
+class GraphicsPipelineManager;
+class DescriptorHeap;
 
 class BasePostEffect
 {
@@ -22,6 +23,8 @@ public:
 
 	// namespace省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
+
+	static void StaticInitialize();
 
 	virtual void Initialize();
 
@@ -35,13 +38,13 @@ public:
 
 
 protected:
-	void PreDraw() const { GraphicsPipelineManager::GetInstance()->PreDraw(piplineType_); }
+	void PreDraw() const;
 
 	virtual void CreateResources();
 
 public:
 
-	const D3D12_GPU_DESCRIPTOR_HANDLE GetSRVGPUDescriptorHandle() const { return srvHandles_->gpuHandle; };
+	const D3D12_GPU_DESCRIPTOR_HANDLE GetSRVGPUDescriptorHandle() const;
 
 protected:
 
@@ -59,7 +62,6 @@ protected:
 
 	struct TransformationMatrix {
 		Matrix4x4 WVP;
-		//Matrix4x4 World;
 	};
 
 	void SetAnchorPoint(const Vector2& anchorpoint);
@@ -113,6 +115,12 @@ protected:
 	const DescriptorHandles* dsvHandles_;
 
 protected:
+
+	static GraphicsPipelineManager* gpoManager_;
+	static DescriptorHeap* srvHeap_;
+	static DescriptorHeap* rtvHeap_;
+	static DescriptorHeap* dsvHeap_;
+	static ID3D12GraphicsCommandList* commandList_;
 
 	PipelineType piplineType_;
 

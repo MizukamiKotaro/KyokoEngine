@@ -19,7 +19,12 @@
 #include "GraphicsPipelines/BlendModeConfig.h"
 #include "GraphicsPipelines/PipelineTypeConfig.h"
 
+#include "DirectionalLight/DirectionalLight.h"
+#include "PointLight/PointLight.h"
+#include "SpotLight/SpotLight.h"
+
 class Camera;
+class ILight;
 
 class Particle
 {
@@ -98,11 +103,7 @@ public:
 
 	void GenerateParticle();
 
-	void SetDirectionalLight(const DirectionalLight* light) { light_.SetDirectionalLight(light); }
-
-	void SetPointLight(const PointLight* light) { light_.SetPointLight(light); }
-
-	void SetSpotLight(const SpotLight* light) { light_.SetSpotLight(light); }
+	void SetLight(const ILight* light);
 
 private:
 

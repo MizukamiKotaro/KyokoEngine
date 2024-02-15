@@ -292,6 +292,9 @@
     <Filter Include="Engine\Base\DescriptorHeapManager\Descriptor">
       <UniqueIdentifier>{8ad1c504-0a5b-4b51-9de9-a4f6ed7da697}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Light\ILight">
+      <UniqueIdentifier>{24249019-e7a4-4ea4-b49a-945856f0e6b7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -548,6 +551,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Base\DescriptorHeapManager\DescriptorHeaps\DescriptorHeaps.cpp">
       <Filter>Engine\Base\DescriptorHeapManager\DescriptorHeaps</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Light\ILight\ILight.cpp">
+      <Filter>Engine\Light\ILight</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -850,6 +856,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Base\DescriptorHeapManager\Descriptor\Descriptor.h">
       <Filter>Engine\Base\DescriptorHeapManager\Descriptor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Light\ILight\ILight.h">
+      <Filter>Engine\Light\ILight</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

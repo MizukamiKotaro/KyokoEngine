@@ -174,6 +174,11 @@ void Particle::GenerateParticle()
 	emitter.countTime_++;
 }
 
+void Particle::SetLight(const ILight* light)
+{
+	light_.SetLight(light);
+}
+
 void Particle::CreateSRV()
 {
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};

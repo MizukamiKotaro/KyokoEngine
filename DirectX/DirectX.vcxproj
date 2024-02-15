@@ -143,6 +143,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Input\Input.cpp" />
     <ClCompile Include="Engine\Kyoko.cpp" />
     <ClCompile Include="Engine\Light\DirectionalLight\DirectionalLight.cpp" />
+    <ClCompile Include="Engine\Light\ILight\ILight.cpp" />
     <ClCompile Include="Engine\Light\LightSingleton\LightSingleton.cpp" />
     <ClCompile Include="Engine\Light\Light\Light.cpp" />
     <ClCompile Include="Engine\Light\PointLight\PointLight.cpp" />
@@ -236,6 +237,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Input\Input.h" />
     <ClInclude Include="Engine\Kyoko.h" />
     <ClInclude Include="Engine\Light\DirectionalLight\DirectionalLight.h" />
+    <ClInclude Include="Engine\Light\ILight\ILight.h" />
     <ClInclude Include="Engine\Light\LightSingleton\LightSingleton.h" />
     <ClInclude Include="Engine\Light\Light\Light.h" />
     <ClInclude Include="Engine\Light\PointLight\PointLight.h" />

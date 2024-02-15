@@ -16,18 +16,17 @@ void AudioManager::Initialize() {
 	hr = xAudio2_->CreateMasteringVoice(&masterVoice_);
 	assert(SUCCEEDED(hr));
 
-	for (int i = 0; i < kSoundVoiceMaxNum; i++) {
-		voices_[i] = std::make_unique<Voice>();
-	}
-
 	Audio::StaticInitialize();
 }
 
 void AudioManager::Update()
 {
-	for (uint32_t i = 0; i < kSoundVoiceMaxNum; i++) {
-		if (!IsPlaying(i)) {
-			DestroyVoice(i);
+	for (const std::unique_ptr<Voice>& voice : voices_) {
+		if (!IsPlaying(voice->handle)) {
+			if (voice->sourceVoice) {
+				voice->sourceVoice->DestroyVoice();
+				voice->sourceVoice = nullptr;
+			}
 		}
 	}
 }
@@ -36,8 +35,8 @@ void AudioManager::Finalize() {
 
 	xAudio2_.Reset();
 
-	for (SoundData soundData : soundDatas_) {
-		Unload(&soundData);
+	for (const std::unique_ptr<SoundData>& soundData : soundDatas_) {
+		Unload(soundData.get());
 	}
 }
 
@@ -45,13 +44,11 @@ uint32_t AudioManager::LoadWave(const std::string& filename) {
 
 	std::string fileName = directoryPath_ + filename;
 
-	for (uint32_t soundDataNum = 0; soundDataNum < static_cast<uint32_t>(soundDatas_.size()); soundDataNum++) {
-
-		if (soundDatas_[soundDataNum].name == fileName) {
-			return soundDataNum;
+	for (const std::unique_ptr<SoundData>& soundData : soundDatas_) {
+		if (soundData->name == fileName) {
+			return soundData->handle;
 		}
 	}
-
 
 	std::ifstream file;
 
@@ -105,10 +102,11 @@ uint32_t AudioManager::LoadWave(const std::string& filename) {
 	soundData.pBuffer = pBuffer;
 	soundData.bufferSize = data.size;
 	soundData.name = fileName;
+	soundData.handle = static_cast<uint32_t>(soundDatas_.size());
 
-	soundDatas_.push_back(soundData);
+	soundDatas_.push_back(std::make_unique<SoundData>(soundData));
 
-	return static_cast<uint32_t>(soundDatas_.size() - 1);
+	return soundDatas_.back()->handle;
 
 }
 
@@ -121,18 +119,37 @@ void AudioManager::Unload(SoundData* soundData) {
 
 void AudioManager::DestroyVoice(uint32_t handle)
 {
-	if (voices_[handle]->sourceVoice) {
-		voices_[handle]->sourceVoice->DestroyVoice();
-		voices_[handle]->sourceVoice = nullptr;
+	for (const std::unique_ptr<Voice>& voice : voices_) {
+		if (voice->handle == handle) {
+			if (voice->sourceVoice) {
+				voice->sourceVoice->DestroyVoice();
+				voice->sourceVoice = nullptr;
+			}
+			break;
+		}
 	}
 }
 
 AudioManager::Voice* AudioManager::FindUnusedVoice()
 {
-	for (int i = 0; i < kSoundVoiceMaxNum; i++) {
-		if (voices_[i]->sourceVoice == nullptr) {
-			voices_[i]->handle = i;
-			return voices_[i].get();
+	for (const std::unique_ptr<Voice>& voice : voices_) {
+		if (!voice->sourceVoice) {
+			return voice.get();
+		}
+	}
+	Voice voice;
+	voice.sourceVoice = nullptr;
+	voice.handle = static_cast<uint32_t>(voices_.size());
+	voices_.push_back(std::make_unique<Voice>(voice));
+
+	return voices_.back().get();
+}
+
+AudioManager::SoundData* AudioManager::FindSoundData(uint32_t handle)
+{
+	for (const std::unique_ptr<SoundData>& soundData : soundDatas_) {
+		if (soundData->handle == handle) {
+			return soundData.get();
 		}
 	}
 	return nullptr;
@@ -142,15 +159,15 @@ uint32_t AudioManager::Play(uint32_t soundDataHandle, bool loopFlag, float volum
 
 	HRESULT hr;
 
-	//voices_.push_back(std::make_unique<Voice>());
 	Voice* voice = FindUnusedVoice();
+	SoundData* soundData = FindSoundData(soundDataHandle);
 
-	hr = xAudio2_->CreateSourceVoice(&voice->sourceVoice, &soundDatas_[soundDataHandle].wfex);
+	hr = xAudio2_->CreateSourceVoice(&voice->sourceVoice, &soundData->wfex);
 	assert(SUCCEEDED(hr));
 
 	XAUDIO2_BUFFER buf{};
-	buf.pAudioData = soundDatas_[soundDataHandle].pBuffer.data();
-	buf.AudioBytes = soundDatas_[soundDataHandle].bufferSize;
+	buf.pAudioData = soundData->pBuffer.data();
+	buf.AudioBytes = soundData->bufferSize;
 	buf.Flags = XAUDIO2_END_OF_STREAM;
 
 	if (loopFlag) {
@@ -163,8 +180,6 @@ uint32_t AudioManager::Play(uint32_t soundDataHandle, bool loopFlag, float volum
 	assert(SUCCEEDED(hr));
 	hr = voice->sourceVoice->SetVolume(volume);
 
-	//voices_.back()->handle = static_cast<uint32_t>(voices_.size() - 1);
-
 	return voice->handle;
 }
 
@@ -175,28 +190,43 @@ void AudioManager::Stop(uint32_t voiceHandle) {
 
 bool AudioManager::IsPlaying(uint32_t voiceHandle)
 {
-	if (voices_[voiceHandle]->sourceVoice) {
-		XAUDIO2_VOICE_STATE state{};
-		voices_[voiceHandle]->sourceVoice->GetState(&state);
-		if (state.BuffersQueued != 0) {
-			return true;
+	for (const std::unique_ptr<Voice>& voice : voices_) {
+		if (voice->handle == voiceHandle) {
+			if (voice->sourceVoice) {
+				XAUDIO2_VOICE_STATE state{};
+				voice->sourceVoice->GetState(&state);
+				if (state.BuffersQueued != 0) {
+					return true;
+				}
+				return false;
+			}
 		}
 	}
-
+	
 	return false;
 }
 
 void AudioManager::Pause(uint32_t voiceHandle)
 {
-	if (voices_[voiceHandle]->sourceVoice) {
-		voices_[voiceHandle]->sourceVoice->Stop();
+	for (const std::unique_ptr<Voice>& voice : voices_) {
+		if (voice->handle == voiceHandle) {
+			if (voice->sourceVoice) {
+				voice->sourceVoice->Stop();
+				break;
+			}
+		}
 	}
 }
 
 void AudioManager::ReStart(uint32_t voiceHandle)
 {
-	if (voices_[voiceHandle]->sourceVoice) {
-		voices_[voiceHandle]->sourceVoice->Start();
+	for (const std::unique_ptr<Voice>& voice : voices_) {
+		if (voice->handle == voiceHandle) {
+			if (voice->sourceVoice) {
+				voice->sourceVoice->Start();
+				break;
+			}
+		}
 	}
 }
 

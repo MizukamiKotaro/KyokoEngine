@@ -44,7 +44,7 @@ Model::~Model()
 	materialResource_->Release();
 }
 
-void Model::FirstInitialize()
+void Model::StaticInitialize()
 {
 	modelDataManager_ = ModelDataManager::GetInstance();
 	commandList_ = DirectXBase::GetInstance()->GetCommandList();
@@ -112,6 +112,11 @@ void Model::SetModelData(const ModelData* modelData)
 	texture_ = modelData_->texture;
 
 	srvGPUDescriptorHandle_ = texture_->handles_->gpuHandle;
+}
+
+void Model::SetLight(const ILight* light)
+{
+	light_.SetLight(light);
 }
 
 void Model::CreateResources()

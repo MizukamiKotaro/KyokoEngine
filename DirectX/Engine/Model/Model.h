@@ -62,7 +62,7 @@ public:
 	// namespace省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 
-	static void FirstInitialize();
+	static void StaticInitialize();
 
 	void Initialize();
 
@@ -82,18 +82,13 @@ public:
 
 	void SetModelData(const ModelData* modelData);
 
-	void SetDirectionalLight(const DirectionalLight* light) { light_.SetDirectionalLight(light); }
-
-	void SetPointLight(const PointLight* light) { light_.SetPointLight(light); }
-
-	void SetSpotLight(const SpotLight* light) { light_.SetSpotLight(light); }
+	void SetLight(const ILight* light);
 
 	void UnUsedLight() { materialData_->enableLighting = 0; }
 
 	void SetColor(const Vector4& color) { materialData_->color = color; }
 
 private:
-
 	ComPtr<ID3D12Resource> materialResource_;
 	Material* materialData_;
 

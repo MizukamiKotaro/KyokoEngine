@@ -2,17 +2,17 @@
 
 #include "Vector3.h"
 #include "Vector4.h"
-#include <wrl.h>
-#include <d3d12.h>
-#include <memory>
 #include "Matrix4x4.h"
+#include "ILight/ILight.h"
 #include "GraphicsPipelines/BlendModeConfig.h"
-#include "GraphicsPipelines/PipelineTypeConfig.h"
 
 class Camera;
 class ModelData;
+enum class PipelineType;
+class GraphicsPipelineManager;
+class ModelDataManager;
 
-class PointLight
+class PointLight : public ILight
 {
 public:
 	struct PointLightData
@@ -32,33 +32,31 @@ public:
 	};
 
 	PointLight();
-	~PointLight();
+	~PointLight() override;
 
-	void Update();
+	static void StaticInitialize();
+
+	void Update() override;
 
 	void Draw(const Camera& camera, BlendMode blendMode = BlendMode::kBlendModeNormal);
 
-	const D3D12_GPU_VIRTUAL_ADDRESS GetGPUVirtualAddress() const { return resource_->GetGPUVirtualAddress(); }
-
 private:
-
 	void CreateTransformationResource();
 
 public:
 	PointLightData* light_ = nullptr;
+	bool isDraw_;
 
 private:
-
-	static const PipelineType piplineType = PipelineType::POINT_LIGHT;
-
-	Microsoft::WRL::ComPtr<ID3D12Resource> resource_;
+	static const PipelineType piplineType;
+	static ID3D12GraphicsCommandList* commandList_;
+	static GraphicsPipelineManager* gpoManager_;
+	static ModelDataManager* modelDataManager_;
 
 	Microsoft::WRL::ComPtr<ID3D12Resource> transformationResource_;
 	TransformationMatrix* transformationData_;
 
-	const ModelData* modelData_;
-
+	static const ModelData* modelData_;
 	static const Matrix4x4 scaleMat_;
-
 	static const Matrix4x4 scaleInverseMat_;
 };

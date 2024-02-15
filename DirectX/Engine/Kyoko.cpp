@@ -11,9 +11,10 @@
 #include "Utils/RandomGenerator/RandomGenerator.h"
 #include "GraphicsPipelines/GraphicsPiplineManager/GraphicsPiplineManager.h"
 #include "AudioManager/AudioManager.h"
-#include "Light/Light.h"
 #include "FrameInfo/FrameInfo.h"
 #include "Model.h"
+#include "PostEffect/BasePostEffect/BasePostEffect.h"
+#include "LightSingleton/LightSingleton.h"
 
 static ResourceLeackChecker leakCheck;
 
@@ -39,7 +40,8 @@ void Kyoko::Engine::Initialize(const char* windowName, int width, int height)
 	gpoManager = GraphicsPipelineManager::GetInstance();
 	gpoManager->Initialize();
 
-	Model::FirstInitialize();
+	Model::StaticInitialize();
+	BasePostEffect::StaticInitialize();
 
 	audioManager = AudioManager::GetInstance();
 	audioManager->Initialize();
@@ -134,5 +136,4 @@ void Kyoko::Engine::Finalize()
 	winInfo->Finalize();
 
 #pragma endregion 基盤システムの終了
-
 }

@@ -128,4 +128,3 @@ void GraphicsPipelineManager::SetBlendMode(PipelineType type, uint32_t blendMode
 		break;
 	}
 }
-
