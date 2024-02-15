@@ -3,10 +3,13 @@
 #include "Engine/Base/DirectXBase/DirectXBase.h"
 #include "Engine/Base/DescriptorHeapManager/DescriptorHeapManager.h"
 #include "Camera.h"
+#include "GraphicsPipelines/PipelineTypeConfig.h"
+#include "DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
+#include "GraphicsPipelines/GraphicsPiplineManager/GraphicsPiplineManager.h"
 
 HighLumi::HighLumi()
 {
-	piplineType_ = GraphicsPiplineManager::PiplineType::HIGH_LUMI;
+	piplineType_ = PipelineType::HIGH_LUMI;
 
 	CreatePostEffect();
 }
@@ -27,7 +30,7 @@ void HighLumi::Draw(BlendMode blendMode)
 	transformData_->WVP = worldMat_ * Camera::GetOrthographicMat();
 	materialData_->uvTransform = Matrix4x4::MakeAffinMatrix({ uvScale_.x,uvScale_.y,0.0f }, { 0.0f,0.0f,uvRotate_ }, { uvTranslate_.x,uvTranslate_.y,0.0f });
 
-	GraphicsPiplineManager::GetInstance()->SetBlendMode(piplineType_, static_cast<uint32_t>(blendMode));
+	gpoManager_->SetBlendMode(piplineType_, static_cast<uint32_t>(blendMode));
 
 	ID3D12GraphicsCommandList* commandList = DirectXBase::GetInstance()->GetCommandList();
 

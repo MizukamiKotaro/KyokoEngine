@@ -3,6 +3,8 @@
 
 DirectionalLight::DirectionalLight()
 {
+	lightType_ = LightType::kDirectionalLight;
+
 	//平行光源用のリソースを作る。
 	resource_ = DirectXBase::CreateBufferResource(sizeof(DirectionalLightData));
 	//データを書き込む
@@ -16,10 +18,7 @@ DirectionalLight::DirectionalLight()
 	light_->intensity = 1.0f;
 }
 
-DirectionalLight::~DirectionalLight()
-{
-	resource_->Release();
-}
+DirectionalLight::~DirectionalLight() {}
 
 void DirectionalLight::Update()
 {

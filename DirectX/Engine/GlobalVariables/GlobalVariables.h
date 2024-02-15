@@ -1,9 +1,10 @@
 #pragma once
-#include "../Utils/Math/Vector2.h"
-#include "../Utils/Math/Vector3.h"
 #include <variant>
 #include <map>
 #include <string>
+
+class Vector2;
+class Vector3;
 
 class GlobalVariables {
 public:
@@ -42,7 +43,6 @@ private:
 	GlobalVariables& operator=(const GlobalVariables& obj) = delete;
 
 private:
-
 
 	using Item = std::variant<int32_t, float, Vector2, Vector3>;
 

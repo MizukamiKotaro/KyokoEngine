@@ -1,10 +1,10 @@
 #pragma once
-#include "Vector3.h"
-#include "Quaternion.h"
 
-class  Transform;
+class Vector3;
+class Quaternion;
+class Transform;
 
-struct Matrix4x4 {
+class Matrix4x4 {
 public:
 	enum RotateType {
 		kXYZ,
@@ -70,7 +70,7 @@ public:
 
 	static Matrix4x4 MakeRotateMatrix(const Quaternion& quaternion);
 
-	static Vector3 RotateVector(const Vector3& vector, const Quaternion& quaternion) { return Matrix4x4::Multiply(vector, MakeRotateMatrix(quaternion)); }
+	static Vector3 RotateVector(const Vector3& vector, const Quaternion& quaternion);
 
 public:
 	float m[4][4];

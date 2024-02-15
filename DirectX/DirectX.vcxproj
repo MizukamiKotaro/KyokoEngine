@@ -114,11 +114,18 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Engine\Audio\Audio.cpp" />
+    <ClCompile Include="Engine\Audio\AudioManager\AudioManager.cpp" />
     <ClCompile Include="Engine\Base\DebugLog\DebugLog.cpp" />
     <ClCompile Include="Engine\Base\DescriptorHeapManager\DescriptorHeapManager.cpp" />
+    <ClCompile Include="Engine\Base\DescriptorHeapManager\DescriptorHeaps\DescriptorHeaps.cpp" />
     <ClCompile Include="Engine\Base\DescriptorHeapManager\DescriptorHeap\DescriptorHeap.cpp" />
     <ClCompile Include="Engine\Base\DirectXBase\DirectXBase.cpp" />
     <ClCompile Include="Engine\Base\WindowsInfo\WindowsInfo.cpp" />
+    <ClCompile Include="Engine\CollisionSystem\BaseColliderShapeType\BaseColliderShapeType.cpp" />
+    <ClCompile Include="Engine\CollisionSystem\ColliderShapes\ColliderShapeBox2D\ColliderShapeBox2D.cpp" />
+    <ClCompile Include="Engine\CollisionSystem\ColliderShapes\ColliderShapeMapChip2D\ColliderShapeMapChip2D.cpp" />
+    <ClCompile Include="Engine\CollisionSystem\Collider\Collider.cpp" />
+    <ClCompile Include="Engine\CollisionSystem\CollisionManager\CollisionManager.cpp" />
     <ClCompile Include="Engine\FrameInfo\FrameInfo.cpp" />
     <ClCompile Include="Engine\GlobalVariables\GlobalVariables.cpp" />
     <ClCompile Include="Engine\GraphicsPipelines\BlurGraphicsPipeline\BlurGraphicsPipeline.cpp" />
@@ -136,6 +143,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Input\Input.cpp" />
     <ClCompile Include="Engine\Kyoko.cpp" />
     <ClCompile Include="Engine\Light\DirectionalLight\DirectionalLight.cpp" />
+    <ClCompile Include="Engine\Light\ILight\ILight.cpp" />
     <ClCompile Include="Engine\Light\LightSingleton\LightSingleton.cpp" />
     <ClCompile Include="Engine\Light\Light\Light.cpp" />
     <ClCompile Include="Engine\Light\PointLight\PointLight.cpp" />
@@ -194,14 +202,25 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Audio\Audio.h" />
+    <ClInclude Include="Engine\Audio\AudioManager\AudioManager.h" />
     <ClInclude Include="Engine\Base\DebugLog\DebugLog.h" />
+    <ClInclude Include="Engine\Base\DescriptorHeapManager\DescriptorHandles\DescriptorHandles.h" />
     <ClInclude Include="Engine\Base\DescriptorHeapManager\DescriptorHeapManager.h" />
+    <ClInclude Include="Engine\Base\DescriptorHeapManager\DescriptorHeaps\DescriptorHeaps.h" />
     <ClInclude Include="Engine\Base\DescriptorHeapManager\DescriptorHeap\DescriptorHeap.h" />
+    <ClInclude Include="Engine\Base\DescriptorHeapManager\Descriptor\Descriptor.h" />
     <ClInclude Include="Engine\Base\DirectXBase\DirectXBase.h" />
     <ClInclude Include="Engine\Base\ResourceLeakChecker.h" />
     <ClInclude Include="Engine\Base\WindowsInfo\WindowsInfo.h" />
+    <ClInclude Include="Engine\CollisionSystem\BaseColliderShapeType\BaseColliderShapeType.h" />
+    <ClInclude Include="Engine\CollisionSystem\ColliderShapes\ColliderShapeBox2D\ColliderShapeBox2D.h" />
+    <ClInclude Include="Engine\CollisionSystem\ColliderShapes\ColliderShapeMapChip2D\ColliderShapeMapChip2D.h" />
+    <ClInclude Include="Engine\CollisionSystem\Collider\Collider.h" />
+    <ClInclude Include="Engine\CollisionSystem\CollisionConfig\CollisionConfig.h" />
+    <ClInclude Include="Engine\CollisionSystem\CollisionManager\CollisionManager.h" />
     <ClInclude Include="Engine\FrameInfo\FrameInfo.h" />
     <ClInclude Include="Engine\GlobalVariables\GlobalVariables.h" />
+    <ClInclude Include="Engine\GraphicsPipelines\BlendModeConfig.h" />
     <ClInclude Include="Engine\GraphicsPipelines\BlurGraphicsPipeline\BlurGraphicsPipeline.h" />
     <ClInclude Include="Engine\GraphicsPipelines\ContrastGraphicsPipeline\ContrastGraphicsPipeline.h" />
     <ClInclude Include="Engine\GraphicsPipelines\GaussianBlurGraphicsPipeline\GaussianBlurGraphicsPipeline.h" />
@@ -210,6 +229,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\GraphicsPipelines\HighLumiGraphicsPipeline\HighLumiGraphicsPipeline.h" />
     <ClInclude Include="Engine\GraphicsPipelines\ModelGraphicsPipline\ModelGraphicsPipline.h" />
     <ClInclude Include="Engine\GraphicsPipelines\ParticleGraphicsPipeline\ParticleGraphicsPipeline.h" />
+    <ClInclude Include="Engine\GraphicsPipelines\PipelineTypeConfig.h" />
     <ClInclude Include="Engine\GraphicsPipelines\PointLightGraphicsPipline\PointLightGraphicsPipline.h" />
     <ClInclude Include="Engine\GraphicsPipelines\SpriteGraphicsPipeline\SpriteGraphicsPipeline.h" />
     <ClInclude Include="Engine\GraphicsPipelines\SpotLightGraphicsPipline\SpotLightGraphicsPipline.h" />
@@ -217,13 +237,13 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Input\Input.h" />
     <ClInclude Include="Engine\Kyoko.h" />
     <ClInclude Include="Engine\Light\DirectionalLight\DirectionalLight.h" />
+    <ClInclude Include="Engine\Light\ILight\ILight.h" />
     <ClInclude Include="Engine\Light\LightSingleton\LightSingleton.h" />
     <ClInclude Include="Engine\Light\Light\Light.h" />
     <ClInclude Include="Engine\Light\PointLight\PointLight.h" />
     <ClInclude Include="Engine\Light\SpotLight\SpotLight.h" />
     <ClInclude Include="Engine\Model\ModelData\AnimationData3D.h" />
     <ClInclude Include="Engine\Model\ModelData\BoneData3D.h" />
-    <ClInclude Include="Engine\Model\ModelData\MaterialData3D.h" />
     <ClInclude Include="Engine\Model\ModelData\MeshData3D.h" />
     <ClInclude Include="Engine\Model\ModelData\ModelData.h" />
     <ClInclude Include="Engine\Model\ModelData\ModelDataManager\ModelDataManager.h" />

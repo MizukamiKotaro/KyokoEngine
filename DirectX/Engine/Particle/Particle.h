@@ -16,8 +16,15 @@
 #include "DescriptorHeapManager/DescriptorHeap/DescriptorHeap.h"
 #include "ModelData/ModelData.h"
 #include "Texture.h"
+#include "GraphicsPipelines/BlendModeConfig.h"
+#include "GraphicsPipelines/PipelineTypeConfig.h"
+
+#include "DirectionalLight/DirectionalLight.h"
+#include "PointLight/PointLight.h"
+#include "SpotLight/SpotLight.h"
 
 class Camera;
+class ILight;
 
 class Particle
 {
@@ -78,7 +85,7 @@ public:
 
 
 private:
-	static void PreDraw() { GraphicsPiplineManager::GetInstance()->PreDraw(piplineType); }
+	static void PreDraw() { GraphicsPipelineManager::GetInstance()->PreDraw(piplineType); }
 
 public:
 
@@ -96,11 +103,7 @@ public:
 
 	void GenerateParticle();
 
-	void SetDirectionalLight(const DirectionalLight* light) { light_.SetDirectionalLight(light); }
-
-	void SetPointLight(const PointLight* light) { light_.SetPointLight(light); }
-
-	void SetSpotLight(const SpotLight* light) { light_.SetSpotLight(light); }
+	void SetLight(const ILight* light);
 
 private:
 
@@ -131,7 +134,7 @@ public:
 
 private:
 
-	static const GraphicsPiplineManager::PiplineType piplineType = GraphicsPiplineManager::PiplineType::PARTICLE;
+	static const PipelineType piplineType = PipelineType::PARTICLE;
 
 	static const std::string directoryPath_;
 

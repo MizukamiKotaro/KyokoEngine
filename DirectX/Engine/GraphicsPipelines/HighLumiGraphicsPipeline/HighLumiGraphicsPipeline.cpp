@@ -1,11 +1,10 @@
 #include "HighLumiGraphicsPipeline.h"
-#include "Engine/Base/DirectXBase/DirectXBase.h"
 #include "Engine/Base/DebugLog/DebugLog.h"
+#include <cassert>
 
-HighLumiGraphicsPipeline* HighLumiGraphicsPipeline::GetInstance()
+HighLumiGraphicsPipeline::HighLumiGraphicsPipeline()
 {
-	static HighLumiGraphicsPipeline instance;
-	return &instance;
+	Initialize();
 }
 
 void HighLumiGraphicsPipeline::InitializePSO()
@@ -174,5 +173,4 @@ void HighLumiGraphicsPipeline::InitializePSO()
 		hr = device_->CreateGraphicsPipelineState(&graphicsPipelineStateDesc, IID_PPV_ARGS(graphicsPipelineStates_[i].GetAddressOf()));
 		assert(SUCCEEDED(hr));
 	}
-
 }

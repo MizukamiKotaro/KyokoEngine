@@ -62,7 +62,7 @@ void Game::Update()
 {
 	if (!isStartMusic_) {
 		isStartMusic_ = true;
-		music_->Play(false, 0.3f);
+		music_->Play(0.3f);
 	}
 
 	if (!music_->IsPlaying()) {
@@ -80,7 +80,7 @@ void Game::Update()
 
 		if (!isFinish_) {
 			isFinish_ = true;
-			se_.Play(false, 0.5f);
+			se_.Play(0.5f);
 		}
 
 		if (finishCount_ >= 0.75f) {

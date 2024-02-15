@@ -1,8 +1,6 @@
 #pragma once
-
 #include "BasePostEffect/BasePostEffect.h"
 
-// スプライト
 class Contrast : public BasePostEffect
 {
 public:
@@ -23,16 +21,11 @@ public:
 private:
 
 
-	void CreateContrastRes();
-
-	void CreateResources() override;
-
 private:
-
+	void CreateContrastRes();
+	void CreateResources() override;
+private:
 	ComPtr<ID3D12Resource> contrastResource_;
-	
 public:
 	ContrastData* contrastData_;
-
 };
-

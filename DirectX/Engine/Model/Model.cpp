@@ -5,11 +5,11 @@
 #include "Engine/Base/DirectXBase/DirectXBase.h"
 #include "ModelData/ModelDataManager/ModelDataManager.h"
 #include "Camera.h"
-#include "Externals/imgui/imgui.h"
+#include "DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
 
 ID3D12GraphicsCommandList* Model::commandList_ = nullptr;
 ModelDataManager* Model::modelDataManager_ = nullptr;
-GraphicsPiplineManager* Model::gpoManager_ = nullptr;
+GraphicsPipelineManager* Model::gpoManager_ = nullptr;
 
 Model::Model(const std::string& fileName)
 {
@@ -44,11 +44,11 @@ Model::~Model()
 	materialResource_->Release();
 }
 
-void Model::FirstInitialize()
+void Model::StaticInitialize()
 {
 	modelDataManager_ = ModelDataManager::GetInstance();
 	commandList_ = DirectXBase::GetInstance()->GetCommandList();
-	gpoManager_ = GraphicsPiplineManager::GetInstance();
+	gpoManager_ = GraphicsPipelineManager::GetInstance();
 }
 
 void Model::Initialize()
@@ -112,6 +112,11 @@ void Model::SetModelData(const ModelData* modelData)
 	texture_ = modelData_->texture;
 
 	srvGPUDescriptorHandle_ = texture_->handles_->gpuHandle;
+}
+
+void Model::SetLight(const ILight* light)
+{
+	light_.SetLight(light);
 }
 
 void Model::CreateResources()

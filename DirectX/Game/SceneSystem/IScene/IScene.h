@@ -3,8 +3,8 @@
 #include <memory>
 #include "TextureManager.h"
 #include "ModelDataManager.h"
-#include "Audio.h"
 #include "Input.h"
+#include "Audio.h"
 #include "Camera.h"
 #include <optional>
 #include "Sprite.h"
@@ -58,7 +58,6 @@ protected:
 
 	TextureManager* textureManager_ = nullptr;
 	ModelDataManager* modelDataManager_ = nullptr;
-	AudioManager* audio_ = nullptr;
 	Input* input_ = nullptr;
 
 protected:

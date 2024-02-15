@@ -10,6 +10,7 @@
 #include <numbers>
 #include <algorithm>
 #include "TextureManager.h"
+#include "DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
 
 const std::string Particle::directoryPath_ = "Resources/Texture/";
 
@@ -134,7 +135,7 @@ void Particle::Draw(const Camera& camera, BlendMode blendMode)
 
 	materialData_->uvTransform = uvMatrix_;
 
-	GraphicsPiplineManager::GetInstance()->SetBlendMode(piplineType, static_cast<uint32_t>(blendMode));
+	GraphicsPipelineManager::GetInstance()->SetBlendMode(piplineType, static_cast<uint32_t>(blendMode));
 
 	ID3D12GraphicsCommandList* commandList = DirectXBase::GetInstance()->GetCommandList();
 
@@ -171,6 +172,11 @@ void Particle::GenerateParticle()
 	}
 
 	emitter.countTime_++;
+}
+
+void Particle::SetLight(const ILight* light)
+{
+	light_.SetLight(light);
 }
 
 void Particle::CreateSRV()

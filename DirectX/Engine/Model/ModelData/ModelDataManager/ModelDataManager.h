@@ -1,12 +1,14 @@
 #pragma once
 
-#include "Model/ModelData/ModelData.h"
 #include <vector>
 #include <memory>
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+
+class ModelData;
+class NodeData;
 
 class ModelDataManager 
 {
@@ -43,8 +45,6 @@ private:
 	~ModelDataManager() = default;
 	ModelDataManager(const ModelDataManager&) = delete;
 	ModelDataManager& operator=(const ModelDataManager&) = delete;
-
-	MaterialData LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& fileName);
 
 	void LoadObjFile(const std::string& directoryPath, const std::string& fileName);
 

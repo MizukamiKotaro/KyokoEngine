@@ -1,12 +1,9 @@
 #pragma once
-
 #include "BasePostEffect/BasePostEffect.h"
 
-// スプライト
 class Blur : public BasePostEffect
 {
 public:
-
 	Blur();
 
 	~Blur() override;
@@ -24,23 +21,16 @@ public:
 	// namespace省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 
-	void Draw(BlendMode blendMode = BlendMode::kBlendModeNormal);
-
-
+	void Draw(BlendMode blendMode = BlendMode::kBlendModeNormal) override;
 private:
-
 	void CreateBlurRes();
-
 	void CreateResources() override;
 
 private:
-
 	ComPtr<ID3D12Resource> blurResource_;
 
 public:
 	BlurData* blurData_;
 
 	Vector4 color_;
-
 };
-

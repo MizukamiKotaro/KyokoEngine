@@ -1,89 +1,89 @@
 #include "GraphicsPiplineManager.h"
-#include "Engine/Base/DirectXBase/DirectXBase.h"
-#include <cassert>
-#include "Engine/Base/DebugLog/DebugLog.h"
-#include <format>
 
-GraphicsPiplineManager* GraphicsPiplineManager::GetInstance()
+#include "GraphicsPipelines/ModelGraphicsPipline/ModelGraphicsPipline.h"
+#include "GraphicsPipelines/ParticleGraphicsPipeline/ParticleGraphicsPipeline.h"
+#include "GraphicsPipelines/SpriteGraphicsPipeline/SpriteGraphicsPipeline.h"
+#include "GraphicsPipelines/PointLightGraphicsPipline/PointLightGraphicsPipline.h"
+#include "GraphicsPipelines/SpotLightGraphicsPipline/SpotLightGraphicsPipline.h"
+#include "GraphicsPipelines/ContrastGraphicsPipeline/ContrastGraphicsPipeline.h"
+#include "GraphicsPipelines/HighLumiGraphicsPipeline/HighLumiGraphicsPipeline.h"
+#include "GraphicsPipelines/BlurGraphicsPipeline/BlurGraphicsPipeline.h"
+#include "GraphicsPipelines/GaussianBlurGraphicsPipeline/GaussianBlurGraphicsPipeline.h"
+#include "GraphicsPipelines/PipelineTypeConfig.h"
+
+GraphicsPipelineManager* GraphicsPipelineManager::GetInstance()
 {
-	static GraphicsPiplineManager instance;
+	static GraphicsPipelineManager instance;
 	return &instance;
 }
 
-void GraphicsPiplineManager::Initialize()
+void GraphicsPipelineManager::Initialize()
 {
-	spritePSO_ = SpriteGraphicsPipeline::GetInstance();
-	spritePSO_->Initialize();
+	currentPiplineType_ = PipelineType::SPRITE;
 
-	modelPSO_ = ModelGraphicsPipline::GetInstance();
-	modelPSO_->Initialize();
+	spritePSO_ = std::make_unique<SpriteGraphicsPipeline>();
 
-	particlePSO_ = ParticleGraphicsPipeline::GetInstance();
-	particlePSO_->Initialize();
+	modelPSO_ = std::make_unique<ModelGraphicsPipline>();
 
-	pointLightPSO_ = PointLightGraphicsPipline::GetInstance();
-	pointLightPSO_->Initialize();
+	particlePSO_ = std::make_unique<ParticleGraphicsPipeline>();
 
-	spotLightPSO_ = SpotLightGraphicsPipline::GetInstance();
-	spotLightPSO_->Initialize();
+	pointLightPSO_ = std::make_unique<PointLightGraphicsPipline>();
 
-	contrastPSO_ = ContrastGraphicsPipeline::GetInstance();
-	contrastPSO_->Initialize();
+	spotLightPSO_ = std::make_unique<SpotLightGraphicsPipline>();
 
-	highLumiPSO_ = HighLumiGraphicsPipeline::GetInstance();
-	highLumiPSO_->Initialize();
+	contrastPSO_ = std::make_unique<ContrastGraphicsPipeline>();
 
-	blurPSO_ = BlurGraphicsPipeline::GetInstance();
-	blurPSO_->Initialize();
+	highLumiPSO_ = std::make_unique<HighLumiGraphicsPipeline>();
 
-	gaussianBlurPSO_ = GaussianBlurGraphicsPipeline::GetInstance();
-	gaussianBlurPSO_->Initialize();
+	blurPSO_ = std::make_unique<BlurGraphicsPipeline>();
+
+	gaussianBlurPSO_ = std::make_unique<GaussianBlurGraphicsPipeline>();
 
 	spritePSO_->PreDraw();
 }
 
-void GraphicsPiplineManager::PreDraw()
+void GraphicsPipelineManager::PreDraw()
 {
-	currentPiplineType_ = PiplineType::SPRITE;
+	currentPiplineType_ = PipelineType::SPRITE;
 
 	spritePSO_->PreDraw();
 }
 
-void GraphicsPiplineManager::PreDraw(PiplineType type)
+void GraphicsPipelineManager::PreDraw(PipelineType type)
 {
 	if (currentPiplineType_ != type) {
 		currentPiplineType_ = type;
 
 		switch (type)
 		{
-		case GraphicsPiplineManager::PiplineType::SPRITE:
+		case PipelineType::SPRITE:
 			spritePSO_->PreDraw();
 			break;
-		case GraphicsPiplineManager::PiplineType::MODEL:
+		case PipelineType::MODEL:
 			modelPSO_->PreDraw();
 			break;
-		case GraphicsPiplineManager::PiplineType::PARTICLE:
+		case PipelineType::PARTICLE:
 			particlePSO_->PreDraw();
 			break;
-		case GraphicsPiplineManager::PiplineType::POINT_LIGHT:
+		case PipelineType::POINT_LIGHT:
 			pointLightPSO_->PreDraw();
 			break;
-		case GraphicsPiplineManager::PiplineType::SPOT_LIGHT:
+		case PipelineType::SPOT_LIGHT:
 			spotLightPSO_->PreDraw();
 			break;
-		case GraphicsPiplineManager::PiplineType::CONTRAST:
+		case PipelineType::CONTRAST:
 			contrastPSO_->PreDraw();
 			break;
-		case GraphicsPiplineManager::PiplineType::HIGH_LUMI:
+		case PipelineType::HIGH_LUMI:
 			highLumiPSO_->PreDraw();
 			break;
-		case GraphicsPiplineManager::PiplineType::BLUR:
+		case PipelineType::BLUR:
 			blurPSO_->PreDraw();
 			break;
-		case GraphicsPiplineManager::PiplineType::GAUSSIAN_BLUR:
+		case PipelineType::GAUSSIAN_BLUR:
 			gaussianBlurPSO_->PreDraw();
 			break;
-		case GraphicsPiplineManager::PiplineType::COUNT_PIPLINE_TYPE:
+		case PipelineType::COUNT_PIPLINE_TYPE:
 			break;
 		default:
 			break;
@@ -91,41 +91,40 @@ void GraphicsPiplineManager::PreDraw(PiplineType type)
 	}
 }
 
-void GraphicsPiplineManager::SetBlendMode(PiplineType type, uint32_t blendMode)
+void GraphicsPipelineManager::SetBlendMode(PipelineType type, uint32_t blendMode)
 {
 	switch (type)
 	{
-	case GraphicsPiplineManager::PiplineType::SPRITE:
+	case PipelineType::SPRITE:
 		spritePSO_->SetBlendMode(blendMode);
 		break;
-	case GraphicsPiplineManager::PiplineType::MODEL:
+	case PipelineType::MODEL:
 		modelPSO_->SetBlendMode(blendMode);
 		break;
-	case GraphicsPiplineManager::PiplineType::PARTICLE:
+	case PipelineType::PARTICLE:
 		particlePSO_->SetBlendMode(blendMode);
 		break;
-	case GraphicsPiplineManager::PiplineType::POINT_LIGHT:
+	case PipelineType::POINT_LIGHT:
 		pointLightPSO_->SetBlendMode(blendMode);
 		break;
-	case GraphicsPiplineManager::PiplineType::SPOT_LIGHT:
+	case PipelineType::SPOT_LIGHT:
 		spotLightPSO_->SetBlendMode(blendMode);
 		break;
-	case GraphicsPiplineManager::PiplineType::CONTRAST:
+	case PipelineType::CONTRAST:
 		contrastPSO_->SetBlendMode(blendMode);
 		break;
-	case GraphicsPiplineManager::PiplineType::HIGH_LUMI:
+	case PipelineType::HIGH_LUMI:
 		highLumiPSO_->SetBlendMode(blendMode);
 		break;
-	case GraphicsPiplineManager::PiplineType::BLUR:
+	case PipelineType::BLUR:
 		blurPSO_->SetBlendMode(blendMode);
 		break;
-	case GraphicsPiplineManager::PiplineType::GAUSSIAN_BLUR:
+	case PipelineType::GAUSSIAN_BLUR:
 		gaussianBlurPSO_->SetBlendMode(blendMode);
 		break;
-	case GraphicsPiplineManager::PiplineType::COUNT_PIPLINE_TYPE:
+	case PipelineType::COUNT_PIPLINE_TYPE:
 		break;
 	default:
 		break;
 	}
 }
-

@@ -3,7 +3,7 @@
 #include "Utils/Math/Matrix4x4.h"
 #include <cstdint>
 
-struct Sphere
+class Sphere
 {
 public:
 	/*Sphere(const Vector3& center, const float& radius);

@@ -1,9 +1,8 @@
 #pragma once
 
-struct Vector2
+class Vector2
 {
 public:
-
 
 	Vector2& operator=(const Vector2& obj) {
 		x = obj.x;

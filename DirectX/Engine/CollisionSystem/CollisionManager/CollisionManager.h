@@ -23,11 +23,15 @@ private:
 	CollisionManager(const CollisionManager&) = delete;
 	const CollisionManager& operator=(const CollisionManager&) = delete;
 
+	bool IsNeedCollision(Collider* a, Collider* b)const;
+
 	bool IsMatchedConfig(Collider* a, Collider* b) const;
 
 	bool IsCollision(Collider* a, Collider* b) const;
 
-	bool IsCollisionCircleCircle(Collider* a, Collider* b) const;
+	bool IsCollisionBox2DBox2D(Collider* a, Collider* b) const;
+
+	bool IsCollisionBox2DMapChip2D(Collider* a, Collider* b) const;
 
 private:
 	

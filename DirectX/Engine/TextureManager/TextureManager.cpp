@@ -5,6 +5,7 @@
 #include "Externals/DirectXTex/d3dx12.h"
 #include "Engine/Base/DirectXBase/DirectXBase.h"
 #include "Engine/Base/DescriptorHeapManager/DescriptorHeapManager.h"
+#include "DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
 
 TextureManager* TextureManager::GetInstance()
 {

@@ -7,9 +7,7 @@
 
 class WindowsInfo
 {
-
 public: // 静的メンバ関数
-
 	static WindowsInfo* GetInstance();
 
 	//ウィンドウプロシャープ
@@ -42,4 +40,3 @@ private: // メンバ変数
 	WNDCLASS wndClass_{}; // ウィンドウクラス
 	Vector2 windowSize_;
 };
-

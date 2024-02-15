@@ -13,7 +13,6 @@ void IScene::FirstInit()
 {
 	textureManager_ = TextureManager::GetInstance();
 	modelDataManager_ = ModelDataManager::GetInstance();
-	audio_ = AudioManager::GetInstance();
 	input_ = Input::GetInstance();
 
 	camera_ = std::make_unique<Camera>();

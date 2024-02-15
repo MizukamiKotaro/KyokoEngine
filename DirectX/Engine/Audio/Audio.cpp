@@ -1,206 +1,44 @@
 #include "Audio.h"
-#include <cassert>
-#include <fstream>
+#include "AudioManager/AudioManager.h"
 
-AudioManager* AudioManager::GetInstance() {
-	static AudioManager instance;
-	return &instance;
-}
+AudioManager* Audio::audioManager_ = nullptr;
 
-void AudioManager::Initialize() {
-
-	HRESULT hr = XAudio2Create(&xAudio2_, 0, XAUDIO2_DEFAULT_PROCESSOR);
-	assert(SUCCEEDED(hr));
-	hr = xAudio2_->CreateMasteringVoice(&masterVoice_);
-	assert(SUCCEEDED(hr));
-
-	for (int i = 0; i < kSoundVoiceMaxNum; i++) {
-		voices_[i] = std::make_unique<Voice>();
-	}
-}
-
-void AudioManager::Update()
+void Audio::StaticInitialize()
 {
-	for (uint32_t i = 0; i < kSoundVoiceMaxNum; i++) {
-		if (!IsPlaying(i)) {
-			DestroyVoice(i);
-		}
-	}
+	audioManager_ = AudioManager::GetInstance();
 }
 
-void AudioManager::Finalize() {
-
-	xAudio2_.Reset();
-
-	for (SoundData soundData : soundDatas_) {
-		Unload(&soundData);
-	}
-}
-
-uint32_t AudioManager::LoadWave(const std::string& filename) {
-
-	std::string fileName = directoryPath_ + filename;
-
-	for (uint32_t soundDataNum = 0; soundDataNum < static_cast<uint32_t>(soundDatas_.size()); soundDataNum++) {
-
-		if (soundDatas_[soundDataNum].name == fileName) {
-			return soundDataNum;
-		}
-	}
-
-
-	std::ifstream file;
-
-	file.open(fileName, std::ios_base::binary);
-
-	assert(file.is_open());
-
-	RiffHeader riff;
-	file.read((char*)&riff, sizeof(riff));
-
-	if (strncmp(riff.chunk.id, "RIFF", 4) != 0) {
-		assert(0);
-	}
-
-	if (strncmp(riff.type, "WAVE", 4) != 0) {
-		assert(0);
-	}
-
-	FormatChunk fmt = {};
-
-	file.read((char*)&fmt.chunk, sizeof(ChunkHeader));
-	while (strncmp(fmt.chunk.id, "fmt ", 4) != 0) {
-		// 読み取りチャンクを検出した場合
-		file.seekg(fmt.chunk.size, std::ios_base::cur);
-		// 再読み込み
-		file.read((char*)&fmt.chunk, sizeof(ChunkHeader));
-	}
-
-	std::vector<char> fmtData(fmt.chunk.size);
-	file.read(fmtData.data(), fmt.chunk.size);
-	memcpy(&fmt.fmt, fmtData.data(), sizeof(fmt.fmt));
-
-	ChunkHeader data;
-	file.read((char*)&data, sizeof(data));
-
-	while (strncmp(data.id, "data", 4) != 0) {
-		// 読み取りチャンクを検出した場合
-		file.seekg(data.size, std::ios_base::cur);
-		// 再読み込み
-		file.read((char*)&data, sizeof(data));
-	}
-
-	std::vector<BYTE> pBuffer(data.size);
-	file.read(reinterpret_cast<char*>(pBuffer.data()), data.size);
-
-	file.close();
-
-	SoundData soundData = {};
-
-	soundData.wfex = fmt.fmt;
-	soundData.pBuffer = pBuffer;
-	soundData.bufferSize = data.size;
-	soundData.name = fileName;
-
-	soundDatas_.push_back(soundData);
-
-	return static_cast<uint32_t>(soundDatas_.size() - 1);
-
-}
-
-void AudioManager::Unload(SoundData* soundData) {
-
-	soundData->pBuffer.clear();
-	soundData->bufferSize = 0;
-	soundData->wfex = {};
-}
-
-void AudioManager::DestroyVoice(uint32_t handle)
+void Audio::LoadWave(const std::string& filename)
 {
-	if (voices_[handle]->sourceVoice) {
-		voices_[handle]->sourceVoice->DestroyVoice();
-		voices_[handle]->sourceVoice = nullptr;
-	}
+	soundHandle_ = audioManager_->LoadWave(filename);
 }
 
-AudioManager::Voice* AudioManager::FindUnusedVoice()
+void Audio::Play(float volume, bool isLoop)
 {
-	for (int i = 0; i < kSoundVoiceMaxNum; i++) {
-		if (voices_[i]->sourceVoice == nullptr) {
-			voices_[i]->handle = i;
-			return voices_[i].get();
-		}
-	}
-	return nullptr;
+	voiseHandle_ = audioManager_->Play(soundHandle_, isLoop, volume);
 }
 
-uint32_t AudioManager::Play(uint32_t soundDataHandle, bool loopFlag, float volume) {
-
-	HRESULT hr;
-
-	//voices_.push_back(std::make_unique<Voice>());
-	Voice* voice = FindUnusedVoice();
-
-	hr = xAudio2_->CreateSourceVoice(&voice->sourceVoice, &soundDatas_[soundDataHandle].wfex);
-	assert(SUCCEEDED(hr));
-
-	XAUDIO2_BUFFER buf{};
-	buf.pAudioData = soundDatas_[soundDataHandle].pBuffer.data();
-	buf.AudioBytes = soundDatas_[soundDataHandle].bufferSize;
-	buf.Flags = XAUDIO2_END_OF_STREAM;
-
-	if (loopFlag) {
-		buf.LoopCount = XAUDIO2_LOOP_INFINITE;
-	}
-
-	hr = voice->sourceVoice->SubmitSourceBuffer(&buf);
-	assert(SUCCEEDED(hr));
-	hr = voice->sourceVoice->Start();
-	assert(SUCCEEDED(hr));
-	hr = voice->sourceVoice->SetVolume(volume);
-
-	//voices_.back()->handle = static_cast<uint32_t>(voices_.size() - 1);
-
-	return voice->handle;
-}
-
-void AudioManager::Stop(uint32_t voiceHandle) {
-
-	DestroyVoice(voiceHandle);
-}
-
-bool AudioManager::IsPlaying(uint32_t voiceHandle)
+void Audio::Stop() const
 {
-	if (voices_[voiceHandle]->sourceVoice) {
-		XAUDIO2_VOICE_STATE state{};
-		voices_[voiceHandle]->sourceVoice->GetState(&state);
-		if (state.BuffersQueued != 0) {
-			return true;
-		}
-	}
-
-	return false;
+	audioManager_->Stop(voiseHandle_);
 }
 
-void AudioManager::Pause(uint32_t voiceHandle)
+bool Audio::IsPlaying() const
 {
-	if (voices_[voiceHandle]->sourceVoice) {
-		voices_[voiceHandle]->sourceVoice->Stop();
-	}
+	return audioManager_->IsPlaying(voiseHandle_);
 }
 
-void AudioManager::ReStart(uint32_t voiceHandle)
+void Audio::Pause() const
 {
-	if (voices_[voiceHandle]->sourceVoice) {
-		voices_[voiceHandle]->sourceVoice->Start();
-	}
+	audioManager_->Pause(voiseHandle_);
 }
 
-void AudioManager::SetVolume(uint32_t voiceHandle, float volume) {
-	for (const std::unique_ptr<Voice>& voice : voices_) {
-		if (voice->handle == voiceHandle) {
-			voice->sourceVoice->SetVolume(volume);
-			break;
-		}
-	}
+void Audio::ReStart() const
+{
+	audioManager_->ReStart(voiseHandle_);
+}
+
+void Audio::SetVolume(float volume) const
+{
+	audioManager_->SetVolume(voiseHandle_, volume);
 }

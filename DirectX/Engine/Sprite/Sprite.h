@@ -10,6 +10,9 @@
 #include "GraphicsPipelines/GraphicsPiplineManager/GraphicsPiplineManager.h"
 #include "Texture.h"
 
+#include "GraphicsPipelines/BlendModeConfig.h"
+#include "GraphicsPipelines/PipelineTypeConfig.h"
+
 class Camera;
 
 // スプライト
@@ -40,7 +43,6 @@ public:
 
 	struct TransformationMatrix {
 		Matrix4x4 WVP;
-		//Matrix4x4 World;
 	};
 
 	// namespace省略
@@ -56,7 +58,7 @@ public:
 
 
 private:
-	static void PreDraw() { GraphicsPiplineManager::GetInstance()->PreDraw(piplineType); }
+	static void PreDraw() { GraphicsPipelineManager::GetInstance()->PreDraw(piplineType); }
 
 public:
 
@@ -112,7 +114,7 @@ public:
 
 private:
 
-	static const GraphicsPiplineManager::PiplineType piplineType = GraphicsPiplineManager::PiplineType::SPRITE;
+	static const PipelineType piplineType = PipelineType::SPRITE;
 
 	static const std::string directoryPath_;
 

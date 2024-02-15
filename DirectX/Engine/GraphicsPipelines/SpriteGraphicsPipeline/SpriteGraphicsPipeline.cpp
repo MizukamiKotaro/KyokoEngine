@@ -1,11 +1,10 @@
 #include "SpriteGraphicsPipeline.h"
-#include "Engine/Base/DirectXBase/DirectXBase.h"
 #include "Engine/Base/DebugLog/DebugLog.h"
+#include <cassert>
 
-SpriteGraphicsPipeline* SpriteGraphicsPipeline::GetInstance()
+SpriteGraphicsPipeline::SpriteGraphicsPipeline()
 {
-	static SpriteGraphicsPipeline instance;
-	return &instance;
+	Initialize();
 }
 
 void SpriteGraphicsPipeline::InitializePSO()
@@ -16,8 +15,6 @@ void SpriteGraphicsPipeline::InitializePSO()
 	descriptorRange[0].NumDescriptors = 1; // 数は1つ
 	descriptorRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV; // SRVを使う
 	descriptorRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND; // offsetを自動計算
-
-	//PSO((Graphics)PipelineStateObject)の作成
 
 	//RootSignature作成
 	D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
@@ -85,7 +82,7 @@ void SpriteGraphicsPipeline::InitializePSO()
 	//RasterizerStateの設定
 	D3D12_RASTERIZER_DESC rasterizerDesc{};
 	//裏面（時計回り）を表示
-	rasterizerDesc.CullMode = D3D12_CULL_MODE_BACK;
+	rasterizerDesc.CullMode = D3D12_CULL_MODE_NONE;
 	//三角形の中を塗りつぶす
 	rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
 
@@ -178,5 +175,4 @@ void SpriteGraphicsPipeline::InitializePSO()
 		hr = device_->CreateGraphicsPipelineState(&graphicsPipelineStateDesc, IID_PPV_ARGS(graphicsPipelineStates_[i].GetAddressOf()));
 		assert(SUCCEEDED(hr));
 	}
-
 }

@@ -1,11 +1,10 @@
 #include "ModelGraphicsPipline.h"
-#include "Engine/Base/DirectXBase/DirectXBase.h"
 #include "Engine/Base/DebugLog/DebugLog.h"
+#include <cassert>
 
-ModelGraphicsPipline* ModelGraphicsPipline::GetInstance()
+ModelGraphicsPipline::ModelGraphicsPipline()
 {
-	static ModelGraphicsPipline instance;
-	return &instance;
+	Initialize();
 }
 
 void ModelGraphicsPipline::InitializePSO()
@@ -16,8 +15,6 @@ void ModelGraphicsPipline::InitializePSO()
 	descriptorRange[0].NumDescriptors = 1; // 数は1つ
 	descriptorRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV; // SRVを使う
 	descriptorRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND; // offsetを自動計算
-
-	//PSO((Graphics)PipelineStateObject)の作成
 
 	//RootSignature作成
 	D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
@@ -190,5 +187,4 @@ void ModelGraphicsPipline::InitializePSO()
 		hr = device_->CreateGraphicsPipelineState(&graphicsPipelineStateDesc, IID_PPV_ARGS(graphicsPipelineStates_[i].GetAddressOf()));
 		assert(SUCCEEDED(hr));
 	}
-
 }

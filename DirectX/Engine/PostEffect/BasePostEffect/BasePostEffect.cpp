@@ -8,17 +8,36 @@
 #include "WindowsInfo/WindowsInfo.h"
 #include "Externals/DirectXTex/d3dx12.h"
 #include <algorithm>
+#include "GraphicsPipelines/PipelineTypeConfig.h"
+#include "DescriptorHeapManager/DescriptorHeap/DescriptorHeap.h"
+#include "GraphicsPipelines/GraphicsPiplineManager/GraphicsPiplineManager.h"
 
 const float BasePostEffect::clearColor[4] = { 0.0f,0.0f,0.0f,0.0f };
+
+GraphicsPipelineManager* BasePostEffect::gpoManager_ = nullptr;
+DescriptorHeap* BasePostEffect::srvHeap_ = nullptr;
+DescriptorHeap* BasePostEffect::rtvHeap_ = nullptr;
+DescriptorHeap* BasePostEffect::dsvHeap_ = nullptr;
+ID3D12GraphicsCommandList* BasePostEffect::commandList_ = nullptr;
 
 BasePostEffect::~BasePostEffect()
 {
 	vertexResource_->Release();
 	transformResource_->Release();
 	materialResource_->Release();
-	DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->DeleteDescriptor(srvHandles_);
-	DescriptorHeapManager::GetInstance()->GetRTVDescriptorHeap()->DeleteDescriptor(rtvHandles_);
-	DescriptorHeapManager::GetInstance()->GetDSVDescriptorHeap()->DeleteDescriptor(dsvHandles_);
+	srvHeap_->DeleteDescriptor(srvHandles_);
+	rtvHeap_->DeleteDescriptor(rtvHandles_);
+	dsvHeap_->DeleteDescriptor(dsvHandles_);
+}
+
+void BasePostEffect::StaticInitialize()
+{
+	gpoManager_ = GraphicsPipelineManager::GetInstance();
+	DescriptorHeapManager* descriptorHeapManager = DescriptorHeapManager::GetInstance();
+	srvHeap_ = descriptorHeapManager->GetSRVDescriptorHeap();
+	rtvHeap_ = descriptorHeapManager->GetRTVDescriptorHeap();
+	dsvHeap_ = descriptorHeapManager->GetDSVDescriptorHeap();
+	commandList_ = DirectXBase::GetInstance()->GetCommandList();
 }
 
 void BasePostEffect::Initialize()
@@ -44,67 +63,59 @@ void BasePostEffect::Draw(BlendMode blendMode)
 	transformData_->WVP = worldMat_ * Camera::GetOrthographicMat();
 	materialData_->uvTransform = Matrix4x4::MakeAffinMatrix({ uvScale_.x,uvScale_.y,0.0f }, { 0.0f,0.0f,uvRotate_ }, { uvTranslate_.x,uvTranslate_.y,0.0f });
 
-	GraphicsPiplineManager::GetInstance()->SetBlendMode(piplineType_, static_cast<uint32_t>(blendMode));
-
-	ID3D12GraphicsCommandList* commandList = DirectXBase::GetInstance()->GetCommandList();
+	gpoManager_->SetBlendMode(piplineType_, static_cast<uint32_t>(blendMode));
 
 	//Spriteの描画。変更に必要なものだけ変更する
-	commandList->IASetVertexBuffers(0, 1, &vertexBufferView_); // VBVを設定
+	commandList_->IASetVertexBuffers(0, 1, &vertexBufferView_); // VBVを設定
 	//マテリアルCBufferの場所を設定
-	commandList->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 	//TransformationMatrixCBufferの場所を設定
-	commandList->SetGraphicsRootConstantBufferView(1, transformResource_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(1, transformResource_->GetGPUVirtualAddress());
 
-	commandList->SetGraphicsRootDescriptorTable(2, srvHandles_->gpuHandle);
+	commandList_->SetGraphicsRootDescriptorTable(2, srvHandles_->gpuHandle);
 
 	//描画!!!!（DrawCall/ドローコール）
-	commandList->DrawInstanced(6, 1, 0, 0);
+	commandList_->DrawInstanced(6, 1, 0, 0);
 
 }
 
 void BasePostEffect::PreDrawScene()
 {
-
-	ID3D12GraphicsCommandList* commandList = DirectXBase::GetInstance()->GetCommandList();
-
 	// バリアの変更
 	CD3DX12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(texResource_.Get(),
 		D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE,D3D12_RESOURCE_STATE_RENDER_TARGET);
-	commandList->ResourceBarrier(1, &barrier);
+	commandList_->ResourceBarrier(1, &barrier);
 
 	// レンダーターゲットのセット
-	commandList->OMSetRenderTargets(1, &rtvHandles_->cpuHandle, false, &dsvHandles_->cpuHandle);
+	commandList_->OMSetRenderTargets(1, &rtvHandles_->cpuHandle, false, &dsvHandles_->cpuHandle);
 
 	// ビューポートの設定
 	CD3DX12_VIEWPORT viewport = CD3DX12_VIEWPORT(0.0f, 0.0f, size_.x, size_.y);
-	commandList->RSSetViewports(1, &viewport);
+	commandList_->RSSetViewports(1, &viewport);
 
 	// シザリング矩形の設定
 	CD3DX12_RECT rect = CD3DX12_RECT(0, 0, (UINT)size_.x, (UINT)size_.y);
-	commandList->RSSetScissorRects(1, &rect);
+	commandList_->RSSetScissorRects(1, &rect);
 
 	// 全画面クリア
-	commandList->ClearRenderTargetView(rtvHandles_->cpuHandle, clearColor, 0, nullptr);
+	commandList_->ClearRenderTargetView(rtvHandles_->cpuHandle, clearColor, 0, nullptr);
 
 	// 深度バッファクリア
-	commandList->ClearDepthStencilView(dsvHandles_->cpuHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
+	commandList_->ClearDepthStencilView(dsvHandles_->cpuHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 
 	//描画用のDescriptorHeapの設定
-	ID3D12DescriptorHeap* descriptorHeaps[] = { DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->GetHeap() };
-	commandList->SetDescriptorHeaps(1, descriptorHeaps);
+	ID3D12DescriptorHeap* descriptorHeaps[] = { srvHeap_->GetHeap() };
+	commandList_->SetDescriptorHeaps(1, descriptorHeaps);
 
-	GraphicsPiplineManager::GetInstance()->PreDraw();
+	gpoManager_->PreDraw();
 }
 
 void BasePostEffect::PostDrawScene()
 {
-	ID3D12GraphicsCommandList* commandList = DirectXBase::GetInstance()->GetCommandList();
-
 	// バリアの変更
 	CD3DX12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(texResource_.Get(),
 		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
-	commandList->ResourceBarrier(1, &barrier);
-
+	commandList_->ResourceBarrier(1, &barrier);
 }
 
 void BasePostEffect::SetAnchorPoint(const Vector2& anchorpoint)
@@ -253,7 +264,7 @@ void BasePostEffect::CreateTexRes()
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D; // 2Dテクスチャ
 	srvDesc.Texture2D.MipLevels = 1;
 
-	srvHandles_ = DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->GetNewDescriptorHandles();
+	srvHandles_ = srvHeap_->GetNewDescriptorHandles();
 
 	DirectXBase::GetInstance()->GetDevice()->CreateShaderResourceView(texResource_.Get(), &srvDesc, srvHandles_->cpuHandle);
 }
@@ -264,7 +275,7 @@ void BasePostEffect::CreateRTV()
 	rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB; //出力結果をSRGBに変換して書き込む
 	rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D; //2dテクスチャとして書き込む
 
-	rtvHandles_ = DescriptorHeapManager::GetInstance()->GetRTVDescriptorHeap()->GetNewDescriptorHandles();
+	rtvHandles_ = rtvHeap_->GetNewDescriptorHandles();
 
 	DirectXBase::GetInstance()->GetDevice()->CreateRenderTargetView(texResource_.Get(), &rtvDesc, rtvHandles_->cpuHandle);
 }
@@ -292,7 +303,7 @@ void BasePostEffect::CreateDSV()
 	);
 	assert(SUCCEEDED(hr));
 
-	dsvHandles_ = DescriptorHeapManager::GetInstance()->GetDSVDescriptorHeap()->GetNewDescriptorHandles();
+	dsvHandles_ = dsvHeap_->GetNewDescriptorHandles();
 
 	//DSVの設定
 	D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc{};
@@ -300,6 +311,11 @@ void BasePostEffect::CreateDSV()
 	dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D; // 2dTexture
 	// DSVHeapの先頭にDSVを作る
 	DirectXBase::GetInstance()->GetDevice()->CreateDepthStencilView(dsvResource_.Get(), &dsvDesc, dsvHandles_->cpuHandle);
+}
+
+void BasePostEffect::PreDraw() const
+{
+	gpoManager_->PreDraw(piplineType_);
 }
 
 void BasePostEffect::CreateResources()
@@ -315,6 +331,11 @@ void BasePostEffect::CreateResources()
 	CreateRTV();
 
 	CreateDSV();
+}
+
+const D3D12_GPU_DESCRIPTOR_HANDLE BasePostEffect::GetSRVGPUDescriptorHandle() const
+{
+	return srvHandles_->gpuHandle;
 }
 
 void BasePostEffect::CreatePostEffect()

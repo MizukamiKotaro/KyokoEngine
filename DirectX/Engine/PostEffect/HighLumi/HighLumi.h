@@ -1,12 +1,9 @@
 #pragma once
-
 #include "BasePostEffect/BasePostEffect.h"
 
-// スプライト
 class HighLumi : public BasePostEffect
 {
 public:
-
 	HighLumi();
 
 	~HighLumi() override;
@@ -18,7 +15,6 @@ public:
 		float max;
 		int isToWhite;
 	};
-
 private:
 	void CreateHighLumiRes();
 
@@ -31,4 +27,3 @@ public:
 	HighLumiData* highLumiData_;
 
 };
-

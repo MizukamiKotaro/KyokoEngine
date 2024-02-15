@@ -85,9 +85,6 @@
     <Filter Include="Engine\Utils\Camera">
       <UniqueIdentifier>{bd3f7a2a-5f01-4a3f-9eb3-0a34e5258c25}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Utils\Collision">
-      <UniqueIdentifier>{27227e56-f856-4b67-b9e9-02e2c9ee02ec}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Utils\Ease">
       <UniqueIdentifier>{be0771b7-7af5-40f3-b507-782218f07b56}</UniqueIdentifier>
     </Filter>
@@ -277,6 +274,27 @@
     <Filter Include="Game\SceneSystem\SceneFactory">
       <UniqueIdentifier>{a23dbc92-c0b7-43d8-9bf3-80ee674c5738}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Utils\CollisionSystem">
+      <UniqueIdentifier>{6c6820ea-bab9-48a6-9f87-7a333249b3ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Utils\CollisionSystem\Collision">
+      <UniqueIdentifier>{27227e56-f856-4b67-b9e9-02e2c9ee02ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Audio\AudioManager">
+      <UniqueIdentifier>{b4cbcc5e-532a-4bf6-858b-85cf0eed0e46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Base\DescriptorHeapManager\DescriptorHeaps">
+      <UniqueIdentifier>{d8aae76e-4da8-4522-bfcf-da135fab7f81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Base\DescriptorHeapManager\DescriptorHandles">
+      <UniqueIdentifier>{edc29bb7-fff4-4ff5-9fae-8622f90bb767}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Base\DescriptorHeapManager\Descriptor">
+      <UniqueIdentifier>{8ad1c504-0a5b-4b51-9de9-a4f6ed7da697}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Light\ILight">
+      <UniqueIdentifier>{24249019-e7a4-4ea4-b49a-945856f0e6b7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -292,7 +310,7 @@
       <Filter>Engine\Utils\Camera</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Utils\Collision\Collision.cpp">
-      <Filter>Engine\Utils\Collision</Filter>
+      <Filter>Engine\Utils\CollisionSystem\Collision</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Utils\Ease\Ease.cpp">
       <Filter>Engine\Utils\Ease</Filter>
@@ -513,6 +531,30 @@
     <ClCompile Include="Game\SceneSystem\SceneFactory\SceneFactory.cpp">
       <Filter>Game\SceneSystem\SceneFactory</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\CollisionSystem\BaseColliderShapeType\BaseColliderShapeType.cpp">
+      <Filter>Engine\Utils\CollisionSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\CollisionSystem\Collider\Collider.cpp">
+      <Filter>Engine\Utils\CollisionSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\CollisionSystem\ColliderShapes\ColliderShapeBox2D\ColliderShapeBox2D.cpp">
+      <Filter>Engine\Utils\CollisionSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\CollisionSystem\ColliderShapes\ColliderShapeMapChip2D\ColliderShapeMapChip2D.cpp">
+      <Filter>Engine\Utils\CollisionSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\CollisionSystem\CollisionManager\CollisionManager.cpp">
+      <Filter>Engine\Utils\CollisionSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Audio\AudioManager\AudioManager.cpp">
+      <Filter>Engine\Audio\AudioManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Base\DescriptorHeapManager\DescriptorHeaps\DescriptorHeaps.cpp">
+      <Filter>Engine\Base\DescriptorHeapManager\DescriptorHeaps</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Light\ILight\ILight.cpp">
+      <Filter>Engine\Light\ILight</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Utils\Math\calc.h">
@@ -522,7 +564,7 @@
       <Filter>Engine\Utils\Camera</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Utils\Collision\Collision.h">
-      <Filter>Engine\Utils\Collision</Filter>
+      <Filter>Engine\Utils\CollisionSystem\Collision</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Utils\Shape\AABB.h">
       <Filter>Engine\Utils\Shape</Filter>
@@ -653,9 +695,6 @@
     <ClInclude Include="Engine\GraphicsPipelines\SpotLightGraphicsPipline\SpotLightGraphicsPipline.h">
       <Filter>Engine\GraphicsPipelines\SpotLightGraphicsPipline</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Model\ModelData\MaterialData3D.h">
-      <Filter>Engine\Model\ModelData</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Model\ModelData\MeshData3D.h">
       <Filter>Engine\Model\ModelData</Filter>
     </ClInclude>
@@ -781,6 +820,45 @@
     </ClInclude>
     <ClInclude Include="Game\SceneSystem\SceneFactory\SceneFactory.h">
       <Filter>Game\SceneSystem\SceneFactory</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\CollisionSystem\BaseColliderShapeType\BaseColliderShapeType.h">
+      <Filter>Engine\Utils\CollisionSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\CollisionSystem\Collider\Collider.h">
+      <Filter>Engine\Utils\CollisionSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\CollisionSystem\ColliderShapes\ColliderShapeBox2D\ColliderShapeBox2D.h">
+      <Filter>Engine\Utils\CollisionSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\CollisionSystem\ColliderShapes\ColliderShapeMapChip2D\ColliderShapeMapChip2D.h">
+      <Filter>Engine\Utils\CollisionSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\CollisionSystem\CollisionConfig\CollisionConfig.h">
+      <Filter>Engine\Utils\CollisionSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\CollisionSystem\CollisionManager\CollisionManager.h">
+      <Filter>Engine\Utils\CollisionSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Audio\AudioManager\AudioManager.h">
+      <Filter>Engine\Audio\AudioManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GraphicsPipelines\BlendModeConfig.h">
+      <Filter>Engine\GraphicsPipelines</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GraphicsPipelines\PipelineTypeConfig.h">
+      <Filter>Engine\GraphicsPipelines</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Base\DescriptorHeapManager\DescriptorHeaps\DescriptorHeaps.h">
+      <Filter>Engine\Base\DescriptorHeapManager\DescriptorHeaps</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Base\DescriptorHeapManager\DescriptorHandles\DescriptorHandles.h">
+      <Filter>Engine\Base\DescriptorHeapManager\DescriptorHandles</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Base\DescriptorHeapManager\Descriptor\Descriptor.h">
+      <Filter>Engine\Base\DescriptorHeapManager\Descriptor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Light\ILight\ILight.h">
+      <Filter>Engine\Light\ILight</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
