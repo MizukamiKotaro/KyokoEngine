@@ -9,5 +9,6 @@ enum class PipelineType {
 	HIGH_LUMI,
 	BLUR,
 	GAUSSIAN_BLUR,
+	SCAN_NOISE,
 	COUNT_PIPLINE_TYPE,
 };

@@ -5,7 +5,8 @@
 #include "Externals/DirectXTex/d3dx12.h"
 #include "Engine/Base/DirectXBase/DirectXBase.h"
 #include "Engine/Base/DescriptorHeapManager/DescriptorHeapManager.h"
-#include "DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
+#include "DescriptorHeapManager/DescriptorHeap/DescriptorHeap.h"
+#include "Texture.h"
 
 TextureManager* TextureManager::GetInstance()
 {
@@ -16,23 +17,20 @@ TextureManager* TextureManager::GetInstance()
 void TextureManager::Initialize()
 {
 	device_ = DirectXBase::GetInstance()->GetDevice();
+	commandList_ = DirectXBase::GetInstance()->GetCommandList();
+	srvHeap_ = DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap();
 }
 
 void TextureManager::Finalize()
 {
-	for (uint32_t texNum = 0; texNum < static_cast<uint32_t>(textures_.size()); texNum++) {
-		textures_[texNum]->resource_->Release();
-		textures_[texNum]->intermediateResource_->Release();
-	}
+	textures_.clear();
 }
 
 const Texture* TextureManager::LoadTexture(const std::string& filePath)
 {
-	
-	for (uint32_t texNum = 0; texNum < static_cast<uint32_t>(textures_.size()); texNum++) {
-
-		if (textures_[texNum]->filePath_ == filePath) {
-			return textures_[texNum].get();
+	for (const std::unique_ptr<Texture>& texture : textures_) {
+		if (texture->filePath_ == filePath) {
+			return texture.get();
 		}
 	}
 
@@ -52,7 +50,7 @@ const Texture* TextureManager::LoadTexture(const std::string& filePath)
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D; // 2Dテクスチャ
 	srvDesc.Texture2D.MipLevels = UINT(metadata.mipLevels);
 
-	textures_.back()->handles_ = DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->GetNewDescriptorHandles();
+	textures_.back()->handles_ = srvHeap_->GetNewDescriptorHandles();
 
 	device_->CreateShaderResourceView(textures_.back()->resource_.Get(), &srvDesc, textures_.back()->handles_->cpuHandle);
 
@@ -109,10 +107,8 @@ ID3D12Resource* TextureManager::CreateTextureResource(const DirectX::TexMetadata
 }
 
 [[nodiscard]]
-ID3D12Resource* TextureManager::UploadTextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages) {
-
-	ID3D12GraphicsCommandList* commandList_ = DirectXBase::GetInstance()->GetCommandList();
-
+ID3D12Resource* TextureManager::UploadTextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages)
+{
 	std::vector<D3D12_SUBRESOURCE_DATA> subresources;
 	DirectX::PrepareUpload(device_, mipImages.GetImages(), mipImages.GetImageCount(), mipImages.GetMetadata(), subresources);
 	uint64_t intermediateSize = GetRequiredIntermediateSize(texture, 0, UINT(subresources.size()));
@@ -130,5 +126,3 @@ ID3D12Resource* TextureManager::UploadTextureData(ID3D12Resource* texture, const
 	commandList_->ResourceBarrier(1, &barrier);
 	return intermediateResource;
 }
-
-

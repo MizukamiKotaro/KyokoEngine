@@ -9,6 +9,7 @@
 #include "GraphicsPipelines/HighLumiGraphicsPipeline/HighLumiGraphicsPipeline.h"
 #include "GraphicsPipelines/BlurGraphicsPipeline/BlurGraphicsPipeline.h"
 #include "GraphicsPipelines/GaussianBlurGraphicsPipeline/GaussianBlurGraphicsPipeline.h"
+#include "GraphicsPipelines/ScanNoiseGraphicsPipeline/ScanNoiseGraphicsPipeline.h"
 #include "GraphicsPipelines/PipelineTypeConfig.h"
 
 GraphicsPipelineManager* GraphicsPipelineManager::GetInstance()
@@ -38,6 +39,8 @@ void GraphicsPipelineManager::Initialize()
 	blurPSO_ = std::make_unique<BlurGraphicsPipeline>();
 
 	gaussianBlurPSO_ = std::make_unique<GaussianBlurGraphicsPipeline>();
+
+	scanNoisePSO_ = std::make_unique<ScanNoiseGraphicsPipeline>();
 
 	spritePSO_->PreDraw();
 }
@@ -83,6 +86,9 @@ void GraphicsPipelineManager::PreDraw(PipelineType type)
 		case PipelineType::GAUSSIAN_BLUR:
 			gaussianBlurPSO_->PreDraw();
 			break;
+		case PipelineType::SCAN_NOISE:
+			scanNoisePSO_->PreDraw();
+			break;
 		case PipelineType::COUNT_PIPLINE_TYPE:
 			break;
 		default:
@@ -121,6 +127,9 @@ void GraphicsPipelineManager::SetBlendMode(PipelineType type, uint32_t blendMode
 		break;
 	case PipelineType::GAUSSIAN_BLUR:
 		gaussianBlurPSO_->SetBlendMode(blendMode);
+		break;
+	case PipelineType::SCAN_NOISE:
+		scanNoisePSO_->SetBlendMode(blendMode);
 		break;
 	case PipelineType::COUNT_PIPLINE_TYPE:
 		break;

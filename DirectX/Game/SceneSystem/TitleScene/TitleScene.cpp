@@ -1,5 +1,6 @@
 #include "TitleScene.h"
 #include "Kyoko.h"
+#include "ImGuiManager/ImGuiManager.h"
 
 TitleScene::TitleScene()
 {
@@ -23,12 +24,15 @@ TitleScene::TitleScene()
 	post_ = std::make_unique<PostEffect>();
 	texcoodY_ = 0.0f;
 
+	scanNoise_ = std::make_unique<ScanNoise>();
+
 	se_.LoadWave("SE/select.wav");
 }
 
 void TitleScene::Initialize()
 {
 	
+
 }
 
 void TitleScene::Update()
@@ -44,6 +48,15 @@ void TitleScene::Update()
 		ChangeScene(SELECT);
 		se_.Play(0.9f);
 	}
+
+#ifdef _DEBUG
+	ImGui::Begin("スキャンノイズ");
+	ImGui::SliderFloat("スクリーン座標の最小のy座標", &scanNoise_->scanNoiseData_->minY, 0.0f, 1.0f);
+	ImGui::SliderFloat("ノイズを行う縦幅", &scanNoise_->scanNoiseData_->width, 0.0f, 1.0f);
+	ImGui::SliderFloat("ノイズの強さ", &scanNoise_->scanNoiseData_->power, 0.0f, 1.0f);
+	ImGui::End();
+#endif // _DEBUG
+
 }
 
 void TitleScene::Draw()
@@ -52,10 +65,12 @@ void TitleScene::Draw()
 
 	Kyoko::Engine::PreDraw();
 
-	dome_->Draw(camera_.get());
+	/*dome_->Draw(camera_.get());
 	stage_->Draw(camera_.get());
-	screen_->Draw(camera_.get());
+	screen_->Draw(camera_.get());*/
 	//title_->Draw();
+
+	scanNoise_->Draw();
 
 	space_->Draw();
 
@@ -81,5 +96,13 @@ void TitleScene::WrightPostEffect()
 	post_->Draw();
 
 	screen_->PostDrawScene();
+
+	scanNoise_->PreDrawScene();
+
+	dome_->Draw(camera_.get());
+	stage_->Draw(camera_.get());
+	screen_->Draw(camera_.get());
+
+	scanNoise_->PostDrawScene();
 }
 

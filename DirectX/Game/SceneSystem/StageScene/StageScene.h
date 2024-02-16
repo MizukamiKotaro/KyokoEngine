@@ -3,12 +3,12 @@
 #include <memory>
 #include "SceneSystem/IScene/IScene.h"
 #include "Sprite.h"
-#include "PostEffect/Contrast/Contrast.h"
+#include "Contrast/Contrast.h"
 #include "Light/Light.h"
-#include "PostEffect/HighLumi/HighLumi.h"
-#include "PostEffect/Blur/Blur.h"
-#include "PostEffect/GaussianBlur/GaussianBlur.h"
-#include "PostEffect/Bloom/Bloom.h"
+#include "HighLumi/HighLumi.h"
+#include "Blur/Blur.h"
+#include "GaussianBlur/GaussianBlur.h"
+#include "Bloom/Bloom.h"
 #include "PostEffect/PostEffect.h"
 #include "GameElement/Game.h"
 

@@ -34,6 +34,7 @@ private:
 	std::unique_ptr<GraphicsPipeline> highLumiPSO_;
 	std::unique_ptr<GraphicsPipeline> blurPSO_;
 	std::unique_ptr<GraphicsPipeline> gaussianBlurPSO_;
+	std::unique_ptr<GraphicsPipeline> scanNoisePSO_;
 
 	PipelineType currentPiplineType_;
 };

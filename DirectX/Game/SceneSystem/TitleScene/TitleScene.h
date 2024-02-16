@@ -5,7 +5,9 @@
 #include "GameElement/Live/Dome/Dome.h"
 #include "GameElement/Live/Screen/Screen.h"
 #include "Sprite.h"
-#include "PostEffect/HighLumi/HighLumi.h"
+#include "HighLumi/HighLumi.h"
+
+#include "ScanNoise/ScanNoise.h"
 
 class TitleScene : public IScene
 {
@@ -32,6 +34,8 @@ private:
 
 	std::unique_ptr<Sprite> title_;
 	std::unique_ptr<Sprite> space_;
+
+	std::unique_ptr<ScanNoise> scanNoise_;
 
 	Audio se_;
 };

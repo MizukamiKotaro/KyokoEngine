@@ -1,19 +1,15 @@
 #pragma once
-
-#include <wrl.h>
 #include <d3d12.h>
 #include <string>
-#include "Externals/DirectXTex/DirectXTex.h"
-#include <vector>
+#include <list>
 #include <memory>
-#include "Texture.h"
+#include "Externals/DirectXTex/DirectXTex.h"
 
-// namespace省略
-template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
+class Texture;
+class DescriptorHeap;
 
 class TextureManager {
 public:
-
 	static TextureManager* GetInstance();
 
 	void Initialize();
@@ -21,7 +17,6 @@ public:
 	void Finalize();
 
 public:
-
 	const Texture* LoadTexture(const std::string& filePath);
 
 private:
@@ -37,9 +32,9 @@ private:
 	ID3D12Resource* UploadTextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages);
 
 private:
-
 	ID3D12Device* device_ = nullptr;
+	ID3D12GraphicsCommandList* commandList_ = nullptr;
+	DescriptorHeap* srvHeap_ = nullptr;
 
-	std::vector<std::unique_ptr<Texture>> textures_;
-
+	std::list<std::unique_ptr<Texture>> textures_;
 };
