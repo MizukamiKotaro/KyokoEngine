@@ -145,6 +145,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Drawers\PostEffect\Mosaic\Mosaic.cpp" />
     <ClCompile Include="Engine\Drawers\PostEffect\NegaPosiInverse\NegaPosiInverse.cpp" />
     <ClCompile Include="Engine\Drawers\PostEffect\PostEffect\PostEffect.cpp" />
+    <ClCompile Include="Engine\Drawers\PostEffect\RGBShift\RGBShift.cpp" />
     <ClCompile Include="Engine\Drawers\PostEffect\ScanNoise\ScanNoise.cpp" />
     <ClCompile Include="Engine\Drawers\Sprite\Sprite.cpp" />
     <ClCompile Include="Engine\FrameInfo\FrameInfo.cpp" />
@@ -160,6 +161,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\GraphicsPipelines\NegaPosiInverseGraphicsPipeline\NegaPosiInverseGraphicsPipeline.cpp" />
     <ClCompile Include="Engine\GraphicsPipelines\ParticleGraphicsPipeline\ParticleGraphicsPipeline.cpp" />
     <ClCompile Include="Engine\GraphicsPipelines\PointLightGraphicsPipline\PointLightGraphicsPipline.cpp" />
+    <ClCompile Include="Engine\GraphicsPipelines\RGBShiftGraphicsPipeline\RGBShiftGraphicsPipeline.cpp" />
     <ClCompile Include="Engine\GraphicsPipelines\ScanNoiseGraphicsPipeline\ScanNoiseGraphicsPipeline.cpp" />
     <ClCompile Include="Engine\GraphicsPipelines\SpriteGraphicsPipeline\SpriteGraphicsPipeline.cpp" />
     <ClCompile Include="Engine\GraphicsPipelines\SpotLightGraphicsPipline\SpotLightGraphicsPipline.cpp" />
@@ -251,6 +253,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Drawers\PostEffect\Mosaic\Mosaic.h" />
     <ClInclude Include="Engine\Drawers\PostEffect\NegaPosiInverse\NegaPosiInverse.h" />
     <ClInclude Include="Engine\Drawers\PostEffect\PostEffect\PostEffect.h" />
+    <ClInclude Include="Engine\Drawers\PostEffect\RGBShift\RGBShift.h" />
     <ClInclude Include="Engine\Drawers\PostEffect\ScanNoise\ScanNoise.h" />
     <ClInclude Include="Engine\Drawers\Sprite\Sprite.h" />
     <ClInclude Include="Engine\FrameInfo\FrameInfo.h" />
@@ -268,6 +271,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\GraphicsPipelines\ParticleGraphicsPipeline\ParticleGraphicsPipeline.h" />
     <ClInclude Include="Engine\GraphicsPipelines\PipelineTypeConfig.h" />
     <ClInclude Include="Engine\GraphicsPipelines\PointLightGraphicsPipline\PointLightGraphicsPipline.h" />
+    <ClInclude Include="Engine\GraphicsPipelines\RGBShiftGraphicsPipeline\RGBShiftGraphicsPipeline.h" />
     <ClInclude Include="Engine\GraphicsPipelines\ScanNoiseGraphicsPipeline\ScanNoiseGraphicsPipeline.h" />
     <ClInclude Include="Engine\GraphicsPipelines\SpriteGraphicsPipeline\SpriteGraphicsPipeline.h" />
     <ClInclude Include="Engine\GraphicsPipelines\SpotLightGraphicsPipline\SpotLightGraphicsPipline.h" />
@@ -435,6 +439,14 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">6.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="Resources\Shaders\PointLightShader\PointLight.VS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">6.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">6.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\RGBShiftShader\RGBShift.PS.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>

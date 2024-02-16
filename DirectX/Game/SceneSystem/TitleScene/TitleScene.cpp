@@ -27,6 +27,7 @@ TitleScene::TitleScene()
 	scanNoise_ = std::make_unique<ScanNoise>();
 	negaposi_ = std::make_unique<NegaPosiInverse>();
 	mosaic_ = std::make_unique<Mosaic>();
+	rgbShift_ = std::make_unique<RGBShift>();
 
 	se_.LoadWave("SE/select.wav");
 }
@@ -61,6 +62,10 @@ void TitleScene::Update()
 	ImGui::SliderFloat("モザイクのサイズ", &mosaic_->mosaicData_->density, 0.1f, 100.0f);
 	ImGui::SliderInt("正方形にするか", &mosaic_->mosaicData_->isSquare, 0, 1);
 	ImGui::End();
+
+	ImGui::Begin("RGBShift");
+	ImGui::SliderFloat("シフトする大きさ", &rgbShift_->rgbShiftData_->shift, -1.0f, 1.0f);
+	ImGui::End();
 #endif // _DEBUG
 
 }
@@ -77,9 +82,7 @@ void TitleScene::Draw()
 	//title_->Draw();
 
 	//scanNoise_->Draw();
-	mosaic_->Draw();
-
-	space_->Draw();
+	rgbShift_->Draw();
 
 	BlackDraw();
 
@@ -104,18 +107,13 @@ void TitleScene::WrightPostEffect()
 
 	screen_->PostDrawScene();
 
-	scanNoise_->PreDrawScene();
+	rgbShift_->PreDrawScene();
 
 	dome_->Draw(camera_.get());
 	stage_->Draw(camera_.get());
 	screen_->Draw(camera_.get());
+	space_->Draw();
 
-	scanNoise_->PostDrawScene();
-
-	mosaic_->PreDrawScene();
-
-	scanNoise_->Draw();
-
-	mosaic_->PostDrawScene();
+	rgbShift_->PostDrawScene();
 }
 

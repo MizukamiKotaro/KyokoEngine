@@ -328,6 +328,15 @@
     <Filter Include="Engine\Shaders\Mosaic">
       <UniqueIdentifier>{7396ea11-8dfb-4979-8247-7c25204a160f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\GraphicsPipelines\RGBShiftGraphicsPipeline">
+      <UniqueIdentifier>{da928479-6b56-4ba3-a2dd-92a594be9826}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\GraphicsPipelines\RGBShift">
+      <UniqueIdentifier>{717d254c-0187-45c3-a2cc-75cae7742a61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Shaders\RGBShift">
+      <UniqueIdentifier>{abca3444-799c-49e6-ae82-aae3901f11c7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -611,6 +620,12 @@
     </ClCompile>
     <ClCompile Include="Engine\Drawers\PostEffect\Mosaic\Mosaic.cpp">
       <Filter>Engine\Drawer\PostEffect\Mosaic</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\GraphicsPipelines\RGBShiftGraphicsPipeline\RGBShiftGraphicsPipeline.cpp">
+      <Filter>Engine\GraphicsPipelines\RGBShiftGraphicsPipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Drawers\PostEffect\RGBShift\RGBShift.cpp">
+      <Filter>Engine\GraphicsPipelines\RGBShift</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -938,6 +953,12 @@
     <ClInclude Include="Engine\Drawers\PostEffect\Mosaic\Mosaic.h">
       <Filter>Engine\Drawer\PostEffect\Mosaic</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\GraphicsPipelines\RGBShiftGraphicsPipeline\RGBShiftGraphicsPipeline.h">
+      <Filter>Engine\GraphicsPipelines\RGBShiftGraphicsPipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drawers\PostEffect\RGBShift\RGBShift.h">
+      <Filter>Engine\GraphicsPipelines\RGBShift</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\Object3dShader\Object3d.PS.hlsl">
@@ -993,6 +1014,9 @@
     </FxCompile>
     <FxCompile Include="Resources\Shaders\MosaicShader\Mosaic.PS.hlsl">
       <Filter>Engine\Shaders\Mosaic</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\RGBShiftShader\RGBShift.PS.hlsl">
+      <Filter>Engine\Shaders\RGBShift</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

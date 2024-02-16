@@ -12,6 +12,7 @@
 #include "GraphicsPipelines/ScanNoiseGraphicsPipeline/ScanNoiseGraphicsPipeline.h"
 #include "GraphicsPipelines/NegaPosiInverseGraphicsPipeline/NegaPosiInverseGraphicsPipeline.h"
 #include "GraphicsPipelines/MosaicGraphicsPipeline/MosaicGraphicsPipeline.h"
+#include "GraphicsPipelines/RGBShiftGraphicsPipeline/RGBShiftGraphicsPipeline.h"
 #include "GraphicsPipelines/PipelineTypeConfig.h"
 
 GraphicsPipelineManager* GraphicsPipelineManager::GetInstance()
@@ -36,6 +37,7 @@ void GraphicsPipelineManager::Initialize()
 	pipelineMap_[PipelineType::SCAN_NOISE] = std::make_unique<ScanNoiseGraphicsPipeline>();
 	pipelineMap_[PipelineType::NEGA_POSI_INVERSE] = std::make_unique<NegaPosiInverseGraphicsPipeline>();
 	pipelineMap_[PipelineType::MOSAIC] = std::make_unique<MosaicGraphicsPipeline>();
+	pipelineMap_[PipelineType::RGB_SHIFT] = std::make_unique<RGBShiftGraphicsPipeline>();
 
 	pipelineMap_[PipelineType::SPRITE]->PreDraw();
 }
