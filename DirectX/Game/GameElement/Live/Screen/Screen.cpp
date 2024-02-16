@@ -9,7 +9,6 @@ Screen::Screen()
 	screen_->SetTexture(TextureManager::GetInstance()->LoadTexture("Resources/Texture/white.png"));
 	screen_->transform_.translate_ = { 0.0f,4.0f,4.0f };
 	screen_->transform_.scale_ = { 3.2f * 1.4f,1.8f * 1.4f,1.0f };
-	screen_->transform_.rotate_.y = std::numbers::pi_v<float>;
 	screen_->Update();
 	screen_->UnUsedLight();
 	screen_->SetColor(Vector4{ 1.0f,1.0f,1.0f,1.0f });

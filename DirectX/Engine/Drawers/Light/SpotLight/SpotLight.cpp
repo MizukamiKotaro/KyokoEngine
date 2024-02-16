@@ -67,7 +67,7 @@ void SpotLight::Draw(const Camera& camera, BlendMode blendMode)
 
 		Matrix4x4 billboardMat{};
 
-		billboardMat = Matrix4x4::MakeRotateYMatrix(std::numbers::pi_v<float>) * camera.transform_.worldMat_;
+		billboardMat = camera.transform_.worldMat_;
 
 		billboardMat.m[3][0] = 0.0f;
 		billboardMat.m[3][1] = 0.0f;

@@ -94,7 +94,7 @@ void Particle::Draw(const Camera& camera, BlendMode blendMode)
 			billboardMat = Matrix4x4::MakeRotateXMatrix(pi) * camera.transform_.worldMat_;
 			break;
 		case Particle::BillboardType::Y:
-			billboardMat = Matrix4x4::MakeRotateYMatrix(pi) * camera.transform_.worldMat_;
+			billboardMat = camera.transform_.worldMat_;
 			break;
 		case Particle::BillboardType::Z:
 			billboardMat = Matrix4x4::MakeRotateZMatrix(pi) * camera.transform_.worldMat_;
