@@ -25,13 +25,14 @@ TitleScene::TitleScene()
 	texcoodY_ = 0.0f;
 
 	scanNoise_ = std::make_unique<ScanNoise>();
+	negaposi_ = std::make_unique<NegaPosiInverse>();
+	mosaic_ = std::make_unique<Mosaic>();
 
 	se_.LoadWave("SE/select.wav");
 }
 
 void TitleScene::Initialize()
 {
-	
 
 }
 
@@ -55,6 +56,11 @@ void TitleScene::Update()
 	ImGui::SliderFloat("ノイズを行う縦幅", &scanNoise_->scanNoiseData_->width, 0.0f, 1.0f);
 	ImGui::SliderFloat("ノイズの強さ", &scanNoise_->scanNoiseData_->power, 0.0f, 1.0f);
 	ImGui::End();
+
+	ImGui::Begin("モザイク");
+	ImGui::SliderFloat("モザイクのサイズ", &mosaic_->mosaicData_->density, 0.1f, 100.0f);
+	ImGui::SliderInt("正方形にするか", &mosaic_->mosaicData_->isSquare, 0, 1);
+	ImGui::End();
 #endif // _DEBUG
 
 }
@@ -70,7 +76,8 @@ void TitleScene::Draw()
 	screen_->Draw(camera_.get());*/
 	//title_->Draw();
 
-	scanNoise_->Draw();
+	//scanNoise_->Draw();
+	mosaic_->Draw();
 
 	space_->Draw();
 
@@ -104,5 +111,11 @@ void TitleScene::WrightPostEffect()
 	screen_->Draw(camera_.get());
 
 	scanNoise_->PostDrawScene();
+
+	mosaic_->PreDrawScene();
+
+	scanNoise_->Draw();
+
+	mosaic_->PostDrawScene();
 }
 

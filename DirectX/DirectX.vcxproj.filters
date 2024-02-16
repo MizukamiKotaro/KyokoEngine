@@ -310,6 +310,24 @@
     <Filter Include="Engine\Shaders\ScanNoise">
       <UniqueIdentifier>{4cc5fe25-f435-48fd-84b9-49fc321ca72e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\GraphicsPipelines\NegaPosiInverseGraphicsPipeline">
+      <UniqueIdentifier>{4eea2fee-c745-469c-b7dc-4ebd8ac5a979}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Drawer\PostEffect\NegaPosiInverse">
+      <UniqueIdentifier>{2e6a6cb4-305b-4afe-b232-ffc70e356e94}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Shaders\NegaPosiInverse">
+      <UniqueIdentifier>{b917f271-ea1b-415b-b681-3809d346a4f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\GraphicsPipelines\MosaicGraphicsPipeline">
+      <UniqueIdentifier>{c4c5f3b5-a70e-4d50-b61f-a746f1342eb7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Drawer\PostEffect\Mosaic">
+      <UniqueIdentifier>{902a2daa-619d-40e7-95a6-98fb91b2527f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Shaders\Mosaic">
+      <UniqueIdentifier>{7396ea11-8dfb-4979-8247-7c25204a160f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -581,6 +599,18 @@
     </ClCompile>
     <ClCompile Include="Engine\Drawers\PostEffect\ScanNoise\ScanNoise.cpp">
       <Filter>Engine\Drawer\PostEffect\ScanNoise</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\GraphicsPipelines\NegaPosiInverseGraphicsPipeline\NegaPosiInverseGraphicsPipeline.cpp">
+      <Filter>Engine\GraphicsPipelines\NegaPosiInverseGraphicsPipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Drawers\PostEffect\NegaPosiInverse\NegaPosiInverse.cpp">
+      <Filter>Engine\Drawer\PostEffect\NegaPosiInverse</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\GraphicsPipelines\MosaicGraphicsPipeline\MosaicGraphicsPipeline.cpp">
+      <Filter>Engine\GraphicsPipelines\MosaicGraphicsPipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Drawers\PostEffect\Mosaic\Mosaic.cpp">
+      <Filter>Engine\Drawer\PostEffect\Mosaic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -896,6 +926,18 @@
     <ClInclude Include="Engine\Drawers\PostEffect\ScanNoise\ScanNoise.h">
       <Filter>Engine\Drawer\PostEffect\ScanNoise</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\GraphicsPipelines\NegaPosiInverseGraphicsPipeline\NegaPosiInverseGraphicsPipeline.h">
+      <Filter>Engine\GraphicsPipelines\NegaPosiInverseGraphicsPipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drawers\PostEffect\NegaPosiInverse\NegaPosiInverse.h">
+      <Filter>Engine\Drawer\PostEffect\NegaPosiInverse</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GraphicsPipelines\MosaicGraphicsPipeline\MosaicGraphicsPipeline.h">
+      <Filter>Engine\GraphicsPipelines\MosaicGraphicsPipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drawers\PostEffect\Mosaic\Mosaic.h">
+      <Filter>Engine\Drawer\PostEffect\Mosaic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\Object3dShader\Object3d.PS.hlsl">
@@ -945,6 +987,12 @@
     </FxCompile>
     <FxCompile Include="Resources\Shaders\ScanNoiseShader\ScanNoise.PS.hlsl">
       <Filter>Engine\Shaders\ScanNoise</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\NegaPosiInverseShader\NegaPosiInverse.PS.hlsl">
+      <Filter>Engine\Shaders\NegaPosiInverse</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\MosaicShader\Mosaic.PS.hlsl">
+      <Filter>Engine\Shaders\Mosaic</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

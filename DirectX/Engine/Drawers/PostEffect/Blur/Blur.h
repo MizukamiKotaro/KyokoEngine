@@ -12,10 +12,8 @@ public:
 		float angle; // 角度。0だと横ブラー、90だと縦ブラー。
 		float pickRange; // 取得する色の幅。
 		float stepWidth; // 取得する色の位置変更の幅。0.0f < stepWidth < pickRange
-		int32_t isCenterBlur; // 真ん中からブラーか。1=true,0=false;
-		int32_t isNormal;
-		//float padding[3];
-
+		int isCenterBlur; // 真ん中からブラーか。1=true,0=false;
+		int isNormal;
 	};
 
 	// namespace省略

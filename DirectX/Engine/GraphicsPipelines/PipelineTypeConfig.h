@@ -10,5 +10,6 @@ enum class PipelineType {
 	BLUR,
 	GAUSSIAN_BLUR,
 	SCAN_NOISE,
-	COUNT_PIPLINE_TYPE,
+	MOSAIC,
+	NEGA_POSI_INVERSE,
 };

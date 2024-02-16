@@ -10,6 +10,8 @@
 #include "GraphicsPipelines/BlurGraphicsPipeline/BlurGraphicsPipeline.h"
 #include "GraphicsPipelines/GaussianBlurGraphicsPipeline/GaussianBlurGraphicsPipeline.h"
 #include "GraphicsPipelines/ScanNoiseGraphicsPipeline/ScanNoiseGraphicsPipeline.h"
+#include "GraphicsPipelines/NegaPosiInverseGraphicsPipeline/NegaPosiInverseGraphicsPipeline.h"
+#include "GraphicsPipelines/MosaicGraphicsPipeline/MosaicGraphicsPipeline.h"
 #include "GraphicsPipelines/PipelineTypeConfig.h"
 
 GraphicsPipelineManager* GraphicsPipelineManager::GetInstance()
@@ -32,6 +34,8 @@ void GraphicsPipelineManager::Initialize()
 	pipelineMap_[PipelineType::BLUR] = std::make_unique<BlurGraphicsPipeline>();
 	pipelineMap_[PipelineType::GAUSSIAN_BLUR] = std::make_unique<GaussianBlurGraphicsPipeline>();
 	pipelineMap_[PipelineType::SCAN_NOISE] = std::make_unique<ScanNoiseGraphicsPipeline>();
+	pipelineMap_[PipelineType::NEGA_POSI_INVERSE] = std::make_unique<NegaPosiInverseGraphicsPipeline>();
+	pipelineMap_[PipelineType::MOSAIC] = std::make_unique<MosaicGraphicsPipeline>();
 
 	pipelineMap_[PipelineType::SPRITE]->PreDraw();
 }
@@ -39,7 +43,6 @@ void GraphicsPipelineManager::Initialize()
 void GraphicsPipelineManager::PreDraw()
 {
 	currentPiplineType_ = PipelineType::SPRITE;
-
 	pipelineMap_[currentPiplineType_]->PreDraw();
 }
 
@@ -47,7 +50,6 @@ void GraphicsPipelineManager::PreDraw(PipelineType type)
 {
 	if (currentPiplineType_ != type) {
 		currentPiplineType_ = type;
-
 		pipelineMap_[type]->PreDraw();
 	}
 }

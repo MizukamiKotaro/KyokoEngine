@@ -1,17 +1,17 @@
 #pragma once
 #include "BasePostEffect/BasePostEffect.h"
 
-class ScanNoise : public BasePostEffect
+class Mosaic : public BasePostEffect
 {
 public:
-	ScanNoise();
+	Mosaic();
 
-	~ScanNoise() override;
+	~Mosaic() override;
 
-	struct ScanNoiseData {
-		float minY; 
-		float width;
-		float power;
+	struct MosaicData {
+		float density;
+		int isSquare;
+		Vector2 screenSize;
 		int isNormal;
 	};
 
@@ -20,14 +20,13 @@ public:
 
 	void Draw(BlendMode blendMode = BlendMode::kBlendModeNormal) override;
 private:
-	void CreateScanNoiseRes();
+	void CreateMosaicRes();
 	void CreateResources() override;
 
 private:
-	ComPtr<ID3D12Resource> scanNoiseResource_;
+	ComPtr<ID3D12Resource> mosaicResource_;
 
 public:
-	ScanNoiseData* scanNoiseData_;
+	MosaicData* mosaicData_;
 
-	Vector4 color_;
 };

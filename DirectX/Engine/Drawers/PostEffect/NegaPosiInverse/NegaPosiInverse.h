@@ -1,17 +1,14 @@
 #pragma once
 #include "BasePostEffect/BasePostEffect.h"
 
-class ScanNoise : public BasePostEffect
+class NegaPosiInverse : public BasePostEffect
 {
 public:
-	ScanNoise();
+	NegaPosiInverse();
 
-	~ScanNoise() override;
+	~NegaPosiInverse() override;
 
-	struct ScanNoiseData {
-		float minY; 
-		float width;
-		float power;
+	struct NegaPosiInverseData {
 		int isNormal;
 	};
 
@@ -20,14 +17,12 @@ public:
 
 	void Draw(BlendMode blendMode = BlendMode::kBlendModeNormal) override;
 private:
-	void CreateScanNoiseRes();
+	void CreateNegaPosiInverseRes();
 	void CreateResources() override;
 
 private:
-	ComPtr<ID3D12Resource> scanNoiseResource_;
-
+	ComPtr<ID3D12Resource> negaPosiInverseResource_;
 public:
-	ScanNoiseData* scanNoiseData_;
+	NegaPosiInverseData* negaPosiInverseData_;
 
-	Vector4 color_;
 };
