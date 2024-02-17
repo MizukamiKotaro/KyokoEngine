@@ -38,5 +38,5 @@ private:
 	ID3D12GraphicsCommandList* commandList_ = nullptr;
 	DescriptorHeap* srvHeap_ = nullptr;
 
-	std::unordered_map<std::string, std::unique_ptr<Texture>> textures_;
+	std::unordered_map<std::string, std::unique_ptr<Texture>> textureMap_;
 };

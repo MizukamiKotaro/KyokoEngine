@@ -1,5 +1,5 @@
 #include "PostEffect.h"
-#include "GraphicsPipelines/PipelineTypeConfig.h"
+#include "GraphicsPipelineSystem/PipelineTypeConfig.h"
 
 PostEffect::PostEffect()
 {

@@ -5,9 +5,9 @@
 #include "ModelDataManager.h"
 #include "calc.h"
 #include <numbers>
-#include "GraphicsPipelines/GraphicsPiplineManager/GraphicsPiplineManager.h"
+#include "GraphicsPipelineSystem/GraphicsPiplineManager/GraphicsPiplineManager.h"
 #include "ModelData/ModelData.h"
-#include "GraphicsPipelines/PipelineTypeConfig.h"
+#include "GraphicsPipelineSystem/PipelineTypeConfig.h"
 
 const Matrix4x4 SpotLight::scaleMat_ = Matrix4x4::MakeScaleMatrix({ 1000.0f,1000.0f,1000.0f });
 const Matrix4x4 SpotLight::scaleInverseMat_ = Matrix4x4::Inverse(SpotLight::scaleMat_);
@@ -91,7 +91,7 @@ void SpotLight::Draw(const Camera& camera, BlendMode blendMode)
 
 		transformationData_->WorldInverse = scaleInverseMat_ * billboardMat * translateMat;
 
-		psoManager_->SetBlendMode(piplineType_, static_cast<uint32_t>(blendMode));
+		psoManager_->SetBlendMode(piplineType_, blendMode);
 
 		//Spriteの描画。変更に必要なものだけ変更する
 		commandList_->IASetVertexBuffers(0, 1, &modelData_->mesh.vertexBufferView_); // VBVを設定

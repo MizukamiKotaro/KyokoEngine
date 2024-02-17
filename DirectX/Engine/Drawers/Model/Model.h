@@ -8,13 +8,13 @@
 #include "Utils/Math/Vector4.h"
 #include "Utils/Math/Matrix4x4.h"
 #include "Utils/Transform/Transform.h"
-#include "GraphicsPipelines/GraphicsPiplineManager/GraphicsPiplineManager.h"
+#include "GraphicsPipelineSystem/GraphicsPiplineManager/GraphicsPiplineManager.h"
 #include "Light/Light.h"
 #include "ModelData/ModelData.h"
 #include "ModelDataManager.h"
 #include "Texture.h"
-#include "GraphicsPipelines/BlendModeConfig.h"
-#include "GraphicsPipelines/PipelineTypeConfig.h"
+#include "GraphicsPipelineSystem/BlendModeConfig.h"
+#include "GraphicsPipelineSystem/PipelineTypeConfig.h"
 
 #include "Drawers/IDrawer/IDrawer.h"
 

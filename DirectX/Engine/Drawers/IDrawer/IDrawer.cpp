@@ -1,7 +1,7 @@
 #include "IDrawer.h"
 #include "DirectXBase/DirectXBase.h"
 #include "ModelDataManager.h"
-#include "GraphicsPipelines/GraphicsPiplineManager/GraphicsPiplineManager.h"
+#include "GraphicsPipelineSystem/GraphicsPiplineManager/GraphicsPiplineManager.h"
 #include "TextureManager.h"
 
 ID3D12GraphicsCommandList* IDrawer::commandList_ = nullptr;

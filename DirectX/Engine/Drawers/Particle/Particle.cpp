@@ -135,7 +135,7 @@ void Particle::Draw(const Camera& camera, BlendMode blendMode)
 
 	materialData_->uvTransform = uvMatrix_;
 
-	GraphicsPipelineManager::GetInstance()->SetBlendMode(pipelineType_, static_cast<uint32_t>(blendMode));
+	GraphicsPipelineManager::GetInstance()->SetBlendMode(pipelineType_, blendMode);
 
 	ID3D12GraphicsCommandList* commandList = DirectXBase::GetInstance()->GetCommandList();
 

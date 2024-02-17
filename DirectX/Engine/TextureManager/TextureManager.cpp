@@ -24,14 +24,13 @@ void TextureManager::Initialize()
 
 void TextureManager::Finalize()
 {
-	textures_.clear();
+	textureMap_.clear();
 }
 
 const Texture* TextureManager::LoadTexture(const std::string& filePath)
 {
-	decltype(textures_)::iterator textureItr = textures_.find(filePath);
-	if (textureItr != textures_.end()) {
-		return textures_[filePath].get();
+	if (textureMap_.find(filePath) != textureMap_.end()) {
+		return textureMap_[filePath].get();
 	}
 
 	std::filesystem::path filePathName(filePath);
@@ -53,12 +52,12 @@ const Texture* TextureManager::LoadTexture(const std::string& filePath)
 		//tex = directoryPath_ + "white.png";
 	}
 
-	textures_[filePath] = std::make_unique<Texture>();
+	textureMap_[filePath] = std::make_unique<Texture>();
 
 	DirectX::ScratchImage mipImages = Load(tex);
 	const DirectX::TexMetadata& metadata = mipImages.GetMetadata();
-	textures_[filePath]->resource_ = CreateTextureResource(metadata);
-	textures_[filePath]->intermediateResource_ = UploadTextureData(textures_[filePath]->resource_.Get(), mipImages);
+	textureMap_[filePath]->resource_ = CreateTextureResource(metadata);
+	textureMap_[filePath]->intermediateResource_ = UploadTextureData(textureMap_[filePath]->resource_.Get(), mipImages);
 
 	//metadataを基にSRVの設定
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
@@ -67,11 +66,11 @@ const Texture* TextureManager::LoadTexture(const std::string& filePath)
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D; // 2Dテクスチャ
 	srvDesc.Texture2D.MipLevels = UINT(metadata.mipLevels);
 
-	textures_[filePath]->handles_ = srvHeap_->GetNewDescriptorHandles();
+	textureMap_[filePath]->handles_ = srvHeap_->GetNewDescriptorHandles();
 
-	device_->CreateShaderResourceView(textures_[filePath]->resource_.Get(), &srvDesc, textures_[filePath]->handles_->cpuHandle);
+	device_->CreateShaderResourceView(textureMap_[filePath]->resource_.Get(), &srvDesc, textureMap_[filePath]->handles_->cpuHandle);
 
-	return textures_[filePath].get();
+	return textureMap_[filePath].get();
 }
 
 DirectX::ScratchImage TextureManager::Load(const std::string& filePath)

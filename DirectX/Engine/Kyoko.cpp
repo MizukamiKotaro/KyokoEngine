@@ -9,7 +9,7 @@
 #include "Engine/Base/DescriptorHeapManager/DescriptorHeapManager.h"
 #include "ModelDataManager.h"
 #include "Utils/RandomGenerator/RandomGenerator.h"
-#include "GraphicsPipelines/GraphicsPiplineManager/GraphicsPiplineManager.h"
+#include "GraphicsPipelineSystem/GraphicsPiplineManager/GraphicsPiplineManager.h"
 #include "AudioManager/AudioManager.h"
 #include "FrameInfo/FrameInfo.h"
 #include "Sprite.h"

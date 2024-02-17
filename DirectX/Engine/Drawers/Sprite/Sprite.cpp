@@ -9,8 +9,8 @@
 #include "DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
 #include "WindowsInfo/WindowsInfo.h"
 #include "Texture.h"
-#include "GraphicsPipelines/PipelineTypeConfig.h"
-#include "GraphicsPipelines/GraphicsPiplineManager/GraphicsPiplineManager.h"
+#include "GraphicsPipelineSystem/PipelineTypeConfig.h"
+#include "GraphicsPipelineSystem/GraphicsPiplineManager/GraphicsPiplineManager.h"
 
 const PipelineType Sprite::pipelineType_ = PipelineType::SPRITE;
 
@@ -156,7 +156,7 @@ void Sprite::Draw(const Camera& camera, BlendMode blendMode)
 	transformData_->WVP = worldMat_ * camera.GetOrthographicMat();
 	materialData_->uvTransform = Matrix4x4::MakeAffinMatrix({ uvScale_.x,uvScale_.y,0.0f }, { 0.0f,0.0f,uvRotate_ }, { uvTranslate_.x,uvTranslate_.y,0.0f });
 
-	psoManager_->SetBlendMode(pipelineType_, static_cast<uint32_t>(blendMode));
+	psoManager_->SetBlendMode(pipelineType_, blendMode);
 
 	//Spriteの描画。変更に必要なものだけ変更する
 	commandList_->IASetVertexBuffers(0, 1, &vertexBufferView_); // VBVを設定
@@ -182,7 +182,7 @@ void Sprite::Draw(BlendMode blendMode)
 	transformData_->WVP = worldMat_ * Camera::GetOrthographicMat();
 	materialData_->uvTransform = Matrix4x4::MakeAffinMatrix({ uvScale_.x,uvScale_.y,0.0f }, { 0.0f,0.0f,uvRotate_ }, { uvTranslate_.x,uvTranslate_.y,0.0f });
 
-	psoManager_->SetBlendMode(pipelineType_, static_cast<uint32_t>(blendMode));
+	psoManager_->SetBlendMode(pipelineType_, blendMode);
 
 	//Spriteの描画。変更に必要なものだけ変更する
 	commandList_->IASetVertexBuffers(0, 1, &vertexBufferView_); // VBVを設定

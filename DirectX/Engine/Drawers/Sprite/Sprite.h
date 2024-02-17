@@ -8,7 +8,7 @@
 #include "Utils/Math/Vector2.h"
 #include "Utils/Math/Vector4.h"
 #include "Utils/Math/Matrix4x4.h"
-#include "GraphicsPipelines/BlendModeConfig.h"
+#include "GraphicsPipelineSystem/BlendModeConfig.h"
 
 class Camera;
 class Texture;

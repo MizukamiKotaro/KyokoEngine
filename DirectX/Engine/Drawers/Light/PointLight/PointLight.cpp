@@ -3,9 +3,9 @@
 #include "ModelDataManager.h"
 #include "Camera.h"
 #include <numbers>
-#include "GraphicsPipelines/GraphicsPiplineManager/GraphicsPiplineManager.h"
+#include "GraphicsPipelineSystem/GraphicsPiplineManager/GraphicsPiplineManager.h"
 #include "ModelData/ModelData.h"
-#include "GraphicsPipelines/PipelineTypeConfig.h"
+#include "GraphicsPipelineSystem/PipelineTypeConfig.h"
 
 const Matrix4x4 PointLight::scaleMat_ = Matrix4x4::MakeScaleMatrix({ 1000.0f,1000.0f,1000.0f });
 const Matrix4x4 PointLight::scaleInverseMat_ = Matrix4x4::Inverse(PointLight::scaleMat_);
@@ -74,7 +74,7 @@ void PointLight::Draw(const Camera& camera, BlendMode blendMode)
 
 		transformationData_->WorldInverse = scaleInverseMat_ * billboardMat * translateMat;
 
-		psoManager_->SetBlendMode(pipelineType_, static_cast<uint32_t>(blendMode));
+		psoManager_->SetBlendMode(pipelineType_, blendMode);
 
 		//Spriteの描画。変更に必要なものだけ変更する
 		commandList_->IASetVertexBuffers(0, 1, &modelData_->mesh.vertexBufferView_); // VBVを設定

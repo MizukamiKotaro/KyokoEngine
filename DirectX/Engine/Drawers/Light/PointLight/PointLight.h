@@ -5,7 +5,7 @@
 #include "Matrix4x4.h"
 #include "ILight/ILight.h"
 #include "Drawers/IDrawer/IDrawer.h"
-#include "GraphicsPipelines/BlendModeConfig.h"
+#include "GraphicsPipelineSystem/BlendModeConfig.h"
 
 class Camera;
 class ModelData;

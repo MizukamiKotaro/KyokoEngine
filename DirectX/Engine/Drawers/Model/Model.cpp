@@ -65,7 +65,6 @@ void Model::PreDraw()
 
 void Model::Draw(const Camera& camera, BlendMode blendMode)
 {
-
 	PreDraw();
 
 	transformationData_->World = transform_.worldMat_;
@@ -74,7 +73,7 @@ void Model::Draw(const Camera& camera, BlendMode blendMode)
 		Matrix4x4::MakeRotateXYZMatrix(transform_.rotate_) * Matrix4x4::MakeTranslateMatrix(transform_.translate_);
 	materialData_->uvTransform = uvMatrix_;
 
-	psoManager_->SetBlendMode(pipelineType_, static_cast<uint32_t>(blendMode));
+	psoManager_->SetBlendMode(pipelineType_, blendMode);
 
 	//Spriteの描画。変更に必要なものだけ変更する
 	commandList_->IASetVertexBuffers(0, 1, &modelData_->mesh.vertexBufferView_); // VBVを設定

@@ -85,7 +85,7 @@ private:
 	Microsoft::WRL::ComPtr<IXAudio2> xAudio2_;
 	IXAudio2MasteringVoice* masterVoice_ = nullptr;
 
-	std::unordered_map<uint32_t, std::unique_ptr<SoundData>> soundDatas_;
+	std::unordered_map<uint32_t, std::unique_ptr<SoundData>> soundDataMap_;
 	std::list<std::unique_ptr<Voice>> voices_;
 
 	const std::string directoryPath_ = "Resources/Audio/";
