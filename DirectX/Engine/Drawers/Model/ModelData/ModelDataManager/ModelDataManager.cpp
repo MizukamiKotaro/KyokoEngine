@@ -94,6 +94,7 @@ void ModelDataManager::LoadObjFile(const std::string& directoryPath, const std::
 		}
 	}
 
+	bool isLoadTexture = false;
 	// materialを解析する
 	for (uint32_t materialIndex = 0; materialIndex < scene_->mNumMaterials; materialIndex++) {
 		aiMaterial* material = scene_->mMaterials[materialIndex];
@@ -109,9 +110,14 @@ void ModelDataManager::LoadObjFile(const std::string& directoryPath, const std::
 			else {
 				texFilePath = "white.png";
 			}
-
+			isLoadTexture = true;
 			modelDatas_.back()->texture = TextureManager::GetInstance()->LoadTexture(texFilePath);
 		}
+	}
+
+	if (!isLoadTexture) {
+		std::string texFilePath = "white.png";
+		modelDatas_.back()->texture = TextureManager::GetInstance()->LoadTexture(texFilePath);
 	}
 
 	modelDatas_.back()->mesh.vertexResource_ = DirectXBase::CreateBufferResource(sizeof(VertexData) * modelDatas_.back()->mesh.verteces.size());
