@@ -3,7 +3,7 @@
 #include <memory>
 #include "Sprite.h"
 #include "PostEffect/PostEffect.h"
-#include "PostEffect/Bloom/Bloom.h"
+#include "Bloom/Bloom.h"
 
 class Camera;
 

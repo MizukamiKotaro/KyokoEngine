@@ -1,6 +1,7 @@
 #pragma once
 #include "Sprite.h"
 #include <array>
+#include <memory>
 #include "GameElement/Score/Score.h"
 
 class StageUI 

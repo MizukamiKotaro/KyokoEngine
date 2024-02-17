@@ -187,7 +187,6 @@ void DirectXBase::InitializeFixFPS() {
 
 	// 現在の時間を記録する
 	reference_ = std::chrono::steady_clock::now();
-
 }
 
 void DirectXBase::UpdateFixFPS() {

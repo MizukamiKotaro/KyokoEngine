@@ -9,6 +9,10 @@
 #include "GraphicsPipelines/HighLumiGraphicsPipeline/HighLumiGraphicsPipeline.h"
 #include "GraphicsPipelines/BlurGraphicsPipeline/BlurGraphicsPipeline.h"
 #include "GraphicsPipelines/GaussianBlurGraphicsPipeline/GaussianBlurGraphicsPipeline.h"
+#include "GraphicsPipelines/ScanNoiseGraphicsPipeline/ScanNoiseGraphicsPipeline.h"
+#include "GraphicsPipelines/NegaPosiInverseGraphicsPipeline/NegaPosiInverseGraphicsPipeline.h"
+#include "GraphicsPipelines/MosaicGraphicsPipeline/MosaicGraphicsPipeline.h"
+#include "GraphicsPipelines/RGBShiftGraphicsPipeline/RGBShiftGraphicsPipeline.h"
 #include "GraphicsPipelines/PipelineTypeConfig.h"
 
 GraphicsPipelineManager* GraphicsPipelineManager::GetInstance()
@@ -21,110 +25,38 @@ void GraphicsPipelineManager::Initialize()
 {
 	currentPiplineType_ = PipelineType::SPRITE;
 
-	spritePSO_ = std::make_unique<SpriteGraphicsPipeline>();
+	pipelineMap_[PipelineType::SPRITE] = std::make_unique<SpriteGraphicsPipeline>();
+	pipelineMap_[PipelineType::MODEL] = std::make_unique<ModelGraphicsPipline>();
+	pipelineMap_[PipelineType::PARTICLE] = std::make_unique<ParticleGraphicsPipeline>();
+	pipelineMap_[PipelineType::POINT_LIGHT] = std::make_unique<PointLightGraphicsPipline>();
+	pipelineMap_[PipelineType::SPOT_LIGHT] = std::make_unique<SpotLightGraphicsPipline>();
+	pipelineMap_[PipelineType::CONTRAST] = std::make_unique<ContrastGraphicsPipeline>();
+	pipelineMap_[PipelineType::HIGH_LUMI] = std::make_unique<HighLumiGraphicsPipeline>();
+	pipelineMap_[PipelineType::BLUR] = std::make_unique<BlurGraphicsPipeline>();
+	pipelineMap_[PipelineType::GAUSSIAN_BLUR] = std::make_unique<GaussianBlurGraphicsPipeline>();
+	pipelineMap_[PipelineType::SCAN_NOISE] = std::make_unique<ScanNoiseGraphicsPipeline>();
+	pipelineMap_[PipelineType::NEGA_POSI_INVERSE] = std::make_unique<NegaPosiInverseGraphicsPipeline>();
+	pipelineMap_[PipelineType::MOSAIC] = std::make_unique<MosaicGraphicsPipeline>();
+	pipelineMap_[PipelineType::RGB_SHIFT] = std::make_unique<RGBShiftGraphicsPipeline>();
 
-	modelPSO_ = std::make_unique<ModelGraphicsPipline>();
-
-	particlePSO_ = std::make_unique<ParticleGraphicsPipeline>();
-
-	pointLightPSO_ = std::make_unique<PointLightGraphicsPipline>();
-
-	spotLightPSO_ = std::make_unique<SpotLightGraphicsPipline>();
-
-	contrastPSO_ = std::make_unique<ContrastGraphicsPipeline>();
-
-	highLumiPSO_ = std::make_unique<HighLumiGraphicsPipeline>();
-
-	blurPSO_ = std::make_unique<BlurGraphicsPipeline>();
-
-	gaussianBlurPSO_ = std::make_unique<GaussianBlurGraphicsPipeline>();
-
-	spritePSO_->PreDraw();
+	pipelineMap_[PipelineType::SPRITE]->PreDraw();
 }
 
 void GraphicsPipelineManager::PreDraw()
 {
 	currentPiplineType_ = PipelineType::SPRITE;
-
-	spritePSO_->PreDraw();
+	pipelineMap_[currentPiplineType_]->PreDraw();
 }
 
 void GraphicsPipelineManager::PreDraw(PipelineType type)
 {
 	if (currentPiplineType_ != type) {
 		currentPiplineType_ = type;
-
-		switch (type)
-		{
-		case PipelineType::SPRITE:
-			spritePSO_->PreDraw();
-			break;
-		case PipelineType::MODEL:
-			modelPSO_->PreDraw();
-			break;
-		case PipelineType::PARTICLE:
-			particlePSO_->PreDraw();
-			break;
-		case PipelineType::POINT_LIGHT:
-			pointLightPSO_->PreDraw();
-			break;
-		case PipelineType::SPOT_LIGHT:
-			spotLightPSO_->PreDraw();
-			break;
-		case PipelineType::CONTRAST:
-			contrastPSO_->PreDraw();
-			break;
-		case PipelineType::HIGH_LUMI:
-			highLumiPSO_->PreDraw();
-			break;
-		case PipelineType::BLUR:
-			blurPSO_->PreDraw();
-			break;
-		case PipelineType::GAUSSIAN_BLUR:
-			gaussianBlurPSO_->PreDraw();
-			break;
-		case PipelineType::COUNT_PIPLINE_TYPE:
-			break;
-		default:
-			break;
-		}
+		pipelineMap_[type]->PreDraw();
 	}
 }
 
 void GraphicsPipelineManager::SetBlendMode(PipelineType type, uint32_t blendMode)
 {
-	switch (type)
-	{
-	case PipelineType::SPRITE:
-		spritePSO_->SetBlendMode(blendMode);
-		break;
-	case PipelineType::MODEL:
-		modelPSO_->SetBlendMode(blendMode);
-		break;
-	case PipelineType::PARTICLE:
-		particlePSO_->SetBlendMode(blendMode);
-		break;
-	case PipelineType::POINT_LIGHT:
-		pointLightPSO_->SetBlendMode(blendMode);
-		break;
-	case PipelineType::SPOT_LIGHT:
-		spotLightPSO_->SetBlendMode(blendMode);
-		break;
-	case PipelineType::CONTRAST:
-		contrastPSO_->SetBlendMode(blendMode);
-		break;
-	case PipelineType::HIGH_LUMI:
-		highLumiPSO_->SetBlendMode(blendMode);
-		break;
-	case PipelineType::BLUR:
-		blurPSO_->SetBlendMode(blendMode);
-		break;
-	case PipelineType::GAUSSIAN_BLUR:
-		gaussianBlurPSO_->SetBlendMode(blendMode);
-		break;
-	case PipelineType::COUNT_PIPLINE_TYPE:
-		break;
-	default:
-		break;
-	}
+	pipelineMap_[type]->SetBlendMode(blendMode);
 }

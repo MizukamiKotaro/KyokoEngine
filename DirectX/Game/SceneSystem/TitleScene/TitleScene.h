@@ -5,7 +5,12 @@
 #include "GameElement/Live/Dome/Dome.h"
 #include "GameElement/Live/Screen/Screen.h"
 #include "Sprite.h"
-#include "PostEffect/HighLumi/HighLumi.h"
+#include "HighLumi/HighLumi.h"
+
+#include "ScanNoise/ScanNoise.h"
+#include "NegaPosiInverse/NegaPosiInverse.h"
+#include "Mosaic/Mosaic.h"
+#include "RGBShift/RGBShift.h"
 
 class TitleScene : public IScene
 {
@@ -32,6 +37,11 @@ private:
 
 	std::unique_ptr<Sprite> title_;
 	std::unique_ptr<Sprite> space_;
+
+	std::unique_ptr<ScanNoise> scanNoise_;
+	std::unique_ptr<NegaPosiInverse> negaposi_;
+	std::unique_ptr<Mosaic> mosaic_;
+	std::unique_ptr<RGBShift> rgbShift_;
 
 	Audio se_;
 };

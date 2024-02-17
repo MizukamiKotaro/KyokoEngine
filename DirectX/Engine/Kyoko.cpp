@@ -12,9 +12,11 @@
 #include "GraphicsPipelines/GraphicsPiplineManager/GraphicsPiplineManager.h"
 #include "AudioManager/AudioManager.h"
 #include "FrameInfo/FrameInfo.h"
+#include "Sprite.h"
 #include "Model.h"
-#include "PostEffect/BasePostEffect/BasePostEffect.h"
+#include "BasePostEffect/BasePostEffect.h"
 #include "LightSingleton/LightSingleton.h"
+#include "Drawers/IDrawer/IDrawer.h"
 
 static ResourceLeackChecker leakCheck;
 
@@ -40,6 +42,8 @@ void Kyoko::Engine::Initialize(const char* windowName, int width, int height)
 	gpoManager = GraphicsPipelineManager::GetInstance();
 	gpoManager->Initialize();
 
+	IDrawer::StaticInitialize();
+	Sprite::StaticInitialize();
 	Model::StaticInitialize();
 	BasePostEffect::StaticInitialize();
 

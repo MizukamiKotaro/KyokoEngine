@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include <unordered_map>
 
 class GraphicsPipeline;
 enum class PipelineType;
@@ -25,15 +26,7 @@ private:
 	GraphicsPipelineManager& operator=(const GraphicsPipelineManager&) = delete;
 
 private:
-	std::unique_ptr<GraphicsPipeline> spritePSO_;
-	std::unique_ptr<GraphicsPipeline> modelPSO_;
-	std::unique_ptr<GraphicsPipeline> particlePSO_;
-	std::unique_ptr<GraphicsPipeline> pointLightPSO_;
-	std::unique_ptr<GraphicsPipeline> spotLightPSO_;
-	std::unique_ptr<GraphicsPipeline> contrastPSO_;
-	std::unique_ptr<GraphicsPipeline> highLumiPSO_;
-	std::unique_ptr<GraphicsPipeline> blurPSO_;
-	std::unique_ptr<GraphicsPipeline> gaussianBlurPSO_;
+	std::unordered_map<PipelineType, std::unique_ptr<GraphicsPipeline>> pipelineMap_;
 
 	PipelineType currentPiplineType_;
 };

@@ -61,7 +61,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)/Engine;$(ProjectDir)/Engine/Base;$(ProjectDir)/Engine/Audio;$(ProjectDir)/Engine/Input;$(ProjectDir)/Engine/Model;$(ProjectDir)/Engine/Model/ModelData/ModelDataManager;$(ProjectDir)/Engine/Sprite;$(ProjectDir)/Engine/TextureManager;$(ProjectDir)/Engine/Utils/Math;$(ProjectDir)/Engine/Utils/Transfrom;$(ProjectDir)/Engine/Utils/Camera;$(ProjectDir)/Engine/Particle;$(ProjectDir)/Engine/Utils;$(ProjectDir)/Game;$(ProjectDir)/Externals\assimp\include;$(ProjectDir)/Engine/TextureManager/Texture;$(ProjectDir)/Engine/PostEffect;$(ProjectDir)/Engine/Light;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)/Engine;$(ProjectDir)/Engine/Base;$(ProjectDir)/Engine/Audio;$(ProjectDir)/Engine/Input;$(ProjectDir)/Engine/Drawers/Model;$(ProjectDir)/Engine/Drawers/Model/ModelData/ModelDataManager;$(ProjectDir)/Engine/Drawers/Sprite;$(ProjectDir)/Engine/TextureManager;$(ProjectDir)/Engine/Utils/Math;$(ProjectDir)/Engine/Utils/Transfrom;$(ProjectDir)/Engine/Utils/Camera;$(ProjectDir)/Engine/Drawers/Particle;$(ProjectDir)/Engine/Utils;$(ProjectDir)/Game;$(ProjectDir)/Externals\assimp\include;$(ProjectDir)/Engine/TextureManager/Texture;$(ProjectDir)/Engine/Drawers/PostEffect;$(ProjectDir)/Engine/Drawers/Light;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PreprocessorDefinitions>_ITERATOR_DEBUG_LEVEL=2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -90,7 +90,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)/Engine;$(ProjectDir)/Engine/Base;$(ProjectDir)/Engine/Audio;$(ProjectDir)/Engine/Input;$(ProjectDir)/Engine/Model;$(ProjectDir)/Engine/Model/ModelData/ModelDataManager;$(ProjectDir)/Engine/Sprite;$(ProjectDir)/Engine/TextureManager;$(ProjectDir)/Engine/Utils/Math;$(ProjectDir)/Engine/Utils/Transfrom;$(ProjectDir)/Engine/Utils/Camera;$(ProjectDir)/Engine/Particle;$(ProjectDir)/Engine/Utils;$(ProjectDir)/Game;$(ProjectDir)/Externals\assimp\include;$(ProjectDir)/Engine/TextureManager/Texture;$(ProjectDir)/Engine/PostEffect;$(ProjectDir)/Engine/Light;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)/Engine;$(ProjectDir)/Engine/Base;$(ProjectDir)/Engine/Audio;$(ProjectDir)/Engine/Input;$(ProjectDir)/Engine/Drawers/Model;$(ProjectDir)/Engine/Drawers/Model/ModelData/ModelDataManager;$(ProjectDir)/Engine/Drawers/Sprite;$(ProjectDir)/Engine/TextureManager;$(ProjectDir)/Engine/Utils/Math;$(ProjectDir)/Engine/Utils/Transfrom;$(ProjectDir)/Engine/Utils/Camera;$(ProjectDir)/Engine/Drawers/Particle;$(ProjectDir)/Engine/Utils;$(ProjectDir)/Game;$(ProjectDir)/Externals\assimp\include;$(ProjectDir)/Engine/TextureManager/Texture;$(ProjectDir)/Engine/Drawers/PostEffect;$(ProjectDir)/Engine/Drawers/Light;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <Optimization>MinSpace</Optimization>
@@ -126,6 +126,28 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\CollisionSystem\ColliderShapes\ColliderShapeMapChip2D\ColliderShapeMapChip2D.cpp" />
     <ClCompile Include="Engine\CollisionSystem\Collider\Collider.cpp" />
     <ClCompile Include="Engine\CollisionSystem\CollisionManager\CollisionManager.cpp" />
+    <ClCompile Include="Engine\Drawers\IDrawer\IDrawer.cpp" />
+    <ClCompile Include="Engine\Drawers\Light\DirectionalLight\DirectionalLight.cpp" />
+    <ClCompile Include="Engine\Drawers\Light\ILight\ILight.cpp" />
+    <ClCompile Include="Engine\Drawers\Light\LightSingleton\LightSingleton.cpp" />
+    <ClCompile Include="Engine\Drawers\Light\Light\Light.cpp" />
+    <ClCompile Include="Engine\Drawers\Light\PointLight\PointLight.cpp" />
+    <ClCompile Include="Engine\Drawers\Light\SpotLight\SpotLight.cpp" />
+    <ClCompile Include="Engine\Drawers\Model\Model.cpp" />
+    <ClCompile Include="Engine\Drawers\Model\ModelData\ModelDataManager\ModelDataManager.cpp" />
+    <ClCompile Include="Engine\Drawers\Particle\Particle.cpp" />
+    <ClCompile Include="Engine\Drawers\PostEffect\BasePostEffect\BasePostEffect.cpp" />
+    <ClCompile Include="Engine\Drawers\PostEffect\Bloom\Bloom.cpp" />
+    <ClCompile Include="Engine\Drawers\PostEffect\Blur\Blur.cpp" />
+    <ClCompile Include="Engine\Drawers\PostEffect\Contrast\Contrast.cpp" />
+    <ClCompile Include="Engine\Drawers\PostEffect\GaussianBlur\GaussianBlur.cpp" />
+    <ClCompile Include="Engine\Drawers\PostEffect\HighLumi\HighLumi.cpp" />
+    <ClCompile Include="Engine\Drawers\PostEffect\Mosaic\Mosaic.cpp" />
+    <ClCompile Include="Engine\Drawers\PostEffect\NegaPosiInverse\NegaPosiInverse.cpp" />
+    <ClCompile Include="Engine\Drawers\PostEffect\PostEffect\PostEffect.cpp" />
+    <ClCompile Include="Engine\Drawers\PostEffect\RGBShift\RGBShift.cpp" />
+    <ClCompile Include="Engine\Drawers\PostEffect\ScanNoise\ScanNoise.cpp" />
+    <ClCompile Include="Engine\Drawers\Sprite\Sprite.cpp" />
     <ClCompile Include="Engine\FrameInfo\FrameInfo.cpp" />
     <ClCompile Include="Engine\GlobalVariables\GlobalVariables.cpp" />
     <ClCompile Include="Engine\GraphicsPipelines\BlurGraphicsPipeline\BlurGraphicsPipeline.cpp" />
@@ -135,31 +157,19 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\GraphicsPipelines\GraphicsPiplineManager\GraphicsPiplineManager.cpp" />
     <ClCompile Include="Engine\GraphicsPipelines\HighLumiGraphicsPipeline\HighLumiGraphicsPipeline.cpp" />
     <ClCompile Include="Engine\GraphicsPipelines\ModelGraphicsPipline\ModelGraphicsPipline.cpp" />
+    <ClCompile Include="Engine\GraphicsPipelines\MosaicGraphicsPipeline\MosaicGraphicsPipeline.cpp" />
+    <ClCompile Include="Engine\GraphicsPipelines\NegaPosiInverseGraphicsPipeline\NegaPosiInverseGraphicsPipeline.cpp" />
     <ClCompile Include="Engine\GraphicsPipelines\ParticleGraphicsPipeline\ParticleGraphicsPipeline.cpp" />
     <ClCompile Include="Engine\GraphicsPipelines\PointLightGraphicsPipline\PointLightGraphicsPipline.cpp" />
+    <ClCompile Include="Engine\GraphicsPipelines\RGBShiftGraphicsPipeline\RGBShiftGraphicsPipeline.cpp" />
+    <ClCompile Include="Engine\GraphicsPipelines\ScanNoiseGraphicsPipeline\ScanNoiseGraphicsPipeline.cpp" />
     <ClCompile Include="Engine\GraphicsPipelines\SpriteGraphicsPipeline\SpriteGraphicsPipeline.cpp" />
     <ClCompile Include="Engine\GraphicsPipelines\SpotLightGraphicsPipline\SpotLightGraphicsPipline.cpp" />
     <ClCompile Include="Engine\ImGuiManager\ImGuiManager.cpp" />
     <ClCompile Include="Engine\Input\Input.cpp" />
     <ClCompile Include="Engine\Kyoko.cpp" />
-    <ClCompile Include="Engine\Light\DirectionalLight\DirectionalLight.cpp" />
-    <ClCompile Include="Engine\Light\ILight\ILight.cpp" />
-    <ClCompile Include="Engine\Light\LightSingleton\LightSingleton.cpp" />
-    <ClCompile Include="Engine\Light\Light\Light.cpp" />
-    <ClCompile Include="Engine\Light\PointLight\PointLight.cpp" />
-    <ClCompile Include="Engine\Light\SpotLight\SpotLight.cpp" />
-    <ClCompile Include="Engine\Model\ModelData\ModelDataManager\ModelDataManager.cpp" />
-    <ClCompile Include="Engine\Model\Model.cpp" />
-    <ClCompile Include="Engine\Particle\Particle.cpp" />
-    <ClCompile Include="Engine\PostEffect\BasePostEffect\BasePostEffect.cpp" />
-    <ClCompile Include="Engine\PostEffect\Bloom\Bloom.cpp" />
-    <ClCompile Include="Engine\PostEffect\Blur\Blur.cpp" />
-    <ClCompile Include="Engine\PostEffect\Contrast\Contrast.cpp" />
-    <ClCompile Include="Engine\PostEffect\GaussianBlur\GaussianBlur.cpp" />
-    <ClCompile Include="Engine\PostEffect\HighLumi\HighLumi.cpp" />
-    <ClCompile Include="Engine\PostEffect\PostEffect\PostEffect.cpp" />
-    <ClCompile Include="Engine\Sprite\Sprite.cpp" />
     <ClCompile Include="Engine\TextureManager\TextureManager.cpp" />
+    <ClCompile Include="Engine\TextureManager\Texture\Texture.cpp" />
     <ClCompile Include="Game\GameElement\Charactor\Charactor.cpp" />
     <ClCompile Include="Game\GameElement\ClearUI\ClearUI.cpp" />
     <ClCompile Include="Game\GameElement\Game.cpp" />
@@ -218,6 +228,34 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\CollisionSystem\Collider\Collider.h" />
     <ClInclude Include="Engine\CollisionSystem\CollisionConfig\CollisionConfig.h" />
     <ClInclude Include="Engine\CollisionSystem\CollisionManager\CollisionManager.h" />
+    <ClInclude Include="Engine\Drawers\IDrawer\IDrawer.h" />
+    <ClInclude Include="Engine\Drawers\Light\DirectionalLight\DirectionalLight.h" />
+    <ClInclude Include="Engine\Drawers\Light\ILight\ILight.h" />
+    <ClInclude Include="Engine\Drawers\Light\LightSingleton\LightSingleton.h" />
+    <ClInclude Include="Engine\Drawers\Light\Light\Light.h" />
+    <ClInclude Include="Engine\Drawers\Light\PointLight\PointLight.h" />
+    <ClInclude Include="Engine\Drawers\Light\SpotLight\SpotLight.h" />
+    <ClInclude Include="Engine\Drawers\Model\Model.h" />
+    <ClInclude Include="Engine\Drawers\Model\ModelData\AnimationData3D.h" />
+    <ClInclude Include="Engine\Drawers\Model\ModelData\BoneData3D.h" />
+    <ClInclude Include="Engine\Drawers\Model\ModelData\MeshData3D.h" />
+    <ClInclude Include="Engine\Drawers\Model\ModelData\ModelData.h" />
+    <ClInclude Include="Engine\Drawers\Model\ModelData\ModelDataManager\ModelDataManager.h" />
+    <ClInclude Include="Engine\Drawers\Model\ModelData\NodeData3D.h" />
+    <ClInclude Include="Engine\Drawers\Model\ModelData\VertexData3D.h" />
+    <ClInclude Include="Engine\Drawers\Particle\Particle.h" />
+    <ClInclude Include="Engine\Drawers\PostEffect\BasePostEffect\BasePostEffect.h" />
+    <ClInclude Include="Engine\Drawers\PostEffect\Bloom\Bloom.h" />
+    <ClInclude Include="Engine\Drawers\PostEffect\Blur\Blur.h" />
+    <ClInclude Include="Engine\Drawers\PostEffect\Contrast\Contrast.h" />
+    <ClInclude Include="Engine\Drawers\PostEffect\GaussianBlur\GaussianBlur.h" />
+    <ClInclude Include="Engine\Drawers\PostEffect\HighLumi\HighLumi.h" />
+    <ClInclude Include="Engine\Drawers\PostEffect\Mosaic\Mosaic.h" />
+    <ClInclude Include="Engine\Drawers\PostEffect\NegaPosiInverse\NegaPosiInverse.h" />
+    <ClInclude Include="Engine\Drawers\PostEffect\PostEffect\PostEffect.h" />
+    <ClInclude Include="Engine\Drawers\PostEffect\RGBShift\RGBShift.h" />
+    <ClInclude Include="Engine\Drawers\PostEffect\ScanNoise\ScanNoise.h" />
+    <ClInclude Include="Engine\Drawers\Sprite\Sprite.h" />
     <ClInclude Include="Engine\FrameInfo\FrameInfo.h" />
     <ClInclude Include="Engine\GlobalVariables\GlobalVariables.h" />
     <ClInclude Include="Engine\GraphicsPipelines\BlendModeConfig.h" />
@@ -228,37 +266,18 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\GraphicsPipelines\GraphicsPiplineManager\GraphicsPiplineManager.h" />
     <ClInclude Include="Engine\GraphicsPipelines\HighLumiGraphicsPipeline\HighLumiGraphicsPipeline.h" />
     <ClInclude Include="Engine\GraphicsPipelines\ModelGraphicsPipline\ModelGraphicsPipline.h" />
+    <ClInclude Include="Engine\GraphicsPipelines\MosaicGraphicsPipeline\MosaicGraphicsPipeline.h" />
+    <ClInclude Include="Engine\GraphicsPipelines\NegaPosiInverseGraphicsPipeline\NegaPosiInverseGraphicsPipeline.h" />
     <ClInclude Include="Engine\GraphicsPipelines\ParticleGraphicsPipeline\ParticleGraphicsPipeline.h" />
     <ClInclude Include="Engine\GraphicsPipelines\PipelineTypeConfig.h" />
     <ClInclude Include="Engine\GraphicsPipelines\PointLightGraphicsPipline\PointLightGraphicsPipline.h" />
+    <ClInclude Include="Engine\GraphicsPipelines\RGBShiftGraphicsPipeline\RGBShiftGraphicsPipeline.h" />
+    <ClInclude Include="Engine\GraphicsPipelines\ScanNoiseGraphicsPipeline\ScanNoiseGraphicsPipeline.h" />
     <ClInclude Include="Engine\GraphicsPipelines\SpriteGraphicsPipeline\SpriteGraphicsPipeline.h" />
     <ClInclude Include="Engine\GraphicsPipelines\SpotLightGraphicsPipline\SpotLightGraphicsPipline.h" />
     <ClInclude Include="Engine\ImGuiManager\ImGuiManager.h" />
     <ClInclude Include="Engine\Input\Input.h" />
     <ClInclude Include="Engine\Kyoko.h" />
-    <ClInclude Include="Engine\Light\DirectionalLight\DirectionalLight.h" />
-    <ClInclude Include="Engine\Light\ILight\ILight.h" />
-    <ClInclude Include="Engine\Light\LightSingleton\LightSingleton.h" />
-    <ClInclude Include="Engine\Light\Light\Light.h" />
-    <ClInclude Include="Engine\Light\PointLight\PointLight.h" />
-    <ClInclude Include="Engine\Light\SpotLight\SpotLight.h" />
-    <ClInclude Include="Engine\Model\ModelData\AnimationData3D.h" />
-    <ClInclude Include="Engine\Model\ModelData\BoneData3D.h" />
-    <ClInclude Include="Engine\Model\ModelData\MeshData3D.h" />
-    <ClInclude Include="Engine\Model\ModelData\ModelData.h" />
-    <ClInclude Include="Engine\Model\ModelData\ModelDataManager\ModelDataManager.h" />
-    <ClInclude Include="Engine\Model\Model.h" />
-    <ClInclude Include="Engine\Model\ModelData\NodeData3D.h" />
-    <ClInclude Include="Engine\Model\ModelData\VertexData3D.h" />
-    <ClInclude Include="Engine\Particle\Particle.h" />
-    <ClInclude Include="Engine\PostEffect\BasePostEffect\BasePostEffect.h" />
-    <ClInclude Include="Engine\PostEffect\Bloom\Bloom.h" />
-    <ClInclude Include="Engine\PostEffect\Blur\Blur.h" />
-    <ClInclude Include="Engine\PostEffect\Contrast\Contrast.h" />
-    <ClInclude Include="Engine\PostEffect\GaussianBlur\GaussianBlur.h" />
-    <ClInclude Include="Engine\PostEffect\HighLumi\HighLumi.h" />
-    <ClInclude Include="Engine\PostEffect\PostEffect\PostEffect.h" />
-    <ClInclude Include="Engine\Sprite\Sprite.h" />
     <ClInclude Include="Engine\TextureManager\TextureManager.h" />
     <ClInclude Include="Engine\TextureManager\Texture\Texture.h" />
     <ClInclude Include="Engine\Utils\Camera\Camera.h" />
@@ -363,6 +382,22 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">6.0</ShaderModel>
     </FxCompile>
+    <FxCompile Include="Resources\Shaders\MosaicShader\Mosaic.PS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">6.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">6.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\NegaPosiInverseShader\NegaPosiInverse.PS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">6.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">6.0</ShaderModel>
+    </FxCompile>
     <FxCompile Include="Resources\Shaders\Object3dShader\Object3d.PS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">6.0</ShaderModel>
@@ -404,6 +439,22 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">6.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="Resources\Shaders\PointLightShader\PointLight.VS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">6.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">6.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\RGBShiftShader\RGBShift.PS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">6.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">6.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\ScanNoiseShader\ScanNoise.PS.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>

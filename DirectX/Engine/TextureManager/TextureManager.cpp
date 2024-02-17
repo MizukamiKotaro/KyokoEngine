@@ -5,7 +5,9 @@
 #include "Externals/DirectXTex/d3dx12.h"
 #include "Engine/Base/DirectXBase/DirectXBase.h"
 #include "Engine/Base/DescriptorHeapManager/DescriptorHeapManager.h"
-#include "DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
+#include "DescriptorHeapManager/DescriptorHeap/DescriptorHeap.h"
+#include "Texture.h"
+#include <filesystem>
 
 TextureManager* TextureManager::GetInstance()
 {
@@ -16,34 +18,47 @@ TextureManager* TextureManager::GetInstance()
 void TextureManager::Initialize()
 {
 	device_ = DirectXBase::GetInstance()->GetDevice();
+	commandList_ = DirectXBase::GetInstance()->GetCommandList();
+	srvHeap_ = DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap();
 }
 
 void TextureManager::Finalize()
 {
-	for (uint32_t texNum = 0; texNum < static_cast<uint32_t>(textures_.size()); texNum++) {
-		textures_[texNum]->resource_->Release();
-		textures_[texNum]->intermediateResource_->Release();
-	}
+	textures_.clear();
 }
 
 const Texture* TextureManager::LoadTexture(const std::string& filePath)
 {
-	
-	for (uint32_t texNum = 0; texNum < static_cast<uint32_t>(textures_.size()); texNum++) {
+	decltype(textures_)::iterator textureItr = textures_.find(filePath);
+	if (textureItr != textures_.end()) {
+		return textures_[filePath].get();
+	}
 
-		if (textures_[texNum]->filePath_ == filePath) {
-			return textures_[texNum].get();
+	std::filesystem::path filePathName(filePath);
+	std::string tex = filePathName.filename().string();
+
+	std::filesystem::path dir(directoryPath_);
+	bool found = false;
+	for (const auto& entry : std::filesystem::recursive_directory_iterator(dir)) {
+		if (entry.is_regular_file() && entry.path().filename().string() == tex) {
+			tex = entry.path().string();
+			found = true;
+			break;
 		}
 	}
 
-	textures_.push_back(std::make_unique<Texture>());
+	if (!found) {
+		// なかった場合白にしてもいいけどエラーの方が気付きやすい
+		// このタイミングで白にしたら白が余計生成される
+		//tex = directoryPath_ + "white.png";
+	}
 
-	textures_.back()->filePath_ = filePath;
+	textures_[filePath] = std::make_unique<Texture>();
 
-	DirectX::ScratchImage mipImages = Load(filePath);
+	DirectX::ScratchImage mipImages = Load(tex);
 	const DirectX::TexMetadata& metadata = mipImages.GetMetadata();
-	textures_.back()->resource_ = CreateTextureResource(metadata);
-	textures_.back()->intermediateResource_ = UploadTextureData(textures_.back()->resource_.Get(), mipImages);
+	textures_[filePath]->resource_ = CreateTextureResource(metadata);
+	textures_[filePath]->intermediateResource_ = UploadTextureData(textures_[filePath]->resource_.Get(), mipImages);
 
 	//metadataを基にSRVの設定
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
@@ -52,11 +67,11 @@ const Texture* TextureManager::LoadTexture(const std::string& filePath)
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D; // 2Dテクスチャ
 	srvDesc.Texture2D.MipLevels = UINT(metadata.mipLevels);
 
-	textures_.back()->handles_ = DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->GetNewDescriptorHandles();
+	textures_[filePath]->handles_ = srvHeap_->GetNewDescriptorHandles();
 
-	device_->CreateShaderResourceView(textures_.back()->resource_.Get(), &srvDesc, textures_.back()->handles_->cpuHandle);
+	device_->CreateShaderResourceView(textures_[filePath]->resource_.Get(), &srvDesc, textures_[filePath]->handles_->cpuHandle);
 
-	return textures_.back().get();
+	return textures_[filePath].get();
 }
 
 DirectX::ScratchImage TextureManager::Load(const std::string& filePath)
@@ -109,10 +124,8 @@ ID3D12Resource* TextureManager::CreateTextureResource(const DirectX::TexMetadata
 }
 
 [[nodiscard]]
-ID3D12Resource* TextureManager::UploadTextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages) {
-
-	ID3D12GraphicsCommandList* commandList_ = DirectXBase::GetInstance()->GetCommandList();
-
+ID3D12Resource* TextureManager::UploadTextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages)
+{
 	std::vector<D3D12_SUBRESOURCE_DATA> subresources;
 	DirectX::PrepareUpload(device_, mipImages.GetImages(), mipImages.GetImageCount(), mipImages.GetMetadata(), subresources);
 	uint64_t intermediateSize = GetRequiredIntermediateSize(texture, 0, UINT(subresources.size()));
@@ -130,5 +143,3 @@ ID3D12Resource* TextureManager::UploadTextureData(ID3D12Resource* texture, const
 	commandList_->ResourceBarrier(1, &barrier);
 	return intermediateResource;
 }
-
-

@@ -1,5 +1,6 @@
 #include "TitleScene.h"
 #include "Kyoko.h"
+#include "ImGuiManager/ImGuiManager.h"
 
 TitleScene::TitleScene()
 {
@@ -23,12 +24,17 @@ TitleScene::TitleScene()
 	post_ = std::make_unique<PostEffect>();
 	texcoodY_ = 0.0f;
 
+	scanNoise_ = std::make_unique<ScanNoise>();
+	negaposi_ = std::make_unique<NegaPosiInverse>();
+	mosaic_ = std::make_unique<Mosaic>();
+	rgbShift_ = std::make_unique<RGBShift>();
+
 	se_.LoadWave("SE/select.wav");
 }
 
 void TitleScene::Initialize()
 {
-	
+
 }
 
 void TitleScene::Update()
@@ -44,6 +50,24 @@ void TitleScene::Update()
 		ChangeScene(SELECT);
 		se_.Play(0.9f);
 	}
+
+#ifdef _DEBUG
+	ImGui::Begin("スキャンノイズ");
+	ImGui::SliderFloat("スクリーン座標の最小のy座標", &scanNoise_->scanNoiseData_->minY, 0.0f, 1.0f);
+	ImGui::SliderFloat("ノイズを行う縦幅", &scanNoise_->scanNoiseData_->width, 0.0f, 1.0f);
+	ImGui::SliderFloat("ノイズの強さ", &scanNoise_->scanNoiseData_->power, 0.0f, 1.0f);
+	ImGui::End();
+
+	ImGui::Begin("モザイク");
+	ImGui::SliderFloat("モザイクのサイズ", &mosaic_->mosaicData_->density, 0.1f, 100.0f);
+	ImGui::SliderInt("正方形にするか", &mosaic_->mosaicData_->isSquare, 0, 1);
+	ImGui::End();
+
+	ImGui::Begin("RGBShift");
+	ImGui::SliderFloat("シフトする大きさ", &rgbShift_->rgbShiftData_->shift, -1.0f, 1.0f);
+	ImGui::End();
+#endif // _DEBUG
+
 }
 
 void TitleScene::Draw()
@@ -52,12 +76,13 @@ void TitleScene::Draw()
 
 	Kyoko::Engine::PreDraw();
 
-	dome_->Draw(camera_.get());
+	/*dome_->Draw(camera_.get());
 	stage_->Draw(camera_.get());
-	screen_->Draw(camera_.get());
+	screen_->Draw(camera_.get());*/
 	//title_->Draw();
 
-	space_->Draw();
+	//scanNoise_->Draw();
+	rgbShift_->Draw();
 
 	BlackDraw();
 
@@ -81,5 +106,14 @@ void TitleScene::WrightPostEffect()
 	post_->Draw();
 
 	screen_->PostDrawScene();
+
+	rgbShift_->PreDrawScene();
+
+	dome_->Draw(camera_.get());
+	stage_->Draw(camera_.get());
+	screen_->Draw(camera_.get());
+	space_->Draw();
+
+	rgbShift_->PostDrawScene();
 }
 
