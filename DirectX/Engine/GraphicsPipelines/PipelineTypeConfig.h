@@ -11,6 +11,6 @@ enum class PipelineType {
 	GAUSSIAN_BLUR,
 	SCAN_NOISE,
 	MOSAIC,
-	RGB_SHIFT,
 	NEGA_POSI_INVERSE,
+	RGB_SHIFT,
 };

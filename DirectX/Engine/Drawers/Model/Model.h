@@ -29,7 +29,6 @@ public:
 	// Cubeフォルダ
 	//   Cube.obj
 	//   Cube.mtl
-	//   hoge.png
 	// の状態
 
 	/// <summary>

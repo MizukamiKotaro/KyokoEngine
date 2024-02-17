@@ -7,7 +7,7 @@
 #include <sstream>
 #include <filesystem>
 #include "TextureManager/TextureManager.h"
-#include "Model/ModelData/ModelData.h"
+#include "ModelData/ModelData.h"
 
 ModelDataManager* ModelDataManager::GetInstance()
 {
@@ -100,11 +100,15 @@ void ModelDataManager::LoadObjFile(const std::string& directoryPath, const std::
 		if (material->GetTextureCount(aiTextureType_DIFFUSE) != 0) {
 			aiString textureFilePath;
 			material->GetTexture(aiTextureType_DIFFUSE, 0, &textureFilePath);
-			std::string texFilePath = textureFilePath.C_Str();
-			std::filesystem::path filePathName(texFilePath);
-			texFilePath = filePathName.filename().string();
-
-			texFilePath = directoryPath + "/" + fileName + "/" + texFilePath.c_str();
+			std::string texFilePath;
+			if (textureFilePath.length > 0) {
+				texFilePath = textureFilePath.C_Str();
+				std::filesystem::path filePathName(texFilePath);
+				texFilePath = filePathName.filename().string();
+			}
+			else {
+				texFilePath = "white.png";
+			}
 
 			modelDatas_.back()->texture = TextureManager::GetInstance()->LoadTexture(texFilePath);
 		}

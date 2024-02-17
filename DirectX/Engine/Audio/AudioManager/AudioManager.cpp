@@ -35,8 +35,8 @@ void AudioManager::Finalize() {
 
 	xAudio2_.Reset();
 
-	for (const std::unique_ptr<SoundData>& soundData : soundDatas_) {
-		Unload(soundData.get());
+	for (const std::pair<const uint32_t, std::unique_ptr<SoundData>>& pair : soundDatas_) {
+		Unload(pair.second.get());
 	}
 }
 
@@ -44,9 +44,9 @@ uint32_t AudioManager::LoadWave(const std::string& filename) {
 
 	std::string fileName = directoryPath_ + filename;
 
-	for (const std::unique_ptr<SoundData>& soundData : soundDatas_) {
-		if (soundData->name == fileName) {
-			return soundData->handle;
+	for (const std::pair<const uint32_t, std::unique_ptr<SoundData>>& pair : soundDatas_) {
+		if (pair.second->name == fileName) {
+			return pair.first;
 		}
 	}
 
@@ -102,12 +102,11 @@ uint32_t AudioManager::LoadWave(const std::string& filename) {
 	soundData.pBuffer = pBuffer;
 	soundData.bufferSize = data.size;
 	soundData.name = fileName;
-	soundData.handle = static_cast<uint32_t>(soundDatas_.size());
+	uint32_t handle = static_cast<uint32_t>(soundDatas_.size());
 
-	soundDatas_.push_back(std::make_unique<SoundData>(soundData));
+	soundDatas_[handle] = std::make_unique<SoundData>(soundData);
 
-	return soundDatas_.back()->handle;
-
+	return handle;
 }
 
 void AudioManager::Unload(SoundData* soundData) {
@@ -147,12 +146,7 @@ AudioManager::Voice* AudioManager::FindUnusedVoice()
 
 AudioManager::SoundData* AudioManager::FindSoundData(uint32_t handle)
 {
-	for (const std::unique_ptr<SoundData>& soundData : soundDatas_) {
-		if (soundData->handle == handle) {
-			return soundData.get();
-		}
-	}
-	return nullptr;
+	return soundDatas_[handle].get();
 }
 
 uint32_t AudioManager::Play(uint32_t soundDataHandle, bool loopFlag, float volume) {
@@ -202,7 +196,7 @@ bool AudioManager::IsPlaying(uint32_t voiceHandle)
 			}
 		}
 	}
-	
+
 	return false;
 }
 

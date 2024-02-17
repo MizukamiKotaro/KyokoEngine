@@ -331,11 +331,11 @@
     <Filter Include="Engine\GraphicsPipelines\RGBShiftGraphicsPipeline">
       <UniqueIdentifier>{da928479-6b56-4ba3-a2dd-92a594be9826}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\GraphicsPipelines\RGBShift">
-      <UniqueIdentifier>{717d254c-0187-45c3-a2cc-75cae7742a61}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Shaders\RGBShift">
       <UniqueIdentifier>{abca3444-799c-49e6-ae82-aae3901f11c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Drawer\PostEffect\RGBShift">
+      <UniqueIdentifier>{717d254c-0187-45c3-a2cc-75cae7742a61}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -625,7 +625,7 @@
       <Filter>Engine\GraphicsPipelines\RGBShiftGraphicsPipeline</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Drawers\PostEffect\RGBShift\RGBShift.cpp">
-      <Filter>Engine\GraphicsPipelines\RGBShift</Filter>
+      <Filter>Engine\Drawer\PostEffect\RGBShift</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -957,7 +957,7 @@
       <Filter>Engine\GraphicsPipelines\RGBShiftGraphicsPipeline</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Drawers\PostEffect\RGBShift\RGBShift.h">
-      <Filter>Engine\GraphicsPipelines\RGBShift</Filter>
+      <Filter>Engine\Drawer\PostEffect\RGBShift</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

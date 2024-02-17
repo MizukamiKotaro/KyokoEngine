@@ -117,7 +117,6 @@ public:
 private:
 
 	static const PipelineType pipelineType_;
-	static const std::string directoryPath_;
 
 	Matrix4x4 worldMat_;
 
