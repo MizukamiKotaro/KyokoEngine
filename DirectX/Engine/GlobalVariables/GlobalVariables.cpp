@@ -12,74 +12,86 @@ GlobalVariables* GlobalVariables::GetInstance() {
 
 void GlobalVariables::Update() {
 #ifdef _DEBUG
-	if (!ImGui::Begin("Global Variables", nullptr, ImGuiWindowFlags_MenuBar)) {
+	for (std::map<std::string, Chunk>::iterator itChunk = datas_.begin();
+		itChunk != datas_.end(); ++itChunk) {
 
-		ImGui::End();
-		return;
-	}
-	if (!ImGui::BeginMenuBar()) {
-		return;
-	}
+		const std::string& chunkName = itChunk->first;
 
-	for (std::map<std::string, Group>::iterator itGroup = datas_.begin();
-	     itGroup != datas_.end(); ++itGroup) {
-		
-		const std::string& groupName = itGroup->first;
+		Chunk& chunk = itChunk->second;
 
-		Group& group = itGroup->second;
-
-		if (!ImGui::BeginMenu(groupName.c_str())) {
+		if (!ImGui::Begin(chunkName.c_str(), nullptr, ImGuiWindowFlags_MenuBar)) {
+			ImGui::End();
 			continue;
 		}
-		
-		for (std::map<std::string, Item>::iterator itItem = group.begin();
-		     itItem != group.end(); ++itItem) {
-			
-			const std::string& itemName = itItem->first;
-
-			Item& item = itItem->second;
-
-
-			if (std::holds_alternative<int32_t>(item)) {
-				int32_t* ptr = std::get_if<int32_t>(&item);
-				ImGui::DragInt(itemName.c_str(), ptr, 1);
-			} else if (std::holds_alternative<float>(item)) {
-				float* ptr = std::get_if<float>(&item);
-				ImGui::DragFloat(itemName.c_str(), ptr, 0.01f);
-			} else if (std::holds_alternative<Vector2>(item)) {
-				Vector2* ptr = std::get_if<Vector2>(&item);
-				ImGui::DragFloat2(itemName.c_str(), reinterpret_cast<float*>(ptr), 0.01f);
-			}
-			else if (std::holds_alternative<Vector3>(item)) {
-				Vector3* ptr = std::get_if<Vector3>(&item);
-				ImGui::DragFloat3(itemName.c_str(), reinterpret_cast<float*>(ptr), 0.01f);
-			}
+		if (!ImGui::BeginMenuBar()) {
+			continue;
 		}
 
+		for (std::map<std::string, Group>::iterator itGroup = chunk.begin();
+			itGroup != chunk.end(); ++itGroup) {
 
-		ImGui::Text("\n");
+			const std::string& groupName = itGroup->first;
 
-		if (ImGui::Button("Save")) {
-			SaveFile(groupName);
-			std::string message = std::format("{}.json saved", groupName);
-			//MessageBoxA(nullptr, message.c_str(), "GlobalVariables", 0);
+			Group& group = itGroup->second;
+
+			if (!ImGui::BeginMenu(groupName.c_str())) {
+				continue;
+			}
+
+			for (std::map<std::string, Item>::iterator itItem = group.begin();
+				itItem != group.end(); ++itItem) {
+
+				const std::string& itemName = itItem->first;
+
+				Item& item = itItem->second;
+
+				if (std::holds_alternative<int32_t>(item)) {
+					int32_t* ptr = std::get_if<int32_t>(&item);
+					ImGui::DragInt(itemName.c_str(), ptr, 1);
+				}
+				else if (std::holds_alternative<float>(item)) {
+					float* ptr = std::get_if<float>(&item);
+					ImGui::DragFloat(itemName.c_str(), ptr, 0.01f);
+				}
+				else if (std::holds_alternative<Vector2>(item)) {
+					Vector2* ptr = std::get_if<Vector2>(&item);
+					ImGui::DragFloat2(itemName.c_str(), reinterpret_cast<float*>(ptr), 0.01f);
+				}
+				else if (std::holds_alternative<Vector3>(item)) {
+					Vector3* ptr = std::get_if<Vector3>(&item);
+					ImGui::DragFloat3(itemName.c_str(), reinterpret_cast<float*>(ptr), 0.01f);
+				}
+			}
+
+			ImGui::Text("\n");
+
+			if (ImGui::Button("Save")) {
+				SaveFile(chunkName, groupName);
+				std::string message = std::format("{}.json saved", chunkName + "_" + groupName);
+			}
+
+			ImGui::EndMenu();
 		}
 
-		ImGui::EndMenu();
+		ImGui::EndMenuBar();
+		ImGui::End();
 	}
-
-
-
-	ImGui::EndMenuBar();
-	ImGui::End();
 #endif // _DEBUG
 }
 
-void GlobalVariables::CreateGroup(const std::string& groupName) { datas_[groupName]; }
+void GlobalVariables::CreateChunk(const std::string& chunkName)
+{
+	datas_[chunkName];
+}
 
-void GlobalVariables::SetValue(const std::string& groupName, const std::string& key, int32_t value) {
+void GlobalVariables::CreateGroup(const std::string& chunkName, const std::string& groupName)
+{
+	datas_[chunkName][groupName];
+}
+
+void GlobalVariables::SetValue(const std::string& chunkName, const std::string& groupName, const std::string& key, int32_t value) {
 	
-	Group& group = datas_[groupName];
+	Group& group = datas_[chunkName][groupName];
 
 	Item newItem{};
 	newItem = value;
@@ -87,8 +99,8 @@ void GlobalVariables::SetValue(const std::string& groupName, const std::string& 
 	group[key] = newItem;
 }
 
-void GlobalVariables::SetValue(const std::string& groupName, const std::string& key, float value) {
-	Group& group = datas_[groupName];
+void GlobalVariables::SetValue(const std::string& chunkName, const std::string& groupName, const std::string& key, float value) {
+	Group& group = datas_[chunkName][groupName];
 
 	Item newItem{};
 	newItem = value;
@@ -96,8 +108,8 @@ void GlobalVariables::SetValue(const std::string& groupName, const std::string& 
 	group[key] = newItem;
 }
 
-void GlobalVariables::SetValue(const std::string& groupName, const std::string& key, Vector2 value) {
-	Group& group = datas_[groupName];
+void GlobalVariables::SetValue(const std::string& chunkName, const std::string& groupName, const std::string& key, Vector2 value) {
+	Group& group = datas_[chunkName][groupName];
 
 	Item newItem{};
 	newItem = value;
@@ -105,8 +117,8 @@ void GlobalVariables::SetValue(const std::string& groupName, const std::string& 
 	group[key] = newItem;
 }
 
-void GlobalVariables::SetValue(const std::string& groupName, const std::string& key, Vector3 value) {
-	Group& group = datas_[groupName];
+void GlobalVariables::SetValue(const std::string& chunkName, const std::string& groupName, const std::string& key, Vector3 value) {
+	Group& group = datas_[chunkName][groupName];
 
 	Item newItem{};
 	newItem = value;
@@ -114,103 +126,107 @@ void GlobalVariables::SetValue(const std::string& groupName, const std::string& 
 	group[key] = newItem;
 }
 
-void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, int32_t value) {
-
-	std::map<std::string, Group>::iterator itGroup = datas_.find(groupName);
-
-	Group& group = itGroup->second;
-
-	if (group.find(key) == group.end()) {
-		SetValue(groupName, key, value);
-	}
-
-}
-
-void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, float value) {
-	std::map<std::string, Group>::iterator itGroup = datas_.find(groupName);
+void GlobalVariables::AddItem(const std::string& chunkName, const std::string& groupName, const std::string& key, int32_t value) {
+	std::map<std::string, Group>::iterator itGroup = datas_.find(chunkName)->second.find(groupName);
 
 	Group& group = itGroup->second;
 
 	if (group.find(key) == group.end()) {
-		SetValue(groupName, key, value);
+		SetValue(chunkName, groupName, key, value);
 	}
 }
 
-void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, const Vector2& value) {
-	std::map<std::string, Group>::iterator itGroup = datas_.find(groupName);
+void GlobalVariables::AddItem(const std::string& chunkName, const std::string& groupName, const std::string& key, float value) {
+	std::map<std::string, Group>::iterator itGroup = datas_.find(chunkName)->second.find(groupName);
 
 	Group& group = itGroup->second;
 
 	if (group.find(key) == group.end()) {
-		SetValue(groupName, key, value);
+		SetValue(chunkName, groupName, key, value);
 	}
 }
 
-void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, const Vector3& value) {
-	std::map<std::string, Group>::iterator itGroup = datas_.find(groupName);
+void GlobalVariables::AddItem(const std::string& chunkName, const std::string& groupName, const std::string& key, const Vector2& value) {
+	std::map<std::string, Group>::iterator itGroup = datas_.find(chunkName)->second.find(groupName);
 
 	Group& group = itGroup->second;
 
 	if (group.find(key) == group.end()) {
-		SetValue(groupName, key, value);
+		SetValue(chunkName, groupName, key, value);
 	}
 }
 
-int32_t GlobalVariables::GetIntValue(const std::string& groupName, const std::string& key) const {
+void GlobalVariables::AddItem(const std::string& chunkName, const std::string& groupName, const std::string& key, const Vector3& value) {
+	std::map<std::string, Group>::iterator itGroup = datas_.find(chunkName)->second.find(groupName);
 
-	assert(datas_.find(groupName) != datas_.end());
+	Group& group = itGroup->second;
 
-	const Group& group = datas_.at(groupName);
+	if (group.find(key) == group.end()) {
+		SetValue(chunkName, groupName, key, value);
+	}
+}
+
+int32_t GlobalVariables::GetIntValue(const std::string& chunkName, const std::string& groupName, const std::string& key) const {
+
+	assert(datas_.find(chunkName) != datas_.end());
+	const Chunk& chunk = datas_.at(chunkName);
+
+	assert(chunk.find(groupName) != chunk.end());
+	const Group& group = chunk.at(groupName);
 
 	assert(group.find(key) != group.end());
-
 	return std::get<int32_t>(group.find(key)->second);
 }
 
-float GlobalVariables::GetFloatValue(const std::string& groupName, const std::string& key) const {
+float GlobalVariables::GetFloatValue(const std::string& chunkName, const std::string& groupName, const std::string& key) const {
 
-	assert(datas_.find(groupName) != datas_.end());
+	assert(datas_.find(chunkName) != datas_.end());
+	const Chunk& chunk = datas_.at(chunkName);
 
-	const Group& group = datas_.at(groupName);
+	assert(chunk.find(groupName) != chunk.end());
+	const Group& group = chunk.at(groupName);
 
 	assert(group.find(key) != group.end());
-
 	return std::get<float>(group.find(key)->second);
 }
 
-Vector2 GlobalVariables::GetVector2Value(const std::string& groupName, const std::string& key) const {
+Vector2 GlobalVariables::GetVector2Value(const std::string& chunkName, const std::string& groupName, const std::string& key) const {
 
-	assert(datas_.find(groupName) != datas_.end());
+	assert(datas_.find(chunkName) != datas_.end());
+	const Chunk& chunk = datas_.at(chunkName);
 
-	const Group& group = datas_.at(groupName);
+	assert(chunk.find(groupName) != chunk.end());
+	const Group& group = chunk.at(groupName);
 
 	assert(group.find(key) != group.end());
-
 	return std::get<Vector2>(group.find(key)->second);
 }
 
-Vector3 GlobalVariables::GetVector3Value(const std::string& groupName, const std::string& key) const {
+Vector3 GlobalVariables::GetVector3Value(const std::string& chunkName, const std::string& groupName, const std::string& key) const {
 
-	assert(datas_.find(groupName) != datas_.end());
+	assert(datas_.find(chunkName) != datas_.end());
+	const Chunk& chunk = datas_.at(chunkName);
 
-	const Group& group = datas_.at(groupName);
+	assert(chunk.find(groupName) != chunk.end());
+	const Group& group = chunk.at(groupName);
 
 	assert(group.find(key) != group.end());
-
 	return std::get<Vector3>(group.find(key)->second);
 }
 
-void GlobalVariables::SaveFile(const std::string& groupName) {
+void GlobalVariables::SaveFile(const std::string& chunkName, const std::string& groupName) {
 
+	std::map<std::string, Chunk>::iterator itChunk = datas_.find(chunkName);
 
-	std::map<std::string, Group>::iterator itGroup = datas_.find(groupName);
+	assert(itChunk != datas_.end());
 
-	assert(itGroup != datas_.end());
+	std::map<std::string, Group>::iterator itGroup = itChunk->second.find(groupName);
+
+	assert(itGroup != itChunk->second.end());
 
 	nlohmann::json root;
 
 	root = nlohmann::json::object();
-	
 	
 	root[groupName] = nlohmann::json::object();
 
@@ -222,9 +238,7 @@ void GlobalVariables::SaveFile(const std::string& groupName) {
 
 		Item& item = itItem->second;
 
-
 		if (std::holds_alternative<int32_t>(item)) {
-			
 			
 			root[groupName][itemName] = std::get<int32_t>(item);
 		} else if (std::holds_alternative<float>(item)) {
@@ -248,7 +262,7 @@ void GlobalVariables::SaveFile(const std::string& groupName) {
 	}
 
 
-	std::string filePath = kDirectoryPath + groupName + ".json";
+	std::string filePath = kDirectoryPath + chunkName + "_" + groupName + ".json";
 
 	std::ofstream ofs;
 
@@ -256,9 +270,6 @@ void GlobalVariables::SaveFile(const std::string& groupName) {
 
 	if (ofs.fail()) {
 		std::string message = "Failed open data file file for write";
-#ifdef _DEBUG
-		//MessageBoxA(nullptr, message.c_str(), "GlobalVariables", 0);
-#endif // _DEBUG
 		assert(0);
 		return;
 	}
@@ -287,15 +298,19 @@ void GlobalVariables::LoadFiles() {
 		if (extension.compare(".json") != 0) {
 			continue;
 		}
+		std::string filePathStr = filePath.stem().string();
 
-		LoadFile(filePath.stem().string());
+		size_t underscorePos = filePathStr.find('_');
+		std::string chunkName = filePathStr.substr(0, underscorePos);
+		std::string groupName = filePathStr.substr(underscorePos + 1);
+
+		LoadFile(chunkName, groupName);
 	}
-
 }
 
-void GlobalVariables::LoadFile(const std::string& groupName) {
+void GlobalVariables::LoadFile(const std::string& chunkName, const std::string& groupName) {
 
-	std::string filePath = kDirectoryPath + groupName + ".json";
+	std::string filePath = kDirectoryPath + chunkName + "_" + groupName + ".json";
 
 	std::ifstream ifs;
 
@@ -309,7 +324,6 @@ void GlobalVariables::LoadFile(const std::string& groupName) {
 		assert(0);
 		return;
 	}
-
 
 	nlohmann::json root;
 
@@ -331,20 +345,20 @@ void GlobalVariables::LoadFile(const std::string& groupName) {
 		if (itItem->is_number_integer()) {
 			
 			int32_t value = itItem->get<int32_t>();
-			SetValue(groupName, itemName, value);
+			SetValue(chunkName, groupName, itemName, value);
 		} else if (itItem->is_number_float()) {
 
 			double value = itItem->get<double>();
-			SetValue(groupName, itemName, static_cast<float>(value));
+			SetValue(chunkName, groupName, itemName, static_cast<float>(value));
 		} else if (itItem->is_array() && itItem->size() == 2) {
 
 			Vector2 value = {itItem->at(0), itItem->at(1)};
-			SetValue(groupName, itemName, value);
+			SetValue(chunkName, groupName, itemName, value);
 		}
 		else if (itItem->is_array() && itItem->size() == 3) {
 
 			Vector3 value = { itItem->at(0), itItem->at(1), itItem->at(2) };
-			SetValue(groupName, itemName, value);
+			SetValue(chunkName, groupName, itemName, value);
 		}
 	}
 }
