@@ -17,6 +17,8 @@
 #include "BasePostEffect/BasePostEffect.h"
 #include "LightSingleton/LightSingleton.h"
 #include "Drawers/IDrawer/IDrawer.h"
+#include "VolumeManager/VolumeManager.h"
+#include "Audio.h"
 
 static ResourceLeackChecker leakCheck;
 
@@ -26,6 +28,7 @@ GraphicsPipelineManager* gpoManager;
 AudioManager* audioManager;
 Input* inputManager;
 GlobalVariables* globalVariables;
+VolumeManager* volumeManager;
 
 void Kyoko::Engine::Initialize(const char* windowName, int width, int height)
 {
@@ -36,6 +39,8 @@ void Kyoko::Engine::Initialize(const char* windowName, int width, int height)
 
 	dxBase = DirectXBase::GetInstance();
 	dxBase->Initialize();
+
+	Kyoko::ImGuiManager::Initialize();
 
 	TextureManager::GetInstance()->Initialize();
 
@@ -49,6 +54,9 @@ void Kyoko::Engine::Initialize(const char* windowName, int width, int height)
 
 	audioManager = AudioManager::GetInstance();
 	audioManager->Initialize();
+	volumeManager = VolumeManager::GetInstance();
+	volumeManager->Initialize();
+	Audio::StaticInitialize();
 
 	inputManager = Input::GetInstance();
 	inputManager->Initialize();
@@ -59,8 +67,6 @@ void Kyoko::Engine::Initialize(const char* windowName, int width, int height)
 	globalVariables->LoadFiles();
 
 	FrameInfo::GetInstance()->Initialize();
-
-	Kyoko::ImGuiManager::Initialize();
 
 #ifdef _DEBUG
 	ID3D12InfoQueue* infoQueue = nullptr;
@@ -104,8 +110,10 @@ void Kyoko::Engine::FirstUpdateInLoop()
 	ImGuiManager::Begin();
 	inputManager->Update();
 	audioManager->Update();
-
+#ifdef _DEBUG
+	volumeManager->Update();
 	globalVariables->Update();
+#endif // _DEBUG
 }
 
 void Kyoko::Engine::PreDraw()

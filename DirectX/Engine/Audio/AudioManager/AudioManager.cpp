@@ -1,8 +1,11 @@
 #include "AudioManager.h"
 #include <cassert>
 #include <fstream>
-
+#include <filesystem>
 #include "Audio.h"
+#include "SoundData.h"
+#include "AudioConfig.h"
+#include "VolumeManager/VolumeManager.h"
 
 AudioManager* AudioManager::GetInstance() {
 	static AudioManager instance;
@@ -15,8 +18,6 @@ void AudioManager::Initialize() {
 	assert(SUCCEEDED(hr));
 	hr = xAudio2_->CreateMasteringVoice(&masterVoice_);
 	assert(SUCCEEDED(hr));
-
-	Audio::StaticInitialize();
 }
 
 void AudioManager::Update()
@@ -35,24 +36,52 @@ void AudioManager::Finalize() {
 
 	xAudio2_.Reset();
 
-	for (const std::pair<const uint32_t, std::unique_ptr<SoundData>>& pair : soundDataMap_) {
+	for (const std::pair<const std::string, std::unique_ptr<SoundData>>& pair : soundDataMap_) {
 		Unload(pair.second.get());
 	}
 }
 
-uint32_t AudioManager::LoadWave(const std::string& filename) {
+const SoundData* AudioManager::LoadWave(const std::string& filename) {
 
-	std::string fileName = directoryPath_ + filename;
+	std::filesystem::path filePathName(filename);
+	std::string fileName = filePathName.filename().string();
 
-	for (const std::pair<const uint32_t, std::unique_ptr<SoundData>>& pair : soundDataMap_) {
-		if (pair.second->name == fileName) {
-			return pair.first;
+	if (soundDataMap_.find(fileName) != soundDataMap_.end()) {
+		return soundDataMap_[fileName].get();
+	}
+
+	SoundData soundData = {};
+
+	std::string entryPath;
+
+	std::filesystem::path dir(directoryPath_);
+	bool found = false;
+	for (const std::filesystem::directory_entry& entry : std::filesystem::recursive_directory_iterator(dir)) {
+		if (entry.is_regular_file() && entry.path().filename().string() == fileName) {
+			entryPath = entry.path().string();
+			found = true;
+
+			for (const std::filesystem::path& component : entry.path()) {
+				if (component.filename() == "SE") {
+					soundData.type = AudioType::SE;
+					break;
+				}
+				else if (component.filename() == "Music") {
+					soundData.type = AudioType::MUSIC;
+					break;
+				}
+			}
+			break;
 		}
+	}
+
+	if (!found) {
+		
 	}
 
 	std::ifstream file;
 
-	file.open(fileName, std::ios_base::binary);
+	file.open(entryPath, std::ios_base::binary);
 
 	assert(file.is_open());
 
@@ -96,17 +125,13 @@ uint32_t AudioManager::LoadWave(const std::string& filename) {
 
 	file.close();
 
-	SoundData soundData = {};
-
 	soundData.wfex = fmt.fmt;
 	soundData.pBuffer = pBuffer;
 	soundData.bufferSize = data.size;
-	soundData.name = fileName;
-	uint32_t handle = static_cast<uint32_t>(soundDataMap_.size());
 
-	soundDataMap_[handle] = std::make_unique<SoundData>(soundData);
+	soundDataMap_[fileName] = std::make_unique<SoundData>(soundData);
 
-	return handle;
+	return soundDataMap_[fileName].get();
 }
 
 void AudioManager::Unload(SoundData* soundData) {
@@ -144,17 +169,11 @@ AudioManager::Voice* AudioManager::FindUnusedVoice()
 	return voices_.back().get();
 }
 
-AudioManager::SoundData* AudioManager::FindSoundData(uint32_t handle)
-{
-	return soundDataMap_[handle].get();
-}
-
-uint32_t AudioManager::Play(uint32_t soundDataHandle, bool loopFlag, float volume) {
+uint32_t AudioManager::Play(const SoundData* soundData, bool loopFlag, float volume) {
 
 	HRESULT hr;
 
 	Voice* voice = FindUnusedVoice();
-	SoundData* soundData = FindSoundData(soundDataHandle);
 
 	hr = xAudio2_->CreateSourceVoice(&voice->sourceVoice, &soundData->wfex);
 	assert(SUCCEEDED(hr));

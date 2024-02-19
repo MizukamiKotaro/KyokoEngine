@@ -38,7 +38,7 @@ const Texture* TextureManager::LoadTexture(const std::string& filePath)
 
 	std::filesystem::path dir(directoryPath_);
 	bool found = false;
-	for (const auto& entry : std::filesystem::recursive_directory_iterator(dir)) {
+	for (const std::filesystem::directory_entry& entry : std::filesystem::recursive_directory_iterator(dir)) {
 		if (entry.is_regular_file() && entry.path().filename().string() == tex) {
 			tex = entry.path().string();
 			found = true;

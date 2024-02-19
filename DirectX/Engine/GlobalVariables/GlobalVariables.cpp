@@ -398,8 +398,8 @@ void GlobalVariables::SaveFile(const std::string& chunkName, const std::string& 
 	ofs.open(filePath);
 
 	if (ofs.fail()) {
-		std::string message = "Failed open data file file for write";
 #ifdef _DEBUG
+		std::string message = "Failed open data file file for write";
 		MessageBoxA(nullptr, message.c_str(), "GlobalVariables", 0);
 #endif // _DEBUG
 		assert(0);
@@ -423,7 +423,6 @@ void GlobalVariables::LoadFiles() {
 	for (const std::filesystem::directory_entry& entry : dir_it) {
 		
 		const std::filesystem::path& filePath = entry.path();
-
 
 		std::string extension = filePath.extension().string();
 
@@ -449,8 +448,8 @@ void GlobalVariables::LoadFile(const std::string& chunkName, const std::string& 
 	ifs.open(filePath);
 
 	if (ifs.fail()) {
-		std::string message = "Failed open data file file for read";
 #ifdef _DEBUG
+		std::string message = "Failed open data file file for read";
 		MessageBoxA(nullptr, message.c_str(), "GlobalVariables", 0);
 #endif // _DEBUG
 		assert(0);

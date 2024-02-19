@@ -34,7 +34,7 @@ void ClearScene::Update()
 	if ((input_->PressedKey(DIK_RETURN) || input_->PressedGamePadButton(Input::GamePadButton::A)) && isEnd_) {
 		// シーン切り替え
 		ChangeScene(SELECT);
-		se_.Play(0.9f);
+		se_.Play();
 	}
 }
 

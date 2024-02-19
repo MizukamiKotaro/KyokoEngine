@@ -346,6 +346,9 @@
     <Filter Include="Engine\GraphicsPipelineSystem\GraphicsPipelineFactory">
       <UniqueIdentifier>{9fa9601b-a2c4-4c1d-96e6-08a81d28ac52}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Audio\VolumeManager">
+      <UniqueIdentifier>{ba55635d-5f98-4afc-a3ed-88bb8ac98dde}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -638,6 +641,9 @@
     </ClCompile>
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelineFactory\GraphicsPipelineFactory.cpp">
       <Filter>Engine\GraphicsPipelineSystem\GraphicsPipelineFactory</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Audio\VolumeManager\VolumeManager.cpp">
+      <Filter>Engine\Audio\VolumeManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -976,6 +982,15 @@
     </ClInclude>
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelineFactory\GraphicsPipelineFactory.h">
       <Filter>Engine\GraphicsPipelineSystem\GraphicsPipelineFactory</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Audio\VolumeManager\VolumeManager.h">
+      <Filter>Engine\Audio\VolumeManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Audio\AudioConfig.h">
+      <Filter>Engine\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Audio\SoundData.h">
+      <Filter>Engine\Audio</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

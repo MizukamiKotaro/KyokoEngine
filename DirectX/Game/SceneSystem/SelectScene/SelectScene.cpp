@@ -32,7 +32,7 @@ void SelectScene::Update()
 		// シーン切り替え
 		stageNo_ = 0;
 		ChangeScene(STAGE);
-		se_.Play(0.9f);
+		se_.Play();
 	}
 }
 

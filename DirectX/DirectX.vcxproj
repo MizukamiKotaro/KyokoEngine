@@ -115,6 +115,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   <ItemGroup>
     <ClCompile Include="Engine\Audio\Audio.cpp" />
     <ClCompile Include="Engine\Audio\AudioManager\AudioManager.cpp" />
+    <ClCompile Include="Engine\Audio\VolumeManager\VolumeManager.cpp" />
     <ClCompile Include="Engine\Base\DebugLog\DebugLog.cpp" />
     <ClCompile Include="Engine\Base\DescriptorHeapManager\DescriptorHeapManager.cpp" />
     <ClCompile Include="Engine\Base\DescriptorHeapManager\DescriptorHeaps\DescriptorHeaps.cpp" />
@@ -213,7 +214,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Audio\Audio.h" />
+    <ClInclude Include="Engine\Audio\AudioConfig.h" />
     <ClInclude Include="Engine\Audio\AudioManager\AudioManager.h" />
+    <ClInclude Include="Engine\Audio\SoundData.h" />
+    <ClInclude Include="Engine\Audio\VolumeManager\VolumeManager.h" />
     <ClInclude Include="Engine\Base\DebugLog\DebugLog.h" />
     <ClInclude Include="Engine\Base\DescriptorHeapManager\DescriptorHandles\DescriptorHandles.h" />
     <ClInclude Include="Engine\Base\DescriptorHeapManager\DescriptorHeapManager.h" />
