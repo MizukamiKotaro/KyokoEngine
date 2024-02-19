@@ -2,6 +2,7 @@
 #include "Externals/nlohmann/json.hpp"
 #include "ImGuiManager/ImGuiManager.h"
 #include <fstream>
+#include "WindowsInfo/WindowsInfo.h"
 #include "Vector2.h"
 #include "Vector3.h"
 
@@ -68,6 +69,7 @@ void GlobalVariables::Update() {
 			if (ImGui::Button("Save")) {
 				SaveFile(chunkName, groupName);
 				std::string message = std::format("{}.json saved", chunkName + "_" + groupName);
+				MessageBoxA(nullptr, message.c_str(), "GlobalVariables", 0);
 			}
 
 			ImGui::EndMenu();
@@ -143,40 +145,28 @@ void GlobalVariables::SetValue(const std::string& chunkName, const std::string& 
 }
 
 void GlobalVariables::AddItem(const std::string& chunkName, const std::string& groupName, const std::string& key, int32_t value) {
-	std::map<std::string, Group>::iterator itGroup = datas_.find(chunkName)->second.find(groupName);
-
-	Group& group = itGroup->second;
-
+	Group& group = datas_[chunkName][groupName];
 	if (group.find(key) == group.end()) {
 		SetValue(chunkName, groupName, key, value);
 	}
 }
 
 void GlobalVariables::AddItem(const std::string& chunkName, const std::string& groupName, const std::string& key, float value) {
-	std::map<std::string, Group>::iterator itGroup = datas_.find(chunkName)->second.find(groupName);
-
-	Group& group = itGroup->second;
-
+	Group& group = datas_[chunkName][groupName];
 	if (group.find(key) == group.end()) {
 		SetValue(chunkName, groupName, key, value);
 	}
 }
 
 void GlobalVariables::AddItem(const std::string& chunkName, const std::string& groupName, const std::string& key, const Vector2& value) {
-	std::map<std::string, Group>::iterator itGroup = datas_.find(chunkName)->second.find(groupName);
-
-	Group& group = itGroup->second;
-
+	Group& group = datas_[chunkName][groupName];
 	if (group.find(key) == group.end()) {
 		SetValue(chunkName, groupName, key, value);
 	}
 }
 
 void GlobalVariables::AddItem(const std::string& chunkName, const std::string& groupName, const std::string& key, const Vector3& value) {
-	std::map<std::string, Group>::iterator itGroup = datas_.find(chunkName)->second.find(groupName);
-
-	Group& group = itGroup->second;
-
+	Group& group = datas_[chunkName][groupName];
 	if (group.find(key) == group.end()) {
 		SetValue(chunkName, groupName, key, value);
 	}
@@ -184,10 +174,7 @@ void GlobalVariables::AddItem(const std::string& chunkName, const std::string& g
 
 void GlobalVariables::AddItem(const std::string& chunkName, const std::string& groupName, const std::string& key, bool value)
 {
-	std::map<std::string, Group>::iterator itGroup = datas_.find(chunkName)->second.find(groupName);
-
-	Group& group = itGroup->second;
-
+	Group& group = datas_[chunkName][groupName];
 	if (group.find(key) == group.end()) {
 		SetValue(chunkName, groupName, key, value);
 	}
@@ -195,10 +182,7 @@ void GlobalVariables::AddItem(const std::string& chunkName, const std::string& g
 
 void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, int32_t value)
 {
-	std::map<std::string, Group>::iterator itGroup = datas_.find(kChunkName)->second.find(groupName);
-
-	Group& group = itGroup->second;
-
+	Group& group = datas_[kChunkName][groupName];
 	if (group.find(key) == group.end()) {
 		SetValue(kChunkName, groupName, key, value);
 	}
@@ -206,10 +190,7 @@ void GlobalVariables::AddItem(const std::string& groupName, const std::string& k
 
 void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, float value)
 {
-	std::map<std::string, Group>::iterator itGroup = datas_.find(kChunkName)->second.find(groupName);
-
-	Group& group = itGroup->second;
-
+	Group& group = datas_[kChunkName][groupName];
 	if (group.find(key) == group.end()) {
 		SetValue(kChunkName, groupName, key, value);
 	}
@@ -217,10 +198,7 @@ void GlobalVariables::AddItem(const std::string& groupName, const std::string& k
 
 void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, const Vector2& value)
 {
-	std::map<std::string, Group>::iterator itGroup = datas_.find(kChunkName)->second.find(groupName);
-
-	Group& group = itGroup->second;
-
+	Group& group = datas_[kChunkName][groupName];
 	if (group.find(key) == group.end()) {
 		SetValue(kChunkName, groupName, key, value);
 	}
@@ -228,10 +206,7 @@ void GlobalVariables::AddItem(const std::string& groupName, const std::string& k
 
 void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, const Vector3& value)
 {
-	std::map<std::string, Group>::iterator itGroup = datas_.find(kChunkName)->second.find(groupName);
-
-	Group& group = itGroup->second;
-
+	Group& group = datas_[kChunkName][groupName];
 	if (group.find(key) == group.end()) {
 		SetValue(kChunkName, groupName, key, value);
 	}
@@ -239,10 +214,7 @@ void GlobalVariables::AddItem(const std::string& groupName, const std::string& k
 
 void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, bool value)
 {
-	std::map<std::string, Group>::iterator itGroup = datas_.find(kChunkName)->second.find(groupName);
-
-	Group& group = itGroup->second;
-
+	Group& group = datas_[kChunkName][groupName];
 	if (group.find(key) == group.end()) {
 		SetValue(kChunkName, groupName, key, value);
 	}
@@ -427,6 +399,9 @@ void GlobalVariables::SaveFile(const std::string& chunkName, const std::string& 
 
 	if (ofs.fail()) {
 		std::string message = "Failed open data file file for write";
+#ifdef _DEBUG
+		MessageBoxA(nullptr, message.c_str(), "GlobalVariables", 0);
+#endif // _DEBUG
 		assert(0);
 		return;
 	}
@@ -476,7 +451,7 @@ void GlobalVariables::LoadFile(const std::string& chunkName, const std::string& 
 	if (ifs.fail()) {
 		std::string message = "Failed open data file file for read";
 #ifdef _DEBUG
-		//MessageBoxA(nullptr, message.c_str(), "GlobalVariables", 0);
+		MessageBoxA(nullptr, message.c_str(), "GlobalVariables", 0);
 #endif // _DEBUG
 		assert(0);
 		return;
