@@ -47,6 +47,9 @@ void Kyoko::Engine::Initialize(const char* windowName, int width, int height)
 	gpoManager = GraphicsPipelineManager::GetInstance();
 	gpoManager->Initialize();
 
+	globalVariables = GlobalVariables::GetInstance();
+	globalVariables->LoadFiles();
+
 	IDrawer::StaticInitialize();
 	Sprite::StaticInitialize();
 	Model::StaticInitialize();
@@ -62,9 +65,6 @@ void Kyoko::Engine::Initialize(const char* windowName, int width, int height)
 	inputManager->Initialize();
 
 	LightSingleton::GetInstance()->Initialize();
-
-	globalVariables = GlobalVariables::GetInstance();
-	globalVariables->LoadFiles();
 
 	FrameInfo::GetInstance()->Initialize();
 

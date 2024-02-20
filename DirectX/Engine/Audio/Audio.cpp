@@ -72,22 +72,22 @@ void Audio::Play(bool isLoop)
 
 void Audio::Stop() const
 {
-	audioManager_->Stop(voiceHandle_);
+	audioManager_->Stop(voiceHandle_, soundData_);
 }
 
 bool Audio::IsPlaying() const
 {
-	return audioManager_->IsPlaying(voiceHandle_);
+	return audioManager_->IsPlaying(voiceHandle_, soundData_);
 }
 
 void Audio::Pause() const
 {
-	audioManager_->Pause(voiceHandle_);
+	audioManager_->Pause(voiceHandle_, soundData_);
 }
 
 void Audio::ReStart() const
 {
-	audioManager_->ReStart(voiceHandle_);
+	audioManager_->ReStart(voiceHandle_, soundData_);
 }
 
 void Audio::Update()
@@ -125,7 +125,7 @@ void Audio::Update()
 		ImGui::End();
 	}
 
-	if (audioManager_->IsPlaying(voiceHandle_)) {
+	if (IsPlaying()) {
 		float volume = volume_;
 		if (soundData_->type == AudioType::SE) {
 			volume *= volumeManager_->GetSEVolume();
@@ -134,7 +134,12 @@ void Audio::Update()
 			volume *= volumeManager_->GetMusicVolume();
 		}
 
-		audioManager_->SetVolume(voiceHandle_, volume);
+		audioManager_->SetVolume(voiceHandle_, soundData_, volume);
 	}
 #endif // _DEBUG
+}
+
+const SoundData* Audio::GetSoundDataPtr() const
+{
+	return soundData_;
 }

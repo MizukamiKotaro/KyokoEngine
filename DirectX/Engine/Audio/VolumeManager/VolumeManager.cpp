@@ -29,12 +29,14 @@ void VolumeManager::Initialize()
 
 void VolumeManager::Clear()
 {
-	audioList_.clear();
+	audioMap_.clear();
 }
 
 void VolumeManager::SetAudio(Audio* audio)
 {
-	audioList_.push_back(std::make_unique<Audio>(*audio));
+	if (audioMap_.find(audio->GetItemName()) == audioMap_.end()) {
+		audioMap_[audio->GetItemName()] = std::make_unique<Audio>(*audio);
+	}
 }
 
 void VolumeManager::Update()
@@ -45,8 +47,8 @@ void VolumeManager::Update()
 
 	seVolume_ = std::clamp(seVolume_, 0.0f, 1.0f);
 	musicVolume_ = std::clamp(musicVolume_, 0.0f, 1.0f);
-	for (std::unique_ptr<Audio>& audio : audioList_) {
-		audio->Update();
+	for (std::pair<const std::string, std::unique_ptr<Audio>>& audio : audioMap_) {
+		audio.second->Update();
 	}
 #endif // _DEBUG
 }

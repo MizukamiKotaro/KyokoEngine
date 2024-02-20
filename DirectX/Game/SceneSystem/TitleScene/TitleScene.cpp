@@ -29,7 +29,7 @@ TitleScene::TitleScene()
 	mosaic_ = std::make_unique<Mosaic>();
 	rgbShift_ = std::make_unique<RGBShift>();
 
-	se_.LoadWave("SE/select.wav");
+	se_.LoadWave("SE/select.wav","決定音");
 }
 
 void TitleScene::Initialize()

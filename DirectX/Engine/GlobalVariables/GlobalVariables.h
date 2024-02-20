@@ -22,25 +22,28 @@ public:
 	void AddItem(const std::string& chunkName, const std::string& groupName, const std::string& key, const Vector2& value);
 	void AddItem(const std::string& chunkName, const std::string& groupName, const std::string& key, const Vector3& value);
 	void AddItem(const std::string& chunkName, const std::string& groupName, const std::string& key, bool value);
+	void AddItem(const std::string& chunkName, const std::string& groupName, const std::string& key, const std::string& value);
 
 	void AddItem(const std::string& groupName, const std::string& key, int32_t value);
 	void AddItem(const std::string& groupName, const std::string& key, float value);
 	void AddItem(const std::string& groupName, const std::string& key, const Vector2& value);
 	void AddItem(const std::string& groupName, const std::string& key, const Vector3& value);
 	void AddItem(const std::string& groupName, const std::string& key, bool value);
-
+	void AddItem(const std::string& groupName, const std::string& key, const std::string& value);
 
 	int32_t GetIntValue(const std::string& chunkName, const std::string& groupName, const std::string& key) const;
 	float GetFloatValue(const std::string& chunkName, const std::string& groupName, const std::string& key) const;
 	Vector2 GetVector2Value(const std::string& chunkName, const std::string& groupName, const std::string& key) const;
 	Vector3 GetVector3Value(const std::string& chunkName, const std::string& groupName, const std::string& key) const;
 	bool GetBoolValue(const std::string& chunkName, const std::string& groupName, const std::string& key) const;
+	std::string GetStringValue(const std::string& chunkName, const std::string& groupName, const std::string& key) const;
 
 	int32_t GetIntValue(const std::string& groupName, const std::string& key) const;
 	float GetFloatValue(const std::string& groupName, const std::string& key) const;
 	Vector2 GetVector2Value(const std::string& groupName, const std::string& key) const;
 	Vector3 GetVector3Value(const std::string& groupName, const std::string& key) const;
 	bool GetBoolValue(const std::string& groupName, const std::string& key) const;
+	std::string GetStringValue(const std::string& groupName, const std::string& key) const;
 
 	void SaveFile(const std::string& chunkName, const std::string& groupName);
 
@@ -59,10 +62,11 @@ private:
 	void SetValue(const std::string& chunkName, const std::string& groupName, const std::string& key, const Vector2& value);
 	void SetValue(const std::string& chunkName, const std::string& groupName, const std::string& key, const Vector3& value);
 	void SetValue(const std::string& chunkName, const std::string& groupName, const std::string& key, bool value);
+	void SetValue(const std::string& chunkName, const std::string& groupName, const std::string& key, const std::string& value);
 
 private:
 
-	using Item = std::variant<int32_t, float, Vector2, Vector3, bool>;
+	using Item = std::variant<int32_t, float, Vector2, Vector3, bool, std::string>;
 
 	using Group = std::map<std::string, Item>;
 

@@ -18,6 +18,7 @@ public:
 	struct Voice {
 		uint32_t handle = 0u;
 		IXAudio2SourceVoice* sourceVoice = nullptr;
+		const SoundData* soundData = nullptr;
 	};
 
 	static AudioManager* GetInstance();
@@ -38,19 +39,19 @@ public:
 
 	uint32_t Play(const SoundData* soundData, bool loopFlag = false, float volume = 0.7f);
 
-	void Stop(uint32_t voiceHandle);
+	void Stop(uint32_t voiceHandle, const SoundData* soundData);
 
-	bool IsPlaying(uint32_t voiceHandle);
+	bool IsPlaying(uint32_t voiceHandle, const SoundData* soundData);
 
-	void Pause(uint32_t voiceHandle);
+	void Pause(uint32_t voiceHandle, const SoundData* soundData);
 
-	void ReStart(uint32_t voiceHandle);
+	void ReStart(uint32_t voiceHandle, const SoundData* soundData);
 
-	void SetVolume(uint32_t voiceHandle, float volume);
+	void SetVolume(uint32_t voiceHandle, const SoundData* soundData, float volume);
 
 private:
 	void Unload(SoundData* soundData);
-	void DestroyVoice(uint32_t handle);
+	void DestroyVoice(uint32_t handle, const SoundData* soundData);
 	Voice* FindUnusedVoice();
 
 private:

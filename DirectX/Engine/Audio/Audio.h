@@ -26,6 +26,10 @@ public:
 
 	void Update();
 
+	const std::string& GetItemName() const { return itemName_; }
+
+	const SoundData* GetSoundDataPtr() const;
+
 private:
 	const SoundData* soundData_;
 	uint32_t voiceHandle_;

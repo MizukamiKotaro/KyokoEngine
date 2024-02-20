@@ -2,6 +2,7 @@
 #include <list>
 #include <string>
 #include <memory>
+#include <unordered_map>
 
 class Audio;
 enum class AudioType;
@@ -29,7 +30,7 @@ private:
 	VolumeManager(const VolumeManager&) = delete;
 	const VolumeManager& operator=(const VolumeManager&) = delete;
 
-	std::list<std::unique_ptr<Audio>> audioList_;
+	std::unordered_map<std::string, std::unique_ptr<Audio>> audioMap_;
 	GlobalVariables* globalVariables_ = nullptr;
 	
 	float seVolume_ = 0.7f;

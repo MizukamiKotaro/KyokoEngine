@@ -23,7 +23,7 @@ void AudioManager::Initialize() {
 void AudioManager::Update()
 {
 	for (const std::unique_ptr<Voice>& voice : voices_) {
-		if (!IsPlaying(voice->handle)) {
+		if (!IsPlaying(voice->handle, voice->soundData)) {
 			if (voice->sourceVoice) {
 				voice->sourceVoice->DestroyVoice();
 				voice->sourceVoice = nullptr;
@@ -141,10 +141,10 @@ void AudioManager::Unload(SoundData* soundData) {
 	soundData->wfex = {};
 }
 
-void AudioManager::DestroyVoice(uint32_t handle)
+void AudioManager::DestroyVoice(uint32_t handle, const SoundData* soundData)
 {
 	for (const std::unique_ptr<Voice>& voice : voices_) {
-		if (voice->handle == handle) {
+		if (voice->handle == handle && voice->soundData == soundData) {
 			if (voice->sourceVoice) {
 				voice->sourceVoice->DestroyVoice();
 				voice->sourceVoice = nullptr;
@@ -193,18 +193,20 @@ uint32_t AudioManager::Play(const SoundData* soundData, bool loopFlag, float vol
 	assert(SUCCEEDED(hr));
 	hr = voice->sourceVoice->SetVolume(volume);
 
+	voice->soundData = soundData;
+
 	return voice->handle;
 }
 
-void AudioManager::Stop(uint32_t voiceHandle) {
+void AudioManager::Stop(uint32_t voiceHandle, const SoundData* soundData) {
 
-	DestroyVoice(voiceHandle);
+	DestroyVoice(voiceHandle, soundData);
 }
 
-bool AudioManager::IsPlaying(uint32_t voiceHandle)
+bool AudioManager::IsPlaying(uint32_t voiceHandle, const SoundData* soundData)
 {
 	for (const std::unique_ptr<Voice>& voice : voices_) {
-		if (voice->handle == voiceHandle) {
+		if (voice->handle == voiceHandle && voice->soundData == soundData) {
 			if (voice->sourceVoice) {
 				XAUDIO2_VOICE_STATE state{};
 				voice->sourceVoice->GetState(&state);
@@ -219,10 +221,10 @@ bool AudioManager::IsPlaying(uint32_t voiceHandle)
 	return false;
 }
 
-void AudioManager::Pause(uint32_t voiceHandle)
+void AudioManager::Pause(uint32_t voiceHandle, const SoundData* soundData)
 {
 	for (const std::unique_ptr<Voice>& voice : voices_) {
-		if (voice->handle == voiceHandle) {
+		if (voice->handle == voiceHandle && voice->soundData == soundData) {
 			if (voice->sourceVoice) {
 				voice->sourceVoice->Stop();
 				break;
@@ -231,10 +233,10 @@ void AudioManager::Pause(uint32_t voiceHandle)
 	}
 }
 
-void AudioManager::ReStart(uint32_t voiceHandle)
+void AudioManager::ReStart(uint32_t voiceHandle, const SoundData* soundData)
 {
 	for (const std::unique_ptr<Voice>& voice : voices_) {
-		if (voice->handle == voiceHandle) {
+		if (voice->handle == voiceHandle && voice->soundData == soundData) {
 			if (voice->sourceVoice) {
 				voice->sourceVoice->Start();
 				break;
@@ -243,9 +245,9 @@ void AudioManager::ReStart(uint32_t voiceHandle)
 	}
 }
 
-void AudioManager::SetVolume(uint32_t voiceHandle, float volume) {
+void AudioManager::SetVolume(uint32_t voiceHandle, const SoundData* soundData, float volume) {
 	for (const std::unique_ptr<Voice>& voice : voices_) {
-		if (voice->handle == voiceHandle) {
+		if (voice->handle == voiceHandle && voice->soundData == soundData) {
 			voice->sourceVoice->SetVolume(volume);
 			break;
 		}
