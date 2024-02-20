@@ -5,7 +5,6 @@
 #include "GaussianBlur/GaussianBlur.h"
 #include <memory>
 
-// スプライト
 class Bloom
 {
 public:

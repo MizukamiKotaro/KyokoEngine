@@ -4,6 +4,5 @@
 class PostEffect : public BasePostEffect
 {
 public:
-
 	PostEffect();
 };

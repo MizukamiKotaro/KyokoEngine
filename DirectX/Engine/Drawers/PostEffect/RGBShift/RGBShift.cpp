@@ -13,8 +13,6 @@ RGBShift::RGBShift()
 
 	rgbShiftData_ = nullptr;
 
-	color_ = { 1.0f,1.0f,1.0f,1.0f };
-
 	CreatePostEffect();
 }
 

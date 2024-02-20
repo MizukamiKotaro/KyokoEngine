@@ -4,23 +4,16 @@
 class Contrast : public BasePostEffect
 {
 public:
-
 	Contrast();
-
 	~Contrast() override;
-
-	// namespace省略
-	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-
+	/// <summary>
+	/// 描画処理
+	/// </summary>
 	void Draw(BlendMode blendMode = BlendMode::kBlendModeNormal) override;
-
 	struct ContrastData {
 		float brightness_;
 		float contrast_;
 	};
-private:
-
-
 private:
 	void CreateContrastRes();
 	void CreateResources() override;

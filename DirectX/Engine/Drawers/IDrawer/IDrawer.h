@@ -9,7 +9,6 @@ class ModelDataManager;
 class IDrawer {
 public:
 	static void StaticInitialize();
-
 protected:
 	static ID3D12GraphicsCommandList* commandList_;
 	static GraphicsPipelineManager* psoManager_;

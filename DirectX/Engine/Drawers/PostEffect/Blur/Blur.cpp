@@ -10,11 +10,7 @@
 Blur::Blur()
 {
 	piplineType_ = PipelineType::BLUR;
-
 	blurData_ = nullptr;
-
-	color_ = { 1.0f,1.0f,1.0f,1.0f };
-
 	CreatePostEffect();
 }
 

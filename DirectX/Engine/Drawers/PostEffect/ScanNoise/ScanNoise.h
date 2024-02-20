@@ -5,29 +5,22 @@ class ScanNoise : public BasePostEffect
 {
 public:
 	ScanNoise();
-
 	~ScanNoise() override;
-
+	/// <summary>
+	/// 描画処理
+	/// </summary>
+	void Draw(BlendMode blendMode = BlendMode::kBlendModeNormal) override;
 	struct ScanNoiseData {
 		float minY; 
 		float width;
 		float power;
 		int isNormal;
 	};
-
-	// namespace省略
-	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-
-	void Draw(BlendMode blendMode = BlendMode::kBlendModeNormal) override;
 private:
 	void CreateScanNoiseRes();
 	void CreateResources() override;
-
 private:
 	ComPtr<ID3D12Resource> scanNoiseResource_;
-
 public:
 	ScanNoiseData* scanNoiseData_;
-
-	Vector4 color_;
 };

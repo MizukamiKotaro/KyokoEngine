@@ -13,8 +13,6 @@ ScanNoise::ScanNoise()
 
 	scanNoiseData_ = nullptr;
 
-	color_ = { 1.0f,1.0f,1.0f,1.0f };
-
 	CreatePostEffect();
 }
 

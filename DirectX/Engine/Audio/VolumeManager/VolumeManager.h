@@ -24,6 +24,9 @@ public:
 	const float GetSEVolume() const { return seVolume_; }
 	const float GetMusicVolume() const { return musicVolume_; }
 
+	void SetSEVolume(float volume) { seVolume_ = volume; }
+	void SetMusicVolume(float volume) { musicVolume_ = volume; }
+
 private:
 	VolumeManager() = default;
 	~VolumeManager() = default;

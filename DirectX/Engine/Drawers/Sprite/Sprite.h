@@ -58,10 +58,6 @@ public:
 
 	void Draw(BlendMode blendMode = BlendMode::kBlendModeNormal);
 
-
-private:
-	static void PreDraw();
-
 public:
 
 	void SetSRVGPUDescriptorHandle_(D3D12_GPU_DESCRIPTOR_HANDLE srvGPUDescriptorHandle);
@@ -83,62 +79,46 @@ public:
 	void SetTextureSize(const Vector2& texSize);
 
 private:
-
+	static void PreDraw();
 	void TransferSize();
-
 	void TransferUV();
-
 	void AdjustTextureSize();
-
 	void CreateVertexRes();
-
 	void CreateMaterialRes();
-
 	void CreateTranformRes();
 
 private:
-
 	ComPtr<ID3D12Resource> vertexResource_;
 	VertexData* vertexData_;
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_{};
-
 	ComPtr<ID3D12Resource> materialResource_;
 	Material* materialData_;
-
 	ComPtr<ID3D12Resource> transformResource_;
 	TransformationMatrix* transformData_;
 
 public:
-
 	float rotate_;
 	Vector2 pos_;
 	Vector2 size_;
 
 private:
-
 	static const PipelineType pipelineType_;
 
 	Matrix4x4 worldMat_;
-
 	Vector2 uvTranslate_;
 	Vector2 uvScale_;
 	float uvRotate_;
 
 	Vector4 color_;
-
 	Vector2 anchorPoint_;
-
 	Vector2 textureLeftTop_;
-
 	Vector2 textureSize_;
 
 	bool isFlipX_ = false;
 	bool isFlipY_ = false;
-
 	bool isInvisible_ = false;
 
 	const Texture* texture_;
-
 	D3D12_GPU_DESCRIPTOR_HANDLE srvGPUDescriptorHandle_;
 };
 
