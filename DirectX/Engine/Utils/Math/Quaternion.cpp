@@ -104,6 +104,41 @@ Quaternion Quaternion::MakeRotateAxisAngle(const Vector3& axis, float angle)
 	return result;
 }
 
+Quaternion Quaternion::DirectionToDirection(const Vector3& from, const Vector3& to)
+{
+	Vector3 u = from;
+	u = u.Normalize();
+	Vector3 v = to;
+	v = v.Normalize();
+
+	Vector3 n = Calc::Cross(u, v).Normalize();
+
+	float cosfTheta = Calc::Dot(u, v);
+
+	if (u.x == -v.x && u.y == -v.y && u.z == -v.z) {
+		if (u.x != 0 || u.y != 0) {
+			n = Vector3{ u.y,-u.x,0.0f }.Normalize();
+		}
+		else if (u.x != 0 || u.z != 0) {
+			n = Vector3{ u.z,0.0f,-u.x }.Normalize();
+		}
+
+		cosfTheta = -1;
+	}
+
+	Quaternion result = { 0.0f,0.0f,0.0f,0.0f };
+
+	float sinfTheta = std::sqrtf((1 - cosfTheta) / 2);
+	n = n.Normalize();
+
+	result.w = std::sqrtf((1 + cosfTheta) / 2);
+	result.x = n.x * sinfTheta;
+	result.y = n.y * sinfTheta;
+	result.z = n.z * sinfTheta;
+
+	return result;
+}
+
 Quaternion Quaternion::Multiply(const Quaternion& lhs, const Quaternion& rhs)
 {
 	Vector3 lhsVec3 = { lhs.x,lhs.y,lhs.z };

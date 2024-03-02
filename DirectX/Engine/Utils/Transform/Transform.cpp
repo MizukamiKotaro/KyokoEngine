@@ -13,6 +13,9 @@ Transform::Transform()
 	worldPos_.x = worldMat_.m[3][0];
 	worldPos_.y = worldMat_.m[3][1];
 	worldPos_.z = worldMat_.m[3][2];
+
+	isQua_ = false;
+	rot_ = Quaternion::Identity();
 }
 
 void Transform::Initialize()
@@ -22,8 +25,12 @@ void Transform::Initialize()
 
 void Transform::UpdateMatrix()
 {
-
-	worldMat_ = Matrix4x4::MakeAffinMatrix(*this);
+	if (isQua_) {
+		worldMat_ = Matrix4x4::MakeScaleMatrix(scale_) * Matrix4x4::MakeRotateMatrix(rot_) * Matrix4x4::MakeTranslateMatrix(translate_);
+	}
+	else {
+		worldMat_ = Matrix4x4::MakeAffinMatrix(*this);
+	}
 
 	if (parent_) {
 		worldMat_ = Matrix4x4::Multiply(worldMat_, parent_->worldMat_);
@@ -75,4 +82,10 @@ void Transform::ClearWorldTranslateParent()
 		translate_ += worldTranslateParent_->worldPos_;
 		worldTranslateParent_ = nullptr;
 	}
+}
+
+void Transform::SetQuaRot(const Quaternion& qua)
+{
+	isQua_ = true;
+	rot_ = qua;
 }

@@ -102,7 +102,10 @@ void Audio::Update()
 
 	volume_ = std::clamp(volume_, 0.0f, 1.0f);
 
-	if (ImGui::Begin("Audio", nullptr, ImGuiWindowFlags_MenuBar)) {
+	if (!ImGui::Begin("Audio", nullptr, ImGuiWindowFlags_MenuBar)) {
+		ImGui::End();
+	}
+	else {
 		if (ImGui::BeginMenuBar()) {
 			if (ImGui::BeginMenu("音量再生")) {
 				std::string playButtonName = itemName_ + "の再生";

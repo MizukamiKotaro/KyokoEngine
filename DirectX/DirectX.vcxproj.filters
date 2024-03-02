@@ -349,6 +349,9 @@
     <Filter Include="Engine\Audio\VolumeManager">
       <UniqueIdentifier>{ba55635d-5f98-4afc-a3ed-88bb8ac98dde}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\GameElement\Live\SpotLightBox">
+      <UniqueIdentifier>{2ee7dc59-8aa1-4600-aabf-6472a93e6894}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -644,6 +647,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Audio\VolumeManager\VolumeManager.cpp">
       <Filter>Engine\Audio\VolumeManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameElement\Live\SpotLightBox\SpotLightBox.cpp">
+      <Filter>Game\GameElement\Live\SpotLightBox</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -991,6 +997,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Audio\SoundData.h">
       <Filter>Engine\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameElement\Live\SpotLightBox\SpotLightBox.h">
+      <Filter>Game\GameElement\Live\SpotLightBox</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

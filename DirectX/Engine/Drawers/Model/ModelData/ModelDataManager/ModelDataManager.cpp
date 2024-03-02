@@ -232,7 +232,7 @@ void ModelDataManager::LoadGLTFFile(const std::string& directoryPath, const std:
 
 	// materialを解析する
 	// ここ間違い
-	for (uint32_t materialIndex = 0; materialIndex < scene_->mNumMaterials; materialIndex++) {
+	/*for (uint32_t materialIndex = 0; materialIndex < scene_->mNumMaterials; materialIndex++) {
 		aiMaterial* material = scene_->mMaterials[materialIndex];
 		if (material->GetTextureCount(aiTextureType_DIFFUSE) != 0) {
 			aiString textureFilePath;
@@ -246,7 +246,8 @@ void ModelDataManager::LoadGLTFFile(const std::string& directoryPath, const std:
 
 			modelDatas_.back()->texture = TextureManager::GetInstance()->LoadTexture(texFilePath);
 		}
-	}
+	}*/
+	modelDatas_.back()->texture = TextureManager::GetInstance()->LoadTexture("white.png");
 
 	// rootNodeの解析
 	modelDatas_.back()->rootNode = ReadNode(scene_->mRootNode);

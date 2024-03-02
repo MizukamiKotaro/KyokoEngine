@@ -87,7 +87,7 @@ public:
 
 	void UnUsedLight() { materialData_->enableLighting = 0; }
 
-	void SetColor(const Vector4& color) { materialData_->color = color; }
+	void SetColor(const Vector4& color) { color_ = color; }
 
 private:
 	ComPtr<ID3D12Resource> materialResource_;
@@ -107,11 +107,10 @@ private:
 	void InitVariables();
 
 public:
-
 	Transform transform_;
+	Vector4 color_;
 
 private:
-
 	static const PipelineType pipelineType_ = PipelineType::MODEL;
 
 	Light light_;

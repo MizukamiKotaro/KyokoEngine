@@ -67,6 +67,8 @@ void Model::Draw(const Camera& camera, BlendMode blendMode)
 {
 	PreDraw();
 
+	materialData_->color = color_;
+
 	transformationData_->World = transform_.worldMat_;
 	transformationData_->WVP = transform_.worldMat_ * camera.GetViewProjection();
 	transformationData_->WorldInverse = Matrix4x4::Inverse(Matrix4x4::MakeScaleMatrix(transform_.scale_)) *
@@ -132,6 +134,7 @@ void Model::CreateMaterialResource()
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 
 	materialData_->color = { 1.0f, 1.0f, 1.0f, 1.0f };
+	color_ = { 1.0f, 1.0f, 1.0f, 1.0f };
 	materialData_->enableLighting = 3;
 	materialData_->uvTransform = Matrix4x4::MakeIdentity4x4();
 	materialData_->shininess = 40.0f;

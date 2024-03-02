@@ -29,6 +29,11 @@ TitleScene::TitleScene()
 	mosaic_ = std::make_unique<Mosaic>();
 	rgbShift_ = std::make_unique<RGBShift>();
 
+	spotLightBox_ = std::make_unique<SpotLightBox>();
+	puniru_ = std::make_unique<Sprite>("puniru.png");
+	puniru_->size_ *= 0.5f;
+	puniru_->Update();
+
 	se_.LoadWave("SE/select.wav","決定音");
 }
 
@@ -68,6 +73,7 @@ void TitleScene::Update()
 	ImGui::End();
 #endif // _DEBUG
 
+	spotLightBox_->Update();
 }
 
 void TitleScene::Draw()
@@ -83,6 +89,9 @@ void TitleScene::Draw()
 
 	//scanNoise_->Draw();
 	rgbShift_->Draw();
+	puniru_->Draw();
+
+	spotLightBox_->Draw(camera_.get());
 
 	BlackDraw();
 
@@ -107,11 +116,18 @@ void TitleScene::WrightPostEffect()
 
 	screen_->PostDrawScene();
 
-	rgbShift_->PreDrawScene();
 
+	/*scanNoise_->PreDrawScene();
+	scanNoise_->PostDrawScene();*/
+
+	mosaic_->PreDrawScene();
 	dome_->Draw(camera_.get());
 	stage_->Draw(camera_.get());
 	screen_->Draw(camera_.get());
+	mosaic_->PostDrawScene();
+
+	rgbShift_->PreDrawScene();
+	mosaic_->Draw();
 	space_->Draw();
 
 	rgbShift_->PostDrawScene();

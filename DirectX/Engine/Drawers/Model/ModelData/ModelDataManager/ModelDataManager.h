@@ -53,7 +53,6 @@ private:
 	void LoadGLTFFile(const std::string& directoryPath, const std::string& fileName);
 
 private:
-
 	std::vector<std::unique_ptr<ModelData>> modelDatas_;
 
 	const std::string directoryPath_ = "Resources/Obj";

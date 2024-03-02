@@ -1,6 +1,7 @@
 #pragma once
 #include "Utils/Math/Vector3.h"
 #include "Utils/Math/Matrix4x4.h"
+#include "Quaternion.h"
 
 class Transform {
 
@@ -26,6 +27,8 @@ public:
 	/// </summary>
 	void ClearWorldTranslateParent();
 
+	void SetQuaRot(const Quaternion& qua);
+
 public:
 
 	Vector3 scale_;
@@ -35,6 +38,9 @@ public:
 	Matrix4x4 worldMat_;
 
 	Vector3 worldPos_;
+
+	Quaternion rot_;
+	bool isQua_;
 
 	const Transform* parent_ = nullptr;
 

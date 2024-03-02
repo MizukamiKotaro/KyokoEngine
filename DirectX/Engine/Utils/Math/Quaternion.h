@@ -48,6 +48,8 @@ public:
 
 	static Quaternion MakeRotateAxisAngle(const Vector3& axis, float angle);
 
+	static Quaternion DirectionToDirection(const Vector3& from, const Vector3& to);
+
 	static Quaternion Multiply(const Quaternion& lhs, const Quaternion& rhs);
 
 	static Quaternion Identity();
