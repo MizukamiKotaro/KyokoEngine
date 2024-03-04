@@ -55,6 +55,6 @@ private:
 private:
 	std::vector<std::unique_ptr<ModelData>> modelDatas_;
 
-	const std::string directoryPath_ = "Resources/Obj";
+	const std::string directoryPath_ = "Resources/Object";
 
 };
