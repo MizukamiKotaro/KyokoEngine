@@ -1,61 +1,85 @@
 #pragma once
-
-#include <wrl.h>
-#include <d3d12.h>
-#include <stdint.h>
-#include <string>
-#include "Utils/Math/Vector2.h"
-#include "Utils/Math/Vector4.h"
-#include "Utils/Math/Matrix4x4.h"
-#include "Utils/Transform/Transform.h"
-#include "GraphicsPipelineSystem/GraphicsPiplineManager/GraphicsPiplineManager.h"
-#include <optional>
+#include "ParticleData.h"
 #include <list>
-#include "Utils/Shape/AABB.h"
-#include "Light/Light.h"
-#include "DescriptorHeapManager/DescriptorHeap/DescriptorHeap.h"
-#include "ModelData/ModelData.h"
-#include "Texture.h"
-#include "GraphicsPipelineSystem/BlendModeConfig.h"
-#include "GraphicsPipelineSystem/PipelineTypeConfig.h"
-
-#include "DirectionalLight/DirectionalLight.h"
-#include "PointLight/PointLight.h"
-#include "SpotLight/SpotLight.h"
+#include <memory>
+#include "Drawers/IDrawer/IDrawer.h"
+#include "StageEditor/StageEditor.h"
+#include <vector>
 
 class Camera;
-class ILight;
+class ParticleManager;
 
-class Particle
+class Particle : public IDrawer
 {
 public:
+	Particle(const std::string& particleName, const std::string& textureName, bool isStageEditor = false, BlendMode blendMode = BlendMode::kBlendModeNormal);
+	Particle(const std::string& particleName, const std::string& modelName, const std::string& textureName, bool isStageEditor = false, BlendMode blendMode = BlendMode::kBlendModeNormal);
 
-	static const uint32_t kNumInstance = 256;
+	static void StaticInitialize();
 
-	Particle(const std::string& fileName);
-	Particle(const Texture* texture);
-	~Particle();
+	void Initialize();
 
-	struct Material
-	{
-		Vector4 color;
-		int32_t enableLighting;
-		float padding[3];
-		Matrix4x4 uvTransform;
-	};
+	void Update(float deltaTime, Camera* camera);
 
-	struct ParticleForGPU {
-		Matrix4x4 WVP;
-		Matrix4x4 World;
-		Vector4 color;
-	};
+	void Draw(Camera* camera);
+
+private:
+	void SetGlobalVariable();
+
+	void ApplyGlobalVariable();
+
+private:
+	static const ModelData* plane_;
+	static ParticleManager* particleManager_;
+	const ParticleMeshTexData* drawData_;
+
+	std::unique_ptr<GlobalVariableUser> globalVariable_;
+	std::unique_ptr<StageEditor> stageEditor_;
 
 	struct Active {
-		Transform transform;
+		Vector3 position;
+		Vector3 rotate;
+		Vector3 scale;
 		Vector3 velocity;
 		Vector4 color;
-		float lifeTime;
 		float currentTime;
+
+		float speed;
+		float acceleration;
+		float lifeTime;
+		float rotateSpeed;
+		float rotateAttenuation;
+
+		std::vector<float> fPara;
+		std::vector<std::string> fName;
+		enum FEnum {
+			kFirstSpeedMin, // 初速の最小
+			kFirstSpeedMax, // 初速の最大
+			kAccelerationMin, // 加速度の最小
+			kAccelerationMax, // 加速度の最大
+			kLifeTimeMin, // 生存時間の最小
+			kLifeTimeMax, // 生存時間の最大
+			kRotateSpeedMin, // 回転速度の最小
+			kRotateSpeedMax, // 回転速度の最大
+			kRotateAttenuationMin, // 回転速度の減衰率の最小
+			kRotateAttenuationMax, // 回転速度の減衰率の最大
+			kFEnd,
+		};
+
+		Vector3 firstAngle;
+		Vector3 rotateAngle;
+
+		std::vector<Vector3> v3Para;
+		std::vector<std::string> v3Name;
+		enum V3Enum {
+			kFirstAngleMin, // 最初の向きの最小
+			kFirstAngleMax, // 最初の向きの最大
+			kFirstRotateMin, // 最初の姿勢の最小
+			kFirstRotateMax, // 最初の姿勢の最大
+			kRotateMin, // 回転の最小
+			kRotateMax, // 回転の最大
+			kV3End,
+		};
 	};
 
 	struct Emitter
@@ -67,92 +91,4 @@ public:
 		float generateCoolTime_; // 生成の間隔
 		float countTime_; // 生成をするための時間のカウント
 	};
-
-	struct AccelerationField
-	{
-		Vector3 acceleration;
-		AABB area;
-	};
-
-	// namespace省略
-	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-
-	void Initialize();
-
-	void Update();
-
-	void Draw(const Camera& camera, BlendMode blendMode = BlendMode::kBlendModeNormal);
-
-
-private:
-	static void PreDraw() { GraphicsPipelineManager::GetInstance()->PreDraw(pipelineType_); }
-
-public:
-
-	enum class BillboardType
-	{
-		X,
-		Y,
-		Z,
-		ALL
-	};
-
-	void SetBillboardType(BillboardType type) { billboardTypeOpt_ = type; }
-
-	void ClearBillboardType() { billboardTypeOpt_ = std::nullopt; }
-
-	void GenerateParticle();
-
-	void SetLight(const ILight* light);
-
-private:
-
-	void CreateSRV();
-
-	void CreateResources();
-
-	void CreateMaterialResource();
-
-	void CreateInstancingResource();
-
-	void InitVariables();
-
-	Active CreateActive();
-
-private:
-	ComPtr<ID3D12Resource> materialResource_;
-	Material* materialData_;
-
-	ComPtr<ID3D12Resource> instancingResource_;
-	ParticleForGPU* instancingData_;
-
-public:
-
-	std::list<Active> actives_;
-
-	Emitter emitter;
-
-private:
-
-	static const PipelineType pipelineType_ = PipelineType::PARTICLE;
-
-	static const std::string directoryPath_;
-
-	Light light_;
-
-	std::optional<BillboardType> billboardTypeOpt_ = BillboardType::Y;
-	BillboardType billbordType = BillboardType::Y;
-
-	Matrix4x4 uvMatrix_;
-
-	Vector3 uvScale_;
-	Vector3 uvRotate_;
-	Vector3 uvPos_;
-
-	const ModelData* modelData_;
-
-	const Texture* texture_;
-
-	const DescriptorHandles* srvHandles_;
 };
-

@@ -9,14 +9,13 @@ Game::Game(Camera* camera)
 	input_ = Input::GetInstance();
 
 	camera_ = camera;
-	camera_->Initialize();
 
 	finishCount_ = 0.0f;
 	isMusicFinish_ = false;
 	isStartMusic_ = false;
 	isClear_ = false;
 
-	live_ = std::make_unique<Live>();
+	live_ = std::make_unique<Live>(camera_);
 
 	music_ = std::make_unique<Audio>();
 	music_->LoadWave("Music/maou_short_14_shining_star.wav");
@@ -37,7 +36,7 @@ Game::Game(Camera* camera)
 
 void Game::Initialize()
 {
-	live_->Initialize(camera_);
+	live_->Initialize();
 
 	time_ = 0.0f;
 
@@ -48,8 +47,6 @@ void Game::Initialize()
 	isMusicFinish_ = false;
 	isStartMusic_ = false;
 	isClear_ = false;
-
-	camera_->Initialize();
 
 	stageUI_->Initialize();
 
@@ -92,7 +89,7 @@ void Game::Update()
 
 void Game::Draw()
 {
-	live_->Draw(camera_);
+	live_->Draw();
 
 	notesList_->Draw(camera_);
 

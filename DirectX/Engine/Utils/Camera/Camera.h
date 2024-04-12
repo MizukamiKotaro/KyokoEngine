@@ -27,8 +27,9 @@ public:
 
 	const D3D12_GPU_VIRTUAL_ADDRESS GetGPUVirtualAddress() const { return cameraForGPUResource_->GetGPUVirtualAddress(); }
 
-private:
+	const bool InScreenCheck2D(const Vector3& position, const float& radius) const;
 
+private:
 	Microsoft::WRL::ComPtr<ID3D12Resource> cameraForGPUResource_;
 	CameraForGPU* cameraForGPUData_;
 

@@ -11,8 +11,26 @@ GlobalVariables* GlobalVariables::GetInstance() {
 	return &globalVariables;
 }
 
+void GlobalVariables::Initialize()
+{
+	kTreeName_.resize(6);
+	for (int i = 0; i < 6; i++) {
+		kTreeName_[i] = "Tree" + std::to_string(i + 1);
+	}
+}
+
 void GlobalVariables::Update() {
 #ifdef _DEBUG
+	for (std::map<std::string, Chunk>::iterator itChunk = isTreeOpen_.begin(); itChunk != isTreeOpen_.end(); itChunk++) {
+		Chunk& chunk = itChunk->second;
+		for (std::map<std::string, Group>::iterator itGroup = chunk.begin(); itGroup != chunk.end(); ++itGroup) {
+			Group& group = itGroup->second;
+			for (std::map<std::string, Item>::iterator itItem = group.begin(); itItem != group.end(); ++itItem) {
+				itItem->second = false;
+			}
+		}
+	}
+
 	for (std::map<std::string, Chunk>::iterator itChunk = datas_.begin();
 		itChunk != datas_.end(); ++itChunk) {
 
@@ -39,6 +57,8 @@ void GlobalVariables::Update() {
 				continue;
 			}
 
+			std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, GroupPtr>>>>>> treeMap;
+
 			for (std::map<std::string, Item>::iterator itItem = group.begin();
 				itItem != group.end(); ++itItem) {
 
@@ -46,21 +66,355 @@ void GlobalVariables::Update() {
 
 				Item& item = itItem->second;
 
-				if (std::holds_alternative<int32_t>(item)) {
-					int32_t* ptr = std::get_if<int32_t>(&item);
-					ImGui::DragInt(itemName.c_str(), ptr, 1);
-				} else if (std::holds_alternative<float>(item)) {
-					float* ptr = std::get_if<float>(&item);
-					ImGui::DragFloat(itemName.c_str(), ptr, 0.01f);
-				} else if (std::holds_alternative<Vector2>(item)) {
-					Vector2* ptr = std::get_if<Vector2>(&item);
-					ImGui::DragFloat2(itemName.c_str(), reinterpret_cast<float*>(ptr), 0.01f);
-				} else if (std::holds_alternative<Vector3>(item)) {
-					Vector3* ptr = std::get_if<Vector3>(&item);
-					ImGui::DragFloat3(itemName.c_str(), reinterpret_cast<float*>(ptr), 0.01f);
-				} else if (std::holds_alternative<bool>(item)) {
-					bool* ptr = std::get_if<bool>(&item);
-					ImGui::Checkbox(itemName.c_str(), ptr);
+				size_t pos = itemName.find(kTreeName_[0]);
+				if (pos != std::string::npos) {
+					size_t underscorePos = itemName.find("_", pos + 5);
+					std::string tree1 = itemName.substr(pos + 5, underscorePos - pos - 5);
+
+					std::string text = itemName.substr(underscorePos + 1);
+					pos = text.find(kTreeName_[1]);
+					if (pos != std::string::npos) {
+						underscorePos = text.find("_", pos + 5);
+						std::string tree2 = text.substr(pos + 5, underscorePos - pos - 5);
+
+						text = text.substr(underscorePos + 1);
+						pos = text.find(kTreeName_[2]);
+						if (pos != std::string::npos) {
+
+							underscorePos = text.find("_", pos + 5);
+							std::string tree3 = text.substr(pos + 5, underscorePos - pos - 5);
+
+							text = text.substr(underscorePos + 1);
+							pos = text.find(kTreeName_[3]);
+							if (pos != std::string::npos) {
+
+								underscorePos = text.find("_", pos + 5);
+								std::string tree4 = text.substr(pos + 5, underscorePos - pos - 5);
+
+								text = text.substr(underscorePos + 1);
+								pos = text.find(kTreeName_[4]);
+								if (pos != std::string::npos) {
+
+									underscorePos = text.find("_", pos + 5);
+									std::string tree5 = text.substr(pos + 5, underscorePos - pos - 5);
+
+									text = text.substr(underscorePos + 1);
+									pos = text.find(kTreeName_[5]);
+									if (pos != std::string::npos) {
+
+
+										underscorePos = text.find("_", pos + 5);
+										if (underscorePos != std::string::npos) {
+											std::string tree6 = text.substr(pos + 5, underscorePos - pos - 5);
+											text = text.substr(underscorePos + 1);
+											treeMap[tree1][tree2][tree3][tree4][tree5][tree6][text] = &item;
+											isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6] = false;
+										}
+									}
+									else {
+										treeMap[tree1][tree2][tree3][tree4][tree5]["_"][text] = &item;
+										isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5] = false;
+									}
+								}
+								else {
+									treeMap[tree1][tree2][tree3][tree4]["_"]["_"][text] = &item;
+									isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4] = false;
+								}
+							}
+							else {
+								treeMap[tree1][tree2][tree3]["_"]["_"]["_"][text] = &item;
+								isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3] = false;
+							}
+						}
+						else {
+							treeMap[tree1][tree2]["_"]["_"]["_"]["_"][text] = &item;
+							isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2] = false;
+						}
+					}
+					else {
+						treeMap[tree1]["_"]["_"]["_"]["_"]["_"][text] = &item;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1] = false;
+					}
+				}
+				else {
+					if (std::holds_alternative<int32_t>(item)) {
+						int32_t* ptr = std::get_if<int32_t>(&item);
+						ImGui::DragInt(itemName.c_str(), ptr, 1);
+					}
+					else if (std::holds_alternative<float>(item)) {
+						float* ptr = std::get_if<float>(&item);
+						ImGui::DragFloat(itemName.c_str(), ptr, 0.01f);
+					}
+					else if (std::holds_alternative<Vector2>(item)) {
+						Vector2* ptr = std::get_if<Vector2>(&item);
+						ImGui::DragFloat2(itemName.c_str(), reinterpret_cast<float*>(ptr), 0.01f);
+					}
+					else if (std::holds_alternative<Vector3>(item)) {
+						Vector3* ptr = std::get_if<Vector3>(&item);
+						ImGui::DragFloat3(itemName.c_str(), reinterpret_cast<float*>(ptr), 0.01f);
+					}
+					else if (std::holds_alternative<bool>(item)) {
+						bool* ptr = std::get_if<bool>(&item);
+						ImGui::Checkbox(itemName.c_str(), ptr);
+					}
+				}
+			}
+
+			for (std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, GroupPtr>>>>>>::iterator itTree1 = treeMap.begin();
+				itTree1 != treeMap.end(); ++itTree1) {
+				const std::string& tree1 = itTree1->first;
+				if (ImGui::TreeNode(tree1.c_str())) {
+					isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1] = true;
+					for (std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, GroupPtr>>>>>::iterator itTree2 = itTree1->second.begin();
+						itTree2 != itTree1->second.end(); ++itTree2) {
+						const std::string& tree2 = itTree2->first;
+						if (tree2 == "_") {
+							for (std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, GroupPtr>>>>::iterator itTree3 = itTree2->second.begin();
+								itTree3 != itTree2->second.end(); ++itTree3) {
+								for (std::map<std::string, std::map<std::string, std::map<std::string, GroupPtr>>>::iterator itTree4 = itTree3->second.begin();
+									itTree4 != itTree3->second.end(); ++itTree4) {
+									for (std::map<std::string, std::map<std::string, GroupPtr>>::iterator itTree5 = itTree4->second.begin();
+										itTree5 != itTree4->second.end(); ++itTree5) {
+										for (std::map<std::string, GroupPtr>::iterator itTree6 = itTree5->second.begin();
+											itTree6 != itTree5->second.end(); ++itTree6) {
+											for (std::map<std::string, Item*>::iterator itItem = itTree6->second.begin();
+												itItem != itTree6->second.end(); ++itItem) {
+
+												const std::string& itemName = itItem->first;
+
+												if (std::holds_alternative<int32_t>(*itItem->second)) {
+													int32_t* ptr = std::get_if<int32_t>(itItem->second);
+													ImGui::DragInt(itemName.c_str(), ptr, 1);
+												}
+												else if (std::holds_alternative<float>(*itItem->second)) {
+													float* ptr = std::get_if<float>(itItem->second);
+													ImGui::DragFloat(itemName.c_str(), ptr, 0.01f);
+												}
+												else if (std::holds_alternative<Vector2>(*itItem->second)) {
+													Vector2* ptr = std::get_if<Vector2>(itItem->second);
+													ImGui::DragFloat2(itemName.c_str(), reinterpret_cast<float*>(ptr), 0.01f);
+												}
+												else if (std::holds_alternative<Vector3>(*itItem->second)) {
+													Vector3* ptr = std::get_if<Vector3>(itItem->second);
+													ImGui::DragFloat3(itemName.c_str(), reinterpret_cast<float*>(ptr), 0.01f);
+												}
+												else if (std::holds_alternative<bool>(*itItem->second)) {
+													bool* ptr = std::get_if<bool>(itItem->second);
+													ImGui::Checkbox(itemName.c_str(), ptr);
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+						else {
+							if (ImGui::TreeNode(tree2.c_str())) {
+								isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2] = true;
+								for (std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, GroupPtr>>>>::iterator itTree3 = itTree2->second.begin();
+									itTree3 != itTree2->second.end(); ++itTree3) {
+									const std::string& tree3 = itTree3->first;
+									if (tree3 == "_") {
+										for (std::map<std::string, std::map<std::string, std::map<std::string, GroupPtr>>>::iterator itTree4 = itTree3->second.begin();
+											itTree4 != itTree3->second.end(); ++itTree4) {
+											for (std::map<std::string, std::map<std::string, GroupPtr>>::iterator itTree5 = itTree4->second.begin();
+												itTree5 != itTree4->second.end(); ++itTree5) {
+												for (std::map<std::string, GroupPtr>::iterator itTree6 = itTree5->second.begin();
+													itTree6 != itTree5->second.end(); ++itTree6) {
+													for (std::map<std::string, Item*>::iterator itItem = itTree6->second.begin();
+														itItem != itTree6->second.end(); ++itItem) {
+
+														const std::string& itemName = itItem->first;
+
+														if (std::holds_alternative<int32_t>(*itItem->second)) {
+															int32_t* ptr = std::get_if<int32_t>(itItem->second);
+															ImGui::DragInt(itemName.c_str(), ptr, 1);
+														}
+														else if (std::holds_alternative<float>(*itItem->second)) {
+															float* ptr = std::get_if<float>(itItem->second);
+															ImGui::DragFloat(itemName.c_str(), ptr, 0.01f);
+														}
+														else if (std::holds_alternative<Vector2>(*itItem->second)) {
+															Vector2* ptr = std::get_if<Vector2>(itItem->second);
+															ImGui::DragFloat2(itemName.c_str(), reinterpret_cast<float*>(ptr), 0.01f);
+														}
+														else if (std::holds_alternative<Vector3>(*itItem->second)) {
+															Vector3* ptr = std::get_if<Vector3>(itItem->second);
+															ImGui::DragFloat3(itemName.c_str(), reinterpret_cast<float*>(ptr), 0.01f);
+														}
+														else if (std::holds_alternative<bool>(*itItem->second)) {
+															bool* ptr = std::get_if<bool>(itItem->second);
+															ImGui::Checkbox(itemName.c_str(), ptr);
+														}
+													}
+												}
+											}
+										}
+									}
+									else {
+										if (ImGui::TreeNode(tree3.c_str())) {
+											isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3] = true;
+											for (std::map<std::string, std::map<std::string, std::map<std::string, GroupPtr>>>::iterator itTree4 = itTree3->second.begin();
+												itTree4 != itTree3->second.end(); ++itTree4) {
+												const std::string& tree4 = itTree4->first;
+												if (tree4 == "_") {
+													for (std::map<std::string, std::map<std::string, GroupPtr>>::iterator itTree5 = itTree4->second.begin();
+														itTree5 != itTree4->second.end(); ++itTree5) {
+														for (std::map<std::string, GroupPtr>::iterator itTree6 = itTree5->second.begin();
+															itTree6 != itTree5->second.end(); ++itTree6) {
+															for (std::map<std::string, Item*>::iterator itItem = itTree6->second.begin();
+																itItem != itTree6->second.end(); ++itItem) {
+
+																const std::string& itemName = itItem->first;
+
+																if (std::holds_alternative<int32_t>(*itItem->second)) {
+																	int32_t* ptr = std::get_if<int32_t>(itItem->second);
+																	ImGui::DragInt(itemName.c_str(), ptr, 1);
+																}
+																else if (std::holds_alternative<float>(*itItem->second)) {
+																	float* ptr = std::get_if<float>(itItem->second);
+																	ImGui::DragFloat(itemName.c_str(), ptr, 0.01f);
+																}
+																else if (std::holds_alternative<Vector2>(*itItem->second)) {
+																	Vector2* ptr = std::get_if<Vector2>(itItem->second);
+																	ImGui::DragFloat2(itemName.c_str(), reinterpret_cast<float*>(ptr), 0.01f);
+																}
+																else if (std::holds_alternative<Vector3>(*itItem->second)) {
+																	Vector3* ptr = std::get_if<Vector3>(itItem->second);
+																	ImGui::DragFloat3(itemName.c_str(), reinterpret_cast<float*>(ptr), 0.01f);
+																}
+																else if (std::holds_alternative<bool>(*itItem->second)) {
+																	bool* ptr = std::get_if<bool>(itItem->second);
+																	ImGui::Checkbox(itemName.c_str(), ptr);
+																}
+															}
+														}
+													}
+												}
+												else {
+													if (ImGui::TreeNode(tree4.c_str())) {
+														isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4] = true;
+														for (std::map<std::string, std::map<std::string, GroupPtr>>::iterator itTree5 = itTree4->second.begin();
+															itTree5 != itTree4->second.end(); ++itTree5) {
+															const std::string& tree5 = itTree5->first;
+															if (tree5 == "_") {
+																for (std::map<std::string, GroupPtr>::iterator itTree6 = itTree5->second.begin();
+																	itTree6 != itTree5->second.end(); ++itTree6) {
+																	for (std::map<std::string, Item*>::iterator itItem = itTree6->second.begin();
+																		itItem != itTree6->second.end(); ++itItem) {
+
+																		const std::string& itemName = itItem->first;
+
+																		if (std::holds_alternative<int32_t>(*itItem->second)) {
+																			int32_t* ptr = std::get_if<int32_t>(itItem->second);
+																			ImGui::DragInt(itemName.c_str(), ptr, 1);
+																		}
+																		else if (std::holds_alternative<float>(*itItem->second)) {
+																			float* ptr = std::get_if<float>(itItem->second);
+																			ImGui::DragFloat(itemName.c_str(), ptr, 0.01f);
+																		}
+																		else if (std::holds_alternative<Vector2>(*itItem->second)) {
+																			Vector2* ptr = std::get_if<Vector2>(itItem->second);
+																			ImGui::DragFloat2(itemName.c_str(), reinterpret_cast<float*>(ptr), 0.01f);
+																		}
+																		else if (std::holds_alternative<Vector3>(*itItem->second)) {
+																			Vector3* ptr = std::get_if<Vector3>(itItem->second);
+																			ImGui::DragFloat3(itemName.c_str(), reinterpret_cast<float*>(ptr), 0.01f);
+																		}
+																		else if (std::holds_alternative<bool>(*itItem->second)) {
+																			bool* ptr = std::get_if<bool>(itItem->second);
+																			ImGui::Checkbox(itemName.c_str(), ptr);
+																		}
+																	}
+																}
+															}
+															else {
+																if (ImGui::TreeNode(tree5.c_str())) {
+																	isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5] = true;
+																	for (std::map<std::string, GroupPtr>::iterator itTree6 = itTree5->second.begin();
+																		itTree6 != itTree5->second.end(); ++itTree6) {
+																		const std::string& tree6 = itTree6->first;
+																		if (tree6 == "_") {
+																			for (std::map<std::string, Item*>::iterator itItem = itTree6->second.begin();
+																				itItem != itTree6->second.end(); ++itItem) {
+
+																				const std::string& itemName = itItem->first;
+
+																				if (std::holds_alternative<int32_t>(*itItem->second)) {
+																					int32_t* ptr = std::get_if<int32_t>(itItem->second);
+																					ImGui::DragInt(itemName.c_str(), ptr, 1);
+																				}
+																				else if (std::holds_alternative<float>(*itItem->second)) {
+																					float* ptr = std::get_if<float>(itItem->second);
+																					ImGui::DragFloat(itemName.c_str(), ptr, 0.01f);
+																				}
+																				else if (std::holds_alternative<Vector2>(*itItem->second)) {
+																					Vector2* ptr = std::get_if<Vector2>(itItem->second);
+																					ImGui::DragFloat2(itemName.c_str(), reinterpret_cast<float*>(ptr), 0.01f);
+																				}
+																				else if (std::holds_alternative<Vector3>(*itItem->second)) {
+																					Vector3* ptr = std::get_if<Vector3>(itItem->second);
+																					ImGui::DragFloat3(itemName.c_str(), reinterpret_cast<float*>(ptr), 0.01f);
+																				}
+																				else if (std::holds_alternative<bool>(*itItem->second)) {
+																					bool* ptr = std::get_if<bool>(itItem->second);
+																					ImGui::Checkbox(itemName.c_str(), ptr);
+																				}
+																			}
+																		}
+																		else {
+																			if (ImGui::TreeNode(tree6.c_str())) {
+																				isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6] = true;
+
+																				for (std::map<std::string, Item*>::iterator itItem = itTree6->second.begin();
+																					itItem != itTree6->second.end(); ++itItem) {
+
+																					const std::string& itemName = itItem->first;
+
+																					if (std::holds_alternative<int32_t>(*itItem->second)) {
+																						int32_t* ptr = std::get_if<int32_t>(itItem->second);
+																						ImGui::DragInt(itemName.c_str(), ptr, 1);
+																					}
+																					else if (std::holds_alternative<float>(*itItem->second)) {
+																						float* ptr = std::get_if<float>(itItem->second);
+																						ImGui::DragFloat(itemName.c_str(), ptr, 0.01f);
+																					}
+																					else if (std::holds_alternative<Vector2>(*itItem->second)) {
+																						Vector2* ptr = std::get_if<Vector2>(itItem->second);
+																						ImGui::DragFloat2(itemName.c_str(), reinterpret_cast<float*>(ptr), 0.01f);
+																					}
+																					else if (std::holds_alternative<Vector3>(*itItem->second)) {
+																						Vector3* ptr = std::get_if<Vector3>(itItem->second);
+																						ImGui::DragFloat3(itemName.c_str(), reinterpret_cast<float*>(ptr), 0.01f);
+																					}
+																					else if (std::holds_alternative<bool>(*itItem->second)) {
+																						bool* ptr = std::get_if<bool>(itItem->second);
+																						ImGui::Checkbox(itemName.c_str(), ptr);
+																					}
+																				}
+
+
+																				ImGui::TreePop();
+																			}
+																		}
+																	}
+																	ImGui::TreePop();
+																}
+															}
+														}
+														ImGui::TreePop();
+													}
+												}
+											}
+											ImGui::TreePop();
+										}
+									}
+								}
+								ImGui::TreePop();
+							}
+						}
+					}
+					ImGui::TreePop();
 				}
 			}
 
@@ -97,7 +451,7 @@ void GlobalVariables::CreateGroup(const std::string& groupName)
 	datas_[kChunkName][groupName];
 }
 
-void GlobalVariables::SetValue(const std::string& chunkName, const std::string& groupName, const std::string& key, int32_t value) {
+void GlobalVariables::SetValue(const std::string& chunkName, const std::string& groupName, const std::string& key, const int32_t& value) {
 	
 	Group& group = datas_[chunkName][groupName];
 
@@ -107,7 +461,7 @@ void GlobalVariables::SetValue(const std::string& chunkName, const std::string& 
 	group[key] = newItem;
 }
 
-void GlobalVariables::SetValue(const std::string& chunkName, const std::string& groupName, const std::string& key, float value) {
+void GlobalVariables::SetValue(const std::string& chunkName, const std::string& groupName, const std::string& key, const float& value) {
 	Group& group = datas_[chunkName][groupName];
 
 	Item newItem{};
@@ -134,7 +488,7 @@ void GlobalVariables::SetValue(const std::string& chunkName, const std::string& 
 	group[key] = newItem;
 }
 
-void GlobalVariables::SetValue(const std::string& chunkName, const std::string& groupName, const std::string& key, bool value)
+void GlobalVariables::SetValue(const std::string& chunkName, const std::string& groupName, const std::string& key, const bool& value)
 {
 	Group& group = datas_[chunkName][groupName];
 
@@ -154,14 +508,388 @@ void GlobalVariables::SetValue(const std::string& chunkName, const std::string& 
 	group[key] = newItem;
 }
 
-void GlobalVariables::AddItem(const std::string& chunkName, const std::string& groupName, const std::string& key, int32_t value) {
+void GlobalVariables::SetValue(const std::string& chunkName, const std::string& groupName, const std::string& key, const int32_t& value, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
+{
+	Group& group = datas_[chunkName][groupName];
+
+	Item newItem{};
+	newItem = value;
+
+	if (tree2 == "_") {
+		std::string name = kTreeName_[0] + tree1 + "_" + key;
+		group[name] = newItem;
+		isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1] = false;
+	}
+	else {
+		if (tree3 == "_") {
+			std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + key;
+			group[name] = newItem;
+			isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1] = false;
+			isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2] = false;
+		}
+		else {
+			if (tree4 == "_") {
+				std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + key;
+				group[name] = newItem;
+				isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1] = false;
+				isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2] = false;
+				isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3] = false;
+			}
+			else {
+				if (tree5 == "_") {
+					std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + key;
+					group[name] = newItem;
+					isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1] = false;
+					isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2] = false;
+					isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3] = false;
+					isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4] = false;
+				}
+				else {
+					if (tree6 == "_") {
+						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + key;
+						group[name] = newItem;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5] = false;
+					}
+					else {
+						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6 + "_" + key;
+						group[name] = newItem;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6] = false;
+					}
+				}
+			}
+		}
+	}
+}
+
+void GlobalVariables::SetValue(const std::string& chunkName, const std::string& groupName, const std::string& key, const float& value, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
+{
+	Group& group = datas_[chunkName][groupName];
+
+	Item newItem{};
+	newItem = value;
+
+	if (tree2 == "_") {
+		std::string name = kTreeName_[0] + tree1 + "_" + key;
+		group[name] = newItem;
+		isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1] = false;
+	}
+	else {
+		if (tree3 == "_") {
+			std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + key;
+			group[name] = newItem;
+			isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1] = false;
+			isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2] = false;
+		}
+		else {
+			if (tree4 == "_") {
+				std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + key;
+				group[name] = newItem;
+				isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1] = false;
+				isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2] = false;
+				isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3] = false;
+			}
+			else {
+				if (tree5 == "_") {
+					std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + key;
+					group[name] = newItem;
+					isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1] = false;
+					isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2] = false;
+					isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3] = false;
+					isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4] = false;
+				}
+				else {
+					if (tree6 == "_") {
+						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + key;
+						group[name] = newItem;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5] = false;
+					}
+					else {
+						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6 + "_" + key;
+						group[name] = newItem;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6] = false;
+					}
+				}
+			}
+		}
+	}
+}
+
+void GlobalVariables::SetValue(const std::string& chunkName, const std::string& groupName, const std::string& key, const Vector2& value, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
+{
+	Group& group = datas_[chunkName][groupName];
+
+	Item newItem{};
+	newItem = value;
+
+	if (tree2 == "_") {
+		std::string name = kTreeName_[0] + tree1 + "_" + key;
+		group[name] = newItem;
+		isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1] = false;
+	}
+	else {
+		if (tree3 == "_") {
+			std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + key;
+			group[name] = newItem;
+			isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1] = false;
+			isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2] = false;
+		}
+		else {
+			if (tree4 == "_") {
+				std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + key;
+				group[name] = newItem;
+				isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1] = false;
+				isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2] = false;
+				isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3] = false;
+			}
+			else {
+				if (tree5 == "_") {
+					std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + key;
+					group[name] = newItem;
+					isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1] = false;
+					isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2] = false;
+					isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3] = false;
+					isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4] = false;
+				}
+				else {
+					if (tree6 == "_") {
+						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + key;
+						group[name] = newItem;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5] = false;
+					}
+					else {
+						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6 + "_" + key;
+						group[name] = newItem;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6] = false;
+					}
+				}
+			}
+		}
+	}
+}
+
+void GlobalVariables::SetValue(const std::string& chunkName, const std::string& groupName, const std::string& key, const Vector3& value, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
+{
+	Group& group = datas_[chunkName][groupName];
+
+	Item newItem{};
+	newItem = value;
+
+	if (tree2 == "_") {
+		std::string name = kTreeName_[0] + tree1 + "_" + key;
+		group[name] = newItem;
+		isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1] = false;
+	}
+	else {
+		if (tree3 == "_") {
+			std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + key;
+			group[name] = newItem;
+			isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1] = false;
+			isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2] = false;
+		}
+		else {
+			if (tree4 == "_") {
+				std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + key;
+				group[name] = newItem;
+				isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1] = false;
+				isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2] = false;
+				isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3] = false;
+			}
+			else {
+				if (tree5 == "_") {
+					std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + key;
+					group[name] = newItem;
+					isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1] = false;
+					isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2] = false;
+					isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3] = false;
+					isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4] = false;
+				}
+				else {
+					if (tree6 == "_") {
+						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + key;
+						group[name] = newItem;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5] = false;
+					}
+					else {
+						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6 + "_" + key;
+						group[name] = newItem;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6] = false;
+					}
+				}
+			}
+		}
+	}
+}
+
+void GlobalVariables::SetValue(const std::string& chunkName, const std::string& groupName, const std::string& key, const bool& value, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
+{
+	Group& group = datas_[chunkName][groupName];
+
+	Item newItem{};
+	newItem = value;
+
+	if (tree2 == "_") {
+		std::string name = kTreeName_[0] + tree1 + "_" + key;
+		group[name] = newItem;
+		isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1] = false;
+	}
+	else {
+		if (tree3 == "_") {
+			std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + key;
+			group[name] = newItem;
+			isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1] = false;
+			isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2] = false;
+		}
+		else {
+			if (tree4 == "_") {
+				std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + key;
+				group[name] = newItem;
+				isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1] = false;
+				isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2] = false;
+				isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3] = false;
+			}
+			else {
+				if (tree5 == "_") {
+					std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + key;
+					group[name] = newItem;
+					isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1] = false;
+					isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2] = false;
+					isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3] = false;
+					isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4] = false;
+				}
+				else {
+					if (tree6 == "_") {
+						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + key;
+						group[name] = newItem;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5] = false;
+					}
+					else {
+						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6 + "_" + key;
+						group[name] = newItem;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6] = false;
+					}
+				}
+			}
+		}
+	}
+}
+
+void GlobalVariables::SetValue(const std::string& chunkName, const std::string& groupName, const std::string& key, const std::string& value, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
+{
+	Group& group = datas_[chunkName][groupName];
+
+	Item newItem{};
+	newItem = value;
+
+	if (tree2 == "_") {
+		std::string name = kTreeName_[0] + tree1 + "_" + key;
+		group[name] = newItem;
+		isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1] = false;
+	}
+	else {
+		if (tree3 == "_") {
+			std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + key;
+			group[name] = newItem;
+			isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1] = false;
+			isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2] = false;
+		}
+		else {
+			if (tree4 == "_") {
+				std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + key;
+				group[name] = newItem;
+				isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1] = false;
+				isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2] = false;
+				isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3] = false;
+			}
+			else {
+				if (tree5 == "_") {
+					std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + key;
+					group[name] = newItem;
+					isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1] = false;
+					isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2] = false;
+					isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3] = false;
+					isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4] = false;
+				}
+				else {
+					if (tree6 == "_") {
+						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + key;
+						group[name] = newItem;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5] = false;
+					}
+					else {
+						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6 + "_" + key;
+						group[name] = newItem;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5] = false;
+						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6] = false;
+					}
+				}
+			}
+		}
+	}
+}
+
+
+
+void GlobalVariables::AddItem(const std::string& chunkName, const std::string& groupName, const std::string& key, const int32_t& value) {
 	Group& group = datas_[chunkName][groupName];
 	if (group.find(key) == group.end()) {
 		SetValue(chunkName, groupName, key, value);
 	}
 }
 
-void GlobalVariables::AddItem(const std::string& chunkName, const std::string& groupName, const std::string& key, float value) {
+void GlobalVariables::AddItem(const std::string& chunkName, const std::string& groupName, const std::string& key, const float& value) {
 	Group& group = datas_[chunkName][groupName];
 	if (group.find(key) == group.end()) {
 		SetValue(chunkName, groupName, key, value);
@@ -182,7 +910,7 @@ void GlobalVariables::AddItem(const std::string& chunkName, const std::string& g
 	}
 }
 
-void GlobalVariables::AddItem(const std::string& chunkName, const std::string& groupName, const std::string& key, bool value)
+void GlobalVariables::AddItem(const std::string& chunkName, const std::string& groupName, const std::string& key, const bool& value)
 {
 	Group& group = datas_[chunkName][groupName];
 	if (group.find(key) == group.end()) {
@@ -198,7 +926,7 @@ void GlobalVariables::AddItem(const std::string& chunkName, const std::string& g
 	}
 }
 
-void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, int32_t value)
+void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, const int32_t& value)
 {
 	Group& group = datas_[kChunkName][groupName];
 	if (group.find(key) == group.end()) {
@@ -206,7 +934,7 @@ void GlobalVariables::AddItem(const std::string& groupName, const std::string& k
 	}
 }
 
-void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, float value)
+void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, const float& value)
 {
 	Group& group = datas_[kChunkName][groupName];
 	if (group.find(key) == group.end()) {
@@ -230,7 +958,7 @@ void GlobalVariables::AddItem(const std::string& groupName, const std::string& k
 	}
 }
 
-void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, bool value)
+void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, const bool& value)
 {
 	Group& group = datas_[kChunkName][groupName];
 	if (group.find(key) == group.end()) {
@@ -246,7 +974,645 @@ void GlobalVariables::AddItem(const std::string& groupName, const std::string& k
 	}
 }
 
-int32_t GlobalVariables::GetIntValue(const std::string& chunkName, const std::string& groupName, const std::string& key) const {
+void GlobalVariables::AddItem(const std::string& chunkName, const std::string& groupName, const std::string& key, const int32_t& value, const int& treeNum, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
+{
+	Group& group = datas_[chunkName][groupName];
+	std::string name;
+
+	if(treeNum){}
+
+	if (tree2 == "_") {
+		name = kTreeName_[0] + tree1 + "_" + key;
+		if (group.find(name) == group.end()) {
+			SetValue(chunkName, groupName, key, value, tree1);
+		}
+	}
+	else {
+		if (tree3 == "_") {
+			name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + key;
+			if (group.find(name) == group.end()) {
+				SetValue(chunkName, groupName, key, value, tree1, tree2);
+			}
+		}
+		else {
+			if (tree4 == "_") {
+				name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + key;
+				if (group.find(name) == group.end()) {
+					SetValue(chunkName, groupName, key, value, tree1, tree2, tree3);
+				}
+			}
+			else {
+				if (tree5 == "_") {
+					name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + key;
+					if (group.find(name) == group.end()) {
+						SetValue(chunkName, groupName, key, value, tree1, tree2, tree3, tree4);
+					}
+				}
+				else {
+					if (tree6 == "_") {
+						name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + key;
+						if (group.find(name) == group.end()) {
+							SetValue(chunkName, groupName, key, value, tree1, tree2, tree3, tree4, tree5);
+						}
+					}
+					else {
+						name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6 + "_" + key;
+						if (group.find(name) == group.end()) {
+							SetValue(chunkName, groupName, key, value, tree1, tree2, tree3, tree4, tree5, tree6);
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+void GlobalVariables::AddItem(const std::string& chunkName, const std::string& groupName, const std::string& key, const float& value, const int& treeNum, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
+{
+	Group& group = datas_[chunkName][groupName];
+	std::string name;
+
+	if (treeNum) {}
+
+	if (tree2 == "_") {
+		name = kTreeName_[0] + tree1 + "_" + key;
+		if (group.find(name) == group.end()) {
+			SetValue(chunkName, groupName, key, value, tree1);
+		}
+	}
+	else {
+		if (tree3 == "_") {
+			name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + key;
+			if (group.find(name) == group.end()) {
+				SetValue(chunkName, groupName, key, value, tree1, tree2);
+			}
+		}
+		else {
+			if (tree4 == "_") {
+				name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + key;
+				if (group.find(name) == group.end()) {
+					SetValue(chunkName, groupName, key, value, tree1, tree2, tree3);
+				}
+			}
+			else {
+				if (tree5 == "_") {
+					name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + key;
+					if (group.find(name) == group.end()) {
+						SetValue(chunkName, groupName, key, value, tree1, tree2, tree3, tree4);
+					}
+				}
+				else {
+					if (tree6 == "_") {
+						name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + key;
+						if (group.find(name) == group.end()) {
+							SetValue(chunkName, groupName, key, value, tree1, tree2, tree3, tree4, tree5);
+						}
+					}
+					else {
+						name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6 + "_" + key;
+						if (group.find(name) == group.end()) {
+							SetValue(chunkName, groupName, key, value, tree1, tree2, tree3, tree4, tree5, tree6);
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+void GlobalVariables::AddItem(const std::string& chunkName, const std::string& groupName, const std::string& key, const Vector2& value, const int& treeNum, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
+{
+	Group& group = datas_[chunkName][groupName];
+	std::string name;
+
+	if (treeNum) {}
+
+	if (tree2 == "_") {
+		name = kTreeName_[0] + tree1 + "_" + key;
+		if (group.find(name) == group.end()) {
+			SetValue(chunkName, groupName, key, value, tree1);
+		}
+	}
+	else {
+		if (tree3 == "_") {
+			name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + key;
+			if (group.find(name) == group.end()) {
+				SetValue(chunkName, groupName, key, value, tree1, tree2);
+			}
+		}
+		else {
+			if (tree4 == "_") {
+				name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + key;
+				if (group.find(name) == group.end()) {
+					SetValue(chunkName, groupName, key, value, tree1, tree2, tree3);
+				}
+			}
+			else {
+				if (tree5 == "_") {
+					name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + key;
+					if (group.find(name) == group.end()) {
+						SetValue(chunkName, groupName, key, value, tree1, tree2, tree3, tree4);
+					}
+				}
+				else {
+					if (tree6 == "_") {
+						name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + key;
+						if (group.find(name) == group.end()) {
+							SetValue(chunkName, groupName, key, value, tree1, tree2, tree3, tree4, tree5);
+						}
+					}
+					else {
+						name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6 + "_" + key;
+						if (group.find(name) == group.end()) {
+							SetValue(chunkName, groupName, key, value, tree1, tree2, tree3, tree4, tree5, tree6);
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+void GlobalVariables::AddItem(const std::string& chunkName, const std::string& groupName, const std::string& key, const Vector3& value, const int& treeNum, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
+{
+	Group& group = datas_[chunkName][groupName];
+	std::string name;
+
+	if (treeNum) {}
+
+	if (tree2 == "_") {
+		name = kTreeName_[0] + tree1 + "_" + key;
+		if (group.find(name) == group.end()) {
+			SetValue(chunkName, groupName, key, value, tree1);
+		}
+	}
+	else {
+		if (tree3 == "_") {
+			name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + key;
+			if (group.find(name) == group.end()) {
+				SetValue(chunkName, groupName, key, value, tree1, tree2);
+			}
+		}
+		else {
+			if (tree4 == "_") {
+				name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + key;
+				if (group.find(name) == group.end()) {
+					SetValue(chunkName, groupName, key, value, tree1, tree2, tree3);
+				}
+			}
+			else {
+				if (tree5 == "_") {
+					name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + key;
+					if (group.find(name) == group.end()) {
+						SetValue(chunkName, groupName, key, value, tree1, tree2, tree3, tree4);
+					}
+				}
+				else {
+					if (tree6 == "_") {
+						name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + key;
+						if (group.find(name) == group.end()) {
+							SetValue(chunkName, groupName, key, value, tree1, tree2, tree3, tree4, tree5);
+						}
+					}
+					else {
+						name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6 + "_" + key;
+						if (group.find(name) == group.end()) {
+							SetValue(chunkName, groupName, key, value, tree1, tree2, tree3, tree4, tree5, tree6);
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+void GlobalVariables::AddItem(const std::string& chunkName, const std::string& groupName, const std::string& key, const bool& value, const int& treeNum, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
+{
+	Group& group = datas_[chunkName][groupName];
+	std::string name;
+
+	if (treeNum) {}
+
+	if (tree2 == "_") {
+		name = kTreeName_[0] + tree1 + "_" + key;
+		if (group.find(name) == group.end()) {
+			SetValue(chunkName, groupName, key, value, tree1);
+		}
+	}
+	else {
+		if (tree3 == "_") {
+			name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + key;
+			if (group.find(name) == group.end()) {
+				SetValue(chunkName, groupName, key, value, tree1, tree2);
+			}
+		}
+		else {
+			if (tree4 == "_") {
+				name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + key;
+				if (group.find(name) == group.end()) {
+					SetValue(chunkName, groupName, key, value, tree1, tree2, tree3);
+				}
+			}
+			else {
+				if (tree5 == "_") {
+					name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + key;
+					if (group.find(name) == group.end()) {
+						SetValue(chunkName, groupName, key, value, tree1, tree2, tree3, tree4);
+					}
+				}
+				else {
+					if (tree6 == "_") {
+						name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + key;
+						if (group.find(name) == group.end()) {
+							SetValue(chunkName, groupName, key, value, tree1, tree2, tree3, tree4, tree5);
+						}
+					}
+					else {
+						name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6 + "_" + key;
+						if (group.find(name) == group.end()) {
+							SetValue(chunkName, groupName, key, value, tree1, tree2, tree3, tree4, tree5, tree6);
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+void GlobalVariables::AddItem(const std::string& chunkName, const std::string& groupName, const std::string& key, const std::string& value, const int& treeNum, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
+{
+	Group& group = datas_[chunkName][groupName];
+	std::string name;
+
+	if (treeNum) {}
+
+	if (tree2 == "_") {
+		name = kTreeName_[0] + tree1 + "_" + key;
+		if (group.find(name) == group.end()) {
+			SetValue(chunkName, groupName, key, value, tree1);
+		}
+	}
+	else {
+		if (tree3 == "_") {
+			name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + key;
+			if (group.find(name) == group.end()) {
+				SetValue(chunkName, groupName, key, value, tree1, tree2);
+			}
+		}
+		else {
+			if (tree4 == "_") {
+				name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + key;
+				if (group.find(name) == group.end()) {
+					SetValue(chunkName, groupName, key, value, tree1, tree2, tree3);
+				}
+			}
+			else {
+				if (tree5 == "_") {
+					name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + key;
+					if (group.find(name) == group.end()) {
+						SetValue(chunkName, groupName, key, value, tree1, tree2, tree3, tree4);
+					}
+				}
+				else {
+					if (tree6 == "_") {
+						name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + key;
+						if (group.find(name) == group.end()) {
+							SetValue(chunkName, groupName, key, value, tree1, tree2, tree3, tree4, tree5);
+						}
+					}
+					else {
+						name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6 + "_" + key;
+						if (group.find(name) == group.end()) {
+							SetValue(chunkName, groupName, key, value, tree1, tree2, tree3, tree4, tree5, tree6);
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, const int32_t& value, const int& treeNum, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
+{
+	Group& group = datas_[kChunkName][groupName];
+	std::string name;
+
+	if (treeNum) {}
+
+	if (tree2 == "_") {
+		name = kTreeName_[0] + tree1 + "_" + key;
+		if (group.find(name) == group.end()) {
+			SetValue(kChunkName, groupName, key, value, tree1);
+		}
+	}
+	else {
+		if (tree3 == "_") {
+			name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + key;
+			if (group.find(name) == group.end()) {
+				SetValue(kChunkName, groupName, key, value, tree1, tree2);
+			}
+		}
+		else {
+			if (tree4 == "_") {
+				name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + key;
+				if (group.find(name) == group.end()) {
+					SetValue(kChunkName, groupName, key, value, tree1, tree2, tree3);
+				}
+			}
+			else {
+				if (tree5 == "_") {
+					name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + key;
+					if (group.find(name) == group.end()) {
+						SetValue(kChunkName, groupName, key, value, tree1, tree2, tree3, tree4);
+					}
+				}
+				else {
+					if (tree6 == "_") {
+						name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + key;
+						if (group.find(name) == group.end()) {
+							SetValue(kChunkName, groupName, key, value, tree1, tree2, tree3, tree4, tree5);
+						}
+					}
+					else {
+						name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6 + "_" + key;
+						if (group.find(name) == group.end()) {
+							SetValue(kChunkName, groupName, key, value, tree1, tree2, tree3, tree4, tree5, tree6);
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, const float& value, const int& treeNum, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
+{
+	Group& group = datas_[kChunkName][groupName];
+	std::string name;
+
+	if (treeNum) {}
+
+	if (tree2 == "_") {
+		name = kTreeName_[0] + tree1 + "_" + key;
+		if (group.find(name) == group.end()) {
+			SetValue(kChunkName, groupName, key, value, tree1);
+		}
+	}
+	else {
+		if (tree3 == "_") {
+			name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + key;
+			if (group.find(name) == group.end()) {
+				SetValue(kChunkName, groupName, key, value, tree1, tree2);
+			}
+		}
+		else {
+			if (tree4 == "_") {
+				name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + key;
+				if (group.find(name) == group.end()) {
+					SetValue(kChunkName, groupName, key, value, tree1, tree2, tree3);
+				}
+			}
+			else {
+				if (tree5 == "_") {
+					name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + key;
+					if (group.find(name) == group.end()) {
+						SetValue(kChunkName, groupName, key, value, tree1, tree2, tree3, tree4);
+					}
+				}
+				else {
+					if (tree6 == "_") {
+						name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + key;
+						if (group.find(name) == group.end()) {
+							SetValue(kChunkName, groupName, key, value, tree1, tree2, tree3, tree4, tree5);
+						}
+					}
+					else {
+						name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6 + "_" + key;
+						if (group.find(name) == group.end()) {
+							SetValue(kChunkName, groupName, key, value, tree1, tree2, tree3, tree4, tree5, tree6);
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, const Vector2& value, const int& treeNum, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
+{
+	Group& group = datas_[kChunkName][groupName];
+	std::string name;
+
+	if (treeNum) {}
+
+	if (tree2 == "_") {
+		name = kTreeName_[0] + tree1 + "_" + key;
+		if (group.find(name) == group.end()) {
+			SetValue(kChunkName, groupName, key, value, tree1);
+		}
+	}
+	else {
+		if (tree3 == "_") {
+			name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + key;
+			if (group.find(name) == group.end()) {
+				SetValue(kChunkName, groupName, key, value, tree1, tree2);
+			}
+		}
+		else {
+			if (tree4 == "_") {
+				name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + key;
+				if (group.find(name) == group.end()) {
+					SetValue(kChunkName, groupName, key, value, tree1, tree2, tree3);
+				}
+			}
+			else {
+				if (tree5 == "_") {
+					name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + key;
+					if (group.find(name) == group.end()) {
+						SetValue(kChunkName, groupName, key, value, tree1, tree2, tree3, tree4);
+					}
+				}
+				else {
+					if (tree6 == "_") {
+						name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + key;
+						if (group.find(name) == group.end()) {
+							SetValue(kChunkName, groupName, key, value, tree1, tree2, tree3, tree4, tree5);
+						}
+					}
+					else {
+						name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6 + "_" + key;
+						if (group.find(name) == group.end()) {
+							SetValue(kChunkName, groupName, key, value, tree1, tree2, tree3, tree4, tree5, tree6);
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, const Vector3& value, const int& treeNum, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
+{
+	Group& group = datas_[kChunkName][groupName];
+	std::string name;
+
+	if (treeNum) {}
+
+	if (tree2 == "_") {
+		name = kTreeName_[0] + tree1 + "_" + key;
+		if (group.find(name) == group.end()) {
+			SetValue(kChunkName, groupName, key, value, tree1);
+		}
+	}
+	else {
+		if (tree3 == "_") {
+			name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + key;
+			if (group.find(name) == group.end()) {
+				SetValue(kChunkName, groupName, key, value, tree1, tree2);
+			}
+		}
+		else {
+			if (tree4 == "_") {
+				name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + key;
+				if (group.find(name) == group.end()) {
+					SetValue(kChunkName, groupName, key, value, tree1, tree2, tree3);
+				}
+			}
+			else {
+				if (tree5 == "_") {
+					name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + key;
+					if (group.find(name) == group.end()) {
+						SetValue(kChunkName, groupName, key, value, tree1, tree2, tree3, tree4);
+					}
+				}
+				else {
+					if (tree6 == "_") {
+						name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + key;
+						if (group.find(name) == group.end()) {
+							SetValue(kChunkName, groupName, key, value, tree1, tree2, tree3, tree4, tree5);
+						}
+					}
+					else {
+						name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6 + "_" + key;
+						if (group.find(name) == group.end()) {
+							SetValue(kChunkName, groupName, key, value, tree1, tree2, tree3, tree4, tree5, tree6);
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, const bool& value, const int& treeNum, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
+{
+	Group& group = datas_[kChunkName][groupName];
+	std::string name;
+
+	if (treeNum) {}
+
+	if (tree2 == "_") {
+		name = kTreeName_[0] + tree1 + "_" + key;
+		if (group.find(name) == group.end()) {
+			SetValue(kChunkName, groupName, key, value, tree1);
+		}
+	}
+	else {
+		if (tree3 == "_") {
+			name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + key;
+			if (group.find(name) == group.end()) {
+				SetValue(kChunkName, groupName, key, value, tree1, tree2);
+			}
+		}
+		else {
+			if (tree4 == "_") {
+				name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + key;
+				if (group.find(name) == group.end()) {
+					SetValue(kChunkName, groupName, key, value, tree1, tree2, tree3);
+				}
+			}
+			else {
+				if (tree5 == "_") {
+					name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + key;
+					if (group.find(name) == group.end()) {
+						SetValue(kChunkName, groupName, key, value, tree1, tree2, tree3, tree4);
+					}
+				}
+				else {
+					if (tree6 == "_") {
+						name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + key;
+						if (group.find(name) == group.end()) {
+							SetValue(kChunkName, groupName, key, value, tree1, tree2, tree3, tree4, tree5);
+						}
+					}
+					else {
+						name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6 + "_" + key;
+						if (group.find(name) == group.end()) {
+							SetValue(kChunkName, groupName, key, value, tree1, tree2, tree3, tree4, tree5, tree6);
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, const std::string& value, const int& treeNum, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
+{
+	Group& group = datas_[kChunkName][groupName];
+	std::string name;
+
+	if (treeNum) {}
+
+	if (tree2 == "_") {
+		name = kTreeName_[0] + tree1 + "_" + key;
+		if (group.find(name) == group.end()) {
+			SetValue(kChunkName, groupName, key, value, tree1);
+		}
+	}
+	else {
+		if (tree3 == "_") {
+			name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + key;
+			if (group.find(name) == group.end()) {
+				SetValue(kChunkName, groupName, key, value, tree1, tree2);
+			}
+		}
+		else {
+			if (tree4 == "_") {
+				name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + key;
+				if (group.find(name) == group.end()) {
+					SetValue(kChunkName, groupName, key, value, tree1, tree2, tree3);
+				}
+			}
+			else {
+				if (tree5 == "_") {
+					name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + key;
+					if (group.find(name) == group.end()) {
+						SetValue(kChunkName, groupName, key, value, tree1, tree2, tree3, tree4);
+					}
+				}
+				else {
+					if (tree6 == "_") {
+						name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + key;
+						if (group.find(name) == group.end()) {
+							SetValue(kChunkName, groupName, key, value, tree1, tree2, tree3, tree4, tree5);
+						}
+					}
+					else {
+						name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6 + "_" + key;
+						if (group.find(name) == group.end()) {
+							SetValue(kChunkName, groupName, key, value, tree1, tree2, tree3, tree4, tree5, tree6);
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+
+
+const int32_t& GlobalVariables::GetIntValue(const std::string& chunkName, const std::string& groupName, const std::string& key) const {
 
 	assert(datas_.find(chunkName) != datas_.end());
 	const Chunk& chunk = datas_.at(chunkName);
@@ -258,7 +1624,7 @@ int32_t GlobalVariables::GetIntValue(const std::string& chunkName, const std::st
 	return std::get<int32_t>(group.find(key)->second);
 }
 
-float GlobalVariables::GetFloatValue(const std::string& chunkName, const std::string& groupName, const std::string& key) const {
+const float& GlobalVariables::GetFloatValue(const std::string& chunkName, const std::string& groupName, const std::string& key) const {
 
 	assert(datas_.find(chunkName) != datas_.end());
 	const Chunk& chunk = datas_.at(chunkName);
@@ -270,7 +1636,7 @@ float GlobalVariables::GetFloatValue(const std::string& chunkName, const std::st
 	return std::get<float>(group.find(key)->second);
 }
 
-Vector2 GlobalVariables::GetVector2Value(const std::string& chunkName, const std::string& groupName, const std::string& key) const {
+const Vector2& GlobalVariables::GetVector2Value(const std::string& chunkName, const std::string& groupName, const std::string& key) const {
 
 	assert(datas_.find(chunkName) != datas_.end());
 	const Chunk& chunk = datas_.at(chunkName);
@@ -282,7 +1648,7 @@ Vector2 GlobalVariables::GetVector2Value(const std::string& chunkName, const std
 	return std::get<Vector2>(group.find(key)->second);
 }
 
-Vector3 GlobalVariables::GetVector3Value(const std::string& chunkName, const std::string& groupName, const std::string& key) const {
+const Vector3& GlobalVariables::GetVector3Value(const std::string& chunkName, const std::string& groupName, const std::string& key) const {
 
 	assert(datas_.find(chunkName) != datas_.end());
 	const Chunk& chunk = datas_.at(chunkName);
@@ -294,7 +1660,7 @@ Vector3 GlobalVariables::GetVector3Value(const std::string& chunkName, const std
 	return std::get<Vector3>(group.find(key)->second);
 }
 
-bool GlobalVariables::GetBoolValue(const std::string& chunkName, const std::string& groupName, const std::string& key) const
+const bool& GlobalVariables::GetBoolValue(const std::string& chunkName, const std::string& groupName, const std::string& key) const
 {
 	assert(datas_.find(chunkName) != datas_.end());
 	const Chunk& chunk = datas_.at(chunkName);
@@ -306,7 +1672,7 @@ bool GlobalVariables::GetBoolValue(const std::string& chunkName, const std::stri
 	return std::get<bool>(group.find(key)->second);
 }
 
-std::string GlobalVariables::GetStringValue(const std::string& chunkName, const std::string& groupName, const std::string& key) const
+const std::string& GlobalVariables::GetStringValue(const std::string& chunkName, const std::string& groupName, const std::string& key) const
 {
 	assert(datas_.find(chunkName) != datas_.end());
 	const Chunk& chunk = datas_.at(chunkName);
@@ -318,7 +1684,7 @@ std::string GlobalVariables::GetStringValue(const std::string& chunkName, const 
 	return std::get<std::string>(group.find(key)->second);
 }
 
-int32_t GlobalVariables::GetIntValue(const std::string& groupName, const std::string& key) const
+const int32_t& GlobalVariables::GetIntValue(const std::string& groupName, const std::string& key) const
 {
 	assert(datas_.find(kChunkName) != datas_.end());
 	const Chunk& chunk = datas_.at(kChunkName);
@@ -330,7 +1696,7 @@ int32_t GlobalVariables::GetIntValue(const std::string& groupName, const std::st
 	return std::get<int32_t>(group.find(key)->second);
 }
 
-float GlobalVariables::GetFloatValue(const std::string& groupName, const std::string& key) const
+const float& GlobalVariables::GetFloatValue(const std::string& groupName, const std::string& key) const
 {
 	assert(datas_.find(kChunkName) != datas_.end());
 	const Chunk& chunk = datas_.at(kChunkName);
@@ -342,7 +1708,7 @@ float GlobalVariables::GetFloatValue(const std::string& groupName, const std::st
 	return std::get<float>(group.find(key)->second);
 }
 
-Vector2 GlobalVariables::GetVector2Value(const std::string& groupName, const std::string& key) const
+const Vector2& GlobalVariables::GetVector2Value(const std::string& groupName, const std::string& key) const
 {
 	assert(datas_.find(kChunkName) != datas_.end());
 	const Chunk& chunk = datas_.at(kChunkName);
@@ -354,7 +1720,7 @@ Vector2 GlobalVariables::GetVector2Value(const std::string& groupName, const std
 	return std::get<Vector2>(group.find(key)->second);
 }
 
-Vector3 GlobalVariables::GetVector3Value(const std::string& groupName, const std::string& key) const
+const Vector3& GlobalVariables::GetVector3Value(const std::string& groupName, const std::string& key) const
 {
 	assert(datas_.find(kChunkName) != datas_.end());
 	const Chunk& chunk = datas_.at(kChunkName);
@@ -366,7 +1732,7 @@ Vector3 GlobalVariables::GetVector3Value(const std::string& groupName, const std
 	return std::get<Vector3>(group.find(key)->second);
 }
 
-bool GlobalVariables::GetBoolValue(const std::string& groupName, const std::string& key) const
+const bool& GlobalVariables::GetBoolValue(const std::string& groupName, const std::string& key) const
 {
 	assert(datas_.find(kChunkName) != datas_.end());
 	const Chunk& chunk = datas_.at(kChunkName);
@@ -378,7 +1744,7 @@ bool GlobalVariables::GetBoolValue(const std::string& groupName, const std::stri
 	return std::get<bool>(group.find(key)->second);
 }
 
-std::string GlobalVariables::GetStringValue(const std::string& groupName, const std::string& key) const
+const std::string& GlobalVariables::GetStringValue(const std::string& groupName, const std::string& key) const
 {
 	assert(datas_.find(kChunkName) != datas_.end());
 	const Chunk& chunk = datas_.at(kChunkName);
@@ -388,6 +1754,658 @@ std::string GlobalVariables::GetStringValue(const std::string& groupName, const 
 
 	assert(group.find(key) != group.end());
 	return std::get<std::string>(group.find(key)->second);
+}
+
+const int32_t& GlobalVariables::GetIntValue(const std::string& chunkName, const std::string& groupName, const std::string& key, const int& treeNum, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6) const
+{
+	assert(datas_.find(chunkName) != datas_.end());
+	const Chunk& chunk = datas_.at(chunkName);
+
+	assert(chunk.find(groupName) != chunk.end());
+	const Group& group = chunk.at(groupName);
+	if (treeNum) {}
+
+	if (tree2 == "_") {
+		std::string name = kTreeName_[0] + tree1 + "_" + key;
+		assert(group.find(name) != group.end());
+		return std::get<int32_t>(group.find(name)->second);
+	}
+	else {
+		if (tree3 == "_") {
+			std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + key;
+			assert(group.find(name) != group.end());
+			return std::get<int32_t>(group.find(name)->second);
+		}
+		else {
+			if (tree4 == "_") {
+				std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + key;
+				assert(group.find(name) != group.end());
+				return std::get<int32_t>(group.find(name)->second);
+			}
+			else {
+				if (tree5 == "_") {
+					std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + key;
+					assert(group.find(name) != group.end());
+					return std::get<int32_t>(group.find(name)->second);
+				}
+				else {
+					if (tree6 == "_") {
+						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + key;
+						assert(group.find(name) != group.end());
+						return std::get<int32_t>(group.find(name)->second);
+					}
+					else {
+						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6 + "_" + key;
+						assert(group.find(name) != group.end());
+						return std::get<int32_t>(group.find(name)->second);
+					}
+				}
+			}
+		}
+	}
+}
+
+const float& GlobalVariables::GetFloatValue(const std::string& chunkName, const std::string& groupName, const std::string& key, const int& treeNum, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6) const
+{
+	assert(datas_.find(chunkName) != datas_.end());
+	const Chunk& chunk = datas_.at(chunkName);
+
+	assert(chunk.find(groupName) != chunk.end());
+	const Group& group = chunk.at(groupName);
+	if (treeNum) {}
+
+	if (tree2 == "_") {
+		std::string name = kTreeName_[0] + tree1 + "_" + key;
+		assert(group.find(name) != group.end());
+		return std::get<float>(group.find(name)->second);
+	}
+	else {
+		if (tree3 == "_") {
+			std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + key;
+			assert(group.find(name) != group.end());
+			return std::get<float>(group.find(name)->second);
+		}
+		else {
+			if (tree4 == "_") {
+				std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + key;
+				assert(group.find(name) != group.end());
+				return std::get<float>(group.find(name)->second);
+			}
+			else {
+				if (tree5 == "_") {
+					std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + key;
+					assert(group.find(name) != group.end());
+					return std::get<float>(group.find(name)->second);
+				}
+				else {
+					if (tree6 == "_") {
+						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + key;
+						assert(group.find(name) != group.end());
+						return std::get<float>(group.find(name)->second);
+					}
+					else {
+						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6 + "_" + key;
+						assert(group.find(name) != group.end());
+						return std::get<float>(group.find(name)->second);
+					}
+				}
+			}
+		}
+	}
+}
+
+const Vector2& GlobalVariables::GetVector2Value(const std::string& chunkName, const std::string& groupName, const std::string& key, const int& treeNum, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6) const
+{
+	assert(datas_.find(chunkName) != datas_.end());
+	const Chunk& chunk = datas_.at(chunkName);
+
+	assert(chunk.find(groupName) != chunk.end());
+	const Group& group = chunk.at(groupName);
+	if (treeNum) {}
+
+	if (tree2 == "_") {
+		std::string name = kTreeName_[0] + tree1 + "_" + key;
+		assert(group.find(name) != group.end());
+		return std::get<Vector2>(group.find(name)->second);
+	}
+	else {
+		if (tree3 == "_") {
+			std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + key;
+			assert(group.find(name) != group.end());
+			return std::get<Vector2>(group.find(name)->second);
+		}
+		else {
+			if (tree4 == "_") {
+				std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + key;
+				assert(group.find(name) != group.end());
+				return std::get<Vector2>(group.find(name)->second);
+			}
+			else {
+				if (tree5 == "_") {
+					std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + key;
+					assert(group.find(name) != group.end());
+					return std::get<Vector2>(group.find(name)->second);
+				}
+				else {
+					if (tree6 == "_") {
+						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + key;
+						assert(group.find(name) != group.end());
+						return std::get<Vector2>(group.find(name)->second);
+					}
+					else {
+						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6 + "_" + key;
+						assert(group.find(name) != group.end());
+						return std::get<Vector2>(group.find(name)->second);
+					}
+				}
+			}
+		}
+	}
+}
+
+const Vector3& GlobalVariables::GetVector3Value(const std::string& chunkName, const std::string& groupName, const std::string& key, const int& treeNum, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6) const
+{
+	assert(datas_.find(chunkName) != datas_.end());
+	const Chunk& chunk = datas_.at(chunkName);
+
+	assert(chunk.find(groupName) != chunk.end());
+	const Group& group = chunk.at(groupName);
+	if (treeNum) {}
+
+	if (tree2 == "_") {
+		std::string name = kTreeName_[0] + tree1 + "_" + key;
+		assert(group.find(name) != group.end());
+		return std::get<Vector3>(group.find(name)->second);
+	}
+	else {
+		if (tree3 == "_") {
+			std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + key;
+			assert(group.find(name) != group.end());
+			return std::get<Vector3>(group.find(name)->second);
+		}
+		else {
+			if (tree4 == "_") {
+				std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + key;
+				assert(group.find(name) != group.end());
+				return std::get<Vector3>(group.find(name)->second);
+			}
+			else {
+				if (tree5 == "_") {
+					std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + key;
+					assert(group.find(name) != group.end());
+					return std::get<Vector3>(group.find(name)->second);
+				}
+				else {
+					if (tree6 == "_") {
+						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + key;
+						assert(group.find(name) != group.end());
+						return std::get<Vector3>(group.find(name)->second);
+					}
+					else {
+						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6 + "_" + key;
+						assert(group.find(name) != group.end());
+						return std::get<Vector3>(group.find(name)->second);
+					}
+				}
+			}
+		}
+	}
+}
+
+const bool& GlobalVariables::GetBoolValue(const std::string& chunkName, const std::string& groupName, const std::string& key, const int& treeNum, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6) const
+{
+	assert(datas_.find(chunkName) != datas_.end());
+	const Chunk& chunk = datas_.at(chunkName);
+
+	assert(chunk.find(groupName) != chunk.end());
+	const Group& group = chunk.at(groupName);
+	if (treeNum) {}
+
+	if (tree2 == "_") {
+		std::string name = kTreeName_[0] + tree1 + "_" + key;
+		assert(group.find(name) != group.end());
+		return std::get<bool>(group.find(name)->second);
+	}
+	else {
+		if (tree3 == "_") {
+			std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + key;
+			assert(group.find(name) != group.end());
+			return std::get<bool>(group.find(name)->second);
+		}
+		else {
+			if (tree4 == "_") {
+				std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + key;
+				assert(group.find(name) != group.end());
+				return std::get<bool>(group.find(name)->second);
+			}
+			else {
+				if (tree5 == "_") {
+					std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + key;
+					assert(group.find(name) != group.end());
+					return std::get<bool>(group.find(name)->second);
+				}
+				else {
+					if (tree6 == "_") {
+						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + key;
+						assert(group.find(name) != group.end());
+						return std::get<bool>(group.find(name)->second);
+					}
+					else {
+						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6 + "_" + key;
+						assert(group.find(name) != group.end());
+						return std::get<bool>(group.find(name)->second);
+					}
+				}
+			}
+		}
+	}
+}
+
+const std::string& GlobalVariables::GetStringValue(const std::string& chunkName, const std::string& groupName, const std::string& key, const int& treeNum, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6) const
+{
+	assert(datas_.find(chunkName) != datas_.end());
+	const Chunk& chunk = datas_.at(chunkName);
+
+	assert(chunk.find(groupName) != chunk.end());
+	const Group& group = chunk.at(groupName);
+	if (treeNum) {}
+
+	if (tree2 == "_") {
+		std::string name = kTreeName_[0] + tree1 + "_" + key;
+		assert(group.find(name) != group.end());
+		return std::get<std::string>(group.find(name)->second);
+	}
+	else {
+		if (tree3 == "_") {
+			std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + key;
+			assert(group.find(name) != group.end());
+			return std::get<std::string>(group.find(name)->second);
+		}
+		else {
+			if (tree4 == "_") {
+				std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + key;
+				assert(group.find(name) != group.end());
+				return std::get<std::string>(group.find(name)->second);
+			}
+			else {
+				if (tree5 == "_") {
+					std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + key;
+					assert(group.find(name) != group.end());
+					return std::get<std::string>(group.find(name)->second);
+				}
+				else {
+					if (tree6 == "_") {
+						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + key;
+						assert(group.find(name) != group.end());
+						return std::get<std::string>(group.find(name)->second);
+					}
+					else {
+						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6 + "_" + key;
+						assert(group.find(name) != group.end());
+						return std::get<std::string>(group.find(name)->second);
+					}
+				}
+			}
+		}
+	}
+}
+
+const int32_t& GlobalVariables::GetIntValue(const std::string& groupName, const std::string& key, const int& treeNum, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6) const
+{
+	assert(datas_.find(kChunkName) != datas_.end());
+	const Chunk& chunk = datas_.at(kChunkName);
+
+	assert(chunk.find(groupName) != chunk.end());
+	const Group& group = chunk.at(groupName);
+	if (treeNum) {}
+
+	if (tree2 == "_") {
+		std::string name = kTreeName_[0] + tree1 + "_" + key;
+		assert(group.find(name) != group.end());
+		return std::get<int32_t>(group.find(name)->second);
+	}
+	else {
+		if (tree3 == "_") {
+			std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + key;
+			assert(group.find(name) != group.end());
+			return std::get<int32_t>(group.find(name)->second);
+		}
+		else {
+			if (tree4 == "_") {
+				std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + key;
+				assert(group.find(name) != group.end());
+				return std::get<int32_t>(group.find(name)->second);
+			}
+			else {
+				if (tree5 == "_") {
+					std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + key;
+					assert(group.find(name) != group.end());
+					return std::get<int32_t>(group.find(name)->second);
+				}
+				else {
+					if (tree6 == "_") {
+						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + key;
+						assert(group.find(name) != group.end());
+						return std::get<int32_t>(group.find(name)->second);
+					}
+					else {
+						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6 + "_" + key;
+						assert(group.find(name) != group.end());
+						return std::get<int32_t>(group.find(name)->second);
+					}
+				}
+			}
+		}
+	}
+}
+
+const float& GlobalVariables::GetFloatValue(const std::string& groupName, const std::string& key, const int& treeNum, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6) const
+{
+	assert(datas_.find(kChunkName) != datas_.end());
+	const Chunk& chunk = datas_.at(kChunkName);
+
+	assert(chunk.find(groupName) != chunk.end());
+	const Group& group = chunk.at(groupName);
+	if (treeNum) {}
+
+	if (tree2 == "_") {
+		std::string name = kTreeName_[0] + tree1 + "_" + key;
+		assert(group.find(name) != group.end());
+		return std::get<float>(group.find(name)->second);
+	}
+	else {
+		if (tree3 == "_") {
+			std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + key;
+			assert(group.find(name) != group.end());
+			return std::get<float>(group.find(name)->second);
+		}
+		else {
+			if (tree4 == "_") {
+				std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + key;
+				assert(group.find(name) != group.end());
+				return std::get<float>(group.find(name)->second);
+			}
+			else {
+				if (tree5 == "_") {
+					std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + key;
+					assert(group.find(name) != group.end());
+					return std::get<float>(group.find(name)->second);
+				}
+				else {
+					if (tree6 == "_") {
+						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + key;
+						assert(group.find(name) != group.end());
+						return std::get<float>(group.find(name)->second);
+					}
+					else {
+						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6 + "_" + key;
+						assert(group.find(name) != group.end());
+						return std::get<float>(group.find(name)->second);
+					}
+				}
+			}
+		}
+	}
+}
+
+const Vector2& GlobalVariables::GetVector2Value(const std::string& groupName, const std::string& key, const int& treeNum, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6) const
+{
+	assert(datas_.find(kChunkName) != datas_.end());
+	const Chunk& chunk = datas_.at(kChunkName);
+
+	assert(chunk.find(groupName) != chunk.end());
+	const Group& group = chunk.at(groupName);
+	if (treeNum) {}
+
+	if (tree2 == "_") {
+		std::string name = kTreeName_[0] + tree1 + "_" + key;
+		assert(group.find(name) != group.end());
+		return std::get<Vector2>(group.find(name)->second);
+	}
+	else {
+		if (tree3 == "_") {
+			std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + key;
+			assert(group.find(name) != group.end());
+			return std::get<Vector2>(group.find(name)->second);
+		}
+		else {
+			if (tree4 == "_") {
+				std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + key;
+				assert(group.find(name) != group.end());
+				return std::get<Vector2>(group.find(name)->second);
+			}
+			else {
+				if (tree5 == "_") {
+					std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + key;
+					assert(group.find(name) != group.end());
+					return std::get<Vector2>(group.find(name)->second);
+				}
+				else {
+					if (tree6 == "_") {
+						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + key;
+						assert(group.find(name) != group.end());
+						return std::get<Vector2>(group.find(name)->second);
+					}
+					else {
+						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6 + "_" + key;
+						assert(group.find(name) != group.end());
+						return std::get<Vector2>(group.find(name)->second);
+					}
+				}
+			}
+		}
+	}
+}
+
+const Vector3& GlobalVariables::GetVector3Value(const std::string& groupName, const std::string& key, const int& treeNum, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6) const
+{
+	assert(datas_.find(kChunkName) != datas_.end());
+	const Chunk& chunk = datas_.at(kChunkName);
+
+	assert(chunk.find(groupName) != chunk.end());
+	const Group& group = chunk.at(groupName);
+	if (treeNum) {}
+
+	if (tree2 == "_") {
+		std::string name = kTreeName_[0] + tree1 + "_" + key;
+		assert(group.find(name) != group.end());
+		return std::get<Vector3>(group.find(name)->second);
+	}
+	else {
+		if (tree3 == "_") {
+			std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + key;
+			assert(group.find(name) != group.end());
+			return std::get<Vector3>(group.find(name)->second);
+		}
+		else {
+			if (tree4 == "_") {
+				std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + key;
+				assert(group.find(name) != group.end());
+				return std::get<Vector3>(group.find(name)->second);
+			}
+			else {
+				if (tree5 == "_") {
+					std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + key;
+					assert(group.find(name) != group.end());
+					return std::get<Vector3>(group.find(name)->second);
+				}
+				else {
+					if (tree6 == "_") {
+						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + key;
+						assert(group.find(name) != group.end());
+						return std::get<Vector3>(group.find(name)->second);
+					}
+					else {
+						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6 + "_" + key;
+						assert(group.find(name) != group.end());
+						return std::get<Vector3>(group.find(name)->second);
+					}
+				}
+			}
+		}
+	}
+}
+
+const bool& GlobalVariables::GetBoolValue(const std::string& groupName, const std::string& key, const int& treeNum, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6) const
+{
+	assert(datas_.find(kChunkName) != datas_.end());
+	const Chunk& chunk = datas_.at(kChunkName);
+
+	assert(chunk.find(groupName) != chunk.end());
+	const Group& group = chunk.at(groupName);
+	if (treeNum) {}
+
+	if (tree2 == "_") {
+		std::string name = kTreeName_[0] + tree1 + "_" + key;
+		assert(group.find(name) != group.end());
+		return std::get<bool>(group.find(name)->second);
+	}
+	else {
+		if (tree3 == "_") {
+			std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + key;
+			assert(group.find(name) != group.end());
+			return std::get<bool>(group.find(name)->second);
+		}
+		else {
+			if (tree4 == "_") {
+				std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + key;
+				assert(group.find(name) != group.end());
+				return std::get<bool>(group.find(name)->second);
+			}
+			else {
+				if (tree5 == "_") {
+					std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + key;
+					assert(group.find(name) != group.end());
+					return std::get<bool>(group.find(name)->second);
+				}
+				else {
+					if (tree6 == "_") {
+						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + key;
+						assert(group.find(name) != group.end());
+						return std::get<bool>(group.find(name)->second);
+					}
+					else {
+						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6 + "_" + key;
+						assert(group.find(name) != group.end());
+						return std::get<bool>(group.find(name)->second);
+					}
+				}
+			}
+		}
+	}
+}
+
+const std::string& GlobalVariables::GetStringValue(const std::string& groupName, const std::string& key, const int& treeNum, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6) const
+{
+	assert(datas_.find(kChunkName) != datas_.end());
+	const Chunk& chunk = datas_.at(kChunkName);
+
+	assert(chunk.find(groupName) != chunk.end());
+	const Group& group = chunk.at(groupName);
+	if (treeNum) {}
+
+	if (tree2 == "_") {
+		std::string name = kTreeName_[0] + tree1 + "_" + key;
+		assert(group.find(name) != group.end());
+		return std::get<std::string>(group.find(name)->second);
+	}
+	else {
+		if (tree3 == "_") {
+			std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + key;
+			assert(group.find(name) != group.end());
+			return std::get<std::string>(group.find(name)->second);
+		}
+		else {
+			if (tree4 == "_") {
+				std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + key;
+				assert(group.find(name) != group.end());
+				return std::get<std::string>(group.find(name)->second);
+			}
+			else {
+				if (tree5 == "_") {
+					std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + key;
+					assert(group.find(name) != group.end());
+					return std::get<std::string>(group.find(name)->second);
+				}
+				else {
+					if (tree6 == "_") {
+						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + key;
+						assert(group.find(name) != group.end());
+						return std::get<std::string>(group.find(name)->second);
+					}
+					else {
+						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6 + "_" + key;
+						assert(group.find(name) != group.end());
+						return std::get<std::string>(group.find(name)->second);
+					}
+				}
+			}
+		}
+	}
+}
+
+bool GlobalVariables::IsTreeOpen(const std::string& chunkName, const std::string& groupName, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
+{
+	if (isTreeOpen_.find(chunkName) == isTreeOpen_.end()) {
+		return false;
+	}
+	const Chunk& chunk = isTreeOpen_.at(chunkName);
+
+	if (chunk.find(groupName) == chunk.end()) {
+		return false;
+	}
+	const Group& group = chunk.at(groupName);
+
+	if (tree2 == "_") {
+		std::string name = kTreeName_[0] + tree1;
+		if (group.find(name) == group.end()) {
+			return false;
+		}
+		return std::get<bool>(group.find(name)->second);
+	}
+	else {
+		if (tree3 == "_") {
+			std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2;
+			if (group.find(name) == group.end()) {
+				return false;
+			}
+			return std::get<bool>(group.find(name)->second);
+		}
+		else {
+			if (tree4 == "_") {
+				std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3;
+				if (group.find(name) == group.end()) {
+					return false;
+				}
+				return std::get<bool>(group.find(name)->second);
+			}
+			else {
+				if (tree5 == "_") {
+					std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4;
+					if (group.find(name) == group.end()) {
+						return false;
+					}
+					return std::get<bool>(group.find(name)->second);
+				}
+				else {
+					if (tree6 == "_") {
+						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5;
+						if (group.find(name) == group.end()) {
+							return false;
+						}
+						return std::get<bool>(group.find(name)->second);
+					}
+					else {
+						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6;
+						if (group.find(name) == group.end()) {
+							return false;
+						}
+						return std::get<bool>(group.find(name)->second);
+					}
+				}
+			}
+		}
+	}
 }
 
 void GlobalVariables::SaveFile(const std::string& chunkName, const std::string& groupName) {
@@ -442,7 +2460,6 @@ void GlobalVariables::SaveFile(const std::string& chunkName, const std::string& 
 	if (!std::filesystem::exists(dir)) {
 		std::filesystem::create_directories(dir);
 	}
-
 
 	std::string filePath = kDirectoryPath + chunkName + "_" + groupName + ".json";
 

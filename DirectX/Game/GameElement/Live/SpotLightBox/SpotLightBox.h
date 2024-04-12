@@ -2,7 +2,6 @@
 #include "Model.h"
 #include "SpotLight/SpotLight.h"
 #include "PointLight/PointLight.h"
-#include <array>
 
 class Camera;
 
@@ -13,11 +12,10 @@ public:
 	void Update();
 	void Draw(Camera* camera);
 
-private:
-	void UpdatePositions();
-
-private:
+public:
+	std::unique_ptr<SpotLight> spotLights_[2];
 	std::unique_ptr<Model> box_;
+	bool isDraw_ = true;
+private:
 	std::unique_ptr<PointLight> point_;
-	std::array<std::unique_ptr<SpotLight>, 2> spots_;
 };
