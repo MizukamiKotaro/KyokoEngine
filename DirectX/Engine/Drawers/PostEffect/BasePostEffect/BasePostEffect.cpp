@@ -115,6 +115,7 @@ void BasePostEffect::CreateMaterialRes()
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 	//今回は赤を書き込んでいる
 	materialData_->color = { 1.0f,1.0f,1.0f,1.0f };
+	color_ = { 1.0f,1.0f,1.0f,1.0f };
 }
 
 
