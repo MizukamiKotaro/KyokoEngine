@@ -42,12 +42,12 @@ void WaterOutline::Draw(BlendMode blendMode)
 	//マテリアルCBufferの場所を設定
 	commandList->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 
-	commandList->SetGraphicsRootDescriptorTable(2, srvHandles_->gpuHandle);
+	commandList->SetGraphicsRootDescriptorTable(1, srvHandles_->gpuHandle);
 
-	commandList->SetGraphicsRootConstantBufferView(3, waterResource_->GetGPUVirtualAddress());
+	commandList->SetGraphicsRootConstantBufferView(2, waterResource_->GetGPUVirtualAddress());
 
 	//描画!!!!（DrawCall/ドローコール）
-	commandList->DrawInstanced(6, 1, 0, 0);
+	commandList->DrawInstanced(3, 1, 0, 0);
 
 }
 
