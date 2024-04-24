@@ -25,7 +25,7 @@ Screen::Screen()
 
 	screen_->SetSRVGPUDescriptorHandle_(postEffect_->GetSRVGPUDescriptorHandle());
 
-	globalVariable_ = std::make_unique<GlobalVariableUser>("Screen");
+	globalVariable_ = std::make_unique<GlobalVariableUser>("Screen", "Screen");
 }
 
 Screen::Screen(const std::string& chunkName, const std::string& groupName)
@@ -106,7 +106,7 @@ void Screen::CreateGroup()
 
 void Screen::SetGlobalVariable()
 {
-	if (globalVariable_->IsCreated()) {
+	if (globalVariable_) {
 		globalVariable_->AddItem("スケール", scale_);
 		globalVariable_->AddItem("ポジション", screen_->transform_.translate_);
 		globalVariable_->AddItem("向き", screen_->transform_.rotate_);
@@ -117,7 +117,7 @@ void Screen::SetGlobalVariable()
 
 void Screen::ApplyGlobalVariable()
 {
-	if (globalVariable_->IsCreated()) {
+	if (globalVariable_) {
 		scale_ = globalVariable_->GetFloatValue("スケール");
 		screen_->transform_.translate_ = globalVariable_->GetVector3Value("ポジション");
 		screen_->transform_.rotate_ = globalVariable_->GetVector3Value("向き");

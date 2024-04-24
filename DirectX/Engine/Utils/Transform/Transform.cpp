@@ -1,7 +1,7 @@
 #include "Transform.h"
 #include "Utils/Math/Vector2.h"
 
-Transform::Transform()
+EulerTransform::EulerTransform()
 {
 
 	scale_ = { 1.0f,1.0f,1.0f };
@@ -18,12 +18,12 @@ Transform::Transform()
 	rot_ = Quaternion::Identity();
 }
 
-void Transform::Initialize()
+void EulerTransform::Initialize()
 {
 	
 }
 
-void Transform::UpdateMatrix()
+void EulerTransform::UpdateMatrix()
 {
 	if (isQua_) {
 		worldMat_ = Matrix4x4::MakeScaleMatrix(scale_) * Matrix4x4::MakeRotateMatrix(rot_) * Matrix4x4::MakeTranslateMatrix(translate_);
@@ -46,12 +46,12 @@ void Transform::UpdateMatrix()
 	worldPos_.z = worldMat_.m[3][2];
 }
 
-const Vector3& Transform::GetWorldPosition() const
+const Vector3& EulerTransform::GetWorldPosition() const
 {
 	return worldPos_;
 }
 
-bool Transform::IsCollisionXZ(const Transform& transform)
+bool EulerTransform::IsCollisionXZ(const EulerTransform& transform)
 {
 
 	Vector2 min0 = { worldPos_.x - scale_.x,worldPos_.z - scale_.z };
@@ -68,7 +68,7 @@ bool Transform::IsCollisionXZ(const Transform& transform)
 	return false;
 }
 
-void Transform::SetWorldTranslateParent(const Transform* transform)
+void EulerTransform::SetWorldTranslateParent(const EulerTransform* transform)
 {
 	if (!worldTranslateParent_) {
 		worldTranslateParent_ = transform;
@@ -76,7 +76,7 @@ void Transform::SetWorldTranslateParent(const Transform* transform)
 	}
 }
 
-void Transform::ClearWorldTranslateParent()
+void EulerTransform::ClearWorldTranslateParent()
 {
 	if (worldTranslateParent_) {
 		translate_ += worldTranslateParent_->worldPos_;
@@ -84,7 +84,7 @@ void Transform::ClearWorldTranslateParent()
 	}
 }
 
-void Transform::SetQuaRot(const Quaternion& qua)
+void EulerTransform::SetQuaRot(const Quaternion& qua)
 {
 	isQua_ = true;
 	rot_ = qua;

@@ -3,10 +3,10 @@
 #include "Utils/Math/Matrix4x4.h"
 #include "Quaternion.h"
 
-class Transform {
+class EulerTransform {
 
 public:
-	Transform();
+	EulerTransform();
 
 	void Initialize();
 
@@ -14,13 +14,13 @@ public:
 
 	const Vector3& GetWorldPosition() const;
 
-	bool IsCollisionXZ(const Transform& transform);
+	bool IsCollisionXZ(const EulerTransform& transform);
 
 	/// <summary>
 	/// 平行移動のみの親のセット
 	/// </summary>
 	/// <param name="transform">親にするTransformのポインタ</param>
-	void SetWorldTranslateParent(const Transform* transform);
+	void SetWorldTranslateParent(const EulerTransform* transform);
 
 	/// <summary>
 	/// 平行移動の親子関係の解除
@@ -42,8 +42,7 @@ public:
 	Quaternion rot_;
 	bool isQua_;
 
-	const Transform* parent_ = nullptr;
+	const EulerTransform* parent_ = nullptr;
 
-	const Transform* worldTranslateParent_ = nullptr;
-
+	const EulerTransform* worldTranslateParent_ = nullptr;
 };

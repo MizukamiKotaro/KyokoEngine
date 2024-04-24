@@ -16,7 +16,7 @@ ClearScene::ClearScene()
 	space_->Update();
 	isEnd_ = false;
 
-	se_.LoadWave("SE/select.wav");
+	se_.Load("SE/select.mp3", "決定音");
 }
 
 void ClearScene::Initialize()

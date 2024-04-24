@@ -34,7 +34,7 @@ TitleScene::TitleScene()
 	puniru_->size_ *= 0.5f;
 	puniru_->Update();
 
-	se_.LoadWave("SE/select.wav","決定音");
+	se_.Load("SE/select.mp3","決定音");
 }
 
 void TitleScene::Initialize()

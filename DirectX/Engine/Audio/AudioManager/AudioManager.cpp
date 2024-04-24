@@ -6,6 +6,16 @@
 #include "SoundData.h"
 #include "AudioConfig.h"
 #include "VolumeManager/VolumeManager.h"
+#include "DebugLog/DebugLog.h"
+
+#include <mfapi.h>
+#include <mfidl.h>
+#include <mfreadwrite.h>
+
+#pragma comment(lib, "Mf.lib")
+#pragma comment(lib, "mfplat.lib")
+#pragma comment(lib, "Mfreadwrite.lib")
+#pragma comment(lib, "mfuuid.lib")
 
 AudioManager* AudioManager::GetInstance() {
 	static AudioManager instance;
@@ -14,10 +24,15 @@ AudioManager* AudioManager::GetInstance() {
 
 void AudioManager::Initialize() {
 
+
 	HRESULT hr = XAudio2Create(&xAudio2_, 0, XAUDIO2_DEFAULT_PROCESSOR);
 	assert(SUCCEEDED(hr));
 	hr = xAudio2_->CreateMasteringVoice(&masterVoice_);
 	assert(SUCCEEDED(hr));
+
+	hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
+	assert(SUCCEEDED(hr));
+	MFStartup(MF_VERSION, MFSTARTUP_NOSOCKET);
 }
 
 void AudioManager::Update()
@@ -39,10 +54,14 @@ void AudioManager::Finalize() {
 	for (const std::pair<const std::string, std::unique_ptr<SoundData>>& pair : soundDataMap_) {
 		Unload(pair.second.get());
 	}
+
+	MFShutdown();
+
+	CoUninitialize();
 }
 
-const SoundData* AudioManager::LoadWave(const std::string& filename) {
-
+const SoundData* AudioManager::Load(const std::string& filename)
+{
 	std::filesystem::path filePathName(filename);
 	std::string fileName = filePathName.filename().string();
 
@@ -75,61 +94,60 @@ const SoundData* AudioManager::LoadWave(const std::string& filename) {
 		}
 	}
 
-	if (!found) {
-		
+	std::wstring path = DebugLog::ConvertString(entryPath);
+	IMFSourceReader* pMFSourceReader{ nullptr };
+	MFCreateSourceReaderFromURL(path.c_str(), nullptr, &pMFSourceReader);
+
+	IMFMediaType* pMFMediaType{ nullptr };
+	MFCreateMediaType(&pMFMediaType);
+	pMFMediaType->SetGUID(MF_MT_MAJOR_TYPE, MFMediaType_Audio);
+	pMFMediaType->SetGUID(MF_MT_SUBTYPE, MFAudioFormat_PCM);
+	pMFSourceReader->SetCurrentMediaType(static_cast<UINT32>(MF_SOURCE_READER_FIRST_AUDIO_STREAM), nullptr, pMFMediaType);
+
+	pMFMediaType->Release();
+	pMFMediaType = nullptr;
+	pMFSourceReader->GetCurrentMediaType(static_cast<UINT32>(MF_SOURCE_READER_FIRST_AUDIO_STREAM), &pMFMediaType);
+
+	WAVEFORMATEX* waveFormat{ nullptr };
+	MFCreateWaveFormatExFromMFMediaType(pMFMediaType, &waveFormat, nullptr);
+
+	std::vector<BYTE> mediaData;
+	while (true)
+	{
+		IMFSample* pMFSample{ nullptr };
+		DWORD dwStreamFlags{ 0 };
+		pMFSourceReader->ReadSample(static_cast<UINT32>(MF_SOURCE_READER_FIRST_AUDIO_STREAM), 0, nullptr, &dwStreamFlags, nullptr, &pMFSample);
+
+		if (dwStreamFlags & MF_SOURCE_READERF_ENDOFSTREAM)
+		{
+			break;
+		}
+
+		IMFMediaBuffer* pMFMediaBuffer{ nullptr };
+		pMFSample->ConvertToContiguousBuffer(&pMFMediaBuffer);
+
+		BYTE* pBuffer{ nullptr };
+		DWORD cbCurrentLength{ 0 };
+		pMFMediaBuffer->Lock(&pBuffer, nullptr, &cbCurrentLength);
+
+		mediaData.resize(mediaData.size() + cbCurrentLength);
+		memcpy(mediaData.data() + mediaData.size() - cbCurrentLength, pBuffer, cbCurrentLength);
+
+		pMFMediaBuffer->Unlock();
+
+		pMFMediaBuffer->Release();
+		pMFSample->Release();
 	}
 
-	std::ifstream file;
-
-	file.open(entryPath, std::ios_base::binary);
-
-	assert(file.is_open());
-
-	RiffHeader riff;
-	file.read((char*)&riff, sizeof(riff));
-
-	if (strncmp(riff.chunk.id, "RIFF", 4) != 0) {
-		assert(0);
-	}
-
-	if (strncmp(riff.type, "WAVE", 4) != 0) {
-		assert(0);
-	}
-
-	FormatChunk fmt = {};
-
-	file.read((char*)&fmt.chunk, sizeof(ChunkHeader));
-	while (strncmp(fmt.chunk.id, "fmt ", 4) != 0) {
-		// 読み取りチャンクを検出した場合
-		file.seekg(fmt.chunk.size, std::ios_base::cur);
-		// 再読み込み
-		file.read((char*)&fmt.chunk, sizeof(ChunkHeader));
-	}
-
-	std::vector<char> fmtData(fmt.chunk.size);
-	file.read(fmtData.data(), fmt.chunk.size);
-	memcpy(&fmt.fmt, fmtData.data(), sizeof(fmt.fmt));
-
-	ChunkHeader data;
-	file.read((char*)&data, sizeof(data));
-
-	while (strncmp(data.id, "data", 4) != 0) {
-		// 読み取りチャンクを検出した場合
-		file.seekg(data.size, std::ios_base::cur);
-		// 再読み込み
-		file.read((char*)&data, sizeof(data));
-	}
-
-	std::vector<BYTE> pBuffer(data.size);
-	file.read(reinterpret_cast<char*>(pBuffer.data()), data.size);
-
-	file.close();
-
-	soundData.wfex = fmt.fmt;
-	soundData.pBuffer = pBuffer;
-	soundData.bufferSize = data.size;
+	soundData.wfex = *waveFormat;
+	soundData.pBuffer = mediaData;
+	soundData.bufferSize = sizeof(BYTE) * static_cast<UINT32>(mediaData.size());
 
 	soundDataMap_[fileName] = std::make_unique<SoundData>(soundData);
+
+	CoTaskMemFree(waveFormat);
+	pMFMediaType->Release();
+	pMFSourceReader->Release();
 
 	return soundDataMap_[fileName].get();
 }
@@ -150,6 +168,18 @@ void AudioManager::DestroyVoice(uint32_t handle, const SoundData* soundData)
 				voice->sourceVoice = nullptr;
 			}
 			break;
+		}
+	}
+}
+
+void AudioManager::DestroyVoiceSameSound(const SoundData* soundData)
+{
+	for (const std::unique_ptr<Voice>& voice : voices_) {
+		if (voice->soundData == soundData) {
+			if (voice->sourceVoice) {
+				voice->sourceVoice->DestroyVoice();
+				voice->sourceVoice = nullptr;
+			}
 		}
 	}
 }
@@ -250,6 +280,48 @@ void AudioManager::SetVolume(uint32_t voiceHandle, const SoundData* soundData, f
 		if (voice->handle == voiceHandle && voice->soundData == soundData) {
 			voice->sourceVoice->SetVolume(volume);
 			break;
+		}
+	}
+}
+
+void AudioManager::AllStop()
+{
+	for (const std::unique_ptr<Voice>& voice : voices_) {
+		if (voice->sourceVoice) {
+			voice->sourceVoice->DestroyVoice();
+			voice->sourceVoice = nullptr;
+		}
+	}
+}
+
+void AudioManager::StopSameSounds(const SoundData* soundData)
+{
+	DestroyVoiceSameSound(soundData);
+}
+
+bool AudioManager::IsPlayingSameSound(const SoundData* soundData)
+{
+	for (const std::unique_ptr<Voice>& voice : voices_) {
+		if (voice->soundData == soundData) {
+			if (voice->sourceVoice) {
+				XAUDIO2_VOICE_STATE state{};
+				voice->sourceVoice->GetState(&state);
+				if (state.BuffersQueued != 0) {
+					return true;
+				}
+				return false;
+			}
+		}
+	}
+
+	return false;
+}
+
+void AudioManager::SetVolumeSameSound(const SoundData* soundData, float volume)
+{
+	for (const std::unique_ptr<Voice>& voice : voices_) {
+		if (voice->soundData == soundData) {
+			voice->sourceVoice->SetVolume(volume);
 		}
 	}
 }

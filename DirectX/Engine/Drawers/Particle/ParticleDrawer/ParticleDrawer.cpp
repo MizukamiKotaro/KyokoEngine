@@ -20,7 +20,6 @@ ParticleDrawer::ParticleDrawer(const ParticleMeshTexData& data)
 
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 	*materialData_ = { Vector4(1.0f, 1.0f, 1.0f, 1.0f) , 2 };
-	materialData_->uvTransform = Matrix4x4::MakeIdentity4x4();
 
 	//WVP用のリソースを作る。Matrix4x4　1つ分のサイズを用意する
 	instancingResource_ = DirectXBase::CreateBufferResource(sizeof(ParticleForGPU) * kNumInstance);
@@ -30,6 +29,7 @@ ParticleDrawer::ParticleDrawer(const ParticleMeshTexData& data)
 	for (uint32_t index = 0; index < kNumInstance; index++) {
 		instancingData_[index].WVP = Matrix4x4::MakeIdentity4x4();
 		instancingData_[index].World = Matrix4x4::MakeIdentity4x4();
+		instancingData_[index].uvTransform = Matrix4x4::MakeIdentity4x4();
 		instancingData_[index].color = { 1.0f,1.0f,1.0f,0.0f };
 	}
 
@@ -59,6 +59,7 @@ void ParticleDrawer::Draw(const Camera& camera, std::list<ParticleData>& blocks,
 
 		instancingData_[index].World = iter->matrix_;
 		instancingData_[index].WVP = instancingData_[index].World * camera.GetViewProjection();
+		instancingData_[index].uvTransform = iter->uvTransform;
 		instancingData_[index].color = iter->color_;
 
 		index++;
@@ -66,6 +67,7 @@ void ParticleDrawer::Draw(const Camera& camera, std::list<ParticleData>& blocks,
 	psoManager_->SetBlendMode(pipelineType_, blendMode);
 	//Spriteの描画。変更に必要なものだけ変更する
 	commandList_->IASetVertexBuffers(0, 1, &data_.modelData_->mesh.vertexBufferView_); // VBVを設定
+	commandList_->IASetIndexBuffer(&data_.modelData_->mesh.indexBufferView_);
 	//マテリアルCBufferの場所を設定
 	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 	//TransformationMatrixCBufferの場所を設定
@@ -75,7 +77,8 @@ void ParticleDrawer::Draw(const Camera& camera, std::list<ParticleData>& blocks,
 	commandList_->SetGraphicsRootConstantBufferView(3, light_.GetDirectionalLightGPUVirtualAddress());
 	commandList_->SetGraphicsRootDescriptorTable(2, data_.texture_->handles_->gpuHandle);
 	//描画!!!!（DrawCall/ドローコール）
-	commandList_->DrawInstanced(UINT(data_.modelData_->mesh.verteces.size()), instaceNum, 0, 0);
+	//commandList_->DrawInstanced(UINT(data_.modelData_->mesh.verteces.size()), instaceNum, 0, 0);
+	commandList_->DrawIndexedInstanced(UINT(data_.modelData_->mesh.indices.size()), instaceNum, 0, 0, 0);
 }
 
 void ParticleDrawer::PreDraw()

@@ -113,8 +113,17 @@ private:
 
 	void InitVariables();
 
+	void CreateSkeleton();
+
+	int32_t Createjoint(const NodeData& node, const std::optional<int32_t>& parent, std::vector<Joint>& joints);
+
+	void UpdateSkeleton();
+
+	void ApplyAnimation();
+
+
 public:
-	Transform transform_;
+	EulerTransform transform_;
 	Vector4 color_;
 
 private:
@@ -131,6 +140,7 @@ private:
 	const ModelData* modelData_;
 
 	std::unique_ptr<Animation> animation_;
+	std::unique_ptr<Skeleton> skeleton_;
 	float animationTime_;
 
 	// texture変えたい時用

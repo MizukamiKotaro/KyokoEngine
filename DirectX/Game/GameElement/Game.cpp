@@ -18,7 +18,7 @@ Game::Game(Camera* camera)
 	live_ = std::make_unique<Live>(camera_);
 
 	music_ = std::make_unique<Audio>();
-	music_->LoadWave("Music/maou_short_14_shining_star.wav");
+	music_->Load("Music/maou_short_14_shining_star.mp3", "シャイニングスター");
 	
 	notesList_ = NotesList::GetInstance();
 	notesList_->Initialize();
@@ -31,7 +31,7 @@ Game::Game(Camera* camera)
 
 	HitSystem::SetScore(score_.get());
 
-	se_.LoadWave("SE/finish.wav");
+	se_.Load("SE/finish.mp3", "ライブ終わりの歓声");
 }
 
 void Game::Initialize()

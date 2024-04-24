@@ -1,22 +1,27 @@
 #pragma once
 #include <stdint.h>
 #include <string>
+#include <memory>
+#include "GlobalVariables/GlobalVariableUser.h"
 
 class AudioManager;
 class SoundData;
-class GlobalVariables;
 class VolumeManager;
 
 class Audio
 {
 public: // gameで使用する関数
+
+	Audio() = default;
+	Audio(const Audio& audio);
+
 	/// <summary>
 	/// waveデータのロード,タグの設定,ボリュームの設定(ImGuiで後からいじれるようになってる)
 	/// </summary>
-	/// <param name="filename">"hoge.wav"で読み込める,Resources/Audio/SE or Musicの中にあれば更に格納しててもok</param>
+	/// <param name="filename">"hoge.mp3"で読み込める,Resources/Audio/SE or Musicの中にあれば更に格納しててもok</param>
 	/// <param name="itemName">ImGuiに表示する名前,日本語可</param>
 	/// <param name="volume">ボリューム</param>
-	void LoadWave(const std::string& filename, const std::string& itemName = "_", float volume = 0.7f);
+	void Load(const std::string& filename, const std::string& itemName = "_", float volume = 0.7f);
 	/// <summary>
 	/// 再生
 	/// </summary>
@@ -40,6 +45,11 @@ public: // gameで使用する関数
 	/// </summary>
 	void ReStart() const;
 
+	/// <summary>
+	/// 全ての再生を停止
+	/// </summary>
+	static void AllStop();
+
 public: // エンジン内で使用する関数
 	static void StaticInitialize();
 	void Update();
@@ -53,5 +63,7 @@ private:
 
 	static AudioManager* audioManager_;
 	static VolumeManager* volumeManager_;
-	static GlobalVariables* globalVariables_;
+	
+	std::unique_ptr<GlobalVariableUser> global_;
+	
 };

@@ -19,6 +19,7 @@ void ModelDataManager::Finalize()
 {
 	for (uint32_t modelNum = 0; modelNum < static_cast<uint32_t>(modelDatas_.size()); modelNum++) {
 		modelDatas_[modelNum]->mesh.vertexResource_->Release();
+		modelDatas_[modelNum]->mesh.indexResource_->Release();
 	}
 }
 
@@ -74,27 +75,44 @@ void ModelDataManager::LoadObjFile(const std::string& directoryPath, const std::
 		assert(mesh->HasTextureCoords(0)); // texCoordがないmeshは非対応
 
 		// faceを解析
+		//for (uint32_t faceIndex = 0; faceIndex < mesh->mNumFaces; faceIndex++) {
+		//	aiFace& face = mesh->mFaces[faceIndex];
+		//	assert(face.mNumIndices == 3); // 三角形のみサポート
+
+		//	// vertexを解析
+		//	for (uint32_t element = 0; element < face.mNumIndices; element++) {
+		//		uint32_t vertexIndex = face.mIndices[element];
+		//		aiVector3D& position = mesh->mVertices[vertexIndex];
+		//		aiVector3D& normal = mesh->mNormals[vertexIndex];
+		//		aiVector3D& texcoord = mesh->mTextureCoords[0][vertexIndex];
+
+		//		VertexData vertex;
+		//		vertex.vertexPos = { -position.x,position.y,position.z,1.0f };
+		//		vertex.normal = { -normal.x,normal.y,normal.z };
+		//		vertex.texcoord = { texcoord.x,texcoord.y };
+
+		//		modelDatas_.back()->mesh.verteces.push_back(vertex);
+		//	}
+		//}
+		
+		// vertexを解析
+		modelDatas_.back()->mesh.verteces.resize(mesh->mNumVertices);
+		for (uint32_t vertexIndex = 0; vertexIndex < mesh->mNumVertices; vertexIndex++) {
+			aiVector3D& position = mesh->mVertices[vertexIndex];
+			aiVector3D& normal = mesh->mNormals[vertexIndex];
+			aiVector3D& texcoord = mesh->mTextureCoords[0][vertexIndex];
+
+			modelDatas_.back()->mesh.verteces[vertexIndex].vertexPos = { -position.x,position.y,position.z,1.0f };
+			modelDatas_.back()->mesh.verteces[vertexIndex].normal = { -normal.x,normal.y,normal.z };
+			modelDatas_.back()->mesh.verteces[vertexIndex].texcoord = { texcoord.x,texcoord.y };
+		}
+
+		// indexを解析
 		for (uint32_t faceIndex = 0; faceIndex < mesh->mNumFaces; faceIndex++) {
 			aiFace& face = mesh->mFaces[faceIndex];
-			assert(face.mNumIndices == 3); // 三角形のみサポート
-
-			// vertexを解析
+			assert(face.mNumIndices == 3);
 			for (uint32_t element = 0; element < face.mNumIndices; element++) {
-				uint32_t vertexIndex = face.mIndices[element];
-				aiVector3D& position = mesh->mVertices[vertexIndex];
-				aiVector3D& normal = mesh->mNormals[vertexIndex];
-				aiVector3D& texcoord = mesh->mTextureCoords[0][vertexIndex];
-
-				VertexData vertex;
-				vertex.vertexPos = { position.x,position.y,position.z,1.0f };
-				vertex.normal = { normal.x,normal.y,normal.z };
-				vertex.texcoord = { texcoord.x,texcoord.y };
-
-				// aiProcess_MakeLefthandedはz*=-1で、右手->左手に変換するので手動で対処
-				vertex.vertexPos.x *= -1.0f;
-				vertex.normal.x *= -1.0f;
-
-				modelDatas_.back()->mesh.verteces.push_back(vertex);
+				modelDatas_.back()->mesh.indices.push_back(face.mIndices[element]);
 			}
 		}
 	}
@@ -125,6 +143,15 @@ void ModelDataManager::LoadObjFile(const std::string& directoryPath, const std::
 		modelDatas_.back()->texture = TextureManager::GetInstance()->LoadTexture(texFilePath);
 	}
 
+	modelDatas_.back()->mesh.indexResource_ = DirectXBase::CreateBufferResource(sizeof(uint32_t) * modelDatas_.back()->mesh.indices.size());
+
+	modelDatas_.back()->mesh.indexBufferView_.BufferLocation = modelDatas_.back()->mesh.indexResource_->GetGPUVirtualAddress();
+	modelDatas_.back()->mesh.indexBufferView_.SizeInBytes = UINT(sizeof(uint32_t) * modelDatas_.back()->mesh.indices.size());
+	modelDatas_.back()->mesh.indexBufferView_.Format = DXGI_FORMAT_R32_UINT;
+
+	modelDatas_.back()->mesh.indexResource_->Map(0, nullptr, reinterpret_cast<void**>(&modelDatas_.back()->mesh.mappedIndex));
+	std::memcpy(modelDatas_.back()->mesh.mappedIndex, modelDatas_.back()->mesh.indices.data(), sizeof(uint32_t) * modelDatas_.back()->mesh.indices.size());
+
 	modelDatas_.back()->mesh.vertexResource_ = DirectXBase::CreateBufferResource(sizeof(VertexData) * modelDatas_.back()->mesh.verteces.size());
 
 	//VertexBufferViewを作成する
@@ -146,14 +173,13 @@ void ModelDataManager::LoadObjFile(const std::string& directoryPath, const std::
 NodeData ModelDataManager::ReadNode(aiNode* node)
 {
 	NodeData result;
-	aiMatrix4x4 aiLocalMatrix = node->mTransformation; // nodeのlocalMatrixを取得
-	aiLocalMatrix.Transpose(); // 列ベクトルを行ベクトルに転置
-	
-	for (int row = 0; row < 4; row++) {
-		for (int column = 0; column < 4; column++) {
-			result.localMatrix.m[row][column] = aiLocalMatrix[row][column];
-		}
-	}
+	aiVector3D scale, translate;
+	aiQuaternion rotate;
+	node->mTransformation.Decompose(scale, rotate, translate);
+	result.transform.scale_ = { scale.x,scale.y,scale.z };
+	result.transform.rotate_ = { rotate.x,-rotate.y,-rotate.z,rotate.w };
+	result.transform.translate_ = { -translate.x,translate.y,translate.z };
+	result.localMatrix = Matrix4x4::MakeAffinMatrix(result.transform);
 
 	result.name = node->mName.C_Str();
 	result.children.resize(node->mNumChildren);

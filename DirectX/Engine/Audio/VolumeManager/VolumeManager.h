@@ -3,10 +3,11 @@
 #include <string>
 #include <memory>
 #include <unordered_map>
+#include "GlobalVariables/GlobalVariableUser.h"
 
 class Audio;
 enum class AudioType;
-class GlobalVariables;
+class AudioManager;
 
 class VolumeManager
 {
@@ -34,7 +35,8 @@ private:
 	const VolumeManager& operator=(const VolumeManager&) = delete;
 
 	std::unordered_map<std::string, std::unique_ptr<Audio>> audioMap_;
-	GlobalVariables* globalVariables_ = nullptr;
+	std::unique_ptr<GlobalVariableUser> global_;
+	AudioManager* audioManager_;
 	
 	float seVolume_ = 0.7f;
 	float musicVolume_ = 0.7f;

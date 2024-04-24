@@ -3,7 +3,8 @@
 #include "Vector3.h"
 #include "Quaternion.h"
 #include "calc.h"
-#include "../Transform/Transform.h"
+#include "Transform/Transform.h"
+#include "Transform/QuaternionTransform.h"
 #include <assert.h>
 #include <cmath>
 
@@ -334,8 +335,12 @@ Matrix4x4 Matrix4x4::MakeAffinMatrix(const Vector3& scale, const Quaternion& rot
 	return result;
 }
 
-Matrix4x4 Matrix4x4::MakeAffinMatrix(const Transform& transform) {
+Matrix4x4 Matrix4x4::MakeAffinMatrix(const EulerTransform& transform) {
+	return MakeAffinMatrix(transform.scale_, transform.rotate_, transform.translate_);
+}
 
+Matrix4x4 Matrix4x4::MakeAffinMatrix(const QuaternionTransform& transform)
+{
 	return MakeAffinMatrix(transform.scale_, transform.rotate_, transform.translate_);
 }
 

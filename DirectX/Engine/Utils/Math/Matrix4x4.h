@@ -2,7 +2,8 @@
 
 class Vector3;
 class Quaternion;
-class Transform;
+class EulerTransform;
+class QuaternionTransform;
 
 class Matrix4x4 {
 public:
@@ -57,7 +58,9 @@ public:
 
 	static Matrix4x4 MakeAffinMatrix(const Vector3& scale, const Quaternion& rotate, const Vector3& translate);
 
-	static Matrix4x4 MakeAffinMatrix(const Transform& transform);
+	static Matrix4x4 MakeAffinMatrix(const EulerTransform& transform);
+
+	static Matrix4x4 MakeAffinMatrix(const QuaternionTransform& transform);
 	//透視投影行列
 	static Matrix4x4 MakePerspectiveFovMatrix(float fovY, float aspectRatio, float nearClip, float farClip);
 	//正射影行列

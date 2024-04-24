@@ -14,7 +14,7 @@ void HitSystem::Initialize()
 {
 	hitCount_ = 0;
 	hitNum_ = 0;
-	se_.LoadWave("SE/se.wav");
+	se_.Load("SE/se.mp3", "タップ音");
 }
 
 void HitSystem::Update(float time)

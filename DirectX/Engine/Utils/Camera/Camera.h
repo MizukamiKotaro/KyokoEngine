@@ -39,7 +39,7 @@ private:
 
 public:
 
-	Transform transform_;
+	EulerTransform transform_;
 
 private:
 

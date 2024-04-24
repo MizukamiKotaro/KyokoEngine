@@ -35,7 +35,7 @@ public:
 	/// </summary>
 	void Finalize();
 
-	const SoundData* LoadWave(const std::string& filename);
+	const SoundData* Load(const std::string& filename);
 
 	uint32_t Play(const SoundData* soundData, bool loopFlag = false, float volume = 0.7f);
 
@@ -49,9 +49,18 @@ public:
 
 	void SetVolume(uint32_t voiceHandle, const SoundData* soundData, float volume);
 
+	void AllStop();
+
+	void StopSameSounds(const SoundData* soundData);
+
+	bool IsPlayingSameSound(const SoundData* soundData);
+
+	void SetVolumeSameSound(const SoundData* soundData, float volume);
+
 private:
 	void Unload(SoundData* soundData);
 	void DestroyVoice(uint32_t handle, const SoundData* soundData);
+	void DestroyVoiceSameSound(const SoundData* soundData);
 	Voice* FindUnusedVoice();
 
 private:

@@ -95,6 +95,7 @@ void SpotLight::Draw(const Camera& camera, BlendMode blendMode)
 
 		//Spriteの描画。変更に必要なものだけ変更する
 		commandList_->IASetVertexBuffers(0, 1, &modelData_->mesh.vertexBufferView_); // VBVを設定
+		commandList_->IASetIndexBuffer(&modelData_->mesh.indexBufferView_);
 
 		//TransformationMatrixCBufferの場所を設定
 		commandList_->SetGraphicsRootConstantBufferView(1, transformationResource_->GetGPUVirtualAddress());
@@ -105,7 +106,8 @@ void SpotLight::Draw(const Camera& camera, BlendMode blendMode)
 		commandList_->SetGraphicsRootConstantBufferView(0, resource_->GetGPUVirtualAddress());
 
 		//描画!!!!（DrawCall/ドローコール）
-		commandList_->DrawInstanced(UINT(modelData_->mesh.verteces.size()), 1, 0, 0);
+		//commandList_->DrawInstanced(UINT(modelData_->mesh.verteces.size()), 1, 0, 0);
+		commandList_->DrawIndexedInstanced(UINT(modelData_->mesh.indices.size()), 1, 0, 0, 0);
 	}
 }
 

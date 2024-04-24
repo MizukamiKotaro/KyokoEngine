@@ -18,7 +18,7 @@ SelectScene::SelectScene()
 	space_->pos_ = { 640.0f,560.0f };
 	space_->Update();
 
-	se_.LoadWave("SE/select.wav");
+	se_.Load("SE/select.mp3", "決定音");
 }
 
 void SelectScene::Initialize()

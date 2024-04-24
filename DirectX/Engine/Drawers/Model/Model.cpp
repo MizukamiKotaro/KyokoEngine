@@ -79,8 +79,8 @@ void Model::Draw(const Camera& camera, BlendMode blendMode)
 
 		transformationData_->World = localMatrix * transform_.worldMat_;
 		transformationData_->WVP = localMatrix * transform_.worldMat_ * camera.GetViewProjection();
-		transformationData_->WorldInverse = Matrix4x4::Inverse(Matrix4x4::MakeScaleMatrix(transform_.scale_)) *
-			Matrix4x4::MakeRotateXYZMatrix(transform_.rotate_) * Matrix4x4::MakeTranslateMatrix(transform_.translate_);
+		transformationData_->WorldInverse = Matrix4x4::Inverse(Matrix4x4::MakeScaleMatrix(transform_.scale_) * Matrix4x4::MakeScaleMatrix(scale)) *
+			Matrix4x4::MakeRotateXYZMatrix(transform_.rotate_) * Matrix4x4::MakeRotateMatrix(rotate) * Matrix4x4::MakeTranslateMatrix(transform_.translate_) * Matrix4x4::MakeTranslateMatrix(translate);
 	}
 	else {
 		transformationData_->World = transform_.worldMat_;
@@ -95,6 +95,8 @@ void Model::Draw(const Camera& camera, BlendMode blendMode)
 
 	//Spriteの描画。変更に必要なものだけ変更する
 	commandList_->IASetVertexBuffers(0, 1, &modelData_->mesh.vertexBufferView_); // VBVを設定
+	commandList_->IASetIndexBuffer(&modelData_->mesh.indexBufferView_);
+
 	//マテリアルCBufferの場所を設定
 	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 	//TransformationMatrixCBufferの場所を設定
@@ -111,8 +113,8 @@ void Model::Draw(const Camera& camera, BlendMode blendMode)
 
 	commandList_->SetGraphicsRootDescriptorTable(2, srvGPUDescriptorHandle_);
 	//描画!!!!（DrawCall/ドローコール）
-	commandList_->DrawInstanced(UINT(modelData_->mesh.verteces.size()), 1, 0, 0);
-
+	//commandList_->DrawInstanced(UINT(modelData_->mesh.verteces.size()), 1, 0, 0);
+	commandList_->DrawIndexedInstanced(UINT(modelData_->mesh.indices.size()), 1, 0, 0, 0);
 }
 
 void Model::AnimationUpdate(float time)
@@ -120,6 +122,7 @@ void Model::AnimationUpdate(float time)
 	if (animation_) {
 		animationTime_ += time;
 		animationTime_ = std::fmod(animationTime_, animation_->duration);
+		ApplyAnimation();
 	}
 }
 
@@ -228,7 +231,7 @@ void Model::InitVariables()
 {
 	light_.Initialize();
 
-	transform_ = Transform();
+	transform_ = EulerTransform();
 
 	uvScale_ = { 1.0f,1.0f,1.0f };
 	uvRotate_ = { 0.0f,0.0f,0.0f };
@@ -237,5 +240,58 @@ void Model::InitVariables()
 	uvMatrix_ = Matrix4x4::MakeAffinMatrix(uvScale_, uvRotate_, uvPos_);
 }
 
+void Model::CreateSkeleton()
+{
+	Skeleton skeleton;
+	skeleton.root = Createjoint(modelData_->rootNode, {}, skeleton.joints);
 
+	for (const Joint& joint : skeleton.joints) {
+		skeleton.jointMap.emplace(joint.name, joint.index);
+	}
+	skeleton_ = std::make_unique<Skeleton>(skeleton);
+	UpdateSkeleton();
+}
 
+int32_t Model::Createjoint(const NodeData& node, const std::optional<int32_t>& parent, std::vector<Joint>& joints)
+{
+	Joint joint;
+	joint.name = node.name;
+	joint.localMatrix = node.localMatrix;
+	joint.skeletonSpaceMatrix = Matrix4x4::MakeIdentity4x4();
+	joint.transform = node.transform;
+	joint.index = int32_t(joints.size());
+	joint.parent = parent;
+	joints.push_back(joint);
+	for (const NodeData& child : node.children) {
+		int32_t childIndex = Createjoint(child, joint.index, joints);
+		joints[joint.index].children.push_back(childIndex);
+	}
+	return 0;
+}
+
+void Model::UpdateSkeleton()
+{
+	if (skeleton_) {
+		for (Joint& joint : skeleton_->joints) {
+			joint.localMatrix = Matrix4x4::MakeAffinMatrix(joint.transform);
+			if (joint.parent) {
+				joint.skeletonSpaceMatrix = joint.localMatrix * skeleton_->joints[*joint.parent].skeletonSpaceMatrix;
+			}
+			else {
+				joint.skeletonSpaceMatrix = joint.localMatrix;
+			}
+		}
+	}
+}
+
+void Model::ApplyAnimation()
+{
+	for (Joint& joint : skeleton_->joints) {
+		if (auto it = animation_->nodeAnimations.find(joint.name); it != animation_->nodeAnimations.end()) {
+			const NodeAnimation& rootNodeAnimation = (*it).second;
+			joint.transform.translate_ = CalculateValue(rootNodeAnimation.translate, animationTime_);
+			joint.transform.rotate_ = CalculateValue(rootNodeAnimation.rotate, animationTime_);
+			joint.transform.scale_ = CalculateValue(rootNodeAnimation.scale, animationTime_);
+		}
+	}
+}

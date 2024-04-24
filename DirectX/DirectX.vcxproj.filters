@@ -151,12 +151,6 @@
     <Filter Include="Game\SceneSystem\SceneFactory">
       <UniqueIdentifier>{a23dbc92-c0b7-43d8-9bf3-80ee674c5738}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Utils\CollisionSystem">
-      <UniqueIdentifier>{6c6820ea-bab9-48a6-9f87-7a333249b3ff}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Utils\CollisionSystem\Collision">
-      <UniqueIdentifier>{27227e56-f856-4b67-b9e9-02e2c9ee02ec}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Audio\AudioManager">
       <UniqueIdentifier>{b4cbcc5e-532a-4bf6-858b-85cf0eed0e46}</UniqueIdentifier>
     </Filter>
@@ -198,9 +192,6 @@
     </Filter>
     <Filter Include="Engine\Drawer\Model">
       <UniqueIdentifier>{9b3d7ddc-abf8-49d9-82a2-5883563904f0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Drawer\Particle">
-      <UniqueIdentifier>{9221d928-522c-462d-ac04-6e656b39b273}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Drawer\PostEffect">
       <UniqueIdentifier>{ac6c224c-40e1-4638-81d1-ee6dd623625e}</UniqueIdentifier>
@@ -313,6 +304,30 @@
     <Filter Include="Game\GameElement\Live\MultipleScreen">
       <UniqueIdentifier>{8e1db68e-49b1-4067-8579-3d8a5a61bd58}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Utils\Collision">
+      <UniqueIdentifier>{27227e56-f856-4b67-b9e9-02e2c9ee02ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\CollisionSystem">
+      <UniqueIdentifier>{6de3343b-1909-4957-8526-18606937db2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\InstancingModelGraphicsPipline">
+      <UniqueIdentifier>{dbdd92d8-2dcb-4fcc-ab69-a2b7a2089a0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\NoiseGraphicsPipeline">
+      <UniqueIdentifier>{3009f1ca-8038-4152-b9d1-aa66a7247a4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\StageEditor">
+      <UniqueIdentifier>{2962aacc-cd8d-4966-a399-b751598a6664}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Drawer\Particle">
+      <UniqueIdentifier>{4fd6cd76-770d-4652-a171-ddb0b46138e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Drawer\InstancingModel">
+      <UniqueIdentifier>{301d704c-9c60-4a77-805d-bc4853ffc396}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Drawer\PostEffect\Noise">
+      <UniqueIdentifier>{09b9576d-efd2-4279-9402-66d5ba464d1a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -328,7 +343,7 @@
       <Filter>Engine\Utils\Camera</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Utils\Collision\Collision.cpp">
-      <Filter>Engine\Utils\CollisionSystem\Collision</Filter>
+      <Filter>Engine\Utils\Collision</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Utils\Ease\Ease.cpp">
       <Filter>Engine\Utils\Ease</Filter>
@@ -501,21 +516,6 @@
     <ClCompile Include="Game\SceneSystem\SceneFactory\SceneFactory.cpp">
       <Filter>Game\SceneSystem\SceneFactory</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\CollisionSystem\BaseColliderShapeType\BaseColliderShapeType.cpp">
-      <Filter>Engine\Utils\CollisionSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\CollisionSystem\Collider\Collider.cpp">
-      <Filter>Engine\Utils\CollisionSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\CollisionSystem\ColliderShapes\ColliderShapeBox2D\ColliderShapeBox2D.cpp">
-      <Filter>Engine\Utils\CollisionSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\CollisionSystem\ColliderShapes\ColliderShapeMapChip2D\ColliderShapeMapChip2D.cpp">
-      <Filter>Engine\Utils\CollisionSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\CollisionSystem\CollisionManager\CollisionManager.cpp">
-      <Filter>Engine\Utils\CollisionSystem</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Audio\AudioManager\AudioManager.cpp">
       <Filter>Engine\Audio\AudioManager</Filter>
     </ClCompile>
@@ -530,9 +530,6 @@
     </ClCompile>
     <ClCompile Include="Engine\Drawers\Model\Model.cpp">
       <Filter>Engine\Drawer\Model</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Drawers\Particle\Particle.cpp">
-      <Filter>Engine\Drawer\Particle</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Drawers\Sprite\Sprite.cpp">
       <Filter>Engine\Drawer\Sprite</Filter>
@@ -621,6 +618,54 @@
     <ClCompile Include="Game\GameElement\Live\SpotLightBox\TwinSpotLightBox.cpp">
       <Filter>Game\GameElement\Live\SpotLightBox</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\CollisionSystem\Collider\Collider.cpp">
+      <Filter>Engine\CollisionSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\CollisionSystem\CollisionManager\CollisionManager.cpp">
+      <Filter>Engine\CollisionSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\CollisionSystem\CollisionProcesses\CollisionCircleCircle\CollisionCircleCircle.cpp">
+      <Filter>Engine\CollisionSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\CollisionSystem\ColliderShapes\ShapeCircle\ShapeCircle.cpp">
+      <Filter>Engine\CollisionSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\InstancingModelGraphicsPipline\InstancingModelGraphicsPipline.cpp">
+      <Filter>Engine\GraphicsPipelineSystem\GraphicsPipelines\InstancingModelGraphicsPipline</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\NoiseGraphicsPipeline\NoiseGraphicsPipeline.cpp">
+      <Filter>Engine\GraphicsPipelineSystem\GraphicsPipelines\NoiseGraphicsPipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\StageEditor\StageEditor.cpp">
+      <Filter>Engine\StageEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Utils\Transform\QuaternionTransform.cpp">
+      <Filter>Engine\Utils\Transform</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Drawers\InstancingModel\InstancingModelList\InstancingModelList.cpp">
+      <Filter>Engine\Drawer\InstancingModel</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Drawers\InstancingModel\InstancingModelManager.cpp">
+      <Filter>Engine\Drawer\InstancingModel</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Drawers\InstancingModel\InstancingModels\InstancingModels.cpp">
+      <Filter>Engine\Drawer\InstancingModel</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Drawers\Particle\Particle.cpp">
+      <Filter>Engine\Drawer\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Drawers\Particle\ParticleDrawer\ParticleDrawer.cpp">
+      <Filter>Engine\Drawer\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Drawers\Particle\ParticleList\ParticleList.cpp">
+      <Filter>Engine\Drawer\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Drawers\Particle\ParticleManager.cpp">
+      <Filter>Engine\Drawer\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Drawers\PostEffect\Noise\Noise.cpp">
+      <Filter>Engine\Drawer\PostEffect\Noise</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Utils\Math\calc.h">
@@ -630,7 +675,7 @@
       <Filter>Engine\Utils\Camera</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Utils\Collision\Collision.h">
-      <Filter>Engine\Utils\CollisionSystem\Collision</Filter>
+      <Filter>Engine\Utils\Collision</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Utils\Shape\AABB.h">
       <Filter>Engine\Utils\Shape</Filter>
@@ -821,24 +866,6 @@
     <ClInclude Include="Game\SceneSystem\SceneFactory\SceneFactory.h">
       <Filter>Game\SceneSystem\SceneFactory</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\CollisionSystem\BaseColliderShapeType\BaseColliderShapeType.h">
-      <Filter>Engine\Utils\CollisionSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\CollisionSystem\Collider\Collider.h">
-      <Filter>Engine\Utils\CollisionSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\CollisionSystem\ColliderShapes\ColliderShapeBox2D\ColliderShapeBox2D.h">
-      <Filter>Engine\Utils\CollisionSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\CollisionSystem\ColliderShapes\ColliderShapeMapChip2D\ColliderShapeMapChip2D.h">
-      <Filter>Engine\Utils\CollisionSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\CollisionSystem\CollisionConfig\CollisionConfig.h">
-      <Filter>Engine\Utils\CollisionSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\CollisionSystem\CollisionManager\CollisionManager.h">
-      <Filter>Engine\Utils\CollisionSystem</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Audio\AudioManager\AudioManager.h">
       <Filter>Engine\Audio\AudioManager</Filter>
     </ClInclude>
@@ -856,9 +883,6 @@
     </ClInclude>
     <ClInclude Include="Engine\Drawers\Model\Model.h">
       <Filter>Engine\Drawer\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Drawers\Particle\Particle.h">
-      <Filter>Engine\Drawer\Particle</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Drawers\Sprite\Sprite.h">
       <Filter>Engine\Drawer\Sprite</Filter>
@@ -979,6 +1003,63 @@
     </ClInclude>
     <ClInclude Include="Game\GameElement\Live\SpotLightBox\TwinSpotLightBox.h">
       <Filter>Game\GameElement\Live\SpotLightBox</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\CollisionSystem\Collider\Collider.h">
+      <Filter>Engine\CollisionSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\CollisionSystem\CollisionConfig.h">
+      <Filter>Engine\CollisionSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\CollisionSystem\CollisionManager\CollisionManager.h">
+      <Filter>Engine\CollisionSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\CollisionSystem\CollisionProcesses\CollisionCircleCircle\CollisionCircleCircle.h">
+      <Filter>Engine\CollisionSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\CollisionSystem\ColliderShapes\ShapeCircle\ShapeCircle.h">
+      <Filter>Engine\CollisionSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\InstancingModelGraphicsPipline\InstancingModelGraphicsPipline.h">
+      <Filter>Engine\GraphicsPipelineSystem\GraphicsPipelines\InstancingModelGraphicsPipline</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\NoiseGraphicsPipeline\NoiseGraphicsPipeline.h">
+      <Filter>Engine\GraphicsPipelineSystem\GraphicsPipelines\NoiseGraphicsPipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\StageEditor\StageEditor.h">
+      <Filter>Engine\StageEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Utils\Transform\QuaternionTransform.h">
+      <Filter>Engine\Utils\Transform</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drawers\InstancingModel\InstancingModelData.h">
+      <Filter>Engine\Drawer\InstancingModel</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drawers\InstancingModel\InstancingModelList\InstancingModelList.h">
+      <Filter>Engine\Drawer\InstancingModel</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drawers\InstancingModel\InstancingModelManager.h">
+      <Filter>Engine\Drawer\InstancingModel</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drawers\InstancingModel\InstancingModels\InstancingModels.h">
+      <Filter>Engine\Drawer\InstancingModel</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drawers\Particle\Particle.h">
+      <Filter>Engine\Drawer\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drawers\Particle\ParticleData.h">
+      <Filter>Engine\Drawer\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drawers\Particle\ParticleDrawer\ParticleDrawer.h">
+      <Filter>Engine\Drawer\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drawers\Particle\ParticleList\ParticleList.h">
+      <Filter>Engine\Drawer\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drawers\Particle\ParticleManager.h">
+      <Filter>Engine\Drawer\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drawers\PostEffect\Noise\Noise.h">
+      <Filter>Engine\Drawer\PostEffect\Noise</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
