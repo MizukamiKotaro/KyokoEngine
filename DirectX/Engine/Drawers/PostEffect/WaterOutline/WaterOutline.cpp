@@ -1,4 +1,4 @@
-#include "Noise.h"
+#include "WaterOutline.h"
 
 #include "Engine/Base/DirectXBase/DirectXBase.h"
 #include "Engine/Base/DescriptorHeapManager/DescriptorHeapManager.h"
@@ -8,56 +8,26 @@
 #include "GraphicsPipelineSystem/GraphicsPiplineManager/GraphicsPiplineManager.h"
 #include "WindowsInfo/WindowsInfo.h"
 
-Noise::Noise()
+WaterOutline::WaterOutline()
 {
-	piplineType_ = PipelineType::NOISE;
-	noiseData_ = nullptr;
+	piplineType_ = PipelineType::WATER_OUTLINE;
+	waterData_ = nullptr;
 	CreatePostEffect();
-	camera = nullptr;
 }
 
-Noise::~Noise()
+WaterOutline::~WaterOutline()
 {
-	noiseResource_->Release();
+	waterResource_->Release();
 }
 
-void Noise::SetCameraPos(const Vector3& pos)
+void WaterOutline::Draw(BlendMode blendMode)
 {
-	camera = &pos;
-	noiseData_->cameraPos = Vector2{ camera->x,camera->y };
-}
-
-void Noise::Initialize()
-{
-	noiseData_->time = 0.0f;
-	if (camera) {
-		noiseData_->cameraPos = Vector2{ camera->x,camera->y };
-	}
-}
-
-void Noise::Update(const float& time)
-{
-	noiseData_->time += time;
-	if (camera) {
-		noiseData_->cameraPos = Vector2{ camera->x,camera->y };
-	}
-}
-
-void Noise::Draw(BlendMode blendMode)
-{
-	if (noiseData_->density <= 0.0f) {
-		noiseData_->density = 0.1f;
-	}
-
-	if (noiseData_->moveScale <= 0.0f) {
-		noiseData_->moveScale = 0.1f;
-	}
 
 	if (blendMode == BlendMode::kBlendModeNormal) {
-		noiseData_->isNormal = 1;
+		waterData_->isNormal = 1;
 	}
 	else {
-		noiseData_->isNormal = 0;
+		waterData_->isNormal = 0;
 	}
 
 	if (isInvisible_) {
@@ -84,33 +54,27 @@ void Noise::Draw(BlendMode blendMode)
 
 	commandList->SetGraphicsRootDescriptorTable(2, srvHandles_->gpuHandle);
 
-	commandList->SetGraphicsRootConstantBufferView(3, noiseResource_->GetGPUVirtualAddress());
+	commandList->SetGraphicsRootConstantBufferView(3, waterResource_->GetGPUVirtualAddress());
 
 	//描画!!!!（DrawCall/ドローコール）
 	commandList->DrawInstanced(6, 1, 0, 0);
 
 }
 
-void Noise::CreateNoiseRes()
+void WaterOutline::CreateWaterRes()
 {
-	noiseResource_ = DirectXBase::CreateBufferResource(sizeof(NoiseData));
+	waterResource_ = DirectXBase::CreateBufferResource(sizeof(WaterOutlineData));
 
-	noiseResource_->Map(0, nullptr, reinterpret_cast<void**>(&noiseData_));
+	waterResource_->Map(0, nullptr, reinterpret_cast<void**>(&waterData_));
 
-	noiseData_->density = 10.0f;
-	noiseData_->screenSize = WindowsInfo::GetInstance()->GetWindowSize();
-	noiseData_->time = 0.0f;
-	noiseData_->lightningColor = { 0.8f,0.8f,0.8f,1.0f };
-	noiseData_->waterColor = { 0.3f,1.0f,0.8f,1.0f };
-	noiseData_->type = NoiseType::WATER;
-	noiseData_->isNormal = 1;
-	noiseData_->cameraPos = {};
-	noiseData_->moveScale = 2.0f;
+	waterData_->screenSize = WindowsInfo::GetInstance()->GetWindowSize();
+	waterData_->outlinePix = 2;
+	waterData_->isNormal = 1;
 }
 
-void Noise::CreateResources()
+void WaterOutline::CreateResources()
 {
 	BasePostEffect::CreateResources();
 
-	CreateNoiseRes();
+	CreateWaterRes();
 }
