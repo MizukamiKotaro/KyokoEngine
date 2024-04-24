@@ -334,6 +334,9 @@
     <Filter Include="Engine\Drawer\PostEffect\WaterOutline">
       <UniqueIdentifier>{74ddc981-cb86-470f-bbc0-34c0f9a8c22c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\CopyGraphicsPipeline">
+      <UniqueIdentifier>{f8885181-0116-4298-a8e7-919b8d445d60}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -677,6 +680,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Drawers\PostEffect\WaterOutline\WaterOutline.cpp">
       <Filter>Engine\Drawer\PostEffect\WaterOutline</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\CopyGraphicsPipeline\CopyGraphicsPipeline.cpp">
+      <Filter>Engine\GraphicsPipelineSystem\GraphicsPipelines\CopyGraphicsPipeline</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1078,6 +1084,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Drawers\PostEffect\WaterOutline\WaterOutline.h">
       <Filter>Engine\Drawer\PostEffect\WaterOutline</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\CopyGraphicsPipeline\CopyGraphicsPipeline.h">
+      <Filter>Engine\GraphicsPipelineSystem\GraphicsPipelines\CopyGraphicsPipeline</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
