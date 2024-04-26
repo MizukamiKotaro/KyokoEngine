@@ -251,124 +251,64 @@ void ModelDataManager::LoadGLTFFile(const std::string& directoryPath, const std:
 		assert(mesh->HasNormals()); // 法線がないmeshは非対応
 		assert(mesh->HasTextureCoords(0)); // texCoordがないmeshは非対応
 
-		// faceを解析
-		for (uint32_t faceIndex = 0; faceIndex < mesh->mNumFaces; faceIndex++) {
-			aiFace& face = mesh->mFaces[faceIndex];
-			assert(face.mNumIndices == 3); // 三角形のみサポート
-	
-			// vertexを解析
-			for (uint32_t element = 0; element < face.mNumIndices; element++) {
-				uint32_t vertexIndex = face.mIndices[element];
-				aiVector3D& position = mesh->mVertices[vertexIndex];
-				aiVector3D& normal = mesh->mNormals[vertexIndex];
-				aiVector3D& texcoord = mesh->mTextureCoords[0][vertexIndex];
+		// vertexを解析
+		modelDatas_.back()->mesh.verteces.resize(mesh->mNumVertices);
+		for (uint32_t vertexIndex = 0; vertexIndex < mesh->mNumVertices; vertexIndex++) {
+			aiVector3D& position = mesh->mVertices[vertexIndex];
+			aiVector3D& normal = mesh->mNormals[vertexIndex];
+			aiVector3D& texcoord = mesh->mTextureCoords[0][vertexIndex];
 
-				VertexData vertex;
-				vertex.vertexPos = { position.x,position.y,position.z,1.0f };
-				vertex.normal = { normal.x,normal.y,normal.z };
-				vertex.texcoord = { texcoord.x,texcoord.y };
-
-				// aiProcess_MakeLefthandedはz*=-1で、右手->左手に変換するので手動で対処
-				vertex.vertexPos.x *= -1.0f;
-				vertex.normal.x *= -1.0f;
-
-				modelDatas_.back()->mesh.verteces.push_back(vertex);
-			}
+			modelDatas_.back()->mesh.verteces[vertexIndex].vertexPos = { -position.x,position.y,position.z,1.0f };
+			modelDatas_.back()->mesh.verteces[vertexIndex].normal = { -normal.x,normal.y,normal.z };
+			modelDatas_.back()->mesh.verteces[vertexIndex].texcoord = { texcoord.x,texcoord.y };
 		}
 
-		if (mesh->HasBones()) {
-			// boneの解析
-			for (uint32_t boneIndex = 0; boneIndex < mesh->mNumBones; boneIndex++) {
-				aiBone* bone = mesh->mBones[boneIndex];
-				aiString boneName = bone->mName;
-				aiMatrix4x4 offsetMatrix = bone->mOffsetMatrix;
-				offsetMatrix.Transpose();
-
-				modelDatas_.back()->boneData.name = boneName.C_Str();
-				for (int row = 0; row < 4; row++) {
-					for (int column = 0; column < 4; column++) {
-						modelDatas_.back()->boneData.offsetMatrix.m[row][column] = offsetMatrix[row][column];
-					}
-				}
-
-				// VertexWeightの解析
-				for (uint32_t weightIndex = 0; weightIndex < bone->mNumWeights; weightIndex++) {
-					VertexWeight vertexWeight;
-
-					vertexWeight.vertexID = bone->mWeights[weightIndex].mVertexId;
-					vertexWeight.weight = bone->mWeights[weightIndex].mWeight;
-
-					modelDatas_.back()->boneData.vertexWeights.push_back(vertexWeight);
-
-				}
+		// indexを解析
+		for (uint32_t faceIndex = 0; faceIndex < mesh->mNumFaces; faceIndex++) {
+			aiFace& face = mesh->mFaces[faceIndex];
+			assert(face.mNumIndices == 3);
+			for (uint32_t element = 0; element < face.mNumIndices; element++) {
+				modelDatas_.back()->mesh.indices.push_back(face.mIndices[element]);
 			}
 		}
 	}
+	// rootNodeの解析
+	modelDatas_.back()->rootNode = ReadNode(scene_->mRootNode);
 
+	bool isLoadTexture = false;
 	// materialを解析する
-	// ここ間違い
 	for (uint32_t materialIndex = 0; materialIndex < scene_->mNumMaterials; materialIndex++) {
 		aiMaterial* material = scene_->mMaterials[materialIndex];
 		if (material->GetTextureCount(aiTextureType_DIFFUSE) != 0) {
 			aiString textureFilePath;
 			material->GetTexture(aiTextureType_DIFFUSE, 0, &textureFilePath);
-
-			std::string texFilePath = textureFilePath.C_Str();
-			std::filesystem::path filePathName(texFilePath);
-			texFilePath = filePathName.filename().string();
-
-			texFilePath = directoryPath + "/" + fileName + "/" + texFilePath.c_str();
-
+			std::string texFilePath;
+			if (textureFilePath.length > 0) {
+				texFilePath = textureFilePath.C_Str();
+				std::filesystem::path filePathName(texFilePath);
+				texFilePath = filePathName.filename().string();
+			}
+			else {
+				texFilePath = "white.png";
+			}
+			isLoadTexture = true;
 			modelDatas_.back()->texture = TextureManager::GetInstance()->LoadTexture(texFilePath);
 		}
 	}
-	//modelDatas_.back()->texture = TextureManager::GetInstance()->LoadTexture("white.png");
 
-	// rootNodeの解析
-	modelDatas_.back()->rootNode = ReadNode(scene_->mRootNode);
+	if (!isLoadTexture) {
+		std::string texFilePath = "white.png";
+		modelDatas_.back()->texture = TextureManager::GetInstance()->LoadTexture(texFilePath);
+	}
 
-	//// animationの解析
-	//if (scene_->HasAnimations()) {
-	//	for (uint32_t animationIndex = 0; animationIndex < scene_->mNumAnimations; animationIndex++) {
-	//		aiAnimation* animation = scene_->mAnimations[animationIndex];
-	//		modelDatas_.back()->animationData.duration = static_cast<float>(animation->mDuration);
-	//		modelDatas_.back()->animationData.ticksPerSecond = static_cast<float>(animation->mTicksPerSecond);
+	modelDatas_.back()->mesh.indexResource_ = DirectXBase::CreateBufferResource(sizeof(uint32_t) * modelDatas_.back()->mesh.indices.size());
 
-	//		for (uint32_t channelIndex = 0; channelIndex < animation->mNumChannels; channelIndex++) {
-	//			aiNodeAnim* nodeAnim = animation->mChannels[channelIndex];
-	//			
-	//			NodeAnime channel;
-	//			channel.name = nodeAnim->mNodeName.C_Str();
+	modelDatas_.back()->mesh.indexBufferView_.BufferLocation = modelDatas_.back()->mesh.indexResource_->GetGPUVirtualAddress();
+	modelDatas_.back()->mesh.indexBufferView_.SizeInBytes = UINT(sizeof(uint32_t) * modelDatas_.back()->mesh.indices.size());
+	modelDatas_.back()->mesh.indexBufferView_.Format = DXGI_FORMAT_R32_UINT;
 
-	//			for (uint32_t positionIndex = 0; positionIndex < nodeAnim->mNumPositionKeys; positionIndex++) {
-	//				aiVectorKey key = nodeAnim->mPositionKeys[positionIndex];
-	//				NodeAnime::Positions position;
-	//				position.time = static_cast<float>(key.mTime);
-	//				position.position = { key.mValue.x,key.mValue.y ,key.mValue.z };
-
-	//				channel.positions.push_back(position);
-	//			}
-	//			for (uint32_t rotateIndex = 0; rotateIndex < nodeAnim->mNumRotationKeys; rotateIndex++) {
-	//				aiQuatKey key = nodeAnim->mRotationKeys[rotateIndex];
-	//				NodeAnime::Rotates rotate;
-	//				rotate.time = static_cast<float>(key.mTime);
-	//				rotate.rotate = { key.mValue.x,key.mValue.y ,key.mValue.z, key.mValue.w };
-
-	//				channel.rotates.push_back(rotate);
-	//			}
-	//			for (uint32_t scaleIndex = 0; scaleIndex < nodeAnim->mNumScalingKeys; scaleIndex++) {
-	//				aiVectorKey key = nodeAnim->mScalingKeys[scaleIndex];
-	//				NodeAnime::Scales scale;
-	//				scale.time = static_cast<float>(key.mTime);
-	//				scale.scale = { key.mValue.x,key.mValue.y ,key.mValue.z };
-
-	//				channel.scales.push_back(scale);
-	//			}
-
-	//			modelDatas_.back()->animationData.channels.push_back(channel);
-	//		}
-	//	}
-	//}
+	modelDatas_.back()->mesh.indexResource_->Map(0, nullptr, reinterpret_cast<void**>(&modelDatas_.back()->mesh.mappedIndex));
+	std::memcpy(modelDatas_.back()->mesh.mappedIndex, modelDatas_.back()->mesh.indices.data(), sizeof(uint32_t) * modelDatas_.back()->mesh.indices.size());
 
 	modelDatas_.back()->mesh.vertexResource_ = DirectXBase::CreateBufferResource(sizeof(VertexData) * modelDatas_.back()->mesh.verteces.size());
 

@@ -81,6 +81,8 @@ void Model::Draw(const Camera& camera, BlendMode blendMode)
 		transformationData_->WVP = localMatrix * transform_.worldMat_ * camera.GetViewProjection();
 		transformationData_->WorldInverse = Matrix4x4::Inverse(Matrix4x4::MakeScaleMatrix(transform_.scale_) * Matrix4x4::MakeScaleMatrix(scale)) *
 			Matrix4x4::MakeRotateXYZMatrix(transform_.rotate_) * Matrix4x4::MakeRotateMatrix(rotate) * Matrix4x4::MakeTranslateMatrix(transform_.translate_) * Matrix4x4::MakeTranslateMatrix(translate);
+		/*transformationData_->WorldInverse = Matrix4x4::Inverse(Matrix4x4::MakeScaleMatrix(transform_.scale_)) *
+			Matrix4x4::MakeRotateXYZMatrix(transform_.rotate_) * Matrix4x4::MakeTranslateMatrix(transform_.translate_);*/
 	}
 	else {
 		transformationData_->World = transform_.worldMat_;
@@ -120,9 +122,17 @@ void Model::Draw(const Camera& camera, BlendMode blendMode)
 void Model::AnimationUpdate(float time)
 {
 	if (animation_) {
-		animationTime_ += time;
-		animationTime_ = std::fmod(animationTime_, animation_->duration);
-		ApplyAnimation();
+		if (time < 0) {
+			animationTime_ += time;
+			if (animationTime_ < 0) {
+				animationTime_ = animation_->duration + animationTime_;
+			}
+		}
+		else {
+			animationTime_ += time;
+			animationTime_ = std::fmod(animationTime_, animation_->duration);
+		}
+		//ApplyAnimation();
 	}
 }
 
@@ -162,6 +172,16 @@ void Model::SetModelData(const ModelData* modelData)
 void Model::SetLight(const ILight* light)
 {
 	light_.SetLight(light);
+}
+
+const Matrix4x4 Model::GetRotateMatrix()
+{
+	if (animation_) {
+		NodeAnimation& rootNodeAnimation = animation_->nodeAnimations[modelData_->rootNode.name];
+		Quaternion rotate = CalculateValue(rootNodeAnimation.rotate, animationTime_);
+		return Matrix4x4::MakeRotateXYZMatrix(transform_.rotate_) * Matrix4x4::MakeRotateMatrix(rotate);
+	}
+	return Matrix4x4::MakeRotateXYZMatrix(transform_.rotate_);
 }
 
 Vector3 Model::CalculateValue(const AnimationCurve<Vector3>& keyframes, const float& time)

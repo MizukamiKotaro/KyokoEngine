@@ -194,6 +194,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\GameElement\Live\Live.cpp" />
     <ClCompile Include="Game\GameElement\Live\MultipleScreen\MultipleScreen.cpp" />
     <ClCompile Include="Game\GameElement\Live\Screen\Screen.cpp" />
+    <ClCompile Include="Game\GameElement\Live\SpotLightBoxAnimation\SpotLightBoxAnimation.cpp" />
     <ClCompile Include="Game\GameElement\Live\SpotLightBox\SpotLightBox.cpp" />
     <ClCompile Include="Game\GameElement\Live\SpotLightBox\TwinSpotLightBox.cpp" />
     <ClCompile Include="Game\GameElement\Live\StageLights\StageLights.cpp" />
@@ -347,6 +348,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\GameElement\Live\Live.h" />
     <ClInclude Include="Game\GameElement\Live\MultipleScreen\MultipleScreen.h" />
     <ClInclude Include="Game\GameElement\Live\Screen\Screen.h" />
+    <ClInclude Include="Game\GameElement\Live\SpotLightBoxAnimation\SpotLightBoxAnimation.h" />
     <ClInclude Include="Game\GameElement\Live\SpotLightBox\SpotLightBox.h" />
     <ClInclude Include="Game\GameElement\Live\SpotLightBox\TwinSpotLightBox.h" />
     <ClInclude Include="Game\GameElement\Live\StageLights\StageLights.h" />

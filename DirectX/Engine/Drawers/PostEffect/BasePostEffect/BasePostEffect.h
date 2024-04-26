@@ -48,11 +48,6 @@ public:
 	/// <returns>SRVGPUDescriptorHandle</returns>
 	const D3D12_GPU_DESCRIPTOR_HANDLE GetSRVGPUDescriptorHandle() const;
 protected:
-	struct VertexData
-	{
-		Vector4 vertexPos;
-		Vector2 texcoord;
-	};
 	struct Material
 	{
 		Vector4 color;

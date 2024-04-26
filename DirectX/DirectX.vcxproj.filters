@@ -684,6 +684,9 @@
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\CopyGraphicsPipeline\CopyGraphicsPipeline.cpp">
       <Filter>Engine\GraphicsPipelineSystem\GraphicsPipelines\CopyGraphicsPipeline</Filter>
     </ClCompile>
+    <ClCompile Include="Game\GameElement\Live\SpotLightBoxAnimation\SpotLightBoxAnimation.cpp">
+      <Filter>Game\GameElement\Live\SpotLightBox</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Utils\Math\calc.h">
@@ -1087,6 +1090,9 @@
     </ClInclude>
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\CopyGraphicsPipeline\CopyGraphicsPipeline.h">
       <Filter>Engine\GraphicsPipelineSystem\GraphicsPipelines\CopyGraphicsPipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameElement\Live\SpotLightBoxAnimation\SpotLightBoxAnimation.h">
+      <Filter>Game\GameElement\Live\SpotLightBox</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

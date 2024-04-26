@@ -13,6 +13,7 @@
 #include "RGBShift/RGBShift.h"
 
 #include "GameElement/Live/SpotLightBox/SpotLightBox.h"
+#include "GameElement/Live/SpotLightBoxAnimation/SpotLightBoxAnimation.h"
 
 class TitleScene : public IScene
 {
@@ -40,12 +41,15 @@ private:
 	std::unique_ptr<Sprite> title_;
 	std::unique_ptr<Sprite> space_;
 
+	//std::unique_ptr<Model> model_;
+
 	std::unique_ptr<ScanNoise> scanNoise_;
 	std::unique_ptr<NegaPosiInverse> negaposi_;
 	std::unique_ptr<Mosaic> mosaic_;
 	std::unique_ptr<RGBShift> rgbShift_;
 
-	std::unique_ptr<SpotLightBox> spotLightBox_;
+	std::unique_ptr<SpotLightBoxAnimation> spotLightBox_;
+	std::unique_ptr<SpotLightBoxAnimation> spotLightBox2_;
 	std::unique_ptr<Sprite> puniru_;
 
 	Audio se_;

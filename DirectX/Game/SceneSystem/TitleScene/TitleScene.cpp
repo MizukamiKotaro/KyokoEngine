@@ -6,9 +6,12 @@ TitleScene::TitleScene()
 {
 	FirstInit();
 
+	camera_->transform_.translate_ = { 0.0f,6.0f,-70.0f };
+	camera_->Update();
+
 	dome_ = std::make_unique<Dome>();
 	stage_ = std::make_unique<Stage>();
-	screen_ = std::make_unique<Screen>();
+	screen_ = std::make_unique<Screen>("TitleScreen", "Screen");
 
 	title_ = std::make_unique<Sprite>("title.png");
 	title_->pos_ = { 630.0f,360.0f };
@@ -29,7 +32,13 @@ TitleScene::TitleScene()
 	mosaic_ = std::make_unique<Mosaic>();
 	rgbShift_ = std::make_unique<RGBShift>();
 
-	spotLightBox_ = std::make_unique<SpotLightBox>();
+	/*model_ = std::make_unique<Model>("Cube");
+	model_->LoadGLTF("SpotLightBox");
+	model_->Update();
+	model_->color_ = { 0.0f,0.0f,0.0f,1.0f };*/
+
+	spotLightBox_ = std::make_unique<SpotLightBoxAnimation>("TitleSpotLight1");
+	spotLightBox2_ = std::make_unique<SpotLightBoxAnimation>("TitleSpotLight2");
 	puniru_ = std::make_unique<Sprite>("puniru.png");
 	puniru_->size_ *= 0.5f;
 	puniru_->Update();
@@ -71,9 +80,17 @@ void TitleScene::Update()
 	ImGui::Begin("RGBShift");
 	ImGui::SliderFloat("シフトする大きさ", &rgbShift_->rgbShiftData_->shift, -1.0f, 1.0f);
 	ImGui::End();
-#endif // _DEBUG
 
-	spotLightBox_->Update();
+	ImGui::Begin("カメラ");
+	ImGui::DragFloat3("位置", &camera_->transform_.translate_.x, 0.01f);
+	ImGui::DragFloat3("角度", &camera_->transform_.rotate_.x, 0.01f);
+	ImGui::End();
+	camera_->Update();
+#endif // _DEBUG
+	screen_->Update();
+	spotLightBox_->Update(0.01f);
+	spotLightBox2_->Update(-0.01f);
+	//model_->AnimationUpdate(0.01f);
 }
 
 void TitleScene::Draw()
@@ -82,16 +99,21 @@ void TitleScene::Draw()
 
 	Kyoko::Engine::PreDraw();
 
-	/*dome_->Draw(camera_.get());
+	dome_->Draw(camera_.get());
 	stage_->Draw(camera_.get());
-	screen_->Draw(camera_.get());*/
+	screen_->Draw(camera_.get());
 	//title_->Draw();
 
 	//scanNoise_->Draw();
-	rgbShift_->Draw();
-	puniru_->Draw();
+	//rgbShift_->Draw();
+	//puniru_->Draw();
+
+	//model_->Draw(*camera_.get());
 
 	spotLightBox_->Draw(camera_.get());
+	spotLightBox2_->Draw(camera_.get());
+
+	space_->Draw();
 
 	BlackDraw();
 

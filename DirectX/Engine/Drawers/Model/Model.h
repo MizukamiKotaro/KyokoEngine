@@ -93,6 +93,8 @@ public:
 
 	void SetColor(const Vector4& color) { color_ = color; }
 
+	const Matrix4x4 GetRotateMatrix();
+
 private:
 	ComPtr<ID3D12Resource> materialResource_;
 	Material* materialData_;
