@@ -15,6 +15,8 @@
 #include "GameElement/Live/SpotLightBox/SpotLightBox.h"
 #include "GameElement/Live/SpotLightBoxAnimation/SpotLightBoxAnimation.h"
 
+#include "Grayscale/Grayscale.h"
+
 class TitleScene : public IScene
 {
 public:
@@ -51,6 +53,8 @@ private:
 	std::unique_ptr<SpotLightBoxAnimation> spotLightBox_;
 	std::unique_ptr<SpotLightBoxAnimation> spotLightBox2_;
 	std::unique_ptr<Sprite> puniru_;
+
+	std::unique_ptr<Grayscale> grayscale_;
 
 	Audio se_;
 };

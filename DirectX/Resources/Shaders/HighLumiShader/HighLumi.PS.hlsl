@@ -24,7 +24,7 @@ PixelShaderOutput main(VertexShaderOutput input) {
 
 	float32_t4 textureColor = gTexture.Sample(gSampler, input.texcoord);
 
-	float grayScale = textureColor.r * 0.299f + textureColor.g * 0.587f + textureColor.b * 0.114f;
+	float grayScale = dot(textureColor.rgb, float32_t3(0.2125f, 0.7154f, 0.0721f));
 	float extract = smoothstep(gHighLumi.min, gHighLumi.max, grayScale);
 
 	output.color = textureColor * extract;

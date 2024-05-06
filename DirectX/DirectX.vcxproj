@@ -147,6 +147,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Drawers\PostEffect\Blur\Blur.cpp" />
     <ClCompile Include="Engine\Drawers\PostEffect\Contrast\Contrast.cpp" />
     <ClCompile Include="Engine\Drawers\PostEffect\GaussianBlur\GaussianBlur.cpp" />
+    <ClCompile Include="Engine\Drawers\PostEffect\Grayscale\Grayscale.cpp" />
     <ClCompile Include="Engine\Drawers\PostEffect\HighLumi\HighLumi.cpp" />
     <ClCompile Include="Engine\Drawers\PostEffect\Mosaic\Mosaic.cpp" />
     <ClCompile Include="Engine\Drawers\PostEffect\NegaPosiInverse\NegaPosiInverse.cpp" />
@@ -164,6 +165,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\CopyGraphicsPipeline\CopyGraphicsPipeline.cpp" />
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\GaussianBlurGraphicsPipeline\GaussianBlurGraphicsPipeline.cpp" />
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelineFactory\GraphicsPipelineFactory.cpp" />
+    <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\GrayscaleGraphicsPipeline\GrayscaleGraphicsPipeline.cpp" />
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\InstancingModelGraphicsPipline\InstancingModelGraphicsPipline.cpp" />
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\NoiseGraphicsPipeline\NoiseGraphicsPipeline.cpp" />
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\WaterOutlineGraphicsPipeline\WaterOutlineGraphicsPipeline.cpp" />
@@ -279,6 +281,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Drawers\PostEffect\Blur\Blur.h" />
     <ClInclude Include="Engine\Drawers\PostEffect\Contrast\Contrast.h" />
     <ClInclude Include="Engine\Drawers\PostEffect\GaussianBlur\GaussianBlur.h" />
+    <ClInclude Include="Engine\Drawers\PostEffect\Grayscale\Grayscale.h" />
     <ClInclude Include="Engine\Drawers\PostEffect\HighLumi\HighLumi.h" />
     <ClInclude Include="Engine\Drawers\PostEffect\Mosaic\Mosaic.h" />
     <ClInclude Include="Engine\Drawers\PostEffect\NegaPosiInverse\NegaPosiInverse.h" />
@@ -297,6 +300,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\CopyGraphicsPipeline\CopyGraphicsPipeline.h" />
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\GaussianBlurGraphicsPipeline\GaussianBlurGraphicsPipeline.h" />
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelineFactory\GraphicsPipelineFactory.h" />
+    <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\GrayscaleGraphicsPipeline\GrayscaleGraphicsPipeline.h" />
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\InstancingModelGraphicsPipline\InstancingModelGraphicsPipline.h" />
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\NoiseGraphicsPipeline\NoiseGraphicsPipeline.h" />
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\WaterOutlineGraphicsPipeline\WaterOutlineGraphicsPipeline.h" />
