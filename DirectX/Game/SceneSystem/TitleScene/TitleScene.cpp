@@ -44,7 +44,6 @@ TitleScene::TitleScene()
 	puniru_->Update();
 
 	se_.Load("SE/select.mp3","決定音");
-	grayscale_ = std::make_unique<Grayscale>();
 }
 
 void TitleScene::Initialize()
@@ -98,20 +97,23 @@ void TitleScene::Draw()
 {
 	WrightPostEffect();
 
-	grayscale_->PreDrawScene();
+	Kyoko::Engine::PreDraw();
+
 	dome_->Draw(camera_.get());
 	stage_->Draw(camera_.get());
 	screen_->Draw(camera_.get());
+	//title_->Draw();
+
+	//scanNoise_->Draw();
+	//rgbShift_->Draw();
+	//puniru_->Draw();
+
+	//model_->Draw(*camera_.get());
 
 	spotLightBox_->Draw(camera_.get());
 	spotLightBox2_->Draw(camera_.get());
 
 	space_->Draw();
-	grayscale_->PostDrawScene();
-
-	Kyoko::Engine::PreDraw();
-
-	grayscale_->Draw();
 
 	BlackDraw();
 
