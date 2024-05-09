@@ -41,7 +41,7 @@ private:
 	std::unique_ptr<Sprite> title_;
 	std::unique_ptr<Sprite> space_;
 
-	//std::unique_ptr<Model> model_;
+	std::unique_ptr<Model> model_;
 
 	std::unique_ptr<ScanNoise> scanNoise_;
 	std::unique_ptr<NegaPosiInverse> negaposi_;

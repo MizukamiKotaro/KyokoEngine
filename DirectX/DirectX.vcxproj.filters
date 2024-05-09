@@ -343,6 +343,9 @@
     <Filter Include="Engine\Drawer\PostEffect\Grayscale">
       <UniqueIdentifier>{8a5c7d4f-d102-4bcb-a85b-ad4f01bfe3c8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SkinningModelGraphicsPipline">
+      <UniqueIdentifier>{af581741-f6d1-4251-b3da-ede878979d27}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -698,6 +701,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Drawers\PostEffect\Grayscale\Grayscale.cpp">
       <Filter>Engine\Drawer\PostEffect\Grayscale</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SkinningModelGraphicsPipline\SkinningModelGraphicsPipline.cpp">
+      <Filter>Engine\GraphicsPipelineSystem\GraphicsPipelines\SkinningModelGraphicsPipline</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1111,6 +1117,15 @@
     </ClInclude>
     <ClInclude Include="Engine\Drawers\PostEffect\Grayscale\Grayscale.h">
       <Filter>Engine\Drawer\PostEffect\Grayscale</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drawers\Model\ModelData\WeightData.h">
+      <Filter>Engine\Drawer\Model\ModelData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drawers\Model\ModelData\SkinClustr.h">
+      <Filter>Engine\Drawer\Model\ModelData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SkinningModelGraphicsPipline\SkinningModelGraphicsPipline.h">
+      <Filter>Engine\GraphicsPipelineSystem\GraphicsPipelines\SkinningModelGraphicsPipline</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

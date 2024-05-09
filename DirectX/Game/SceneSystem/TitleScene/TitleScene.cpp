@@ -32,10 +32,8 @@ TitleScene::TitleScene()
 	mosaic_ = std::make_unique<Mosaic>();
 	rgbShift_ = std::make_unique<RGBShift>();
 
-	/*model_ = std::make_unique<Model>("Cube");
-	model_->LoadGLTF("SpotLightBox");
-	model_->Update();
-	model_->color_ = { 0.0f,0.0f,0.0f,1.0f };*/
+	model_ = std::make_unique<Model>("Cube");
+	model_->LoadGLTF("walk");
 
 	spotLightBox_ = std::make_unique<SpotLightBoxAnimation>("TitleSpotLight1");
 	spotLightBox2_ = std::make_unique<SpotLightBoxAnimation>("TitleSpotLight2");
@@ -90,7 +88,7 @@ void TitleScene::Update()
 	screen_->Update();
 	spotLightBox_->Update(0.01f);
 	spotLightBox2_->Update(-0.01f);
-	//model_->AnimationUpdate(0.01f);
+	model_->AnimationUpdate(0.01f);
 }
 
 void TitleScene::Draw()
@@ -108,7 +106,7 @@ void TitleScene::Draw()
 	//rgbShift_->Draw();
 	//puniru_->Draw();
 
-	//model_->Draw(*camera_.get());
+	model_->Draw(*camera_.get());
 
 	spotLightBox_->Draw(camera_.get());
 	spotLightBox2_->Draw(camera_.get());

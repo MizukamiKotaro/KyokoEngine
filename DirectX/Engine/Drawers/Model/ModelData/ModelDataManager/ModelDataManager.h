@@ -43,6 +43,8 @@ public:
 
 	Animation LoadAnimation(const std::string& fileName);
 
+	const ModelData* LoadSkinAnimationModel(const std::string& fileName);
+
 private:
 	ModelDataManager() = default;
 	~ModelDataManager() = default;
@@ -56,6 +58,8 @@ private:
 	Animation LoadAnimation(const std::string& directoryPath, const std::string& fileName);
 
 	void LoadGLTFFile(const std::string& directoryPath, const std::string& fileName);
+
+	void LoadSkinAnimationFile(const std::string& directoryPath, const std::string& fileName);
 
 private:
 	std::vector<std::unique_ptr<ModelData>> modelDatas_;

@@ -12,9 +12,9 @@
 #include "Light/Light.h"
 #include "ModelData/ModelData.h"
 #include "ModelDataManager.h"
-#include "Texture.h"
 #include "GraphicsPipelineSystem/BlendModeConfig.h"
 #include "GraphicsPipelineSystem/PipelineTypeConfig.h"
+#include "ModelData/SkinClustr.h"
 
 #include "Drawers/IDrawer/IDrawer.h"
 
@@ -73,7 +73,6 @@ public:
 
 	void AnimationUpdate(float time);
 
-
 private:
 	static void PreDraw();
 
@@ -117,12 +116,15 @@ private:
 
 	void CreateSkeleton();
 
-	int32_t Createjoint(const NodeData& node, const std::optional<int32_t>& parent, std::vector<Joint>& joints);
+	void CreateSkinCluster();
 
-	void UpdateSkeleton();
+	int32_t Createjoint(const NodeData& node, const std::optional<int32_t>& parent, std::vector<Joint>& joints);
 
 	void ApplyAnimation();
 
+	void UpdateSkeleton();
+
+	void UpdateSkinAnimation();
 
 public:
 	EulerTransform transform_;
@@ -143,6 +145,7 @@ private:
 
 	std::unique_ptr<Animation> animation_;
 	std::unique_ptr<Skeleton> skeleton_;
+	std::unique_ptr<SkinCluter> skinCluter_;
 	float animationTime_;
 
 	// texture変えたい時用

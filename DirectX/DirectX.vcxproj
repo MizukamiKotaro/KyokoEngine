@@ -168,6 +168,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\GrayscaleGraphicsPipeline\GrayscaleGraphicsPipeline.cpp" />
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\InstancingModelGraphicsPipline\InstancingModelGraphicsPipline.cpp" />
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\NoiseGraphicsPipeline\NoiseGraphicsPipeline.cpp" />
+    <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SkinningModelGraphicsPipline\SkinningModelGraphicsPipline.cpp" />
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\WaterOutlineGraphicsPipeline\WaterOutlineGraphicsPipeline.cpp" />
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipeline\GraphicsPipeline.cpp" />
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPiplineManager\GraphicsPiplineManager.cpp" />
@@ -270,7 +271,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Drawers\Model\ModelData\ModelData.h" />
     <ClInclude Include="Engine\Drawers\Model\ModelData\ModelDataManager\ModelDataManager.h" />
     <ClInclude Include="Engine\Drawers\Model\ModelData\NodeData3D.h" />
+    <ClInclude Include="Engine\Drawers\Model\ModelData\SkinClustr.h" />
     <ClInclude Include="Engine\Drawers\Model\ModelData\VertexData3D.h" />
+    <ClInclude Include="Engine\Drawers\Model\ModelData\WeightData.h" />
     <ClInclude Include="Engine\Drawers\Particle\Particle.h" />
     <ClInclude Include="Engine\Drawers\Particle\ParticleData.h" />
     <ClInclude Include="Engine\Drawers\Particle\ParticleDrawer\ParticleDrawer.h" />
@@ -303,6 +306,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\GrayscaleGraphicsPipeline\GrayscaleGraphicsPipeline.h" />
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\InstancingModelGraphicsPipline\InstancingModelGraphicsPipline.h" />
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\NoiseGraphicsPipeline\NoiseGraphicsPipeline.h" />
+    <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SkinningModelGraphicsPipline\SkinningModelGraphicsPipline.h" />
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\WaterOutlineGraphicsPipeline\WaterOutlineGraphicsPipeline.h" />
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipeline\GraphicsPipeline.h" />
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPiplineManager\GraphicsPiplineManager.h" />

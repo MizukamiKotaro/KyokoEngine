@@ -18,4 +18,5 @@ enum class PipelineType {
 	NOISE,
 	WATER_OUTLINE,
 	GRAYSCALE,
+	SKINNING_MODEL,
 };
