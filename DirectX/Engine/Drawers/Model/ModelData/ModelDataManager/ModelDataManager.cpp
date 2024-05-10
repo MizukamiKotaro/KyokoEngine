@@ -364,15 +364,16 @@ void ModelDataManager::LoadSkinAnimationFile(const std::string& directoryPath, c
 		assert(mesh->HasTextureCoords(0)); // texCoordがないmeshは非対応
 
 		// vertexを解析
-		modelDatas_.back()->mesh.verteces.resize(mesh->mNumVertices);
+		//modelDatas_.back()->mesh.verteces.resize(mesh->mNumVertices);
 		for (uint32_t vertexIndex = 0; vertexIndex < mesh->mNumVertices; vertexIndex++) {
 			aiVector3D& position = mesh->mVertices[vertexIndex];
 			aiVector3D& normal = mesh->mNormals[vertexIndex];
 			aiVector3D& texcoord = mesh->mTextureCoords[0][vertexIndex];
 
-			modelDatas_.back()->mesh.verteces[vertexIndex].vertexPos = { -position.x,position.y,position.z,1.0f };
+			/*modelDatas_.back()->mesh.verteces[vertexIndex].vertexPos = { -position.x,position.y,position.z,1.0f };
 			modelDatas_.back()->mesh.verteces[vertexIndex].normal = { -normal.x,normal.y,normal.z };
-			modelDatas_.back()->mesh.verteces[vertexIndex].texcoord = { texcoord.x,texcoord.y };
+			modelDatas_.back()->mesh.verteces[vertexIndex].texcoord = { texcoord.x,texcoord.y };*/
+			modelDatas_.back()->mesh.verteces.push_back(VertexData{ { -position.x,position.y,position.z,1.0f },{ texcoord.x,texcoord.y }, { -normal.x,normal.y,normal.z } });
 		}
 
 		// indexを解析

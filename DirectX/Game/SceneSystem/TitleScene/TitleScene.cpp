@@ -32,9 +32,6 @@ TitleScene::TitleScene()
 	mosaic_ = std::make_unique<Mosaic>();
 	rgbShift_ = std::make_unique<RGBShift>();
 
-	model_ = std::make_unique<Model>("Cube");
-	model_->LoadGLTF("walk");
-
 	spotLightBox_ = std::make_unique<SpotLightBoxAnimation>("TitleSpotLight1");
 	spotLightBox2_ = std::make_unique<SpotLightBoxAnimation>("TitleSpotLight2");
 	puniru_ = std::make_unique<Sprite>("puniru.png");
@@ -88,7 +85,6 @@ void TitleScene::Update()
 	screen_->Update();
 	spotLightBox_->Update(0.01f);
 	spotLightBox2_->Update(-0.01f);
-	model_->AnimationUpdate(0.01f);
 }
 
 void TitleScene::Draw()
@@ -105,8 +101,6 @@ void TitleScene::Draw()
 	//scanNoise_->Draw();
 	//rgbShift_->Draw();
 	//puniru_->Draw();
-
-	model_->Draw(*camera_.get());
 
 	spotLightBox_->Draw(camera_.get());
 	spotLightBox2_->Draw(camera_.get());

@@ -5,8 +5,8 @@
 #include "GameElement/Live/Stage/Stage.h"
 #include "GameElement/Live/StageLights/StageLights.h"
 #include "GameElement/Live/MultipleScreen/MultipleScreen.h"
-
-class Camera;
+#include "DancingIdol/DancingIdol.h"
+#include "Camera.h"
 
 class Live {
 public: 
@@ -32,6 +32,13 @@ private:
 	std::unique_ptr<MultipleScreen> multipleScreen_;
 	std::unique_ptr<Stage> stage_;
 	std::unique_ptr<StageLights> stageLights_;
+	std::unique_ptr<DancingIdol> idol_;
+
+	// スクリーン用
+	std::unique_ptr<Dome> dome2_;
+	std::unique_ptr<Stage> stage2_;
+	std::unique_ptr<DancingIdol> idol2_;
 
 	Camera* camera_ = nullptr;
+	std::unique_ptr<Camera> screenCamera_;
 };

@@ -346,6 +346,12 @@
     <Filter Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SkinningModelGraphicsPipline">
       <UniqueIdentifier>{af581741-f6d1-4251-b3da-ede878979d27}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Drawer\SkinningModel">
+      <UniqueIdentifier>{c8180c1a-0f6c-4683-86c4-a624b8c1741c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameElement\Live\DancingIdol">
+      <UniqueIdentifier>{9ea3ad42-012d-4474-98a5-21b3755a566b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -704,6 +710,12 @@
     </ClCompile>
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SkinningModelGraphicsPipline\SkinningModelGraphicsPipline.cpp">
       <Filter>Engine\GraphicsPipelineSystem\GraphicsPipelines\SkinningModelGraphicsPipline</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Drawers\SkinningModel\SkinningModel.cpp">
+      <Filter>Engine\Drawer\SkinningModel</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameElement\Live\DancingIdol\DancingIdol.cpp">
+      <Filter>Game\GameElement\Live\DancingIdol</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1126,6 +1138,12 @@
     </ClInclude>
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SkinningModelGraphicsPipline\SkinningModelGraphicsPipline.h">
       <Filter>Engine\GraphicsPipelineSystem\GraphicsPipelines\SkinningModelGraphicsPipline</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drawers\SkinningModel\SkinningModel.h">
+      <Filter>Engine\Drawer\SkinningModel</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameElement\Live\DancingIdol\DancingIdol.h">
+      <Filter>Game\GameElement\Live\DancingIdol</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

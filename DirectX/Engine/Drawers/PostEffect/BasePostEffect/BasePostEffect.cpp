@@ -154,7 +154,7 @@ void BasePostEffect::CreateTexRes()
 
 	// 画像イメージ
 	UINT* img = new UINT[pixelCount];
-	for (UINT i = 0; i < pixelCount; i++) { img[i] = 0xFF0000FF; }
+	for (UINT i = 0; i < pixelCount; i++) { img[i] = 0x00000000; }
 
 	// データの転送
 	hr = texResource_->WriteToSubresource(0, nullptr, img, rowPitch, depthPitch);

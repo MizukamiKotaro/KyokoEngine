@@ -156,6 +156,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Drawers\PostEffect\RGBShift\RGBShift.cpp" />
     <ClCompile Include="Engine\Drawers\PostEffect\ScanNoise\ScanNoise.cpp" />
     <ClCompile Include="Engine\Drawers\PostEffect\WaterOutline\WaterOutline.cpp" />
+    <ClCompile Include="Engine\Drawers\SkinningModel\SkinningModel.cpp" />
     <ClCompile Include="Engine\Drawers\Sprite\Sprite.cpp" />
     <ClCompile Include="Engine\FrameInfo\FrameInfo.cpp" />
     <ClCompile Include="Engine\GlobalVariables\GlobalVariables.cpp" />
@@ -193,6 +194,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\GameElement\ClearUI\ClearUI.cpp" />
     <ClCompile Include="Game\GameElement\Game.cpp" />
     <ClCompile Include="Game\GameElement\HitSystem\HitSystem.cpp" />
+    <ClCompile Include="Game\GameElement\Live\DancingIdol\DancingIdol.cpp" />
     <ClCompile Include="Game\GameElement\Live\Dome\Dome.cpp" />
     <ClCompile Include="Game\GameElement\Live\Live.cpp" />
     <ClCompile Include="Game\GameElement\Live\MultipleScreen\MultipleScreen.cpp" />
@@ -293,6 +295,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Drawers\PostEffect\RGBShift\RGBShift.h" />
     <ClInclude Include="Engine\Drawers\PostEffect\ScanNoise\ScanNoise.h" />
     <ClInclude Include="Engine\Drawers\PostEffect\WaterOutline\WaterOutline.h" />
+    <ClInclude Include="Engine\Drawers\SkinningModel\SkinningModel.h" />
     <ClInclude Include="Engine\Drawers\Sprite\Sprite.h" />
     <ClInclude Include="Engine\FrameInfo\FrameInfo.h" />
     <ClInclude Include="Engine\GlobalVariables\GlobalVariables.h" />
@@ -352,6 +355,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\GameElement\ClearUI\ClearUI.h" />
     <ClInclude Include="Game\GameElement\Game.h" />
     <ClInclude Include="Game\GameElement\HitSystem\HitSystem.h" />
+    <ClInclude Include="Game\GameElement\Live\DancingIdol\DancingIdol.h" />
     <ClInclude Include="Game\GameElement\Live\Dome\Dome.h" />
     <ClInclude Include="Game\GameElement\Live\Live.h" />
     <ClInclude Include="Game\GameElement\Live\MultipleScreen\MultipleScreen.h" />

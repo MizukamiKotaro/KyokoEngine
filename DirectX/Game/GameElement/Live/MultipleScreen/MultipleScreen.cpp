@@ -82,6 +82,7 @@ void MultipleScreen::PostDrawScene()
 void MultipleScreen::SetGlobalVariable()
 {
 	globalVariable_->AddItem("スクリーンの数", screenNum_);
+	ApplyGlobalVariable();
 }
 
 void MultipleScreen::ApplyGlobalVariable()

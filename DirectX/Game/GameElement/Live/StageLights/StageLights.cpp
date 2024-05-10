@@ -71,6 +71,7 @@ void StageLights::Initialize() {
 	}
 
 	SetLoadLight();
+	Update(0.0f);
 }
 
 void StageLights::Update(const float time) {

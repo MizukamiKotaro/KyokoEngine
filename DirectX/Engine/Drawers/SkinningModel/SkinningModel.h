@@ -14,12 +14,13 @@
 #include "ModelDataManager.h"
 #include "GraphicsPipelineSystem/BlendModeConfig.h"
 #include "GraphicsPipelineSystem/PipelineTypeConfig.h"
+#include "ModelData/SkinClustr.h"
 
 #include "Drawers/IDrawer/IDrawer.h"
 
 class Camera;
 
-class Model : public IDrawer
+class SkinningModel : public IDrawer
 {
 public:
 
@@ -34,14 +35,14 @@ public:
 	/// モデルの生成
 	/// </summary>
 	/// <param name="fileName">.objが入っているフォルダの名前( "Cube" 等)</param>
-	Model(const std::string& fileName);
+	SkinningModel(const std::string& fileName);
 
 	/// <summary>
 	/// モデルの生成
 	/// </summary>
 	/// <param name="meshHundle">モデルデータのハンドル( ModelDataManager::GetInstance()->LoadObj("Cube") 等)</param>
-	Model(const ModelData* modelData);
-	~Model();
+	//Model(const ModelData* modelData);
+	~SkinningModel();
 
 	struct Material
 	{
@@ -66,18 +67,16 @@ public:
 
 	void Initialize();
 
-	void Update();
+	void Update(const float& time);
 
 	void Draw(const Camera& camera, BlendMode blendMode = BlendMode::kBlendModeNormal);
 
-	void AnimationUpdate(float time);
 
 private:
 	static void PreDraw();
 
 public:
 	void LoadGLTF(const std::string& fileName);
-	void LoadAnimation(const std::string& fileName);
 
 	void SetTexture(const Texture* texture);
 
@@ -94,6 +93,8 @@ public:
 	const Matrix4x4 GetRotateMatrix();
 
 private:
+	void AnimationUpdate(float time);
+	void LoadAnimation(const std::string& fileName);
 	ComPtr<ID3D12Resource> materialResource_;
 	Material* materialData_;
 
@@ -113,14 +114,24 @@ private:
 
 	void InitVariables();
 
+	void CreateSkeleton();
+
+	void CreateSkinCluster();
+
 	int32_t Createjoint(const NodeData& node, const std::optional<int32_t>& parent, std::vector<Joint>& joints);
+
+	void ApplyAnimation();
+
+	void UpdateSkeleton();
+
+	void UpdateSkinAnimation();
 
 public:
 	EulerTransform transform_;
 	Vector4 color_;
 
 private:
-	static const PipelineType pipelineType_ = PipelineType::MODEL;
+	static const PipelineType pipelineType_ = PipelineType::SKINNING_MODEL;
 
 	Light light_;
 
@@ -133,6 +144,8 @@ private:
 	const ModelData* modelData_;
 
 	std::unique_ptr<Animation> animation_;
+	std::unique_ptr<Skeleton> skeleton_;
+	std::unique_ptr<SkinCluter> skinCluter_;
 	float animationTime_;
 
 	// texture変えたい時用
