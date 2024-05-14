@@ -19,4 +19,5 @@ enum class PipelineType {
 	WATER_OUTLINE,
 	GRAYSCALE,
 	SKINNING_MODEL,
+	VIGNETTE,
 };

@@ -38,6 +38,10 @@ TitleScene::TitleScene()
 	puniru_->size_ *= 0.5f;
 	puniru_->Update();
 
+	vignette_ = std::make_unique<Vignette>();
+	vignette_->color_ = { 0.0f,1.0f,0.2f,1.0f };
+	noise_ = std::make_unique<Noise>();
+
 	se_.Load("SE/select.mp3","決定音");
 }
 
@@ -85,14 +89,18 @@ void TitleScene::Update()
 	screen_->Update();
 	spotLightBox_->Update(0.01f);
 	spotLightBox2_->Update(-0.01f);
+	noise_->Update(0.001f);
 }
 
 void TitleScene::Draw()
 {
 	WrightPostEffect();
 
-	Kyoko::Engine::PreDraw();
+	vignette_->PreDrawScene();
+	noise_->Draw();
+	vignette_->PostDrawScene();
 
+	Kyoko::Engine::PreDraw();
 	dome_->Draw(camera_.get());
 	stage_->Draw(camera_.get());
 	screen_->Draw(camera_.get());
@@ -108,6 +116,7 @@ void TitleScene::Draw()
 	space_->Draw();
 
 	BlackDraw();
+	vignette_->Draw();
 
 	Kyoko::Engine::PostDraw();
 }

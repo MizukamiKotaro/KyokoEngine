@@ -15,6 +15,9 @@
 #include "GameElement/Live/SpotLightBox/SpotLightBox.h"
 #include "GameElement/Live/SpotLightBoxAnimation/SpotLightBoxAnimation.h"
 
+#include "Vignette/Vignette.h"
+#include "Noise/Noise.h"
+
 class TitleScene : public IScene
 {
 public:
@@ -49,6 +52,9 @@ private:
 	std::unique_ptr<SpotLightBoxAnimation> spotLightBox_;
 	std::unique_ptr<SpotLightBoxAnimation> spotLightBox2_;
 	std::unique_ptr<Sprite> puniru_;
+
+	std::unique_ptr<Vignette> vignette_;
+	std::unique_ptr<Noise> noise_;
 
 	Audio se_;
 };

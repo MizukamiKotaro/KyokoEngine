@@ -78,7 +78,7 @@ void Live::Draw()
 	multipleScreen_->Draw(camera_);
 	idol_->Draw(camera_);
 
-	stageLights_->Draw(camera_);
+	//stageLights_->Draw(camera_);
 }
 
 void Live::WriteScreen()
@@ -88,7 +88,7 @@ void Live::WriteScreen()
 	dome2_->Draw(screenCamera_.get());
 	stage2_->Draw(screenCamera_.get());
 	idol2_->Draw(screenCamera_.get());
-	//stageLights_->Draw(camera_);
+	stageLights_->Draw(screenCamera_.get());
 
 	multipleScreen_->PostDrawScene();
 }

@@ -48,6 +48,7 @@ void BasePostEffect::Update()
 
 void BasePostEffect::Draw(BlendMode blendMode)
 {
+	materialData_->color = color_;
 
 	PreDraw();
 
