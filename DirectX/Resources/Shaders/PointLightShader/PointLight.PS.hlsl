@@ -34,7 +34,7 @@ PixelShaderOutput main(VertexShaderOutput input) {
 	float32_t specularPow = pow(saturate(NdotH), 40.0f);
 
 	float32_t distance = length(gPointLight.position - input.worldPosition);
-	float32_t factor = pow(saturate(-distance / gPointLight.radius + 1.0f), gPointLight.decay);
+	float32_t factor = pow(saturate(-distance * rcp(gPointLight.radius) + 1.0f), gPointLight.decay);
 
 	float32_t3 diffusePL = gPointLight.color.rgb * cos * gPointLight.intensity * factor;
 

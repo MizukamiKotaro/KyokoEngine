@@ -18,13 +18,18 @@ DescriptorHeap* BasePostEffect::srvHeap_ = nullptr;
 DescriptorHeap* BasePostEffect::rtvHeap_ = nullptr;
 DescriptorHeap* BasePostEffect::dsvHeap_ = nullptr;
 ID3D12Device* BasePostEffect::device_ = nullptr;
+Vector2 BasePostEffect::windowSize_ = {};
 
 BasePostEffect::~BasePostEffect()
 {
 	materialResource_->Release();
 	srvHeap_->DeleteDescriptor(srvHandles_);
-	rtvHeap_->DeleteDescriptor(rtvHandles_);
-	dsvHeap_->DeleteDescriptor(dsvHandles_);
+	if (isRender_) {
+		rtvHeap_->DeleteDescriptor(rtvHandles_);
+	}
+	if (isDepth_) {
+		dsvHeap_->DeleteDescriptor(dsvHandles_);
+	}
 }
 
 void BasePostEffect::StaticInitialize()
@@ -34,6 +39,7 @@ void BasePostEffect::StaticInitialize()
 	rtvHeap_ = descriptorHeapManager->GetRTVDescriptorHeap();
 	dsvHeap_ = descriptorHeapManager->GetDSVDescriptorHeap();
 	device_ = DirectXBase::GetInstance()->GetDevice();
+	windowSize_ = WindowsInfo::GetInstance()->GetWindowSize();
 }
 
 void BasePostEffect::Initialize()
@@ -70,41 +76,47 @@ void BasePostEffect::Draw(BlendMode blendMode)
 
 void BasePostEffect::PreDrawScene()
 {
-	// バリアの変更
-	CD3DX12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(texResource_.Get(),
-		D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE,D3D12_RESOURCE_STATE_RENDER_TARGET);
-	commandList_->ResourceBarrier(1, &barrier);
+	if (isRender_) {
+		// バリアの変更
+		CD3DX12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(texResource_.Get(),
+			D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET);
+		commandList_->ResourceBarrier(1, &barrier);
 
-	// レンダーターゲットのセット
-	commandList_->OMSetRenderTargets(1, &rtvHandles_->cpuHandle, false, &dsvHandles_->cpuHandle);
+		// レンダーターゲットのセット
+		commandList_->OMSetRenderTargets(1, &rtvHandles_->cpuHandle, false, &dsvHandles_->cpuHandle);
 
-	// ビューポートの設定
-	CD3DX12_VIEWPORT viewport = CD3DX12_VIEWPORT(0.0f, 0.0f, size_.x, size_.y);
-	commandList_->RSSetViewports(1, &viewport);
+		// ビューポートの設定
+		CD3DX12_VIEWPORT viewport = CD3DX12_VIEWPORT(0.0f, 0.0f, size_.x, size_.y);
+		commandList_->RSSetViewports(1, &viewport);
 
-	// シザリング矩形の設定
-	CD3DX12_RECT rect = CD3DX12_RECT(0, 0, (UINT)size_.x, (UINT)size_.y);
-	commandList_->RSSetScissorRects(1, &rect);
+		// シザリング矩形の設定
+		CD3DX12_RECT rect = CD3DX12_RECT(0, 0, (UINT)size_.x, (UINT)size_.y);
+		commandList_->RSSetScissorRects(1, &rect);
 
-	// 全画面クリア
-	commandList_->ClearRenderTargetView(rtvHandles_->cpuHandle, clearColor, 0, nullptr);
+		// 全画面クリア
+		commandList_->ClearRenderTargetView(rtvHandles_->cpuHandle, clearColor, 0, nullptr);
 
-	// 深度バッファクリア
-	commandList_->ClearDepthStencilView(dsvHandles_->cpuHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
+		if (isDepth_) {
+			// 深度バッファクリア
+			commandList_->ClearDepthStencilView(dsvHandles_->cpuHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
+		}
 
-	//描画用のDescriptorHeapの設定
-	ID3D12DescriptorHeap* descriptorHeaps[] = { srvHeap_->GetHeap() };
-	commandList_->SetDescriptorHeaps(1, descriptorHeaps);
+		//描画用のDescriptorHeapの設定
+		ID3D12DescriptorHeap* descriptorHeaps[] = { srvHeap_->GetHeap() };
+		commandList_->SetDescriptorHeaps(1, descriptorHeaps);
 
-	psoManager_->PreDraw();
+		psoManager_->PreDraw();
+	}
 }
 
 void BasePostEffect::PostDrawScene()
 {
-	// バリアの変更
-	CD3DX12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(texResource_.Get(),
-		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
-	commandList_->ResourceBarrier(1, &barrier);
+	if (isRender_) {
+		// バリアの変更
+		CD3DX12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(texResource_.Get(),
+			D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+		commandList_->ResourceBarrier(1, &barrier);
+	}
 }
 
 void BasePostEffect::CreateMaterialRes()
@@ -122,7 +134,6 @@ void BasePostEffect::CreateMaterialRes()
 
 void BasePostEffect::CreateTexRes()
 {
-
 	CD3DX12_RESOURCE_DESC texDesc = CD3DX12_RESOURCE_DESC::Tex2D(
 		DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
 		(UINT)size_.x,
@@ -175,46 +186,50 @@ void BasePostEffect::CreateTexRes()
 
 void BasePostEffect::CreateRTV()
 {
-	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
-	rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB; //出力結果をSRGBに変換して書き込む
-	rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D; //2dテクスチャとして書き込む
+	if (isRender_) {
+		D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
+		rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB; //出力結果をSRGBに変換して書き込む
+		rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D; //2dテクスチャとして書き込む
 
-	rtvHandles_ = rtvHeap_->GetNewDescriptorHandles();
+		rtvHandles_ = rtvHeap_->GetNewDescriptorHandles();
 
-	device_->CreateRenderTargetView(texResource_.Get(), &rtvDesc, rtvHandles_->cpuHandle);
+		device_->CreateRenderTargetView(texResource_.Get(), &rtvDesc, rtvHandles_->cpuHandle);
+	}
 }
 
 void BasePostEffect::CreateDSV()
 {
-	CD3DX12_RESOURCE_DESC resourceDesc = CD3DX12_RESOURCE_DESC::Tex2D(
-		DXGI_FORMAT_D24_UNORM_S8_UINT,
-		(UINT)size_.x,
-		(UINT)size_.y,
-		1, 0, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL
-	);
+	if (isDepth_) {
+		CD3DX12_RESOURCE_DESC resourceDesc = CD3DX12_RESOURCE_DESC::Tex2D(
+			DXGI_FORMAT_D24_UNORM_S8_UINT,
+			(UINT)size_.x,
+			(UINT)size_.y,
+			1, 0, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL
+		);
 
-	CD3DX12_HEAP_PROPERTIES properties = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
+		CD3DX12_HEAP_PROPERTIES properties = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
 
-	CD3DX12_CLEAR_VALUE value = CD3DX12_CLEAR_VALUE(DXGI_FORMAT_D24_UNORM_S8_UINT, 1.0f, 0);
+		CD3DX12_CLEAR_VALUE value = CD3DX12_CLEAR_VALUE(DXGI_FORMAT_D24_UNORM_S8_UINT, 1.0f, 0);
 
-	HRESULT hr = device_->CreateCommittedResource(
-		&properties,
-		D3D12_HEAP_FLAG_NONE,
-		&resourceDesc,
-		D3D12_RESOURCE_STATE_DEPTH_WRITE,
-		&value,
-		IID_PPV_ARGS(&dsvResource_)
-	);
-	assert(SUCCEEDED(hr));
+		HRESULT hr = device_->CreateCommittedResource(
+			&properties,
+			D3D12_HEAP_FLAG_NONE,
+			&resourceDesc,
+			D3D12_RESOURCE_STATE_DEPTH_WRITE,
+			&value,
+			IID_PPV_ARGS(&dsvResource_)
+		);
+		assert(SUCCEEDED(hr));
 
-	dsvHandles_ = dsvHeap_->GetNewDescriptorHandles();
+		dsvHandles_ = dsvHeap_->GetNewDescriptorHandles();
 
-	//DSVの設定
-	D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc{};
-	dsvDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT; // Format。基本的にはResourceに合わせる
-	dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D; // 2dTexture
-	// DSVHeapの先頭にDSVを作る
-	device_->CreateDepthStencilView(dsvResource_.Get(), &dsvDesc, dsvHandles_->cpuHandle);
+		//DSVの設定
+		D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc{};
+		dsvDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT; // Format。基本的にはResourceに合わせる
+		dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D; // 2dTexture
+		// DSVHeapの先頭にDSVを作る
+		device_->CreateDepthStencilView(dsvResource_.Get(), &dsvDesc, dsvHandles_->cpuHandle);
+	}
 }
 
 void BasePostEffect::PreDraw() const
@@ -238,9 +253,16 @@ const D3D12_GPU_DESCRIPTOR_HANDLE BasePostEffect::GetSRVGPUDescriptorHandle() co
 	return srvHandles_->gpuHandle;
 }
 
-void BasePostEffect::CreatePostEffect()
+void BasePostEffect::CreatePostEffect(const bool& isRender, const bool& isDepth, const Vector2& size)
 {
-	size_ = WindowsInfo::GetInstance()->GetWindowSize();
+	size_ = size;
+	isRender_ = isRender;
+	if (isRender_) {
+		isDepth_ = isDepth;
+	}
+	else {
+		isDepth_ = false;
+	}
 
 	CreateResources();
 

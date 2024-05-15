@@ -247,17 +247,8 @@
     <Filter Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\ParticleGraphicsPipeline">
       <UniqueIdentifier>{07299507-6aa1-4da6-8d3a-89ce0f4b5afc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\ModelGraphicsPipline">
-      <UniqueIdentifier>{0ce94d8a-bc1f-4820-87d0-9bf7c6f30dab}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SpirteGraphicsPipeline">
       <UniqueIdentifier>{39ff2cbd-7c9e-42e7-8607-ed716620abb4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\PointLightGraphicsPipline">
-      <UniqueIdentifier>{a77d6c70-8841-4f7a-8604-70eff20bf647}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SpotLightGraphicsPipline">
-      <UniqueIdentifier>{e7bf65a2-ca95-41d1-9009-b581bcb00d2c}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\ContrastGraphicsPipeline">
       <UniqueIdentifier>{21daf958-b418-47d0-8266-70f092e3425d}</UniqueIdentifier>
@@ -310,9 +301,6 @@
     <Filter Include="Engine\CollisionSystem">
       <UniqueIdentifier>{6de3343b-1909-4957-8526-18606937db2d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\InstancingModelGraphicsPipline">
-      <UniqueIdentifier>{dbdd92d8-2dcb-4fcc-ab69-a2b7a2089a0d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\NoiseGraphicsPipeline">
       <UniqueIdentifier>{3009f1ca-8038-4152-b9d1-aa66a7247a4c}</UniqueIdentifier>
     </Filter>
@@ -343,9 +331,6 @@
     <Filter Include="Engine\Drawer\PostEffect\Grayscale">
       <UniqueIdentifier>{8a5c7d4f-d102-4bcb-a85b-ad4f01bfe3c8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SkinningModelGraphicsPipline">
-      <UniqueIdentifier>{af581741-f6d1-4251-b3da-ede878979d27}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Drawer\SkinningModel">
       <UniqueIdentifier>{c8180c1a-0f6c-4683-86c4-a624b8c1741c}</UniqueIdentifier>
     </Filter>
@@ -357,6 +342,27 @@
     </Filter>
     <Filter Include="Engine\Drawer\PostEffect\Vignette">
       <UniqueIdentifier>{53b79a3a-9021-4ba9-b233-8fde44cd47be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Drawer\PostEffect\Smoothing">
+      <UniqueIdentifier>{331ed7fc-2bfe-4265-93cd-f3639dd8285b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SmoothingGraphicsPipeline">
+      <UniqueIdentifier>{6784efbe-b443-4c7f-8f3f-b5e099eab870}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\InstancingModelGraphicsPipeline">
+      <UniqueIdentifier>{dbdd92d8-2dcb-4fcc-ab69-a2b7a2089a0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\ModelGraphicsPipeline">
+      <UniqueIdentifier>{0ce94d8a-bc1f-4820-87d0-9bf7c6f30dab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\PointLightGraphicsPipeline">
+      <UniqueIdentifier>{a77d6c70-8841-4f7a-8604-70eff20bf647}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SkinningModelGraphicsPipeline">
+      <UniqueIdentifier>{af581741-f6d1-4251-b3da-ede878979d27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SpotLightGraphicsPipeline">
+      <UniqueIdentifier>{e7bf65a2-ca95-41d1-9009-b581bcb00d2c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -430,7 +436,7 @@
       <Filter>Engine\GraphicsPipelineSystem\GraphicsPipelines\ParticleGraphicsPipeline</Filter>
     </ClCompile>
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\ModelGraphicsPipline\ModelGraphicsPipline.cpp">
-      <Filter>Engine\GraphicsPipelineSystem\GraphicsPipelines\ModelGraphicsPipline</Filter>
+      <Filter>Engine\GraphicsPipelineSystem\GraphicsPipelines\ModelGraphicsPipeline</Filter>
     </ClCompile>
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SpriteGraphicsPipeline\SpriteGraphicsPipeline.cpp">
       <Filter>Engine\GraphicsPipelineSystem\GraphicsPipelines\SpirteGraphicsPipeline</Filter>
@@ -460,10 +466,10 @@
       <Filter>Game\SceneSystem\TitleScene</Filter>
     </ClCompile>
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\PointLightGraphicsPipline\PointLightGraphicsPipline.cpp">
-      <Filter>Engine\GraphicsPipelineSystem\GraphicsPipelines\PointLightGraphicsPipline</Filter>
+      <Filter>Engine\GraphicsPipelineSystem\GraphicsPipelines\PointLightGraphicsPipeline</Filter>
     </ClCompile>
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SpotLightGraphicsPipline\SpotLightGraphicsPipline.cpp">
-      <Filter>Engine\GraphicsPipelineSystem\GraphicsPipelines\SpotLightGraphicsPipline</Filter>
+      <Filter>Engine\GraphicsPipelineSystem\GraphicsPipelines\SpotLightGraphicsPipeline</Filter>
     </ClCompile>
     <ClCompile Include="Game\SceneSystem\SelectScene\SelectScene.cpp">
       <Filter>Game\SceneSystem\SelectScene</Filter>
@@ -661,7 +667,7 @@
       <Filter>Engine\CollisionSystem</Filter>
     </ClCompile>
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\InstancingModelGraphicsPipline\InstancingModelGraphicsPipline.cpp">
-      <Filter>Engine\GraphicsPipelineSystem\GraphicsPipelines\InstancingModelGraphicsPipline</Filter>
+      <Filter>Engine\GraphicsPipelineSystem\GraphicsPipelines\InstancingModelGraphicsPipeline</Filter>
     </ClCompile>
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\NoiseGraphicsPipeline\NoiseGraphicsPipeline.cpp">
       <Filter>Engine\GraphicsPipelineSystem\GraphicsPipelines\NoiseGraphicsPipeline</Filter>
@@ -715,7 +721,7 @@
       <Filter>Engine\Drawer\PostEffect\Grayscale</Filter>
     </ClCompile>
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SkinningModelGraphicsPipline\SkinningModelGraphicsPipline.cpp">
-      <Filter>Engine\GraphicsPipelineSystem\GraphicsPipelines\SkinningModelGraphicsPipline</Filter>
+      <Filter>Engine\GraphicsPipelineSystem\GraphicsPipelines\SkinningModelGraphicsPipeline</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Drawers\SkinningModel\SkinningModel.cpp">
       <Filter>Engine\Drawer\SkinningModel</Filter>
@@ -728,6 +734,12 @@
     </ClCompile>
     <ClCompile Include="Engine\Drawers\PostEffect\Vignette\Vignette.cpp">
       <Filter>Engine\Drawer\PostEffect\Vignette</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Drawers\PostEffect\Smoothing\Smoothing.cpp">
+      <Filter>Engine\Drawer\PostEffect\Smoothing</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SmoothingGraphicsPipeline\SmoothingGraphicsPipeline.cpp">
+      <Filter>Engine\GraphicsPipelineSystem\GraphicsPipelines\SmoothingGraphicsPipeline</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -810,7 +822,7 @@
       <Filter>Engine\GraphicsPipelineSystem\GraphicsPipelines\ParticleGraphicsPipeline</Filter>
     </ClInclude>
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\ModelGraphicsPipline\ModelGraphicsPipline.h">
-      <Filter>Engine\GraphicsPipelineSystem\GraphicsPipelines\ModelGraphicsPipline</Filter>
+      <Filter>Engine\GraphicsPipelineSystem\GraphicsPipelines\ModelGraphicsPipeline</Filter>
     </ClInclude>
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SpriteGraphicsPipeline\SpriteGraphicsPipeline.h">
       <Filter>Engine\GraphicsPipelineSystem\GraphicsPipelines\SpirteGraphicsPipeline</Filter>
@@ -840,10 +852,10 @@
       <Filter>Game\SceneSystem\TitleScene</Filter>
     </ClInclude>
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\PointLightGraphicsPipline\PointLightGraphicsPipline.h">
-      <Filter>Engine\GraphicsPipelineSystem\GraphicsPipelines\PointLightGraphicsPipline</Filter>
+      <Filter>Engine\GraphicsPipelineSystem\GraphicsPipelines\PointLightGraphicsPipeline</Filter>
     </ClInclude>
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SpotLightGraphicsPipline\SpotLightGraphicsPipline.h">
-      <Filter>Engine\GraphicsPipelineSystem\GraphicsPipelines\SpotLightGraphicsPipline</Filter>
+      <Filter>Engine\GraphicsPipelineSystem\GraphicsPipelines\SpotLightGraphicsPipeline</Filter>
     </ClInclude>
     <ClInclude Include="Game\SceneSystem\SelectScene\SelectScene.h">
       <Filter>Game\SceneSystem\SelectScene</Filter>
@@ -1083,7 +1095,7 @@
       <Filter>Engine\CollisionSystem</Filter>
     </ClInclude>
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\InstancingModelGraphicsPipline\InstancingModelGraphicsPipline.h">
-      <Filter>Engine\GraphicsPipelineSystem\GraphicsPipelines\InstancingModelGraphicsPipline</Filter>
+      <Filter>Engine\GraphicsPipelineSystem\GraphicsPipelines\InstancingModelGraphicsPipeline</Filter>
     </ClInclude>
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\NoiseGraphicsPipeline\NoiseGraphicsPipeline.h">
       <Filter>Engine\GraphicsPipelineSystem\GraphicsPipelines\NoiseGraphicsPipeline</Filter>
@@ -1149,7 +1161,7 @@
       <Filter>Engine\Drawer\Model\ModelData</Filter>
     </ClInclude>
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SkinningModelGraphicsPipline\SkinningModelGraphicsPipline.h">
-      <Filter>Engine\GraphicsPipelineSystem\GraphicsPipelines\SkinningModelGraphicsPipline</Filter>
+      <Filter>Engine\GraphicsPipelineSystem\GraphicsPipelines\SkinningModelGraphicsPipeline</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Drawers\SkinningModel\SkinningModel.h">
       <Filter>Engine\Drawer\SkinningModel</Filter>
@@ -1162,6 +1174,12 @@
     </ClInclude>
     <ClInclude Include="Engine\Drawers\PostEffect\Vignette\Vignette.h">
       <Filter>Engine\Drawer\PostEffect\Vignette</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drawers\PostEffect\Smoothing\Smoothing.h">
+      <Filter>Engine\Drawer\PostEffect\Smoothing</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SmoothingGraphicsPipeline\SmoothingGraphicsPipeline.h">
+      <Filter>Engine\GraphicsPipelineSystem\GraphicsPipelines\SmoothingGraphicsPipeline</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

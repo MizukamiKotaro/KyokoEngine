@@ -31,7 +31,7 @@ PixelShaderOutput main(VertexShaderOutput input) {
 	// spotLight
 	float32_t3 spotLightDirectionOnSurface = normalize(input.worldPosition - gSpotLight.position);
 	float32_t cosAngle = dot(spotLightDirectionOnSurface, gSpotLight.direction);
-	float32_t falloffFactor = saturate((cosAngle - gSpotLight.cosAngle) / (gSpotLight.cosFalloffStart - gSpotLight.cosAngle));
+	float32_t falloffFactor = saturate((cosAngle - gSpotLight.cosAngle) * rcp(gSpotLight.cosFalloffStart - gSpotLight.cosAngle));
 
 	float32_t NdotL = dot(normalize(input.normal), -spotLightDirectionOnSurface);
 	float32_t cos = pow(NdotL * 0.5f + 0.5f, 2.0f);
@@ -40,7 +40,7 @@ PixelShaderOutput main(VertexShaderOutput input) {
 	float32_t specularPow = pow(saturate(NdotH), 40.0f);
 
 	float32_t distance = length(gSpotLight.position - input.worldPosition);
-	float32_t factor = pow(saturate(-distance / gSpotLight.distance + 1.0f), gSpotLight.decay);
+	float32_t factor = pow(saturate(-distance * rcp(gSpotLight.distance) + 1.0f), gSpotLight.decay);
 
 	float32_t3 diffuseSL = gSpotLight.color.rgb * cos * gSpotLight.intensity * factor * falloffFactor;
 

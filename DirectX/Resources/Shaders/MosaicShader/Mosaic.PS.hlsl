@@ -35,11 +35,10 @@ PixelShaderOutput main(VertexShaderOutput input) {
 	}
 
 	if(gMosaic.isSquare == 1){
-		output.color = gTexture.Sample(gSampler,
-		floor(input.texcoord * gMosaic.screenSize.xy / gMosaic.density) * gMosaic.density / gMosaic.screenSize.xy);
+		output.color = gTexture.Sample(gSampler, floor(input.texcoord * gMosaic.screenSize.xy * rcp(gMosaic.density)) * gMosaic.density * rcp(gMosaic.screenSize.xy));
 	}
 	else {
-		output.color = gTexture.Sample(gSampler, floor(input.texcoord * gMosaic.density) / gMosaic.density);
+		output.color = gTexture.Sample(gSampler, floor(input.texcoord * gMosaic.density) * rcp(gMosaic.density));
 	}
 	
 	if (gMosaic.isNormal == 1) {

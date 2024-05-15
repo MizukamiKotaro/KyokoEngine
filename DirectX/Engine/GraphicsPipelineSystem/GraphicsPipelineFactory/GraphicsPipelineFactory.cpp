@@ -19,6 +19,7 @@
 #include "GraphicsPipelineSystem/GraphicsPipelines/GrayscaleGraphicsPipeline/GrayscaleGraphicsPipeline.h"
 #include "GraphicsPipelineSystem/GraphicsPipelines/SkinningModelGraphicsPipline/SkinningModelGraphicsPipline.h"
 #include "GraphicsPipelineSystem/GraphicsPipelines/VignetteGraphicsPipeline/VignetteGraphicsPipeline.h"
+#include "GraphicsPipelineSystem/GraphicsPipelines/SmoothingGraphicsPipeline/SmoothingGraphicsPipeline.h"
 #include "GraphicsPipelineSystem/PipelineTypeConfig.h"
 
 GraphicsPipeline* GraphicsPipelineFactory::CreateGraphicsPipeline(PipelineType pipelineType)
@@ -34,16 +35,16 @@ GraphicsPipeline* GraphicsPipelineFactory::CreateGraphicsPipeline(PipelineType p
 		graphicsPipeline = new CopyGraphicsPipeline();
 		break;
 	case PipelineType::MODEL:
-		graphicsPipeline = new ModelGraphicsPipline();
+		graphicsPipeline = new ModelGraphicsPipeline();
 		break;
 	case PipelineType::PARTICLE:
 		graphicsPipeline = new ParticleGraphicsPipeline();
 		break;
 	case PipelineType::POINT_LIGHT:
-		graphicsPipeline = new PointLightGraphicsPipline();
+		graphicsPipeline = new PointLightGraphicsPipeline();
 		break;
 	case PipelineType::SPOT_LIGHT:
-		graphicsPipeline = new SpotLightGraphicsPipline();
+		graphicsPipeline = new SpotLightGraphicsPipeline();
 		break;
 	case PipelineType::CONTRAST:
 		graphicsPipeline = new ContrastGraphicsPipeline();
@@ -70,7 +71,7 @@ GraphicsPipeline* GraphicsPipelineFactory::CreateGraphicsPipeline(PipelineType p
 		graphicsPipeline = new RGBShiftGraphicsPipeline();
 		break;
 	case PipelineType::INSTANCING_MODEL:
-		graphicsPipeline = new InstancingModelGraphicsPipline();
+		graphicsPipeline = new InstancingModelGraphicsPipeline();
 		break;
 	case PipelineType::NOISE:
 		graphicsPipeline = new NoiseGraphicsPipeline();
@@ -82,10 +83,13 @@ GraphicsPipeline* GraphicsPipelineFactory::CreateGraphicsPipeline(PipelineType p
 		graphicsPipeline = new GrayscaleGraphicsPipeline();
 		break;
 	case PipelineType::SKINNING_MODEL:
-		graphicsPipeline = new SkinningModelGraphicsPipline();
+		graphicsPipeline = new SkinningModelGraphicsPipeline();
 		break;
 	case PipelineType::VIGNETTE:
 		graphicsPipeline = new VignetteGraphicsPipeline();
+		break;
+	case PipelineType::SMOOTHING:
+		graphicsPipeline = new SmoothingGraphicsPipeline();
 		break;
 	default:
 		break;

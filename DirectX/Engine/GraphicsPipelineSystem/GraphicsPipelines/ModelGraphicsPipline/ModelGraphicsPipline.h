@@ -1,10 +1,10 @@
 #pragma once
 #include "GraphicsPipelineSystem/GraphicsPipeline/GraphicsPipeline.h"
 
-class ModelGraphicsPipline : public GraphicsPipeline
+class ModelGraphicsPipeline : public GraphicsPipeline
 {
 public:
-	ModelGraphicsPipline();
+	ModelGraphicsPipeline();
 private:
 	void InitializePSO() override;
 };

@@ -34,14 +34,14 @@ PixelShaderOutput main(VertexShaderOutput input) {
 
 			/// Gaussian
 			float d = distance(input.texcoord, uv);
-			float weight = exp(-(d * d) / (2.0f * gGaussianBlur.pickRange * gGaussianBlur.pickRange));
+			float weight = exp(-(d * d) * rcp(2.0f * gGaussianBlur.pickRange * gGaussianBlur.pickRange));
 			///
 			color += gTexture.Sample(gSampler, uv) * weight;
 			totalWeight += weight;
 		}
 	}
 
-	output.color.rgb = color.rgb / totalWeight;
+	output.color.rgb = color.rgb * rcp(totalWeight);
 	output.color.a = 1.0f;
 
 	return output;

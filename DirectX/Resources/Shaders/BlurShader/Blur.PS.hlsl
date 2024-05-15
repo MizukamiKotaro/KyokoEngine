@@ -26,7 +26,7 @@ PixelShaderOutput main(VertexShaderOutput input) {
 
 	float32_t4 color = { 0.0f,0.0f,0.0f,0.0f };
 
-	float angle = gBlur.angle * 3.14159f / 180;
+	float angle = gBlur.angle * 3.14159f * rcp(180);
 	float32_t2 uv;
 	float totalWeight = 0.0f;
 
@@ -43,13 +43,13 @@ PixelShaderOutput main(VertexShaderOutput input) {
 
 		/// Gaussian
 		float d = distance(input.texcoord, uv);
-		float weight = exp(-(d * d) / (2.0f * gBlur.pickRange * gBlur.pickRange));
+		float weight = exp(-(d * d) * rcp(2.0f * gBlur.pickRange * gBlur.pickRange));
 		///
 		color += gTexture.Sample(gSampler, uv) * weight;
 		totalWeight += weight;
 	}
 
-	output.color = color / totalWeight * gMaterial.color;
+	output.color = color * rcp(totalWeight) * gMaterial.color;
 
 	if (gBlur.isNormal == 1) {
 		if (output.color.a <= 0.5f) {

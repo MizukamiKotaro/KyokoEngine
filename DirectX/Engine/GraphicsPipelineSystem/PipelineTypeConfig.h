@@ -20,4 +20,6 @@ enum class PipelineType {
 	GRAYSCALE,
 	SKINNING_MODEL,
 	VIGNETTE,
+	SMOOTHING,
+
 };

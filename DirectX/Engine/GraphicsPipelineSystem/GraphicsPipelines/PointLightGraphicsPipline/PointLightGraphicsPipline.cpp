@@ -2,12 +2,12 @@
 #include "Engine/Base/DebugLog/DebugLog.h"
 #include <cassert>
 
-PointLightGraphicsPipline::PointLightGraphicsPipline()
+PointLightGraphicsPipeline::PointLightGraphicsPipeline()
 {
 	Initialize();
 }
 
-void PointLightGraphicsPipline::InitializePSO()
+void PointLightGraphicsPipeline::InitializePSO()
 {
 	//DescriptorRange
 	D3D12_DESCRIPTOR_RANGE descriptorRange[1] = {};

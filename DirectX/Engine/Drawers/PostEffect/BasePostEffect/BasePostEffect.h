@@ -53,7 +53,7 @@ protected:
 		Vector4 color;
 	};
 
-	void CreatePostEffect();
+	void CreatePostEffect(const bool& isRender = true, const bool& isDepth = true, const Vector2& size = windowSize_);
 private:
 	void CreateMaterialRes();
 	void CreateTexRes();
@@ -75,7 +75,11 @@ protected:
 	static DescriptorHeap* rtvHeap_;
 	static DescriptorHeap* dsvHeap_;
 	static ID3D12Device* device_;
+	static Vector2 windowSize_;
 	PipelineType piplineType_;
 	static const float clearColor[4];
 	Vector2 size_;
+
+	bool isRender_;
+	bool isDepth_;
 };

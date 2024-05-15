@@ -2,12 +2,12 @@
 #include "Engine/Base/DebugLog/DebugLog.h"
 #include <cassert>
 
-SkinningModelGraphicsPipline::SkinningModelGraphicsPipline()
+SkinningModelGraphicsPipeline::SkinningModelGraphicsPipeline()
 {
 	Initialize();
 }
 
-void SkinningModelGraphicsPipline::InitializePSO()
+void SkinningModelGraphicsPipeline::InitializePSO()
 {
 	//DescriptorRange
 	D3D12_DESCRIPTOR_RANGE descriptorRange[1] = {};

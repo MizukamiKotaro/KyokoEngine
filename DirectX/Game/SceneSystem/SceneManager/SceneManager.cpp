@@ -7,6 +7,8 @@
 #include "GameElement/ScoreManager/ScoreManager.h"
 #include "SceneSystem/SceneFactory/SceneFactory.h"
 
+FrameInfo* frameInfo = nullptr;
+
 SceneManager::SceneManager()
 {
 	ScoreManager::GetInstance()->Initialize();
@@ -22,6 +24,7 @@ SceneManager::SceneManager()
 	IScene::stageNo_ = 0;
 
 	inputManager_ = Input::GetInstance();
+	frameInfo = FrameInfo::GetInstance();
 }
 
 int SceneManager::Run()
@@ -68,11 +71,14 @@ int SceneManager::Run()
 			break;
 		}
 		ImGui::End();
+		ImGui::Begin("フレーム");
+		ImGui::Text("フレーム : %4.1f", frameInfo->GetFramerate());
+		ImGui::End();
 #endif // _DEBUG
 		
 		scene_->Draw();
 
-		FrameInfo::GetInstance()->End();
+		frameInfo->End();
 	}
 
 	scene_.reset();

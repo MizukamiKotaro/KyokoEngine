@@ -41,6 +41,7 @@ TitleScene::TitleScene()
 	vignette_ = std::make_unique<Vignette>();
 	vignette_->color_ = { 0.0f,1.0f,0.2f,1.0f };
 	noise_ = std::make_unique<Noise>();
+	smoothing_ = std::make_unique<Smoothing>();
 
 	se_.Load("SE/select.mp3","決定音");
 }
@@ -84,6 +85,11 @@ void TitleScene::Update()
 	ImGui::DragFloat3("位置", &camera_->transform_.translate_.x, 0.01f);
 	ImGui::DragFloat3("角度", &camera_->transform_.rotate_.x, 0.01f);
 	ImGui::End();
+
+	ImGui::Begin("Smoothing");
+	ImGui::DragInt("ヨコ", &smoothing_->smoothingData_->width, 1, 1, 50);
+	ImGui::DragInt("タテ", &smoothing_->smoothingData_->height, 1, 1, 50);
+	ImGui::End();
 	camera_->Update();
 #endif // _DEBUG
 	screen_->Update();
@@ -96,27 +102,9 @@ void TitleScene::Draw()
 {
 	WrightPostEffect();
 
-	vignette_->PreDrawScene();
-	noise_->Draw();
-	vignette_->PostDrawScene();
-
 	Kyoko::Engine::PreDraw();
-	dome_->Draw(camera_.get());
-	stage_->Draw(camera_.get());
-	screen_->Draw(camera_.get());
-	//title_->Draw();
-
-	//scanNoise_->Draw();
-	//rgbShift_->Draw();
-	//puniru_->Draw();
-
-	spotLightBox_->Draw(camera_.get());
-	spotLightBox2_->Draw(camera_.get());
-
-	space_->Draw();
-
-	BlackDraw();
-	vignette_->Draw();
+	
+	smoothing_->Draw();
 
 	Kyoko::Engine::PostDraw();
 }
@@ -154,5 +142,30 @@ void TitleScene::WrightPostEffect()
 	space_->Draw();
 
 	rgbShift_->PostDrawScene();
+
+	vignette_->PreDrawScene();
+	noise_->Draw();
+	vignette_->PostDrawScene();
+
+	smoothing_->PreDrawScene();
+
+	dome_->Draw(camera_.get());
+	stage_->Draw(camera_.get());
+	screen_->Draw(camera_.get());
+	//title_->Draw();
+
+	//scanNoise_->Draw();
+	//rgbShift_->Draw();
+	//puniru_->Draw();
+
+	spotLightBox_->Draw(camera_.get());
+	spotLightBox2_->Draw(camera_.get());
+
+	space_->Draw();
+
+	BlackDraw();
+	vignette_->Draw();
+
+	smoothing_->PostDrawScene();
 }
 

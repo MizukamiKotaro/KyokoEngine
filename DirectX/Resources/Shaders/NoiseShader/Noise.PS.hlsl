@@ -38,8 +38,8 @@ float32_t2 randomVec(float32_t2 fact){
 }
 
 float PerlinNoise(float density, float32_t2 uv, float32_t2 screenSize){
-	float32_t2 uvFloor = floor(uv * screenSize / density);
-	float32_t2 uvFrac = frac(uv * screenSize / density);
+	float32_t2 uvFloor = floor(uv * screenSize * rcp(density));
+	float32_t2 uvFrac = frac(uv * screenSize * rcp(density));
 
 	float32_t2 v00 = randomVec(uvFloor);
 	float32_t2 v01 = randomVec(uvFloor + float32_t2(0,1));
@@ -56,7 +56,7 @@ float PerlinNoise(float density, float32_t2 uv, float32_t2 screenSize){
 	float v0010 = lerp(c00,c10,u.x);
 	float v0111 = lerp(c01,c11,u.x);
 
-	return lerp(v0010,v0111,u.y) / 2 + 0.5;
+	return lerp(v0010,v0111,u.y) * 0.5f + 0.5f;
 }
 
 float FractalPerlinNoise(float density, float32_t2 uv){
@@ -78,15 +78,15 @@ float FractalPerlinNoise(float density, float32_t2 uv){
 	float v0010 = lerp(c00,c10,u.x);
 	float v0111 = lerp(c01,c11,u.x);
 
-	return lerp(v0010,v0111,u.y) / 2 + 0.5;
+	return lerp(v0010,v0111,u.y) * 0.5f + 0.5;
 }
 
 float FractalSumNoise(float density, float32_t2 uv){
 	float fn;
-	fn = FractalPerlinNoise(density, uv) / 2;
-	fn += FractalPerlinNoise(density * 2, uv) / 4;
-	fn += FractalPerlinNoise(density * 4, uv) / 8;
-	fn += FractalPerlinNoise(density * 8, uv) / 16;
+	fn = FractalPerlinNoise(density, uv) * 0.5f;
+	fn += FractalPerlinNoise(density * 2, uv) * 0.25f;
+	fn += FractalPerlinNoise(density * 4, uv) * 0.125f;
+	fn += FractalPerlinNoise(density * 8, uv) * 0.0625f;
 	return fn;
 }
 
@@ -98,16 +98,18 @@ PixelShaderOutput main(VertexShaderOutput input) {
 		output.color = float32_t4(r,r,r,1);
 	}
 	else if(gNoise.type == 1){
-		float r = random(floor(input.texcoord * gNoise.screenSize.xy / gNoise.density) * gNoise.density / gNoise.screenSize.xy);
+		float r = random(floor(input.texcoord * gNoise.screenSize.xy * rcp(gNoise.density)) * gNoise.density * rcp(gNoise.screenSize.xy));
 		output.color = float32_t4(r,r,r,1);
 	}
 	else if(gNoise.type == 2){
-		float v00 = random(floor(input.texcoord * gNoise.screenSize.xy / gNoise.density) * gNoise.density / gNoise.screenSize.xy);
-		float v01 = random((floor(input.texcoord * gNoise.screenSize.xy / gNoise.density) + float32_t2(0,1)) * gNoise.density / gNoise.screenSize.xy);
-		float v10 = random((floor(input.texcoord * gNoise.screenSize.xy / gNoise.density) + float32_t2(1,0)) * gNoise.density / gNoise.screenSize.xy);
-		float v11 = random((floor(input.texcoord * gNoise.screenSize.xy / gNoise.density) + float32_t2(1,1)) * gNoise.density / gNoise.screenSize.xy);
+		float32_t2 texcoord = floor(input.texcoord * gNoise.screenSize.xy * rcp(gNoise.density));
+		float32_t2 density = gNoise.density * rcp(gNoise.screenSize.xy);
+		float v00 = random(texcoord * density);
+		float v01 = random((texcoord + float32_t2(0,1)) * density);
+		float v10 = random((texcoord + float32_t2(1,0)) * density);
+		float v11 = random((texcoord + float32_t2(1,1)) * density);
 		
-		float32_t2 p = frac(input.texcoord * gNoise.screenSize.xy / gNoise.density);
+		float32_t2 p = frac(input.texcoord * gNoise.screenSize.xy * rcp(gNoise.density));
 		float v0010 = lerp(v00,v10,p.x);
 		float v0111 = lerp(v01,v11,p.x);
 		float n = lerp(v0010,v0111,p.y);
@@ -115,12 +117,14 @@ PixelShaderOutput main(VertexShaderOutput input) {
 		output.color = float32_t4(n,n,n,1);
 	}
 	else if(gNoise.type == 3){
-		float v00 = random(floor(input.texcoord * gNoise.screenSize.xy / gNoise.density) * gNoise.density / gNoise.screenSize.xy);
-		float v01 = random((floor(input.texcoord * gNoise.screenSize.xy / gNoise.density) + float32_t2(0,1)) * gNoise.density / gNoise.screenSize.xy);
-		float v10 = random((floor(input.texcoord * gNoise.screenSize.xy / gNoise.density) + float32_t2(1,0)) * gNoise.density / gNoise.screenSize.xy);
-		float v11 = random((floor(input.texcoord * gNoise.screenSize.xy / gNoise.density) + float32_t2(1,1)) * gNoise.density / gNoise.screenSize.xy);
+		float32_t2 texcoord = floor(input.texcoord * gNoise.screenSize.xy * rcp(gNoise.density));
+		float32_t2 density = gNoise.density * rcp(gNoise.screenSize.xy);
+		float v00 = random(texcoord * density);
+		float v01 = random((texcoord + float32_t2(0,1)) * density);
+		float v10 = random((texcoord + float32_t2(1,0)) * density);
+		float v11 = random((texcoord + float32_t2(1,1)) * density);
 		
-		float32_t2 p = frac(input.texcoord * gNoise.screenSize.xy / gNoise.density);
+		float32_t2 p = frac(input.texcoord * gNoise.screenSize.xy * rcp(gNoise.density));
 		float32_t2 v = p * p * (3 - 2 * p);
 
 		float v0010 = lerp(v00,v10,v.x);
@@ -144,7 +148,7 @@ PixelShaderOutput main(VertexShaderOutput input) {
 		float n2 = FractalSumNoise(gNoise.density, input.texcoord + float32_t2(gNoise.time,gNoise.time));
 		float n3 = FractalSumNoise(gNoise.density, input.texcoord + float32_t2(gNoise.time,-gNoise.time));
 
-		float n = (n1 + n2 + n3) / 3;
+		float n = (n1 + n2 + n3) * 0.333f;
 
 		output.color = float32_t4(n,n,n,1);
 	}
@@ -160,19 +164,19 @@ PixelShaderOutput main(VertexShaderOutput input) {
 		float n1 = FractalSumNoise(gNoise.density, input.texcoord + float32_t2(gNoise.time,gNoise.time));
 		float n2 = FractalSumNoise(gNoise.density, input.texcoord + float32_t2(-gNoise.time,-gNoise.time));
 		
-		float32_t4 textureColor = gTexture.Sample(gSampler, float32_t2(input.texcoord.x + n1 / 5, input.texcoord.y + n2 / 5));
+		float32_t4 textureColor = gTexture.Sample(gSampler, float32_t2(input.texcoord.x + n1 * 0.2f, input.texcoord.y + n2 * 0.2f));
 
 		output.color = textureColor;
 	}
 	else if(gNoise.type == 9){
-		float32_t2 pos = float32_t2(gNoise.cameraPos.x / (16 * gNoise.moveScale),-gNoise.cameraPos.y / (9 * gNoise.moveScale));
+		float32_t2 pos = float32_t2(gNoise.cameraPos.x * rcp(16 * gNoise.moveScale),-gNoise.cameraPos.y * rcp(9 * gNoise.moveScale));
 
 		float n1 = FractalSumNoise(gNoise.density, input.texcoord + pos + float32_t2(gNoise.time,gNoise.time));
 		float n2 = FractalSumNoise(gNoise.density, input.texcoord + pos + float32_t2(-gNoise.time,-gNoise.time));
 		
-		float32_t4 textureColor = gTexture.Sample(gSampler, float32_t2(input.texcoord.x + n1 / 5, input.texcoord.y + n2 / 5));
+		float32_t4 textureColor = gTexture.Sample(gSampler, float32_t2(input.texcoord.x + n1 * 0.2f, input.texcoord.y + n2 * 0.2f));
 
-		float n3 = (n1 + n2) / 2;
+		float n3 = (n1 + n2) * 0.5f;
 
 		float n4 = step(0.985,1-abs(n1-n2));
 

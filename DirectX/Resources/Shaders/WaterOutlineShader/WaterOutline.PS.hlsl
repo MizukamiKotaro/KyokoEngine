@@ -29,8 +29,8 @@ PixelShaderOutput main(VertexShaderOutput input) {
 	float n = textureColor.r * textureColor.g * textureColor.b * textureColor.a;
 
 	if(n != 0){
-		float y = 1.0 / gWaterOutline.screenSize.y;
-		float x = 1.0 / gWaterOutline.screenSize.x;
+		float y = 1.0 * rcp(gWaterOutline.screenSize.y);
+		float x = 1.0 * rcp(gWaterOutline.screenSize.x);
 		for(int i = 0; i < gWaterOutline.outlinePix; i++){
 			textureColor = gTexture.Sample(gSampler, input.texcoord + float32_t2((-i - 1) * x,0));
 			n = n * textureColor.a;

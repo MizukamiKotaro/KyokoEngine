@@ -2,12 +2,12 @@
 #include "Engine/Base/DebugLog/DebugLog.h"
 #include <cassert>
 
-InstancingModelGraphicsPipline::InstancingModelGraphicsPipline()
+InstancingModelGraphicsPipeline::InstancingModelGraphicsPipeline()
 {
 	Initialize();
 }
 
-void InstancingModelGraphicsPipline::InitializePSO()
+void InstancingModelGraphicsPipeline::InitializePSO()
 {
 	//DescriptorRange
 	D3D12_DESCRIPTOR_RANGE descriptorRange[1] = {};
