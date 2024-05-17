@@ -2,7 +2,7 @@
 #include "Externals/nlohmann/json.hpp"
 #include "ImGuiManager/ImGuiManager.h"
 #include <fstream>
-#include "WindowsInfo/WindowsInfo.h"
+#include <Windows.h>
 #include "Vector2.h"
 #include "Vector3.h"
 

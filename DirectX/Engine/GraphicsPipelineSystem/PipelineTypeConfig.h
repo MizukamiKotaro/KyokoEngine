@@ -21,5 +21,5 @@ enum class PipelineType {
 	SKINNING_MODEL,
 	VIGNETTE,
 	SMOOTHING,
-
+	SKYBOX,
 };

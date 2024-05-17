@@ -364,6 +364,15 @@
     <Filter Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SpotLightGraphicsPipeline">
       <UniqueIdentifier>{e7bf65a2-ca95-41d1-9009-b581bcb00d2c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\LevelDataLoader">
+      <UniqueIdentifier>{a2d95825-0f85-43f4-ace5-5975c2cfaaeb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Drawer\Skybox">
+      <UniqueIdentifier>{53f08a23-74f7-4d5d-97c1-7eebefb2df6e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SkyboxGraphicsPipeline">
+      <UniqueIdentifier>{34f29185-356c-4a5a-81d6-9879f600bb55}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -740,6 +749,15 @@
     </ClCompile>
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SmoothingGraphicsPipeline\SmoothingGraphicsPipeline.cpp">
       <Filter>Engine\GraphicsPipelineSystem\GraphicsPipelines\SmoothingGraphicsPipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\LevelDataLoader\LevelDataLoader.cpp">
+      <Filter>Engine\LevelDataLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Drawers\Skybox\Skybox.cpp">
+      <Filter>Engine\Drawer\Skybox</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SkyboxGraphicsPipeline\SkyboxGraphicsPipeline.cpp">
+      <Filter>Engine\GraphicsPipelineSystem\GraphicsPipelines\SkyboxGraphicsPipeline</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1180,6 +1198,15 @@
     </ClInclude>
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SmoothingGraphicsPipeline\SmoothingGraphicsPipeline.h">
       <Filter>Engine\GraphicsPipelineSystem\GraphicsPipelines\SmoothingGraphicsPipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\LevelDataLoader\LevelDataLoader.h">
+      <Filter>Engine\LevelDataLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drawers\Skybox\Skybox.h">
+      <Filter>Engine\Drawer\Skybox</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SkyboxGraphicsPipeline\SkyboxGraphicsPipeline.h">
+      <Filter>Engine\GraphicsPipelineSystem\GraphicsPipelines\SkyboxGraphicsPipeline</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

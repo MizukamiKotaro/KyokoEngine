@@ -20,6 +20,7 @@
 #include "GraphicsPipelineSystem/GraphicsPipelines/SkinningModelGraphicsPipline/SkinningModelGraphicsPipline.h"
 #include "GraphicsPipelineSystem/GraphicsPipelines/VignetteGraphicsPipeline/VignetteGraphicsPipeline.h"
 #include "GraphicsPipelineSystem/GraphicsPipelines/SmoothingGraphicsPipeline/SmoothingGraphicsPipeline.h"
+#include "GraphicsPipelineSystem/GraphicsPipelines/SkyboxGraphicsPipeline/SkyboxGraphicsPipeline.h"
 #include "GraphicsPipelineSystem/PipelineTypeConfig.h"
 
 GraphicsPipeline* GraphicsPipelineFactory::CreateGraphicsPipeline(PipelineType pipelineType)
@@ -90,6 +91,9 @@ GraphicsPipeline* GraphicsPipelineFactory::CreateGraphicsPipeline(PipelineType p
 		break;
 	case PipelineType::SMOOTHING:
 		graphicsPipeline = new SmoothingGraphicsPipeline();
+		break;
+	case PipelineType::SKYBOX:
+		graphicsPipeline = new SkyboxGraphicsPipeline();
 		break;
 	default:
 		break;
