@@ -41,7 +41,7 @@ TitleScene::TitleScene()
 	vignette_ = std::make_unique<Vignette>();
 	vignette_->color_ = { 0.0f,1.0f,0.2f,1.0f };
 	noise_ = std::make_unique<Noise>();
-	smoothing_ = std::make_unique<Smoothing>();
+	gauss_ = std::make_unique<GaussianBlur>();
 
 	se_.Load("SE/select.mp3","決定音");
 }
@@ -87,8 +87,8 @@ void TitleScene::Update()
 	ImGui::End();
 
 	ImGui::Begin("Smoothing");
-	ImGui::DragInt("ヨコ", &smoothing_->smoothingData_->width, 1, 1, 50);
-	ImGui::DragInt("タテ", &smoothing_->smoothingData_->height, 1, 1, 50);
+	ImGui::DragInt("サイズ", &gauss_->kernelSize_, 1, 1, 100);
+	ImGui::DragFloat("シグマ", &gauss_->sigma_, 0.1f, 0.5f, 50.0f);
 	ImGui::End();
 	camera_->Update();
 #endif // _DEBUG
@@ -104,7 +104,7 @@ void TitleScene::Draw()
 
 	Kyoko::Engine::PreDraw();
 	
-	smoothing_->Draw();
+	gauss_->Draw();
 
 	Kyoko::Engine::PostDraw();
 }
@@ -147,7 +147,7 @@ void TitleScene::WrightPostEffect()
 	noise_->Draw();
 	vignette_->PostDrawScene();
 
-	smoothing_->PreDrawScene();
+	gauss_->PreDrawScene();
 
 	dome_->Draw(camera_.get());
 	stage_->Draw(camera_.get());
@@ -156,7 +156,7 @@ void TitleScene::WrightPostEffect()
 
 	//scanNoise_->Draw();
 	//rgbShift_->Draw();
-	//puniru_->Draw();
+	puniru_->Draw();
 
 	spotLightBox_->Draw(camera_.get());
 	spotLightBox2_->Draw(camera_.get());
@@ -164,8 +164,8 @@ void TitleScene::WrightPostEffect()
 	space_->Draw();
 
 	BlackDraw();
-	vignette_->Draw();
+	//vignette_->Draw();
 
-	smoothing_->PostDrawScene();
+	gauss_->PostDrawScene();
 }
 

@@ -7,29 +7,22 @@
 #include "DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
 #include "GraphicsPipelineSystem/GraphicsPiplineManager/GraphicsPiplineManager.h"
 
-GaussianBlur::GaussianBlur()
+Gaussian::Gaussian(const bool& isRender, const bool& isDepth, const Vector2& size)
 {
 	piplineType_ = PipelineType::GAUSSIAN_BLUR;
 
 	gaussianBlurData_ = nullptr;
 
-	CreatePostEffect();
+	CreatePostEffect(isRender, isDepth, size);
 }
 
-GaussianBlur::~GaussianBlur()
+Gaussian::~Gaussian()
 {
 	gaussianBlurResource_->Release();
 }
 
-void GaussianBlur::Draw(BlendMode blendMode)
+void Gaussian::Draw(BlendMode blendMode)
 {
-	if (gaussianBlurData_->pickRange <= 0.0f) {
-		gaussianBlurData_->pickRange = 0.001f;
-	}
-	if (gaussianBlurData_->stepWidth <= 0.0f) {
-		gaussianBlurData_->stepWidth = 0.0001f;
-	}
-
 	PreDraw();
 
 	psoManager_->SetBlendMode(piplineType_, blendMode);
@@ -49,22 +42,61 @@ void GaussianBlur::Draw(BlendMode blendMode)
 
 }
 
-void GaussianBlur::CreateGaussianBlurRes()
+void Gaussian::CreateGaussianBlurRes()
 {
 	gaussianBlurResource_ = DirectXBase::CreateBufferResource(sizeof(GaussianBlurData));
 
 	gaussianBlurResource_->Map(0, nullptr, reinterpret_cast<void**>(&gaussianBlurData_));
 
-	gaussianBlurData_->pickRange = 0.005f;
-
-	gaussianBlurData_->stepWidth = 0.001f;
+	gaussianBlurData_->width = 9;
+	gaussianBlurData_->height = 0;
+	gaussianBlurData_->sigma = 2.0f;
 }
 
-void GaussianBlur::CreateResources()
+void Gaussian::CreateResources()
 {
 	BasePostEffect::CreateResources();
 
 	CreateGaussianBlurRes();
 }
 
+GaussianBlur::GaussianBlur(const bool& isRender, const bool& isDepth, const Vector2& size)
+{
+	if (size.x == 0.0f || size.y == 0.0f) {
+		gaussian0_ = std::make_unique<Gaussian>(isRender, isDepth);
+		gaussian1_ = std::make_unique<Gaussian>(isRender, isDepth);
+	}
+	else {
+		gaussian0_ = std::make_unique<Gaussian>(isRender, isDepth, size);
+		gaussian1_ = std::make_unique<Gaussian>(isRender, isDepth, size);
+	}
+	kernelSize_ = 9;
+	sigma_ = 2.0f;
+	gaussian1_->gaussianBlurData_->height = 1;
+}
 
+void GaussianBlur::Initialize()
+{
+}
+
+void GaussianBlur::Draw(BlendMode blendMode)
+{
+	gaussian1_->Draw(blendMode);
+}
+
+void GaussianBlur::PreDrawScene()
+{
+	gaussian0_->gaussianBlurData_->width = kernelSize_;
+	gaussian1_->gaussianBlurData_->width = kernelSize_;
+	gaussian0_->gaussianBlurData_->sigma = sigma_;
+	gaussian1_->gaussianBlurData_->sigma = sigma_;
+	gaussian0_->PreDrawScene();
+}
+
+void GaussianBlur::PostDrawScene()
+{
+	gaussian0_->PostDrawScene();
+	gaussian1_->PreDrawScene();
+	gaussian0_->Draw();
+	gaussian1_->PostDrawScene();
+}

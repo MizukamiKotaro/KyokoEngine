@@ -17,7 +17,7 @@
 
 #include "Vignette/Vignette.h"
 #include "Noise/Noise.h"
-#include "Smoothing/Smoothing.h"
+#include "GaussianBlur/GaussianBlur.h"
 
 class TitleScene : public IScene
 {
@@ -56,7 +56,7 @@ private:
 
 	std::unique_ptr<Vignette> vignette_;
 	std::unique_ptr<Noise> noise_;
-	std::unique_ptr<Smoothing> smoothing_;
+	std::unique_ptr<GaussianBlur> gauss_;
 
 	Audio se_;
 };

@@ -1,18 +1,20 @@
 #pragma once
 #include "BasePostEffect/BasePostEffect.h"
+#include "memory"
 
-class GaussianBlur : public BasePostEffect
+class Gaussian : public BasePostEffect
 {
 public:
-	GaussianBlur();
-	~GaussianBlur() override;
+	Gaussian(const bool& isRender = true, const bool& isDepth = true, const Vector2& size = windowSize_);
+	~Gaussian() override;
 	/// <summary>
 	/// 描画処理
 	/// </summary>
 	void Draw(BlendMode blendMode = BlendMode::kBlendModeNormal) override;
 	struct GaussianBlurData {
-		float pickRange; // 取得する色の幅。
-		float stepWidth; // 取得する色の位置変更の幅。0.0f < stepWidth < pickRange
+		int32_t width;
+		int32_t height;
+		float sigma;
 	};
 private:
 	void CreateGaussianBlurRes();
@@ -21,4 +23,31 @@ private:
 	ComPtr<ID3D12Resource> gaussianBlurResource_;
 public:
 	GaussianBlurData* gaussianBlurData_;
+};
+
+class GaussianBlur
+{
+public:
+	GaussianBlur(const bool& isRender = true, const bool& isDepth = true, const Vector2& size = {});
+	void Initialize();
+	/// <summary>
+	/// 描画処理
+	/// </summary>
+	void Draw(BlendMode blendMode = BlendMode::kBlendModeNormal);
+	/// <summary>
+	/// 描画前の処理,ポストエフェクトさせるものの描画処理の前に書く,更新処理の部分に書くのが吉
+	/// </summary>
+	void PreDrawScene();
+	/// <summary>
+	/// 描画後の処理,ポストエフェクトさせるものの描画処理の後に書く,更新処理の部分に書くのが吉
+	/// </summary>
+	void PostDrawScene();
+
+public:
+	int32_t kernelSize_;
+	float sigma_;
+
+private:
+	std::unique_ptr<Gaussian> gaussian0_;
+	std::unique_ptr<Gaussian> gaussian1_;
 };
