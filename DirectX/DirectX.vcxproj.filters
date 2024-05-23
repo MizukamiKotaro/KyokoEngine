@@ -373,6 +373,9 @@
     <Filter Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SkyboxGraphicsPipeline">
       <UniqueIdentifier>{34f29185-356c-4a5a-81d6-9879f600bb55}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Drawer\Light\DrawLightManager">
+      <UniqueIdentifier>{323dcf4e-6b91-4e8d-8021-b19708a9ffed}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -758,6 +761,9 @@
     </ClCompile>
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SkyboxGraphicsPipeline\SkyboxGraphicsPipeline.cpp">
       <Filter>Engine\GraphicsPipelineSystem\GraphicsPipelines\SkyboxGraphicsPipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Drawers\Light\DrawLightManager\DrawLightManager.cpp">
+      <Filter>Engine\Drawer\Light\DrawLightManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1207,6 +1213,9 @@
     </ClInclude>
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SkyboxGraphicsPipeline\SkyboxGraphicsPipeline.h">
       <Filter>Engine\GraphicsPipelineSystem\GraphicsPipelines\SkyboxGraphicsPipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drawers\Light\DrawLightManager\DrawLightManager.h">
+      <Filter>Engine\Drawer\Light\DrawLightManager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

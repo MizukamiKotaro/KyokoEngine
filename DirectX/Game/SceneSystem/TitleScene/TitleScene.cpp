@@ -41,7 +41,7 @@ TitleScene::TitleScene()
 	vignette_ = std::make_unique<Vignette>();
 	vignette_->color_ = { 0.0f,1.0f,0.2f,1.0f };
 	noise_ = std::make_unique<Noise>();
-	gauss_ = std::make_unique<GaussianBlur>();
+	bloom_ = std::make_unique<Bloom>();
 
 	se_.Load("SE/select.mp3","決定音");
 }
@@ -86,16 +86,13 @@ void TitleScene::Update()
 	ImGui::DragFloat3("角度", &camera_->transform_.rotate_.x, 0.01f);
 	ImGui::End();
 
-	ImGui::Begin("Smoothing");
-	ImGui::DragInt("サイズ", &gauss_->kernelSize_, 1, 1, 100);
-	ImGui::DragFloat("シグマ", &gauss_->sigma_, 0.1f, 0.5f, 50.0f);
-	ImGui::End();
 	camera_->Update();
 #endif // _DEBUG
 	screen_->Update();
 	spotLightBox_->Update(0.01f);
 	spotLightBox2_->Update(-0.01f);
 	noise_->Update(0.001f);
+	bloom_->Update();
 }
 
 void TitleScene::Draw()
@@ -103,9 +100,7 @@ void TitleScene::Draw()
 	WrightPostEffect();
 
 	Kyoko::Engine::PreDraw();
-	
-	gauss_->Draw();
-
+	bloom_->Draw();
 	Kyoko::Engine::PostDraw();
 }
 
@@ -147,8 +142,7 @@ void TitleScene::WrightPostEffect()
 	noise_->Draw();
 	vignette_->PostDrawScene();
 
-	gauss_->PreDrawScene();
-
+	bloom_->PreDrawScene();
 	dome_->Draw(camera_.get());
 	stage_->Draw(camera_.get());
 	screen_->Draw(camera_.get());
@@ -165,7 +159,6 @@ void TitleScene::WrightPostEffect()
 
 	BlackDraw();
 	//vignette_->Draw();
-
-	gauss_->PostDrawScene();
+	bloom_->PostDrawScene();
 }
 

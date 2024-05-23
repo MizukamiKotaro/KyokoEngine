@@ -43,9 +43,10 @@ public:
 	/// </summary>
 	void PostDrawScene();
 
-public:
-	int32_t kernelSize_;
-	float sigma_;
+	void SetSize(const int32_t& size);
+	const int32_t& GetSize() const { return gaussian0_->gaussianBlurData_->width; }
+	void SetSigma(const float& sigma);
+	const float& GetSigma() const { return gaussian0_->gaussianBlurData_->sigma; }
 
 private:
 	std::unique_ptr<Gaussian> gaussian0_;

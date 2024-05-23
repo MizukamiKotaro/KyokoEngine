@@ -49,8 +49,6 @@ void Kyoko::ImGuiManager::Finalize()
 void Kyoko::ImGuiManager::Begin()
 {
 #ifdef _DEBUG
-
-
 	ImGui_ImplDX12_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();

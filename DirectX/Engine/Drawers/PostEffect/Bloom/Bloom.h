@@ -26,7 +26,6 @@ public:
 	HighLumi::HighLumiData* GetHighLumiData() const { return highLumi_->highLumiData_; }
 
 private:
-
 	std::unique_ptr<PostEffect> postEffect_;
 	std::unique_ptr<HighLumi> highLumi_;
 	std::unique_ptr<GaussianBlur> gaussianBlur_;

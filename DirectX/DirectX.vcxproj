@@ -131,6 +131,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Drawers\InstancingModel\InstancingModelManager.cpp" />
     <ClCompile Include="Engine\Drawers\InstancingModel\InstancingModels\InstancingModels.cpp" />
     <ClCompile Include="Engine\Drawers\Light\DirectionalLight\DirectionalLight.cpp" />
+    <ClCompile Include="Engine\Drawers\Light\DrawLightManager\DrawLightManager.cpp" />
     <ClCompile Include="Engine\Drawers\Light\ILight\ILight.cpp" />
     <ClCompile Include="Engine\Drawers\Light\LightSingleton\LightSingleton.cpp" />
     <ClCompile Include="Engine\Drawers\Light\Light\Light.cpp" />
@@ -268,6 +269,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Drawers\InstancingModel\InstancingModelManager.h" />
     <ClInclude Include="Engine\Drawers\InstancingModel\InstancingModels\InstancingModels.h" />
     <ClInclude Include="Engine\Drawers\Light\DirectionalLight\DirectionalLight.h" />
+    <ClInclude Include="Engine\Drawers\Light\DrawLightManager\DrawLightManager.h" />
     <ClInclude Include="Engine\Drawers\Light\ILight\ILight.h" />
     <ClInclude Include="Engine\Drawers\Light\LightSingleton\LightSingleton.h" />
     <ClInclude Include="Engine\Drawers\Light\Light\Light.h" />

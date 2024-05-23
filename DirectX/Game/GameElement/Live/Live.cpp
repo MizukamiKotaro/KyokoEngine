@@ -78,7 +78,7 @@ void Live::Draw()
 	multipleScreen_->Draw(camera_);
 	idol_->Draw(camera_);
 
-	//stageLights_->Draw(camera_);
+	stageLights_->Draw(camera_);
 }
 
 void Live::WriteScreen()

@@ -1,4 +1,5 @@
 #include "Bloom.h"
+#include "ImGuiManager/ImGuiManager.h"
 
 Bloom::Bloom()
 {
@@ -24,7 +25,18 @@ void Bloom::Initialize()
 
 void Bloom::Update()
 {
-	
+#ifdef _DEBUG
+	int32_t size = gaussianBlur_->GetSize();
+	float sigma = gaussianBlur_->GetSigma();
+	ImGui::Begin("ブルーム");
+	ImGui::DragInt("サイズ", &size, 1, 1, 100);
+	ImGui::DragFloat("シグマ", &sigma, 0.1f, 0.5f, 100.0f);
+	ImGui::DragFloat("明度最小", &highLumi_->highLumiData_->min, 0.01f, 0.0f, 1.0f);
+	ImGui::DragFloat("明度最大", &highLumi_->highLumiData_->max, 0.01f, 0.0f, 1.0f);
+	ImGui::End();
+	gaussianBlur_->SetSize(size);
+	gaussianBlur_->SetSigma(sigma);
+#endif // _DEBUG
 }
 
 void Bloom::Draw()

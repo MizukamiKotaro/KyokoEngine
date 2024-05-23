@@ -1,17 +1,15 @@
 #pragma once
-
 #include "Vector3.h"
 #include "Vector4.h"
 #include "Matrix4x4.h"
 #include "ILight/ILight.h"
-#include "Drawers/IDrawer/IDrawer.h"
 #include "GraphicsPipelineSystem/BlendModeConfig.h"
 
 class Camera;
 class ModelData;
-enum class PipelineType;
+class DrawLightManager;
 
-class PointLight : public ILight, public IDrawer
+class PointLight : public ILight
 {
 public:
 	struct PointLightData
@@ -24,12 +22,6 @@ public:
 		float padding[2];
 	};
 
-	struct TransformationMatrix {
-		Matrix4x4 WVP;
-		Matrix4x4 World;
-		Matrix4x4 WorldInverse;
-	};
-
 	PointLight();
 	~PointLight() override;
 
@@ -37,22 +29,12 @@ public:
 
 	void Update() override;
 
-	void Draw(const Camera& camera, BlendMode blendMode = BlendMode::kBlendModeNormal);
-
-private:
-	void CreateTransformationResource();
+	void Draw(const Camera& camera, const BlendMode& blendMode = BlendMode::kBlendModeNormal) const;
 
 public:
 	PointLightData* light_ = nullptr;
 	bool isDraw_;
-
+	
 private:
-	static const PipelineType pipelineType_;
-
-	Microsoft::WRL::ComPtr<ID3D12Resource> transformationResource_;
-	TransformationMatrix* transformationData_;
-
-	static const ModelData* modelData_;
-	static const Matrix4x4 scaleMat_;
-	static const Matrix4x4 scaleInverseMat_;
+	static DrawLightManager* drawManager_;
 };
