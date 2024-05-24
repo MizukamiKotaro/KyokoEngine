@@ -21,36 +21,14 @@ SkinningModel::SkinningModel(const std::string& fileName)
 
 SkinningModel::~SkinningModel()
 {
-	transformationResource_->Release();
-	materialResource_->Release();
 	skinCluter_->influenceResouce->Release();
 	skinCluter_->paletteResouce->Release();
 }
 
-void SkinningModel::StaticInitialize()
-{
-	modelDataManager_ = ModelDataManager::GetInstance();
-	commandList_ = DirectXBase::GetInstance()->GetCommandList();
-	psoManager_ = GraphicsPipelineManager::GetInstance();
-}
-
-void SkinningModel::Initialize()
-{
-	
-}
-
 void SkinningModel::Update(const float& time)
 {
-	transform_.UpdateMatrix();
-
-	uvMatrix_ = Matrix4x4::MakeAffinMatrix(uvScale_, uvRotate_, uvPos_);
-
+	BaseModel::Update();
 	AnimationUpdate(time);
-}
-
-void SkinningModel::PreDraw()
-{
-	psoManager_->PreDraw(pipelineType_);
 }
 
 void SkinningModel::Draw(const Camera& camera, BlendMode blendMode)
@@ -65,8 +43,8 @@ void SkinningModel::Draw(const Camera& camera, BlendMode blendMode)
 		Matrix4x4::MakeRotateXYZMatrix(transform_.rotate_) * Matrix4x4::MakeTranslateMatrix(transform_.translate_);
 	//	Matrix4x4::MakeRotateXYZMatrix(transform_.rotate_) * Matrix4x4::MakeTranslateMatrix(transform_.translate_);*/
 
-	psoManager_->PreDraw(pipelineType_);
-	psoManager_->SetBlendMode(pipelineType_, blendMode);
+	psoManager_->PreDraw(PipelineType::SKINNING_MODEL);
+	psoManager_->SetBlendMode(PipelineType::SKINNING_MODEL, blendMode);
 
 	D3D12_VERTEX_BUFFER_VIEW vbvs[2] = {
 		modelData_->mesh.vertexBufferView_,
@@ -137,35 +115,11 @@ void SkinningModel::LoadAnimation(const std::string& fileName)
 	animation_ = std::make_unique<Animation>(modelDataManager_->LoadAnimation(fileName));
 }
 
-void SkinningModel::SetTexture(const Texture* texture)
-{
-	texture_ = texture;
-
-	srvGPUDescriptorHandle_ = texture_->handles_->gpuHandle;
-}
-
-void SkinningModel::SetModelData(const ModelData* modelData)
-{
-	modelData_ = modelData;
-
-	texture_ = modelData_->texture;
-
-	srvGPUDescriptorHandle_ = texture_->handles_->gpuHandle;
-}
-
-void SkinningModel::SetLight(const ILight* light)
-{
-	light_.SetLight(light);
-}
-
 const Matrix4x4 SkinningModel::GetRotateMatrix()
 {
-	if (animation_) {
-		NodeAnimation& rootNodeAnimation = animation_->nodeAnimations[modelData_->rootNode.name];
-		Quaternion rotate = CalculateValue(rootNodeAnimation.rotate, animationTime_);
-		return Matrix4x4::MakeRotateXYZMatrix(transform_.rotate_) * Matrix4x4::MakeRotateMatrix(rotate);
-	}
-	return Matrix4x4::MakeRotateXYZMatrix(transform_.rotate_);
+	NodeAnimation& rootNodeAnimation = animation_->nodeAnimations[modelData_->rootNode.name];
+	Quaternion rotate = CalculateValue(rootNodeAnimation.rotate, animationTime_);
+	return Matrix4x4::MakeRotateXYZMatrix(transform_.rotate_) * Matrix4x4::MakeRotateMatrix(rotate);
 }
 
 Vector3 SkinningModel::CalculateValue(const AnimationCurve<Vector3>& keyframes, const float& time)
@@ -199,49 +153,6 @@ Quaternion SkinningModel::CalculateValue(const AnimationCurve<Quaternion>& keyfr
 	}
 
 	return (*keyframes.keyframes.rbegin()).value;
-}
-
-void SkinningModel::CreateResources()
-{
-	CreateMaterialResource();
-
-	CreateTransformationResource();
-}
-
-void SkinningModel::CreateMaterialResource()
-{
-	materialResource_ = DirectXBase::CreateBufferResource(sizeof(Material));
-
-	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
-
-	materialData_->color = { 1.0f, 1.0f, 1.0f, 1.0f };
-	color_ = { 1.0f, 1.0f, 1.0f, 1.0f };
-	materialData_->enableLighting = 3;
-	materialData_->uvTransform = Matrix4x4::MakeIdentity4x4();
-	materialData_->shininess = 40.0f;
-	materialData_->supeqularColor = { 1.0f, 1.0f, 1.0f };
-}
-
-void SkinningModel::CreateTransformationResource()
-{
-	//WVP用のリソースを作る。Matrix4x4　1つ分のサイズを用意する
-	transformationResource_ = DirectXBase::CreateBufferResource(sizeof(TransformationMatrix));
-	transformationData_ = nullptr;
-	transformationResource_->Map(0, nullptr, reinterpret_cast<void**>(&transformationData_));
-	*transformationData_ = { Matrix4x4::MakeIdentity4x4() ,Matrix4x4::MakeIdentity4x4(), Matrix4x4::Inverse(Matrix4x4::MakeIdentity4x4()) };
-}
-
-void SkinningModel::InitVariables()
-{
-	light_.Initialize();
-
-	transform_ = EulerTransform();
-
-	uvScale_ = { 1.0f,1.0f,1.0f };
-	uvRotate_ = { 0.0f,0.0f,0.0f };
-	uvPos_ = { 0.0f,0.0f,0.0f };
-
-	uvMatrix_ = Matrix4x4::MakeAffinMatrix(uvScale_, uvRotate_, uvPos_);
 }
 
 void SkinningModel::CreateSkeleton()

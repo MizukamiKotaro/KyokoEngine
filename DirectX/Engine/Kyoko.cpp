@@ -148,8 +148,9 @@ void Kyoko::Engine::PostDraw()
 void Kyoko::Engine::Finalize()
 {
 #pragma region 基盤システムの終了
+	globalVariables->Finalize();
 	ImGuiManager::Finalize();
-
+	
 	CoUninitialize();
 	audioManager->Finalize();
 	TextureManager::GetInstance()->Finalize();

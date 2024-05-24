@@ -137,8 +137,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Drawers\Light\Light\Light.cpp" />
     <ClCompile Include="Engine\Drawers\Light\PointLight\PointLight.cpp" />
     <ClCompile Include="Engine\Drawers\Light\SpotLight\SpotLight.cpp" />
+    <ClCompile Include="Engine\Drawers\Model\BaseModel\BaseModel.cpp" />
     <ClCompile Include="Engine\Drawers\Model\Model.cpp" />
     <ClCompile Include="Engine\Drawers\Model\ModelData\ModelDataManager\ModelDataManager.cpp" />
+    <ClCompile Include="Engine\Drawers\Model\RigidAnimationModel\RigidAnimationModel.cpp" />
+    <ClCompile Include="Engine\Drawers\Model\SkinningModel\SkinningModel.cpp" />
     <ClCompile Include="Engine\Drawers\Particle\Particle.cpp" />
     <ClCompile Include="Engine\Drawers\Particle\ParticleDrawer\ParticleDrawer.cpp" />
     <ClCompile Include="Engine\Drawers\Particle\ParticleList\ParticleList.cpp" />
@@ -159,7 +162,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Drawers\PostEffect\Smoothing\Smoothing.cpp" />
     <ClCompile Include="Engine\Drawers\PostEffect\Vignette\Vignette.cpp" />
     <ClCompile Include="Engine\Drawers\PostEffect\WaterOutline\WaterOutline.cpp" />
-    <ClCompile Include="Engine\Drawers\SkinningModel\SkinningModel.cpp" />
     <ClCompile Include="Engine\Drawers\Skybox\Skybox.cpp" />
     <ClCompile Include="Engine\Drawers\Sprite\Sprite.cpp" />
     <ClCompile Include="Engine\FrameInfo\FrameInfo.cpp" />
@@ -275,6 +277,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Drawers\Light\Light\Light.h" />
     <ClInclude Include="Engine\Drawers\Light\PointLight\PointLight.h" />
     <ClInclude Include="Engine\Drawers\Light\SpotLight\SpotLight.h" />
+    <ClInclude Include="Engine\Drawers\Model\BaseModel\BaseModel.h" />
     <ClInclude Include="Engine\Drawers\Model\Model.h" />
     <ClInclude Include="Engine\Drawers\Model\ModelData\AnimationData3D.h" />
     <ClInclude Include="Engine\Drawers\Model\ModelData\BoneData3D.h" />
@@ -285,6 +288,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Drawers\Model\ModelData\SkinClustr.h" />
     <ClInclude Include="Engine\Drawers\Model\ModelData\VertexData3D.h" />
     <ClInclude Include="Engine\Drawers\Model\ModelData\WeightData.h" />
+    <ClInclude Include="Engine\Drawers\Model\RigidAnimationModel\RigidAnimationModel.h" />
+    <ClInclude Include="Engine\Drawers\Model\SkinningModel\SkinningModel.h" />
     <ClInclude Include="Engine\Drawers\Particle\Particle.h" />
     <ClInclude Include="Engine\Drawers\Particle\ParticleData.h" />
     <ClInclude Include="Engine\Drawers\Particle\ParticleDrawer\ParticleDrawer.h" />
@@ -306,7 +311,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Drawers\PostEffect\Smoothing\Smoothing.h" />
     <ClInclude Include="Engine\Drawers\PostEffect\Vignette\Vignette.h" />
     <ClInclude Include="Engine\Drawers\PostEffect\WaterOutline\WaterOutline.h" />
-    <ClInclude Include="Engine\Drawers\SkinningModel\SkinningModel.h" />
     <ClInclude Include="Engine\Drawers\Skybox\Skybox.h" />
     <ClInclude Include="Engine\Drawers\Sprite\Sprite.h" />
     <ClInclude Include="Engine\FrameInfo\FrameInfo.h" />

@@ -1,5 +1,5 @@
 #pragma once
-#include "Model.h"
+#include "RigidAnimationModel/RigidAnimationModel.h"
 #include "SpotLight/SpotLight.h"
 #include "PointLight/PointLight.h"
 #include "GlobalVariables/GlobalVariableUser.h"
@@ -20,7 +20,7 @@ private:
 
 public:
 	std::unique_ptr<SpotLight> spotLights_[2];
-	std::unique_ptr<Model> box_;
+	std::unique_ptr<RigidAnimationModel> box_;
 	bool isDraw_ = true;
 private:
 	std::unique_ptr<PointLight> point_;

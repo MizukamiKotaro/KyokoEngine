@@ -8,8 +8,7 @@ const int kSpotNum = 2;
 
 SpotLightBoxAnimation::SpotLightBoxAnimation(const std::string& name)
 {
-	box_ = std::make_unique<Model>("Cube");
-	box_->LoadGLTF("SpotLightBox");
+	box_ = std::make_unique<RigidAnimationModel>("SpotLightBox");
 	box_->transform_.scale_ *= 1.01f;
 	box_->color_ = { 0.0f,0.0f,0.0f,1.0f };
 	point_ = std::make_unique<PointLight>();
@@ -65,7 +64,7 @@ void SpotLightBoxAnimation::Update(const float& time)
 	ImGui::End();*/
 #endif // _DEBUG
 
-	box_->AnimationUpdate(time);
+	box_->Update(time);
 
 	spotLights_[0]->light_->direction = Vector3{ 1.0f,0.0f,0.0f } *box_->GetRotateMatrix();
 	spotLights_[1]->light_->direction = spotLights_[0]->light_->direction;
@@ -98,5 +97,5 @@ void SpotLightBoxAnimation::ApplyGlobalVariable()
 {
 	box_->transform_.translate_ = global_->GetVector3Value("位置");
 	box_->transform_.rotate_ = global_->GetVector3Value("角度");
-	box_->Update();
+	box_->Update(0.0f);
 }

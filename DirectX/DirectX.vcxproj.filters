@@ -331,9 +331,6 @@
     <Filter Include="Engine\Drawer\PostEffect\Grayscale">
       <UniqueIdentifier>{8a5c7d4f-d102-4bcb-a85b-ad4f01bfe3c8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Drawer\SkinningModel">
-      <UniqueIdentifier>{c8180c1a-0f6c-4683-86c4-a624b8c1741c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\GameElement\Live\DancingIdol">
       <UniqueIdentifier>{9ea3ad42-012d-4474-98a5-21b3755a566b}</UniqueIdentifier>
     </Filter>
@@ -375,6 +372,15 @@
     </Filter>
     <Filter Include="Engine\Drawer\Light\DrawLightManager">
       <UniqueIdentifier>{323dcf4e-6b91-4e8d-8021-b19708a9ffed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Drawer\Model\BaseModel">
+      <UniqueIdentifier>{6cddd777-fb90-455c-a96d-a5a0f34f2db3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Drawer\Model\SkinningModel">
+      <UniqueIdentifier>{c8180c1a-0f6c-4683-86c4-a624b8c1741c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Drawer\Model\RigidAnimationModel">
+      <UniqueIdentifier>{97aa7035-54d9-4500-b19e-41af2f039fb9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -735,9 +741,6 @@
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SkinningModelGraphicsPipline\SkinningModelGraphicsPipline.cpp">
       <Filter>Engine\GraphicsPipelineSystem\GraphicsPipelines\SkinningModelGraphicsPipeline</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Drawers\SkinningModel\SkinningModel.cpp">
-      <Filter>Engine\Drawer\SkinningModel</Filter>
-    </ClCompile>
     <ClCompile Include="Game\GameElement\Live\DancingIdol\DancingIdol.cpp">
       <Filter>Game\GameElement\Live\DancingIdol</Filter>
     </ClCompile>
@@ -764,6 +767,15 @@
     </ClCompile>
     <ClCompile Include="Engine\Drawers\Light\DrawLightManager\DrawLightManager.cpp">
       <Filter>Engine\Drawer\Light\DrawLightManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Drawers\Model\SkinningModel\SkinningModel.cpp">
+      <Filter>Engine\Drawer\Model\SkinningModel</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Drawers\Model\BaseModel\BaseModel.cpp">
+      <Filter>Engine\Drawer\Model\BaseModel</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Drawers\Model\RigidAnimationModel\RigidAnimationModel.cpp">
+      <Filter>Engine\Drawer\Model\RigidAnimationModel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1187,9 +1199,6 @@
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SkinningModelGraphicsPipline\SkinningModelGraphicsPipline.h">
       <Filter>Engine\GraphicsPipelineSystem\GraphicsPipelines\SkinningModelGraphicsPipeline</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Drawers\SkinningModel\SkinningModel.h">
-      <Filter>Engine\Drawer\SkinningModel</Filter>
-    </ClInclude>
     <ClInclude Include="Game\GameElement\Live\DancingIdol\DancingIdol.h">
       <Filter>Game\GameElement\Live\DancingIdol</Filter>
     </ClInclude>
@@ -1216,6 +1225,15 @@
     </ClInclude>
     <ClInclude Include="Engine\Drawers\Light\DrawLightManager\DrawLightManager.h">
       <Filter>Engine\Drawer\Light\DrawLightManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drawers\Model\SkinningModel\SkinningModel.h">
+      <Filter>Engine\Drawer\Model\SkinningModel</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drawers\Model\BaseModel\BaseModel.h">
+      <Filter>Engine\Drawer\Model\BaseModel</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drawers\Model\RigidAnimationModel\RigidAnimationModel.h">
+      <Filter>Engine\Drawer\Model\RigidAnimationModel</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

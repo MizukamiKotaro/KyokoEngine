@@ -1,5 +1,5 @@
 #pragma once
-#include "Drawers/SkinningModel/SkinningModel.h"
+#include "SkinningModel/SkinningModel.h"
 #include <memory>
 
 class Camera;
