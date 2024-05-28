@@ -1,5 +1,4 @@
 #pragma once
-
 #include <wrl.h>
 #include <d3d12.h>
 #include <stdint.h>
@@ -8,12 +7,10 @@
 #include "Utils/Math/Vector4.h"
 #include "Utils/Math/Matrix4x4.h"
 #include "Utils/Transform/Transform.h"
-#include "GraphicsPipelineSystem/GraphicsPiplineManager/GraphicsPiplineManager.h"
 #include "Light/Light.h"
 #include "ModelData/ModelData.h"
 #include "ModelDataManager.h"
 #include "GraphicsPipelineSystem/BlendModeConfig.h"
-#include "GraphicsPipelineSystem/PipelineTypeConfig.h"
 
 #include "Drawers/IDrawer/IDrawer.h"
 
@@ -31,8 +28,13 @@ public:
 	void SetModelData(const ModelData* modelData);
 	void SetLight(const ILight* light);
 	void UnUsedLight() { materialData_->enableLighting = 0; }
-	void SetColor(const Vector4& color) { color_ = color; }
+	void SetColor(const Vector4& color);
 	virtual const Matrix4x4 GetRotateMatrix();
+
+	const Light& GetLight() const { return light_; }
+	const ModelData& GetModelData() const { return *modelData_; }
+	const D3D12_GPU_DESCRIPTOR_HANDLE& GetTextureData() const { return srvGPUDescriptorHandle_; }
+	ID3D12Resource& GetMaterialData() const { return *materialResource_.Get(); }
 
 protected:
 	struct Material

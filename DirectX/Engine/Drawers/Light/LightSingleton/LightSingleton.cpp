@@ -13,8 +13,6 @@ LightSingleton* LightSingleton::GetInstance()
 void LightSingleton::Initialize()
 {
 	Light::StaticInitialize();
-	PointLight::StaticInitialize();
-	SpotLight::StaticInitialize();
 
 	directionalLight_ = std::make_unique<DirectionalLight>();
 	pointLight_ = std::make_unique<PointLight>();

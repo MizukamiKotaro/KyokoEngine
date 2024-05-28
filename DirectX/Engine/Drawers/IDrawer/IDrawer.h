@@ -5,6 +5,7 @@ enum class PipelineType;
 class GraphicsPipelineManager;
 class TextureManager;
 class ModelDataManager;
+class DrawManager;
 
 class IDrawer {
 public:
@@ -14,4 +15,5 @@ protected:
 	static GraphicsPipelineManager* psoManager_;
 	static TextureManager* textureManager_;
 	static ModelDataManager* modelDataManager_;
+	static DrawManager* drawManager_;
 };

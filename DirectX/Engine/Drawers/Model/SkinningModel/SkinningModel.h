@@ -24,12 +24,14 @@ public:
 
 	void Update(const float& time);
 
-	void Draw(const Camera& camera, BlendMode blendMode = BlendMode::kBlendModeNormal);
+	void Draw(const Camera& camera, BlendMode blendMode = BlendMode::kBlendModeNormal) const;
 
 public:
 	void LoadGLTF(const std::string& fileName);
 
 	const Matrix4x4 GetRotateMatrix() override;
+
+	const SkinCluter& GetSkinCluter() const { return *skinCluter_.get(); }
 
 private:
 	void AnimationUpdate(float time);

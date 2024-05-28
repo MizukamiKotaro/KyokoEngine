@@ -9,6 +9,7 @@
 #include "calc.h"
 #include "DescriptorHeapManager/DescriptorHeapManager.h"
 #include "DescriptorHeapManager/DescriptorHeap/DescriptorHeap.h"
+#include "Drawers/DrawManager/DrawManager.h"
 
 RigidAnimationModel::RigidAnimationModel(const std::string& fileName)
 {
@@ -33,49 +34,9 @@ void RigidAnimationModel::Update(const float& time)
 	AnimationUpdate(time);
 }
 
-void RigidAnimationModel::Draw(const Camera& camera, BlendMode blendMode)
+void RigidAnimationModel::Draw(const Camera& camera, BlendMode blendMode) const
 {
-
-	materialData_->color = color_;
-	materialData_->uvTransform = uvMatrix_;
-
-	NodeAnimation& rootNodeAnimation = animation_->nodeAnimations[modelData_->rootNode.name];
-	Vector3 translate = CalculateValue(rootNodeAnimation.translate, animationTime_);
-	Quaternion rotate = CalculateValue(rootNodeAnimation.rotate, animationTime_);
-	Vector3 scale = CalculateValue(rootNodeAnimation.scale, animationTime_);
-	Matrix4x4 localMatrix = Matrix4x4::MakeAffinMatrix(scale, rotate, translate);
-
-	transformationData_->World = localMatrix * transform_.worldMat_;
-	transformationData_->WVP = localMatrix * transform_.worldMat_ * camera.GetViewProjection();
-	transformationData_->WorldInverse = Matrix4x4::Inverse(Matrix4x4::MakeScaleMatrix(transform_.scale_) * Matrix4x4::MakeScaleMatrix(scale)) *
-		Matrix4x4::MakeRotateXYZMatrix(transform_.rotate_) * Matrix4x4::MakeRotateMatrix(rotate) * Matrix4x4::MakeTranslateMatrix(transform_.translate_) * Matrix4x4::MakeTranslateMatrix(translate);
-
-
-	psoManager_->PreDraw(PipelineType::MODEL);
-	psoManager_->SetBlendMode(PipelineType::MODEL, blendMode);
-
-	//Spriteの描画。変更に必要なものだけ変更する
-	commandList_->IASetVertexBuffers(0, 1, &modelData_->mesh.vertexBufferView_); // VBVを設定
-	commandList_->IASetIndexBuffer(&modelData_->mesh.indexBufferView_);
-
-	//マテリアルCBufferの場所を設定
-	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
-	//TransformationMatrixCBufferの場所を設定
-	commandList_->SetGraphicsRootConstantBufferView(1, transformationResource_->GetGPUVirtualAddress());
-
-	//平行光源CBufferの場所を設定
-	commandList_->SetGraphicsRootConstantBufferView(3, light_.GetDirectionalLightGPUVirtualAddress());
-	// カメラの設定
-	commandList_->SetGraphicsRootConstantBufferView(4, camera.GetGPUVirtualAddress());
-	// pointLight の設定
-	commandList_->SetGraphicsRootConstantBufferView(5, light_.GetPointLightGPUVirtualAddress());
-	// spotLight の設定
-	commandList_->SetGraphicsRootConstantBufferView(6, light_.GetSpotLightGPUVirtualAddress());
-
-	commandList_->SetGraphicsRootDescriptorTable(2, srvGPUDescriptorHandle_);
-	//描画!!!!（DrawCall/ドローコール）
-	//commandList_->DrawInstanced(UINT(modelData_->mesh.verteces.size()), 1, 0, 0);
-	commandList_->DrawIndexedInstanced(UINT(modelData_->mesh.indices.size()), 1, 0, 0, 0);
+	drawManager_->Draw(*this, camera, blendMode);
 }
 
 void RigidAnimationModel::AnimationUpdate(const float& time)

@@ -34,11 +34,6 @@ private:
 	std::unique_ptr<StageLights> stageLights_;
 	std::unique_ptr<DancingIdol> idol_;
 
-	// スクリーン用
-	std::unique_ptr<Dome> dome2_;
-	std::unique_ptr<Stage> stage2_;
-	std::unique_ptr<DancingIdol> idol2_;
-
 	Camera* camera_ = nullptr;
 	std::unique_ptr<Camera> screenCamera_;
 };

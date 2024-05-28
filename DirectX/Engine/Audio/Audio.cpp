@@ -105,10 +105,38 @@ void Audio::AllStop()
 void Audio::Update()
 {
 #ifdef _DEBUG
-	volume_ = global_->GetFloatValue(itemName_ + "のボリューム");
+	if (soundData_->type == AudioType::SE) {
+		volume_ = global_->GetFloatValue(itemName_ + "のボリューム");
+	}
+	else if (soundData_->type == AudioType::MUSIC) {
+		volume_ = global_->GetFloatValue(itemName_ + "のボリューム");
+	}
 
 	volume_ = std::clamp(volume_, 0.0f, 1.0f);
 
+	if (!ImGui::Begin("Audio", nullptr, ImGuiWindowFlags_MenuBar)) {
+		ImGui::End();
+	}
+	else {
+		if (ImGui::BeginMenuBar()) {
+			if (ImGui::BeginMenu("音量再生")) {
+				std::string playButtonName = itemName_ + "の再生";
+				if (ImGui::Button(playButtonName.c_str())) {
+					audioManager_->StopSameSounds(soundData_);
+					Play();
+				}
+				std::string stopButtonName = itemName_ + "の停止";
+				if (ImGui::Button(stopButtonName.c_str())) {
+					audioManager_->StopSameSounds(soundData_);
+				}
+				ImGui::EndMenu();
+			}
+			ImGui::EndMenuBar();
+		}
+		ImGui::End();
+	}
+
+#endif // _DEBUG
 	if (IsPlaying()) {
 		float volume = volume_;
 		if (soundData_->type == AudioType::SE) {
@@ -120,7 +148,6 @@ void Audio::Update()
 
 		audioManager_->SetVolume(voiceHandle_, soundData_, volume);
 	}
-#endif // _DEBUG
 }
 
 const SoundData* Audio::GetSoundDataPtr() const

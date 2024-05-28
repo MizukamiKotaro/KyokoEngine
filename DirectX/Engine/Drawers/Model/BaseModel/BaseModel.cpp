@@ -20,6 +20,7 @@ void BaseModel::Update()
 {
 	transform_.UpdateMatrix();
 	uvMatrix_ = Matrix4x4::MakeAffinMatrix(uvScale_, uvRotate_, uvPos_);
+	materialData_->color = color_;
 }
 
 void BaseModel::SetTexture(const Texture* texture)
@@ -41,6 +42,12 @@ void BaseModel::SetModelData(const ModelData* modelData)
 void BaseModel::SetLight(const ILight* light)
 {
 	light_.SetLight(light);
+}
+
+void BaseModel::SetColor(const Vector4& color)
+{
+	color_ = color;
+	materialData_->color = color_;
 }
 
 const Matrix4x4 BaseModel::GetRotateMatrix()

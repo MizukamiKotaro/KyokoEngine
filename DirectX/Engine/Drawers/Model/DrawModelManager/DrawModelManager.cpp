@@ -1,15 +1,16 @@
-#include "DrawLightManager.h"
+#include "DrawModelManager.h"
 #include "DirectXBase/DirectXBase.h"
 #include "Camera.h"
 #include "ModelDataManager.h"
 #include "GraphicsPipelineSystem/GraphicsPiplineManager/GraphicsPiplineManager.h"
 #include "ModelData/ModelData.h"
 #include "GraphicsPipelineSystem/PipelineTypeConfig.h"
-#include "SpotLight/SpotLight.h"
-#include "PointLight/PointLight.h"
 #include "calc.h"
+#include "Model.h"
+#include "SkinningModel/SkinningModel.h"
+#include "RigidAnimationModel/RigidAnimationModel.h"
 
-DrawLightManager::Transformation::Transformation()
+DrawModelManager::Transformation::Transformation()
 {
 	transformationResource = DirectXBase::CreateBufferResource(sizeof(TransformationMatrix));
 	transformationData = nullptr;
@@ -17,95 +18,160 @@ DrawLightManager::Transformation::Transformation()
 	*transformationData = { Matrix4x4::MakeIdentity4x4() ,Matrix4x4::MakeIdentity4x4(), Matrix4x4::Inverse(Matrix4x4::MakeIdentity4x4()) };
 }
 
-DrawLightManager::Transformation::~Transformation()
+DrawModelManager::Transformation::~Transformation()
 {
 	transformationResource->Release();
 }
 
-DrawLightManager* DrawLightManager::GetInstance()
+DrawModelManager::DrawModelManager()
 {
-	static DrawLightManager instance;
-	return &instance;
-}
-
-void DrawLightManager::Initialize()
-{
-	scaleMat_ = Matrix4x4::MakeScaleMatrix({ 1000.0f,1000.0f,1000.0f });
-	scaleInverseMat_ = Matrix4x4::Inverse(scaleMat_);
-	modelData_ = modelDataManager_->LoadObj("Plane");
+	drawNum_ = 0;
 	for (int32_t i = 0; i < 50; i++) {
 		transformation_.push_back(std::make_unique<Transformation>());
 	}
 }
 
-void DrawLightManager::Reset()
+void DrawModelManager::Draw(const Model& model, const Camera& camera, const BlendMode& blendMode)
 {
-	drawNum_ = 0;
-}
-
-void DrawLightManager::Draw(const PointLight& light, const Camera& camera, const BlendMode& blendMode)
-{
-	Matrix4x4 billboardMat{};
-
-	billboardMat = camera.transform_.worldMat_;
-	billboardMat.m[3][0] = 0.0f;
-	billboardMat.m[3][1] = 0.0f;
-	billboardMat.m[3][2] = 0.0f;
-
-	Matrix4x4 translateMat = Matrix4x4::MakeTranslateMatrix(light.light_->position + Vector3{ 0.0f,0.0f,0.1f } * billboardMat);
-
 	if (transformation_.size() == drawNum_) {
 		transformation_.push_back(std::make_unique<Transformation>());
 	}
-	transformation_[drawNum_]->transformationData->World = scaleMat_ * billboardMat * translateMat;
-	transformation_[drawNum_]->transformationData->WVP = transformation_[drawNum_]->transformationData->World * camera.GetViewProjection();
-	transformation_[drawNum_]->transformationData->WorldInverse = scaleInverseMat_ * billboardMat * translateMat;
 
-	PipelineType piplineType = PipelineType::SPOT_LIGHT;
-	psoManager_->PreDraw(piplineType);
-	psoManager_->SetBlendMode(piplineType, blendMode);
-	commandList_->IASetVertexBuffers(0, 1, &modelData_->mesh.vertexBufferView_);
-	commandList_->IASetIndexBuffer(&modelData_->mesh.indexBufferView_);
+	transformation_[drawNum_]->transformationData->World = model.transform_.worldMat_;
+	transformation_[drawNum_]->transformationData->WVP = model.transform_.worldMat_ * camera.GetViewProjection();
+	transformation_[drawNum_]->transformationData->WorldInverse = Matrix4x4::Inverse(Matrix4x4::MakeScaleMatrix(model.transform_.scale_)) *
+		Matrix4x4::MakeRotateXYZMatrix(model.transform_.rotate_) * Matrix4x4::MakeTranslateMatrix(model.transform_.translate_);
+
+	psoManager_->PreDraw(PipelineType::MODEL);
+	psoManager_->SetBlendMode(PipelineType::MODEL, blendMode);
+
+	const ModelData& modelData = model.GetModelData();
+	const Light& light = model.GetLight();
+
+	//Spriteの描画。変更に必要なものだけ変更する
+	commandList_->IASetVertexBuffers(0, 1, &modelData.mesh.vertexBufferView_); // VBVを設定
+	commandList_->IASetIndexBuffer(&modelData.mesh.indexBufferView_);
+
+	//マテリアルCBufferの場所を設定
+	commandList_->SetGraphicsRootConstantBufferView(0, model.GetMaterialData().GetGPUVirtualAddress());
+	//TransformationMatrixCBufferの場所を設定
 	commandList_->SetGraphicsRootConstantBufferView(1, transformation_[drawNum_]->transformationResource->GetGPUVirtualAddress());
-	commandList_->SetGraphicsRootConstantBufferView(2, camera.GetGPUVirtualAddress());
-	commandList_->SetGraphicsRootConstantBufferView(0, light.GetGPUVirtualAddress());
-	commandList_->DrawIndexedInstanced(UINT(modelData_->mesh.indices.size()), 1, 0, 0, 0);
+
+	//平行光源CBufferの場所を設定
+	commandList_->SetGraphicsRootConstantBufferView(3, light.GetDirectionalLightGPUVirtualAddress());
+	// カメラの設定
+	commandList_->SetGraphicsRootConstantBufferView(4, camera.GetGPUVirtualAddress());
+	// pointLight の設定
+	commandList_->SetGraphicsRootConstantBufferView(5, light.GetPointLightGPUVirtualAddress());
+	// spotLight の設定
+	commandList_->SetGraphicsRootConstantBufferView(6, light.GetSpotLightGPUVirtualAddress());
+
+	commandList_->SetGraphicsRootDescriptorTable(2, model.GetTextureData());
+	//描画!!!!（DrawCall/ドローコール）
+	//commandList_->DrawInstanced(UINT(modelData_->mesh.verteces.size()), 1, 0, 0);
+	commandList_->DrawIndexedInstanced(UINT(modelData.mesh.indices.size()), 1, 0, 0, 0);
 
 	drawNum_++;
 }
 
-void DrawLightManager::Draw(const SpotLight& light, const Camera& camera, const BlendMode& blendMode)
+void DrawModelManager::Draw(const RigidAnimationModel& model, const Camera& camera, const BlendMode& blendMode)
 {
-	Matrix4x4 billboardMat{};
-	billboardMat = camera.transform_.worldMat_;
-	billboardMat.m[3][0] = 0.0f;
-	billboardMat.m[3][1] = 0.0f;
-	billboardMat.m[3][2] = 0.0f;
-
-	Vector3 project = Calc::Project(camera.transform_.worldPos_ - light.light_->position, light.light_->direction);
-	Vector3 rotate = camera.transform_.worldPos_ - (light.light_->position + project);
-	rotate = rotate.Normalize();
-	if (rotate.z != -1.0f) {
-		billboardMat = billboardMat * Matrix4x4::DirectionToDirection({ 0.0f,0.0f,-1.0f }, rotate);
+	if (transformation_.size() == drawNum_) {
+		transformation_.push_back(std::make_unique<Transformation>());
 	}
-	Matrix4x4 translateMat = Matrix4x4::MakeTranslateMatrix(light.light_->position + Vector3{ 0.0f,0.0f,0.1f } * billboardMat);
+	const ModelData& modelData = model.GetModelData();
+	const float& animationTime = model.GetAnimationTime();
+
+	NodeAnimation& rootNodeAnimation = model.GetAnimation().nodeAnimations[modelData.rootNode.name];
+	Vector3 translate = RigidAnimationModel::CalculateValue(rootNodeAnimation.translate, animationTime);
+	Quaternion rotate = RigidAnimationModel::CalculateValue(rootNodeAnimation.rotate, animationTime);
+	Vector3 scale = RigidAnimationModel::CalculateValue(rootNodeAnimation.scale, animationTime);
+	Matrix4x4 localMatrix = Matrix4x4::MakeAffinMatrix(scale, rotate, translate);
+
+	transformation_[drawNum_]->transformationData->World = localMatrix * model.transform_.worldMat_;
+	transformation_[drawNum_]->transformationData->WVP = localMatrix * model.transform_.worldMat_ * camera.GetViewProjection();
+	transformation_[drawNum_]->transformationData->WorldInverse = Matrix4x4::Inverse(Matrix4x4::MakeScaleMatrix(model.transform_.scale_) * Matrix4x4::MakeScaleMatrix(scale)) *
+		(Matrix4x4::MakeRotateXYZMatrix(model.transform_.rotate_) * Matrix4x4::MakeRotateMatrix(rotate)) * (Matrix4x4::MakeTranslateMatrix(model.transform_.translate_) * Matrix4x4::MakeTranslateMatrix(translate));
+
+	psoManager_->PreDraw(PipelineType::MODEL);
+	psoManager_->SetBlendMode(PipelineType::MODEL, blendMode);
+
+	const Light& light = model.GetLight();
+
+	//Spriteの描画。変更に必要なものだけ変更する
+	commandList_->IASetVertexBuffers(0, 1, &modelData.mesh.vertexBufferView_); // VBVを設定
+	commandList_->IASetIndexBuffer(&modelData.mesh.indexBufferView_);
+
+	//マテリアルCBufferの場所を設定
+	commandList_->SetGraphicsRootConstantBufferView(0, model.GetMaterialData().GetGPUVirtualAddress());
+	//TransformationMatrixCBufferの場所を設定
+	commandList_->SetGraphicsRootConstantBufferView(1, transformation_[drawNum_]->transformationResource->GetGPUVirtualAddress());
+
+	//平行光源CBufferの場所を設定
+	commandList_->SetGraphicsRootConstantBufferView(3, light.GetDirectionalLightGPUVirtualAddress());
+	// カメラの設定
+	commandList_->SetGraphicsRootConstantBufferView(4, camera.GetGPUVirtualAddress());
+	// pointLight の設定
+	commandList_->SetGraphicsRootConstantBufferView(5, light.GetPointLightGPUVirtualAddress());
+	// spotLight の設定
+	commandList_->SetGraphicsRootConstantBufferView(6, light.GetSpotLightGPUVirtualAddress());
+
+	commandList_->SetGraphicsRootDescriptorTable(2, model.GetTextureData());
+	//描画!!!!（DrawCall/ドローコール）
+	//commandList_->DrawInstanced(UINT(modelData_->mesh.verteces.size()), 1, 0, 0);
+	commandList_->DrawIndexedInstanced(UINT(modelData.mesh.indices.size()), 1, 0, 0, 0);
+
+	drawNum_++;
+}
+
+void DrawModelManager::Draw(const SkinningModel& model, const Camera& camera, const BlendMode& blendMode)
+{
 
 	if (transformation_.size() == drawNum_) {
 		transformation_.push_back(std::make_unique<Transformation>());
 	}
-	transformation_[drawNum_]->transformationData->World = scaleMat_ * billboardMat * translateMat;
-	transformation_[drawNum_]->transformationData->WVP = transformation_[drawNum_]->transformationData->World * camera.GetViewProjection();
-	transformation_[drawNum_]->transformationData->WorldInverse = scaleInverseMat_ * billboardMat * translateMat;
 
-	PipelineType piplineType = PipelineType::SPOT_LIGHT;
-	psoManager_->PreDraw(piplineType);
-	psoManager_->SetBlendMode(piplineType, blendMode);
-	commandList_->IASetVertexBuffers(0, 1, &modelData_->mesh.vertexBufferView_);
-	commandList_->IASetIndexBuffer(&modelData_->mesh.indexBufferView_);
+	transformation_[drawNum_]->transformationData->World = model.transform_.worldMat_;
+	transformation_[drawNum_]->transformationData->WVP = model.transform_.worldMat_ * camera.GetViewProjection();
+	transformation_[drawNum_]->transformationData->WorldInverse = Matrix4x4::Inverse(Matrix4x4::MakeScaleMatrix(model.transform_.scale_)) *
+		Matrix4x4::MakeRotateXYZMatrix(model.transform_.rotate_) * Matrix4x4::MakeTranslateMatrix(model.transform_.translate_);
+
+	psoManager_->PreDraw(PipelineType::SKINNING_MODEL);
+	psoManager_->SetBlendMode(PipelineType::SKINNING_MODEL, blendMode);
+
+	const ModelData& modelData = model.GetModelData();
+	const Light& light = model.GetLight();
+	const SkinCluter& skinCluter = model.GetSkinCluter();
+
+	D3D12_VERTEX_BUFFER_VIEW vbvs[2] = {
+		modelData.mesh.vertexBufferView_,
+		skinCluter.influenceBufferView
+	};
+
+	//Spriteの描画。変更に必要なものだけ変更する
+	commandList_->IASetVertexBuffers(0, 2, vbvs); // VBVを設定
+	commandList_->IASetIndexBuffer(&modelData.mesh.indexBufferView_);
+
+	//マテリアルCBufferの場所を設定
+	commandList_->SetGraphicsRootConstantBufferView(0, model.GetMaterialData().GetGPUVirtualAddress());
+	//TransformationMatrixCBufferの場所を設定
 	commandList_->SetGraphicsRootConstantBufferView(1, transformation_[drawNum_]->transformationResource->GetGPUVirtualAddress());
-	commandList_->SetGraphicsRootConstantBufferView(2, camera.GetGPUVirtualAddress());
-	commandList_->SetGraphicsRootConstantBufferView(0, light.GetGPUVirtualAddress());
-	commandList_->DrawIndexedInstanced(UINT(modelData_->mesh.indices.size()), 1, 0, 0, 0);
+
+	//平行光源CBufferの場所を設定
+	commandList_->SetGraphicsRootConstantBufferView(3, light.GetDirectionalLightGPUVirtualAddress());
+	// カメラの設定
+	commandList_->SetGraphicsRootConstantBufferView(4, camera.GetGPUVirtualAddress());
+	// pointLight の設定
+	commandList_->SetGraphicsRootConstantBufferView(5, light.GetPointLightGPUVirtualAddress());
+	// spotLight の設定
+	commandList_->SetGraphicsRootConstantBufferView(6, light.GetSpotLightGPUVirtualAddress());
+
+	commandList_->SetGraphicsRootDescriptorTable(7, skinCluter.paletteSrvHandle->gpuHandle);
+
+	commandList_->SetGraphicsRootDescriptorTable(2, model.GetTextureData());
+	//描画!!!!（DrawCall/ドローコール）
+	//commandList_->DrawInstanced(UINT(modelData_->mesh.verteces.size()), 1, 0, 0);
+	commandList_->DrawIndexedInstanced(UINT(modelData.mesh.indices.size()), 1, 0, 0, 0);
 
 	drawNum_++;
 }

@@ -21,7 +21,8 @@
 #include "Audio.h"
 #include "GlobalVariables/GlobalVariableUser.h"
 #include "ParticleManager.h"
-#include "DrawLightManager/DrawLightManager.h"
+#include "Drawers/DrawManager/DrawManager.h"
+#include "Drawers/IDrawManager/IDrawManager.h"
 
 static ResourceLeackChecker leakCheck;
 
@@ -32,7 +33,7 @@ AudioManager* audioManager;
 Input* inputManager;
 GlobalVariables* globalVariables;
 VolumeManager* volumeManager;
-DrawLightManager* drawLightManager;
+DrawManager* drawManager;
 
 void Kyoko::Engine::Initialize(const char* windowName, int width, int height)
 {
@@ -58,12 +59,12 @@ void Kyoko::Engine::Initialize(const char* windowName, int width, int height)
 	GlobalVariableUser::StaticInitialize();
 
 	IDrawer::StaticInitialize();
+	IDrawManager::StaticInitialize();
 	Sprite::StaticInitialize();
-	Model::StaticInitialize();
 	BasePostEffect::StaticInitialize();
 	ParticleManager::GetInstance()->FirstInitialize();
-	drawLightManager = DrawLightManager::GetInstance();
-	drawLightManager->Initialize();
+	drawManager = DrawManager::GetInstance();
+	drawManager->Initialize();
 
 	audioManager = AudioManager::GetInstance();
 	audioManager->Initialize();
@@ -124,7 +125,7 @@ void Kyoko::Engine::FirstUpdateInLoop()
 #endif // _DEBUG
 	inputManager->Update();
 	audioManager->Update();
-	drawLightManager->Reset();
+	drawManager->Reset();
 }
 
 void Kyoko::Engine::PreDraw()

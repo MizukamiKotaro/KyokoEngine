@@ -1,9 +1,7 @@
 #include "PointLight.h"
 #include "DirectXBase/DirectXBase.h"
 #include "Camera.h"
-#include "DrawLightManager/DrawLightManager.h"
-
-DrawLightManager* PointLight::drawManager_ = nullptr;
+#include "Drawers/DrawManager/DrawManager.h"
 
 PointLight::PointLight()
 {
@@ -23,11 +21,6 @@ PointLight::PointLight()
 
 PointLight::~PointLight()
 {
-}
-
-void PointLight::StaticInitialize()
-{
-	drawManager_ = DrawLightManager::GetInstance();
 }
 
 void PointLight::Update()

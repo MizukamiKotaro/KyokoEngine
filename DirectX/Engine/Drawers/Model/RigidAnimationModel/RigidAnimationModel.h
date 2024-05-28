@@ -11,7 +11,7 @@ public:
 
 	void Update(const float& time = 0.0f);
 
-	void Draw(const Camera& camera, BlendMode blendMode = BlendMode::kBlendModeNormal);
+	void Draw(const Camera& camera, BlendMode blendMode = BlendMode::kBlendModeNormal) const;
 
 public:
 	void LoadGLTF(const std::string& fileName);
@@ -19,10 +19,13 @@ public:
 
 	const Matrix4x4 GetRotateMatrix() override;
 
+	static Vector3 CalculateValue(const AnimationCurve<Vector3>& keyframes, const float& time);
+	static Quaternion CalculateValue(const AnimationCurve<Quaternion>& keyframes, const float& time);
+
+	Animation& GetAnimation() const { return *animation_.get(); }
+	const float& GetAnimationTime() const { return animationTime_; }
 private:
 	void AnimationUpdate(const float& time);
-	Vector3 CalculateValue(const AnimationCurve<Vector3>& keyframes, const float& time);
-	Quaternion CalculateValue(const AnimationCurve<Quaternion>& keyframes, const float& time);
 
 private:
 	int32_t Createjoint(const NodeData& node, const std::optional<int32_t>& parent, std::vector<Joint>& joints);

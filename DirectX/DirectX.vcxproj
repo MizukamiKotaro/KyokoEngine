@@ -126,7 +126,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\CollisionSystem\Collider\Collider.cpp" />
     <ClCompile Include="Engine\CollisionSystem\CollisionManager\CollisionManager.cpp" />
     <ClCompile Include="Engine\CollisionSystem\CollisionProcesses\CollisionCircleCircle\CollisionCircleCircle.cpp" />
+    <ClCompile Include="Engine\Drawers\DrawManager\DrawManager.cpp" />
     <ClCompile Include="Engine\Drawers\IDrawer\IDrawer.cpp" />
+    <ClCompile Include="Engine\Drawers\IDrawManager\IDrawManager.cpp" />
     <ClCompile Include="Engine\Drawers\InstancingModel\InstancingModelList\InstancingModelList.cpp" />
     <ClCompile Include="Engine\Drawers\InstancingModel\InstancingModelManager.cpp" />
     <ClCompile Include="Engine\Drawers\InstancingModel\InstancingModels\InstancingModels.cpp" />
@@ -138,6 +140,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Drawers\Light\PointLight\PointLight.cpp" />
     <ClCompile Include="Engine\Drawers\Light\SpotLight\SpotLight.cpp" />
     <ClCompile Include="Engine\Drawers\Model\BaseModel\BaseModel.cpp" />
+    <ClCompile Include="Engine\Drawers\Model\DrawModelManager\DrawModelManager.cpp" />
     <ClCompile Include="Engine\Drawers\Model\Model.cpp" />
     <ClCompile Include="Engine\Drawers\Model\ModelData\ModelDataManager\ModelDataManager.cpp" />
     <ClCompile Include="Engine\Drawers\Model\RigidAnimationModel\RigidAnimationModel.cpp" />
@@ -265,7 +268,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\CollisionSystem\CollisionConfig.h" />
     <ClInclude Include="Engine\CollisionSystem\CollisionManager\CollisionManager.h" />
     <ClInclude Include="Engine\CollisionSystem\CollisionProcesses\CollisionCircleCircle\CollisionCircleCircle.h" />
+    <ClInclude Include="Engine\Drawers\DrawManager\DrawManager.h" />
     <ClInclude Include="Engine\Drawers\IDrawer\IDrawer.h" />
+    <ClInclude Include="Engine\Drawers\IDrawManager\IDrawManager.h" />
     <ClInclude Include="Engine\Drawers\InstancingModel\InstancingModelData.h" />
     <ClInclude Include="Engine\Drawers\InstancingModel\InstancingModelList\InstancingModelList.h" />
     <ClInclude Include="Engine\Drawers\InstancingModel\InstancingModelManager.h" />
@@ -278,6 +283,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Drawers\Light\PointLight\PointLight.h" />
     <ClInclude Include="Engine\Drawers\Light\SpotLight\SpotLight.h" />
     <ClInclude Include="Engine\Drawers\Model\BaseModel\BaseModel.h" />
+    <ClInclude Include="Engine\Drawers\Model\DrawModelManager\DrawModelManager.h" />
     <ClInclude Include="Engine\Drawers\Model\Model.h" />
     <ClInclude Include="Engine\Drawers\Model\ModelData\AnimationData3D.h" />
     <ClInclude Include="Engine\Drawers\Model\ModelData\BoneData3D.h" />

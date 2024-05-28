@@ -26,5 +26,5 @@ public:
 	/// <param name="meshHundle">モデルデータのハンドル( ModelDataManager::GetInstance()->LoadObj("Cube") 等)</param>
 	Model(const ModelData* modelData);
 
-	void Draw(const Camera& camera, BlendMode blendMode = BlendMode::kBlendModeNormal);
+	void Draw(const Camera& camera, BlendMode blendMode = BlendMode::kBlendModeNormal) const;
 };

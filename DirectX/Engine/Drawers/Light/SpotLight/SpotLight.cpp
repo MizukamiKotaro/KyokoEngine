@@ -1,10 +1,8 @@
 #include "SpotLight.h"
 #include "DirectXBase/DirectXBase.h"
 #include "Camera.h"
-#include "DrawLightManager/DrawLightManager.h"
+#include "Drawers/DrawManager/DrawManager.h"
 #include <algorithm>
-
-DrawLightManager* SpotLight::drawManager_ = nullptr;
 
 SpotLight::SpotLight()
 {
@@ -27,11 +25,6 @@ SpotLight::SpotLight()
 
 SpotLight::~SpotLight()
 {
-}
-
-void SpotLight::StaticInitialize()
-{
-	drawManager_ = DrawLightManager::GetInstance();
 }
 
 void SpotLight::Update()

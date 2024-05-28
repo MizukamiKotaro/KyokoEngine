@@ -1,8 +1,7 @@
 #pragma once
-#include "Vector3.h"
 #include "Matrix4x4.h"
-#include "ILight/ILight.h"
-#include "Drawers/IDrawer/IDrawer.h"
+#include "Drawers/IDrawManager/IDrawManager.h"
+#include <wrl.h>
 #include <vector>
 #include <memory>
 
@@ -12,23 +11,15 @@ enum class BlendMode;
 class PointLight;
 class SpotLight;
 
-class DrawLightManager : public IDrawer
+class DrawLightManager : public IDrawManager
 {
 public:
-	static DrawLightManager* GetInstance();
-
-	void Initialize();
-	void Reset();
+	DrawLightManager();
 
 	void Draw(const PointLight& light,const Camera& camera, const BlendMode& blendMode);
 	void Draw(const SpotLight& light, const Camera& camera, const BlendMode& blendMode);
 
 private:
-	DrawLightManager() = default;
-	~DrawLightManager() = default;
-	DrawLightManager(const DrawLightManager&) = delete;
-	const DrawLightManager& operator=(const DrawLightManager&) = delete;
-
 	class Transformation
 	{
 	public:
@@ -43,7 +34,6 @@ private:
 		TransformationMatrix* transformationData;
 	};
 	std::vector<std::unique_ptr<Transformation>> transformation_;
-	int32_t drawNum_;
 
 	const ModelData* modelData_;
 	Matrix4x4 scaleMat_;

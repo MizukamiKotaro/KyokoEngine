@@ -22,25 +22,15 @@ DrawLightManager::Transformation::~Transformation()
 	transformationResource->Release();
 }
 
-DrawLightManager* DrawLightManager::GetInstance()
+DrawLightManager::DrawLightManager()
 {
-	static DrawLightManager instance;
-	return &instance;
-}
-
-void DrawLightManager::Initialize()
-{
+	drawNum_ = 0;
 	scaleMat_ = Matrix4x4::MakeScaleMatrix({ 1000.0f,1000.0f,1000.0f });
 	scaleInverseMat_ = Matrix4x4::Inverse(scaleMat_);
-	modelData_ = modelDataManager_->LoadObj("Plane");
+	modelData_ = ModelDataManager::GetInstance()->LoadObj("Plane");
 	for (int32_t i = 0; i < 50; i++) {
 		transformation_.push_back(std::make_unique<Transformation>());
 	}
-}
-
-void DrawLightManager::Reset()
-{
-	drawNum_ = 0;
 }
 
 void DrawLightManager::Draw(const PointLight& light, const Camera& camera, const BlendMode& blendMode)

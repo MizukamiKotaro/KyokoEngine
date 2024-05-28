@@ -4,12 +4,12 @@
 #include "Matrix4x4.h"
 #include "ILight/ILight.h"
 #include "GraphicsPipelineSystem/BlendModeConfig.h"
+#include "Drawers/IDrawer/IDrawer.h"
 
 class Camera;
 class ModelData;
-class DrawLightManager;
 
-class PointLight : public ILight
+class PointLight : public ILight, public IDrawer
 {
 public:
 	struct PointLightData
@@ -25,8 +25,6 @@ public:
 	PointLight();
 	~PointLight() override;
 
-	static void StaticInitialize();
-
 	void Update() override;
 
 	void Draw(const Camera& camera, const BlendMode& blendMode = BlendMode::kBlendModeNormal) const;
@@ -34,7 +32,4 @@ public:
 public:
 	PointLightData* light_ = nullptr;
 	bool isDraw_;
-	
-private:
-	static DrawLightManager* drawManager_;
 };
