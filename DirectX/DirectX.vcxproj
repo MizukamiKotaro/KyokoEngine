@@ -199,6 +199,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Input\Input.cpp" />
     <ClCompile Include="Engine\Kyoko.cpp" />
     <ClCompile Include="Engine\LevelDataLoader\LevelDataLoader.cpp" />
+    <ClCompile Include="Engine\LevelDataLoader\LevelData\LevelData.cpp" />
     <ClCompile Include="Engine\StageEditor\StageEditor.cpp" />
     <ClCompile Include="Engine\TextureManager\TextureManager.cpp" />
     <ClCompile Include="Engine\TextureManager\Texture\Texture.cpp" />
@@ -354,6 +355,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Input\Input.h" />
     <ClInclude Include="Engine\Kyoko.h" />
     <ClInclude Include="Engine\LevelDataLoader\LevelDataLoader.h" />
+    <ClInclude Include="Engine\LevelDataLoader\LevelData\LevelData.h" />
     <ClInclude Include="Engine\StageEditor\StageEditor.h" />
     <ClInclude Include="Engine\TextureManager\TextureManager.h" />
     <ClInclude Include="Engine\TextureManager\Texture\Texture.h" />

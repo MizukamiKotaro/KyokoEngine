@@ -1,11 +1,9 @@
 #include "DrawModelManager.h"
 #include "DirectXBase/DirectXBase.h"
 #include "Camera.h"
-#include "ModelDataManager.h"
 #include "GraphicsPipelineSystem/GraphicsPiplineManager/GraphicsPiplineManager.h"
 #include "ModelData/ModelData.h"
 #include "GraphicsPipelineSystem/PipelineTypeConfig.h"
-#include "calc.h"
 #include "Model.h"
 #include "SkinningModel/SkinningModel.h"
 #include "RigidAnimationModel/RigidAnimationModel.h"
@@ -48,29 +46,16 @@ void DrawModelManager::Draw(const Model& model, const Camera& camera, const Blen
 	const ModelData& modelData = model.GetModelData();
 	const Light& light = model.GetLight();
 
-	//Spriteの描画。変更に必要なものだけ変更する
-	commandList_->IASetVertexBuffers(0, 1, &modelData.mesh.vertexBufferView_); // VBVを設定
+	commandList_->IASetVertexBuffers(0, 1, &modelData.mesh.vertexBufferView_);
 	commandList_->IASetIndexBuffer(&modelData.mesh.indexBufferView_);
-
-	//マテリアルCBufferの場所を設定
 	commandList_->SetGraphicsRootConstantBufferView(0, model.GetMaterialData().GetGPUVirtualAddress());
-	//TransformationMatrixCBufferの場所を設定
 	commandList_->SetGraphicsRootConstantBufferView(1, transformation_[drawNum_]->transformationResource->GetGPUVirtualAddress());
-
-	//平行光源CBufferの場所を設定
-	commandList_->SetGraphicsRootConstantBufferView(3, light.GetDirectionalLightGPUVirtualAddress());
-	// カメラの設定
-	commandList_->SetGraphicsRootConstantBufferView(4, camera.GetGPUVirtualAddress());
-	// pointLight の設定
-	commandList_->SetGraphicsRootConstantBufferView(5, light.GetPointLightGPUVirtualAddress());
-	// spotLight の設定
-	commandList_->SetGraphicsRootConstantBufferView(6, light.GetSpotLightGPUVirtualAddress());
-
 	commandList_->SetGraphicsRootDescriptorTable(2, model.GetTextureData());
-	//描画!!!!（DrawCall/ドローコール）
-	//commandList_->DrawInstanced(UINT(modelData_->mesh.verteces.size()), 1, 0, 0);
+	commandList_->SetGraphicsRootConstantBufferView(3, light.GetDirectionalLightGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(4, camera.GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(5, light.GetPointLightGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(6, light.GetSpotLightGPUVirtualAddress());
 	commandList_->DrawIndexedInstanced(UINT(modelData.mesh.indices.size()), 1, 0, 0, 0);
-
 	drawNum_++;
 }
 
@@ -98,39 +83,24 @@ void DrawModelManager::Draw(const RigidAnimationModel& model, const Camera& came
 
 	const Light& light = model.GetLight();
 
-	//Spriteの描画。変更に必要なものだけ変更する
-	commandList_->IASetVertexBuffers(0, 1, &modelData.mesh.vertexBufferView_); // VBVを設定
+	commandList_->IASetVertexBuffers(0, 1, &modelData.mesh.vertexBufferView_);
 	commandList_->IASetIndexBuffer(&modelData.mesh.indexBufferView_);
-
-	//マテリアルCBufferの場所を設定
 	commandList_->SetGraphicsRootConstantBufferView(0, model.GetMaterialData().GetGPUVirtualAddress());
-	//TransformationMatrixCBufferの場所を設定
 	commandList_->SetGraphicsRootConstantBufferView(1, transformation_[drawNum_]->transformationResource->GetGPUVirtualAddress());
-
-	//平行光源CBufferの場所を設定
-	commandList_->SetGraphicsRootConstantBufferView(3, light.GetDirectionalLightGPUVirtualAddress());
-	// カメラの設定
-	commandList_->SetGraphicsRootConstantBufferView(4, camera.GetGPUVirtualAddress());
-	// pointLight の設定
-	commandList_->SetGraphicsRootConstantBufferView(5, light.GetPointLightGPUVirtualAddress());
-	// spotLight の設定
-	commandList_->SetGraphicsRootConstantBufferView(6, light.GetSpotLightGPUVirtualAddress());
-
 	commandList_->SetGraphicsRootDescriptorTable(2, model.GetTextureData());
-	//描画!!!!（DrawCall/ドローコール）
-	//commandList_->DrawInstanced(UINT(modelData_->mesh.verteces.size()), 1, 0, 0);
+	commandList_->SetGraphicsRootConstantBufferView(3, light.GetDirectionalLightGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(4, camera.GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(5, light.GetPointLightGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(6, light.GetSpotLightGPUVirtualAddress());
 	commandList_->DrawIndexedInstanced(UINT(modelData.mesh.indices.size()), 1, 0, 0, 0);
-
 	drawNum_++;
 }
 
 void DrawModelManager::Draw(const SkinningModel& model, const Camera& camera, const BlendMode& blendMode)
 {
-
 	if (transformation_.size() == drawNum_) {
 		transformation_.push_back(std::make_unique<Transformation>());
 	}
-
 	transformation_[drawNum_]->transformationData->World = model.transform_.worldMat_;
 	transformation_[drawNum_]->transformationData->WVP = model.transform_.worldMat_ * camera.GetViewProjection();
 	transformation_[drawNum_]->transformationData->WorldInverse = Matrix4x4::Inverse(Matrix4x4::MakeScaleMatrix(model.transform_.scale_)) *
@@ -147,31 +117,16 @@ void DrawModelManager::Draw(const SkinningModel& model, const Camera& camera, co
 		modelData.mesh.vertexBufferView_,
 		skinCluter.influenceBufferView
 	};
-
-	//Spriteの描画。変更に必要なものだけ変更する
-	commandList_->IASetVertexBuffers(0, 2, vbvs); // VBVを設定
+	commandList_->IASetVertexBuffers(0, 2, vbvs);
 	commandList_->IASetIndexBuffer(&modelData.mesh.indexBufferView_);
-
-	//マテリアルCBufferの場所を設定
 	commandList_->SetGraphicsRootConstantBufferView(0, model.GetMaterialData().GetGPUVirtualAddress());
-	//TransformationMatrixCBufferの場所を設定
 	commandList_->SetGraphicsRootConstantBufferView(1, transformation_[drawNum_]->transformationResource->GetGPUVirtualAddress());
-
-	//平行光源CBufferの場所を設定
-	commandList_->SetGraphicsRootConstantBufferView(3, light.GetDirectionalLightGPUVirtualAddress());
-	// カメラの設定
-	commandList_->SetGraphicsRootConstantBufferView(4, camera.GetGPUVirtualAddress());
-	// pointLight の設定
-	commandList_->SetGraphicsRootConstantBufferView(5, light.GetPointLightGPUVirtualAddress());
-	// spotLight の設定
-	commandList_->SetGraphicsRootConstantBufferView(6, light.GetSpotLightGPUVirtualAddress());
-
-	commandList_->SetGraphicsRootDescriptorTable(7, skinCluter.paletteSrvHandle->gpuHandle);
-
 	commandList_->SetGraphicsRootDescriptorTable(2, model.GetTextureData());
-	//描画!!!!（DrawCall/ドローコール）
-	//commandList_->DrawInstanced(UINT(modelData_->mesh.verteces.size()), 1, 0, 0);
+	commandList_->SetGraphicsRootConstantBufferView(3, light.GetDirectionalLightGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(4, camera.GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(5, light.GetPointLightGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(6, light.GetSpotLightGPUVirtualAddress());
+	commandList_->SetGraphicsRootDescriptorTable(7, skinCluter.paletteSrvHandle->gpuHandle);
 	commandList_->DrawIndexedInstanced(UINT(modelData.mesh.indices.size()), 1, 0, 0, 0);
-
 	drawNum_++;
 }

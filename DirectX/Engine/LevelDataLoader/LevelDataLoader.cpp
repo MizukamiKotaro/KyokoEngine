@@ -1,5 +1,4 @@
 #include "LevelDataLoader.h"
-#include "Externals/nlohmann/json.hpp"
 #include <fstream>
 #include <Windows.h>
 
@@ -69,8 +68,55 @@ void LevelDataLoader::LoadFile(const std::string& filePath)
 	assert(name.compare("scene") == 0);
 
 	// レベルデータ格納用インスタンスを生成
-	
+	LevelData* levelData = new LevelData();
+
+	// "objects"の全オブジェクトを走査
+	ParseRecursive(deserialized, levelData->objects);
 
 	ifs.close();
+	delete levelData;
+}
 
+void LevelDataLoader::ParseRecursive(nlohmann::json& deserialized, std::vector<LevelData::ObjectData>& objects)
+{
+	for (nlohmann::json& object : deserialized["objects"]) {
+		assert(object.contains("type"));
+
+		// 種別を取得
+		std::string type = object["type"].get<std::string>();
+
+		// MESH
+		if (type.compare("MESH") == 0) {
+			// 要素の追加
+			objects.emplace_back(LevelData::ObjectData{});
+			LevelData::ObjectData& objectData = objects.back();
+
+			if (object.contains("file_name")) {
+				// ファイル名
+				objectData.fileName = object["file_name"];
+			}
+
+			// トランスフォームのパラメータ読み込み
+			nlohmann::json& transform = object["transform"];
+			// 平行移動
+			objectData.translation.x = (float)transform["translation"][0];
+			objectData.translation.y = (float)transform["translation"][1];
+			objectData.translation.z = (float)transform["translation"][2];
+			// 回転角
+			objectData.rotation.x = -(float)transform["rotation"][0];
+			objectData.rotation.y = -(float)transform["rotation"][1];
+			objectData.rotation.z = -(float)transform["rotation"][2];
+			// スケーリング
+			objectData.scaling.x = -(float)transform["scaling"][0];
+			objectData.scaling.y = -(float)transform["scaling"][1];
+			objectData.scaling.z = -(float)transform["scaling"][2];
+
+			// TODO: コライダーのパラメータ読み込み
+		}
+
+		// TODO: 再帰関数
+		if (object.contains("children")) {
+			ParseRecursive(object["children"], objects.back().children);
+		}
+	}
 }

@@ -792,6 +792,9 @@
     <ClCompile Include="Engine\Drawers\IDrawManager\IDrawManager.cpp">
       <Filter>Engine\Drawer\DrawManager</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\LevelDataLoader\LevelData\LevelData.cpp">
+      <Filter>Engine\LevelDataLoader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Utils\Math\calc.h">
@@ -1258,6 +1261,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Drawers\IDrawManager\IDrawManager.h">
       <Filter>Engine\Drawer\DrawManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\LevelDataLoader\LevelData\LevelData.h">
+      <Filter>Engine\LevelDataLoader</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

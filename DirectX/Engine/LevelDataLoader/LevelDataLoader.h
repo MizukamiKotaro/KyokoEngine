@@ -1,4 +1,6 @@
 #pragma once
+#include "Externals/nlohmann/json.hpp"
+#include "Engine/LevelDataLoader/LevelData/LevelData.h"
 #include <string>
 
 class LevelDataLoader 
@@ -15,4 +17,6 @@ private:
 	~LevelDataLoader() = default;
 	LevelDataLoader(const LevelDataLoader& obj) = delete;
 	LevelDataLoader& operator=(const LevelDataLoader& obj) = delete;
+
+	void ParseRecursive(nlohmann::json& deserialized, std::vector<LevelData::ObjectData>& objects);
 };
