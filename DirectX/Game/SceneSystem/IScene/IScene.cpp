@@ -17,7 +17,7 @@ void IScene::FirstInit()
 
 	camera_ = std::make_unique<Camera>();
 	camera_->Initialize();
-
+	debugCamera_ = std::make_unique<DebugCamera>(camera_.get(), input_);
 	black_ = std::make_unique<Sprite>("white.png");
 	black_->size_ = { 1280.0f,720.0f };
 	black_->pos_ = { 640.0f,360.0f };
@@ -43,7 +43,11 @@ void IScene::FromBlackInitialize()
 
 void IScene::FromBlackUpdate()
 {
-	transitionTimeCount_ += FrameInfo::GetInstance()->GetDeltaTime();
+	float time = FrameInfo::GetInstance()->GetDeltaTime();
+	if (time >= 0.1f) {
+		return;
+	}
+	transitionTimeCount_ += time;
 
 	float alpha =
 		Ease::UseEase(1.0f, 0.0f, transitionTimeCount_, kTransitionTime, Ease::EaseInSine, 2);

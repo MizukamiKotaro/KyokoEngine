@@ -11,7 +11,13 @@ Model::Model(const ModelData* modelData)
 	CreateModel(modelData);
 }
 
-void Model::Draw(const Camera& camera, BlendMode blendMode) const
+void Model::Update(const float& time)
+{
+	if(time){}
+	TransformUpdate();
+}
+
+void Model::Draw(const Camera& camera, const BlendMode& blendMode) const
 {
 	drawManager_->Draw(*this, camera, blendMode);
 }

@@ -1,17 +1,14 @@
 #pragma once
 #include "BaseModel/BaseModel.h"
 
-class Camera;
-
 class RigidAnimationModel : public BaseModel
 {
 public:
 	RigidAnimationModel(const std::string& fileName);
 	RigidAnimationModel(const ModelData* modelData, const std::string& fileName);
 
-	void Update(const float& time = 0.0f);
-
-	void Draw(const Camera& camera, BlendMode blendMode = BlendMode::kBlendModeNormal) const;
+	void Update(const float& time = 0.0f) override;
+	void Draw(const Camera& camera, const BlendMode& blendMode = BlendMode::kBlendModeNormal) const override;
 
 public:
 	void LoadGLTF(const std::string& fileName);

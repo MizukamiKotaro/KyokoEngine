@@ -1,8 +1,6 @@
 #pragma once
 #include "BaseModel/BaseModel.h"
 
-class Camera;
-
 class Model : public BaseModel
 {
 public:
@@ -25,6 +23,6 @@ public:
 	/// </summary>
 	/// <param name="meshHundle">モデルデータのハンドル( ModelDataManager::GetInstance()->LoadObj("Cube") 等)</param>
 	Model(const ModelData* modelData);
-
-	void Draw(const Camera& camera, BlendMode blendMode = BlendMode::kBlendModeNormal) const;
+	void Update(const float& time = 0) override;
+	void Draw(const Camera& camera, const BlendMode& blendMode = BlendMode::kBlendModeNormal) const override;
 };

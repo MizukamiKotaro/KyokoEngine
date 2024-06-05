@@ -16,13 +16,6 @@ BaseModel::~BaseModel()
 	materialResource_->Release();
 }
 
-void BaseModel::Update()
-{
-	transform_.UpdateMatrix();
-	uvMatrix_ = Matrix4x4::MakeAffinMatrix(uvScale_, uvRotate_, uvPos_);
-	materialData_->color = color_;
-}
-
 void BaseModel::SetTexture(const Texture* texture)
 {
 	texture_ = texture;
@@ -122,4 +115,11 @@ void BaseModel::InitVariables()
 	uvPos_ = { 0.0f,0.0f,0.0f };
 
 	uvMatrix_ = Matrix4x4::MakeAffinMatrix(uvScale_, uvRotate_, uvPos_);
+}
+
+void BaseModel::TransformUpdate()
+{
+	transform_.UpdateMatrix();
+	uvMatrix_ = Matrix4x4::MakeAffinMatrix(uvScale_, uvRotate_, uvPos_);
+	materialData_->color = color_;
 }

@@ -18,5 +18,5 @@ private:
 	LevelDataLoader(const LevelDataLoader& obj) = delete;
 	LevelDataLoader& operator=(const LevelDataLoader& obj) = delete;
 
-	void ParseRecursive(nlohmann::json& deserialized, std::vector<LevelData::ObjectData>& objects);
+	void ParseRecursive(nlohmann::json& deserialized, std::vector<LevelData::ObjectData>& objects, const std::string& name = "objects");
 };

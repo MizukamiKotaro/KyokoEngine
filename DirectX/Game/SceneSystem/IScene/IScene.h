@@ -9,6 +9,7 @@
 #include <optional>
 #include "Sprite.h"
 #include <memory>
+#include "DebugCamera/DebugCamera.h"
 
 enum SCENE { TITLE, SELECT, STAGE, CLEAR };
 
@@ -63,6 +64,7 @@ protected:
 protected:
 
 	std::unique_ptr<Camera> camera_;
+	std::unique_ptr<DebugCamera> debugCamera_;
 
 	std::optional<Transition> transitionRequest_ = std::nullopt;
 

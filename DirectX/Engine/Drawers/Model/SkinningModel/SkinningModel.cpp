@@ -27,11 +27,11 @@ SkinningModel::~SkinningModel()
 
 void SkinningModel::Update(const float& time)
 {
-	BaseModel::Update();
+	TransformUpdate();
 	AnimationUpdate(time);
 }
 
-void SkinningModel::Draw(const Camera& camera, BlendMode blendMode) const
+void SkinningModel::Draw(const Camera& camera, const BlendMode& blendMode) const
 {
 	drawManager_->Draw(*this, camera, blendMode);
 }

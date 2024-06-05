@@ -2,8 +2,6 @@
 #include "BaseModel/BaseModel.h"
 #include "ModelData/SkinClustr.h"
 
-class Camera;
-
 class SkinningModel : public BaseModel
 {
 public:
@@ -22,9 +20,8 @@ public:
 	SkinningModel(const std::string& fileName);
 	~SkinningModel();
 
-	void Update(const float& time);
-
-	void Draw(const Camera& camera, BlendMode blendMode = BlendMode::kBlendModeNormal) const;
+	void Update(const float& time = 0) override;
+	void Draw(const Camera& camera, const BlendMode& blendMode = BlendMode::kBlendModeNormal) const override;
 
 public:
 	void LoadGLTF(const std::string& fileName);

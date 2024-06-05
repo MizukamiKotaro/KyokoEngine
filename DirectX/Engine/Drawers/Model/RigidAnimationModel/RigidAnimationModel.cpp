@@ -30,11 +30,11 @@ RigidAnimationModel::RigidAnimationModel(const ModelData* modelData, const std::
 
 void RigidAnimationModel::Update(const float& time)
 {
-	BaseModel::Update();
+	TransformUpdate();
 	AnimationUpdate(time);
 }
 
-void RigidAnimationModel::Draw(const Camera& camera, BlendMode blendMode) const
+void RigidAnimationModel::Draw(const Camera& camera, const BlendMode& blendMode) const
 {
 	drawManager_->Draw(*this, camera, blendMode);
 }

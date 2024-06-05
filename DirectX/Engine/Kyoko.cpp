@@ -23,6 +23,7 @@
 #include "ParticleManager.h"
 #include "Drawers/DrawManager/DrawManager.h"
 #include "Drawers/IDrawManager/IDrawManager.h"
+#include "LevelDataLoader/LevelDataLoader.h"
 
 static ResourceLeackChecker leakCheck;
 
@@ -65,6 +66,8 @@ void Kyoko::Engine::Initialize(const char* windowName, int width, int height)
 	ParticleManager::GetInstance()->FirstInitialize();
 	drawManager = DrawManager::GetInstance();
 	drawManager->Initialize();
+
+	LevelDataLoader::GetInstance()->LoadFiles();
 
 	audioManager = AudioManager::GetInstance();
 	audioManager->Initialize();

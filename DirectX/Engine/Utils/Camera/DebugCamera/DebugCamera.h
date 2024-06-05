@@ -18,7 +18,7 @@ public:
 private:
 	Input* input_;
 	Camera* camera_;
-	Transform beforeDebugTransform_;
+	EulerTransform beforeDebugTransform_;
 	bool isDebug_;
 	bool isPreDebug_;
 	bool is2D_;

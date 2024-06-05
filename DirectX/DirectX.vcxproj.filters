@@ -388,6 +388,9 @@
     <Filter Include="Engine\Drawer\DrawManager\DrawModelManager">
       <UniqueIdentifier>{682a5a9f-1f0f-4e9c-9972-78d038a2dfe8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\SceneObject">
+      <UniqueIdentifier>{e45811c1-7518-401e-a271-936acbc701e6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -794,6 +797,15 @@
     </ClCompile>
     <ClCompile Include="Engine\LevelDataLoader\LevelData\LevelData.cpp">
       <Filter>Engine\LevelDataLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\SceneObject\SceneObjectManager.cpp">
+      <Filter>Engine\SceneObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\LevelDataLoader\LevelData\LevelDataManager.cpp">
+      <Filter>Engine\LevelDataLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Utils\Camera\DebugCamera\DebugCamera.cpp">
+      <Filter>Engine\Utils\Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1264,6 +1276,15 @@
     </ClInclude>
     <ClInclude Include="Engine\LevelDataLoader\LevelData\LevelData.h">
       <Filter>Engine\LevelDataLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\SceneObject\SceneObjectManager.h">
+      <Filter>Engine\SceneObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\LevelDataLoader\LevelData\LevelDataManager.h">
+      <Filter>Engine\LevelDataLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Utils\Camera\DebugCamera\DebugCamera.h">
+      <Filter>Engine\Utils\Camera</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

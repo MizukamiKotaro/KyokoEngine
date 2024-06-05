@@ -20,7 +20,8 @@ class BaseModel : public IDrawer
 {
 public:
 	virtual ~BaseModel();
-	void Update();
+	virtual void Update(const float& time = 0) = 0;
+	virtual void Draw(const Camera& camera, const BlendMode& blendMode = BlendMode::kBlendModeNormal) const = 0;
 
 public:
 	void SetTexture(const Texture* texture);
@@ -68,6 +69,8 @@ protected:
 	void CreateMaterialResource();
 	void CreateTransformationResource();
 	void InitVariables();
+
+	void TransformUpdate();
 
 public:
 	EulerTransform transform_;
