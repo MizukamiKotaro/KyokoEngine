@@ -106,16 +106,16 @@ void LevelDataLoader::ParseRecursive(nlohmann::json& deserialized, std::vector<L
 			nlohmann::json& transform = object["transform"];
 			// 平行移動
 			objectData.translation.x = (float)transform["translation"][0];
-			objectData.translation.y = (float)transform["translation"][1];
-			objectData.translation.z = (float)transform["translation"][2];
+			objectData.translation.y = (float)transform["translation"][2];
+			objectData.translation.z = (float)transform["translation"][1];
 			// 回転角
 			objectData.rotation.x = -(float)transform["rotation"][0];
-			objectData.rotation.y = -(float)transform["rotation"][1];
-			objectData.rotation.z = -(float)transform["rotation"][2];
+			objectData.rotation.y = -(float)transform["rotation"][2];
+			objectData.rotation.z = -(float)transform["rotation"][1];
 			// スケーリング
 			objectData.scaling.x = (float)transform["scaling"][0];
-			objectData.scaling.y = (float)transform["scaling"][1];
-			objectData.scaling.z = (float)transform["scaling"][2];
+			objectData.scaling.y = (float)transform["scaling"][2];
+			objectData.scaling.z = (float)transform["scaling"][1];
 
 			// TODO: コライダーのパラメータ読み込み
 		}
