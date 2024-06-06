@@ -1,7 +1,6 @@
 #include "TitleScene.h"
 #include "Kyoko.h"
 #include "ImGuiManager/ImGuiManager.h"
-#include "SceneObject/SceneObjectManager.h"
 
 TitleScene::TitleScene()
 {
@@ -45,7 +44,6 @@ TitleScene::TitleScene()
 	bloom_ = std::make_unique<Bloom>();
 
 	se_.Load("SE/select.mp3","決定音");
-	SceneObjectManager::GetInstance()->CreateObjects("scene.json");
 }
 
 void TitleScene::Initialize()
@@ -95,8 +93,6 @@ void TitleScene::Update()
 	spotLightBox2_->Update(-0.01f);
 	noise_->Update(0.001f);
 	bloom_->Update();
-
-	SceneObjectManager::GetInstance()->Update();
 }
 
 void TitleScene::Draw()
@@ -104,8 +100,7 @@ void TitleScene::Draw()
 	WrightPostEffect();
 
 	Kyoko::Engine::PreDraw();
-	//bloom_->Draw();
-	SceneObjectManager::GetInstance()->Draw(*camera_.get());
+	bloom_->Draw();
 	Kyoko::Engine::PostDraw();
 }
 
