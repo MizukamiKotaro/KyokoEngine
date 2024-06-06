@@ -128,10 +128,10 @@ Quaternion Quaternion::DirectionToDirection(const Vector3& from, const Vector3& 
 
 	Quaternion result = { 0.0f,0.0f,0.0f,0.0f };
 
-	float sinfTheta = std::sqrtf((1 - cosfTheta) / 2);
+	float sinfTheta = std::sqrtf((1 - cosfTheta) * 0.5f);
 	n = n.Normalize();
 
-	result.w = std::sqrtf((1 + cosfTheta) / 2);
+	result.w = std::sqrtf((1 + cosfTheta) * 0.5f);
 	result.x = n.x * sinfTheta;
 	result.y = n.y * sinfTheta;
 	result.z = n.z * sinfTheta;
