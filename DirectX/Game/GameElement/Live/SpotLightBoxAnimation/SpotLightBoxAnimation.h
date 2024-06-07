@@ -18,6 +18,8 @@ private:
 
 	void ApplyGlobalVariable();
 
+	void LightUpdate();
+
 public:
 	std::unique_ptr<SpotLight> spotLights_[2];
 	std::unique_ptr<RigidAnimationModel> box_;

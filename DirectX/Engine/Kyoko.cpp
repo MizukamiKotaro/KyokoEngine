@@ -24,6 +24,7 @@
 #include "Drawers/DrawManager/DrawManager.h"
 #include "Drawers/IDrawManager/IDrawManager.h"
 #include "LevelDataLoader/LevelDataLoader.h"
+#include "ComputePipelineSystem/ComputePipelineManager/ComputePipelineManager.h"
 
 static ResourceLeackChecker leakCheck;
 
@@ -52,6 +53,8 @@ void Kyoko::Engine::Initialize(const char* windowName, int width, int height)
 
 	gpoManager = GraphicsPipelineManager::GetInstance();
 	gpoManager->Initialize();
+	
+	ComputePipelineManager::GetInstance()->Initialize();
 
 	globalVariables = GlobalVariables::GetInstance();
 	globalVariables->Initialize();

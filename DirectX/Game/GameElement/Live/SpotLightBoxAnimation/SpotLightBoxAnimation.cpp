@@ -36,6 +36,7 @@ SpotLightBoxAnimation::SpotLightBoxAnimation(const std::string& name)
 	
 	global_ = std::make_unique<GlobalVariableUser>("SpotLight", name);
 	SetGlobalVariable();
+	LightUpdate();
 }
 
 void SpotLightBoxAnimation::Initialize()
@@ -66,16 +67,7 @@ void SpotLightBoxAnimation::Update(const float& time)
 
 	box_->Update(time);
 
-	spotLights_[0]->light_->direction = Vector3{ 1.0f,0.0f,0.0f } *box_->GetRotateMatrix();
-	spotLights_[1]->light_->direction = spotLights_[0]->light_->direction;
-	spotLights_[1]->light_->distance = spotLights_[0]->light_->distance;
-	point_->light_->position = box_->transform_.translate_;
-	point_->Update();
-	for (int i = 0; i < kSpotNum; i++) {
-		spotLights_[i]->light_->position = box_->transform_.translate_;
-		spotLights_[i]->isDraw_ = isDraw_;
-		spotLights_[i]->Update();
-	}
+	LightUpdate();
 }
 
 void SpotLightBoxAnimation::Draw(Camera* camera)
@@ -98,4 +90,18 @@ void SpotLightBoxAnimation::ApplyGlobalVariable()
 	box_->transform_.translate_ = global_->GetVector3Value("位置");
 	box_->transform_.rotate_ = global_->GetVector3Value("角度");
 	box_->Update(0.0f);
+}
+
+void SpotLightBoxAnimation::LightUpdate()
+{
+	spotLights_[0]->light_->direction = Vector3{ 1.0f,0.0f,0.0f } *box_->GetRotateMatrix();
+	spotLights_[1]->light_->direction = spotLights_[0]->light_->direction;
+	spotLights_[1]->light_->distance = spotLights_[0]->light_->distance;
+	point_->light_->position = box_->transform_.translate_;
+	point_->Update();
+	for (int i = 0; i < kSpotNum; i++) {
+		spotLights_[i]->light_->position = box_->transform_.translate_;
+		spotLights_[i]->isDraw_ = isDraw_;
+		spotLights_[i]->Update();
+	}
 }

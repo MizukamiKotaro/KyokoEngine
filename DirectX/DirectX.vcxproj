@@ -126,6 +126,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\CollisionSystem\Collider\Collider.cpp" />
     <ClCompile Include="Engine\CollisionSystem\CollisionManager\CollisionManager.cpp" />
     <ClCompile Include="Engine\CollisionSystem\CollisionProcesses\CollisionCircleCircle\CollisionCircleCircle.cpp" />
+    <ClCompile Include="Engine\ComputePipelineSystem\ComputePipelineFactory\ComputePipelineFactory.cpp" />
+    <ClCompile Include="Engine\ComputePipelineSystem\ComputePipelineManager\ComputePipelineManager.cpp" />
+    <ClCompile Include="Engine\ComputePipelineSystem\ComputePipelines\SkinningComputePipeline\SkinningComputePipeline.cpp" />
+    <ClCompile Include="Engine\ComputePipelineSystem\ComputePipeline\ComputePipeline.cpp" />
     <ClCompile Include="Engine\Drawers\DrawManager\DrawManager.cpp" />
     <ClCompile Include="Engine\Drawers\IDrawer\IDrawer.cpp" />
     <ClCompile Include="Engine\Drawers\IDrawManager\IDrawManager.cpp" />
@@ -272,6 +276,12 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\CollisionSystem\CollisionConfig.h" />
     <ClInclude Include="Engine\CollisionSystem\CollisionManager\CollisionManager.h" />
     <ClInclude Include="Engine\CollisionSystem\CollisionProcesses\CollisionCircleCircle\CollisionCircleCircle.h" />
+    <ClInclude Include="Engine\ComputePipelineSystem\ComputePipelineFactory\ComputePipelineFactory.h" />
+    <ClInclude Include="Engine\ComputePipelineSystem\ComputePipelineManager\ComputePipelineManager.h" />
+    <ClInclude Include="Engine\ComputePipelineSystem\ComputePipelines\SkinningComputePipeline\SkinningComputePipeline.h" />
+    <ClInclude Include="Engine\ComputePipelineSystem\ComputePipelineTypeConfig.h" />
+    <ClInclude Include="Engine\ComputePipelineSystem\ComputePipeline\ComputePipeline.h" />
+    <ClInclude Include="Engine\ComputePipelineSystem\IComputePipelineFactory\IComputePipelineFactory.h" />
     <ClInclude Include="Engine\Drawers\DrawManager\DrawManager.h" />
     <ClInclude Include="Engine\Drawers\IDrawer\IDrawer.h" />
     <ClInclude Include="Engine\Drawers\IDrawManager\IDrawManager.h" />
