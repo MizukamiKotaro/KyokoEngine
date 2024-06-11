@@ -3,7 +3,7 @@
 #include <list>
 #include <memory>
 #include "Drawers/IDrawer/IDrawer.h"
-#include "StageEditor/StageEditor.h"
+#include "Editor/StageEditor.h"
 #include <vector>
 
 class Camera;

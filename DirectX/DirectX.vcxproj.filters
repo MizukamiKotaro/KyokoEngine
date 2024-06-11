@@ -178,9 +178,6 @@
     <Filter Include="Engine\CollisionSystem">
       <UniqueIdentifier>{6de3343b-1909-4957-8526-18606937db2d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\StageEditor">
-      <UniqueIdentifier>{2962aacc-cd8d-4966-a399-b751598a6664}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\GameElement\Live\DancingIdol">
       <UniqueIdentifier>{9ea3ad42-012d-4474-98a5-21b3755a566b}</UniqueIdentifier>
     </Filter>
@@ -414,6 +411,9 @@
     </Filter>
     <Filter Include="Engine\PipelineSystems\ComputePipelineSystem\ComputePipelineManager">
       <UniqueIdentifier>{dd0da1a5-ec3b-4d1d-a4cf-58c6c7d4cc11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Editor">
+      <UniqueIdentifier>{2962aacc-cd8d-4966-a399-b751598a6664}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -723,9 +723,6 @@
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\NoiseGraphicsPipeline\NoiseGraphicsPipeline.cpp">
       <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\NoiseGraphicsPipeline</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\StageEditor\StageEditor.cpp">
-      <Filter>Engine\StageEditor</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Utils\Transform\QuaternionTransform.cpp">
       <Filter>Engine\Utils\Transform</Filter>
     </ClCompile>
@@ -842,6 +839,15 @@
     </ClCompile>
     <ClCompile Include="Engine\ComputePipelineSystem\ComputePipelineManager\ComputePipelineManager.cpp">
       <Filter>Engine\PipelineSystems\ComputePipelineSystem\ComputePipelineManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\StageEditor.cpp">
+      <Filter>Engine\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\TimerStageEditor.cpp">
+      <Filter>Engine\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\IEditor.cpp">
+      <Filter>Engine\Editor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1202,9 +1208,6 @@
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\NoiseGraphicsPipeline\NoiseGraphicsPipeline.h">
       <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\NoiseGraphicsPipeline</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\StageEditor\StageEditor.h">
-      <Filter>Engine\StageEditor</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Utils\Transform\QuaternionTransform.h">
       <Filter>Engine\Utils\Transform</Filter>
     </ClInclude>
@@ -1339,6 +1342,15 @@
     </ClInclude>
     <ClInclude Include="Engine\ComputePipelineSystem\ComputePipelineManager\ComputePipelineManager.h">
       <Filter>Engine\PipelineSystems\ComputePipelineSystem\ComputePipelineManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\StageEditor.h">
+      <Filter>Engine\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\TimerStageEditor.h">
+      <Filter>Engine\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\IEditor.h">
+      <Filter>Engine\Editor</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
