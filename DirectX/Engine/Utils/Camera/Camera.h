@@ -21,9 +21,11 @@ public:
 
 	void Update();
 
-	const Matrix4x4 GetViewProjection() const { return viewProjectionMatrix_; }
+	const Matrix4x4& GetViewProjection() const { return viewProjectionMatrix_; }
 
-	static const Matrix4x4 GetOrthographicMat() { return orthographicMat_; }
+	const Matrix4x4& GetInverseProjection() const { return inverseProjectionMatrix_; }
+
+	static const Matrix4x4& GetOrthographicMat() { return orthographicMat_; }
 
 	const D3D12_GPU_VIRTUAL_ADDRESS GetGPUVirtualAddress() const { return cameraForGPUResource_->GetGPUVirtualAddress(); }
 
@@ -44,6 +46,7 @@ public:
 private:
 
 	Matrix4x4 projectionMatrix_;
+	Matrix4x4 inverseProjectionMatrix_;
 	Matrix4x4 viewProjectionMatrix_;
 
 	static Matrix4x4 orthographicMat_;

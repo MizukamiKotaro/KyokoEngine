@@ -22,4 +22,5 @@ enum class PipelineType {
 	VIGNETTE,
 	SMOOTHING,
 	SKYBOX,
+	OUTLINE,
 };

@@ -17,6 +17,7 @@ Camera::Camera()
 
 	Vector2 windowSize = WindowsInfo::GetInstance()->GetWindowSize();
 	projectionMatrix_ = Matrix4x4::MakePerspectiveFovMatrix(0.45f, windowSize.x / windowSize.y, 0.1f, 1050.0f);
+	inverseProjectionMatrix_ = Matrix4x4::Inverse(projectionMatrix_);
 	viewProjectionMatrix_ = viewMatrix * projectionMatrix_;
 
 	orthographicMat_ = Matrix4x4::MakeOrthographicMatrix(0.0f, 0.0f, windowSize.x, windowSize.y, 0.0f, 1.0f);
@@ -39,6 +40,7 @@ void Camera::Initialize()
 	Matrix4x4 viewMatrix = Matrix4x4::Inverse(transform_.worldMat_);
 	Vector2 windowSize = WindowsInfo::GetInstance()->GetWindowSize();
 	projectionMatrix_ = Matrix4x4::MakePerspectiveFovMatrix(0.45f, windowSize.x / windowSize.y, 0.1f, 1050.0f);
+	inverseProjectionMatrix_ = Matrix4x4::Inverse(projectionMatrix_);
 	viewProjectionMatrix_ = viewMatrix * projectionMatrix_;
 }
 

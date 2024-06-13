@@ -415,6 +415,12 @@
     <Filter Include="Engine\Editor">
       <UniqueIdentifier>{2962aacc-cd8d-4966-a399-b751598a6664}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Drawers\PostEffect\Outline">
+      <UniqueIdentifier>{9d17527e-c7cc-4ce8-8c03-0f962b20a602}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\OutlineGraphicsPipeline">
+      <UniqueIdentifier>{e5b244f1-ae88-4639-a5ba-83dcdb5c67c2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -848,6 +854,12 @@
     </ClCompile>
     <ClCompile Include="Engine\Editor\IEditor.cpp">
       <Filter>Engine\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Drawers\PostEffect\Outline\Outline.cpp">
+      <Filter>Engine\Drawers\PostEffect\Outline</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\OutlineGraphicsPipeline\OutlineGraphicsPipeline.cpp">
+      <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\OutlineGraphicsPipeline</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1351,6 +1363,12 @@
     </ClInclude>
     <ClInclude Include="Engine\Editor\IEditor.h">
       <Filter>Engine\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drawers\PostEffect\Outline\Outline.h">
+      <Filter>Engine\Drawers\PostEffect\Outline</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\OutlineGraphicsPipeline\OutlineGraphicsPipeline.h">
+      <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\OutlineGraphicsPipeline</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

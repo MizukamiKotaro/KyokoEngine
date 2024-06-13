@@ -21,6 +21,7 @@
 #include "GraphicsPipelineSystem/GraphicsPipelines/VignetteGraphicsPipeline/VignetteGraphicsPipeline.h"
 #include "GraphicsPipelineSystem/GraphicsPipelines/SmoothingGraphicsPipeline/SmoothingGraphicsPipeline.h"
 #include "GraphicsPipelineSystem/GraphicsPipelines/SkyboxGraphicsPipeline/SkyboxGraphicsPipeline.h"
+#include "GraphicsPipelineSystem/GraphicsPipelines/OutlineGraphicsPipeline/OutlineGraphicsPipeline.h"
 #include "GraphicsPipelineSystem/PipelineTypeConfig.h"
 
 GraphicsPipeline* GraphicsPipelineFactory::CreateGraphicsPipeline(PipelineType pipelineType)
@@ -94,6 +95,9 @@ GraphicsPipeline* GraphicsPipelineFactory::CreateGraphicsPipeline(PipelineType p
 		break;
 	case PipelineType::SKYBOX:
 		graphicsPipeline = new SkyboxGraphicsPipeline();
+		break;
+	case PipelineType::OUTLINE:
+		graphicsPipeline = new OutlineGraphicsPipeline();
 		break;
 	default:
 		break;

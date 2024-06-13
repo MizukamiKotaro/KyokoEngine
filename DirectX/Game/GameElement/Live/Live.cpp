@@ -13,6 +13,8 @@ Live::Live(Camera* camera)
 	multipleScreen_ = std::make_unique<MultipleScreen>("Screen");
 	idol_ = std::make_unique<DancingIdol>();
 	screenCamera_ = std::make_unique<Camera>();
+	outline_ = std::make_unique<Outline>();
+	outline2_ = std::make_unique<Outline>();
 
 	screen_->SetGPUHandle(multipleScreen_->GetSRVGPUDescriptorHandle());
 }
@@ -36,6 +38,7 @@ void Live::Initialize()
 
 	WriteScreen();
 	WriteScreen();
+	WriteOutline();
 }
 
 void Live::Update(float time)
@@ -56,27 +59,36 @@ void Live::Update(float time)
 	idol_->Update(FrameInfo::GetInstance()->GetDeltaTime());
 
 	WriteScreen();
+	WriteOutline();
 }
 
 void Live::Draw()
 {
 	dome_->Draw(camera_);
 	stage_->Draw(camera_);
-	screen_->Draw(camera_);
-	multipleScreen_->Draw(camera_);
-	idol_->Draw(camera_);
-
+	outline_->Draw(*camera_);
 	stageLights_->Draw(camera_);
 }
 
 void Live::WriteScreen()
 {
-	multipleScreen_->PreDrawScene();
+	outline2_->PreDrawScene();
+	idol_->Draw(screenCamera_.get());
+	outline2_->PostDrawScene();
 
+	multipleScreen_->PreDrawScene();
 	dome_->Draw(screenCamera_.get());
 	stage_->Draw(screenCamera_.get());
-	idol_->Draw(screenCamera_.get());
+	outline2_->Draw(*screenCamera_.get());
 	stageLights_->Draw(screenCamera_.get());
-
 	multipleScreen_->PostDrawScene();
+}
+
+void Live::WriteOutline()
+{
+	outline_->PreDrawScene();
+	screen_->Draw(camera_);
+	multipleScreen_->Draw(camera_);
+	idol_->Draw(camera_);
+	outline_->PostDrawScene();
 }

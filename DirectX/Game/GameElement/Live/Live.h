@@ -6,6 +6,7 @@
 #include "GameElement/Live/StageLights/StageLights.h"
 #include "GameElement/Live/MultipleScreen/MultipleScreen.h"
 #include "DancingIdol/DancingIdol.h"
+#include "Outline/Outline.h"
 #include "Camera.h"
 
 class Live {
@@ -25,6 +26,8 @@ public:
 private:
 	Live() = default;
 
+	void WriteOutline();
+
 private:
 	
 	std::unique_ptr<Dome> dome_;
@@ -33,7 +36,8 @@ private:
 	std::unique_ptr<Stage> stage_;
 	std::unique_ptr<StageLights> stageLights_;
 	std::unique_ptr<DancingIdol> idol_;
-
+	std::unique_ptr<Outline> outline_;
+	std::unique_ptr<Outline> outline2_;
 	Camera* camera_ = nullptr;
 	std::unique_ptr<Camera> screenCamera_;
 };
