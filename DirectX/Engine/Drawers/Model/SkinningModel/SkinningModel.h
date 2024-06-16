@@ -28,7 +28,7 @@ public:
 
 	const Matrix4x4 GetRotateMatrix() override;
 
-	const SkinCluter& GetSkinCluter() const { return *skinCluter_.get(); }
+	const SkinCluster& GetSkinCluter() const { return *skinCluter_.get(); }
 
 private:
 	void AnimationUpdate(float time);
@@ -50,9 +50,11 @@ private:
 
 	void UpdateSkinAnimation();
 
+	void UpdateCompute();
+
 private:
 	std::unique_ptr<Animation> animation_;
 	std::unique_ptr<Skeleton> skeleton_;
-	std::unique_ptr<SkinCluter> skinCluter_;
+	std::unique_ptr<SkinCluster> skinCluter_;
 	float animationTime_;
 };

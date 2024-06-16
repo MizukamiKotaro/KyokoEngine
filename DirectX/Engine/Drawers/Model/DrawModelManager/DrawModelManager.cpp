@@ -101,23 +101,19 @@ void DrawModelManager::Draw(const SkinningModel& model, const Camera& camera, co
 	if (transformation_.size() == drawNum_) {
 		transformation_.push_back(std::make_unique<Transformation>());
 	}
+
 	transformation_[drawNum_]->transformationData->World = model.transform_.worldMat_;
 	transformation_[drawNum_]->transformationData->WVP = model.transform_.worldMat_ * camera.GetViewProjection();
 	transformation_[drawNum_]->transformationData->WorldInverse = Matrix4x4::Inverse(Matrix4x4::MakeScaleMatrix(model.transform_.scale_)) *
 		Matrix4x4::MakeRotateXYZMatrix(model.transform_.rotate_) * Matrix4x4::MakeTranslateMatrix(model.transform_.translate_);
 
-	psoManager_->PreDraw(PipelineType::SKINNING_MODEL);
-	psoManager_->SetBlendMode(PipelineType::SKINNING_MODEL, blendMode);
+	psoManager_->PreDraw(PipelineType::MODEL);
+	psoManager_->SetBlendMode(PipelineType::MODEL, blendMode);
 
 	const ModelData& modelData = model.GetModelData();
 	const Light& light = model.GetLight();
-	const SkinCluter& skinCluter = model.GetSkinCluter();
 
-	D3D12_VERTEX_BUFFER_VIEW vbvs[2] = {
-		modelData.mesh.vertexBufferView_,
-		skinCluter.influenceBufferView
-	};
-	commandList_->IASetVertexBuffers(0, 2, vbvs);
+	commandList_->IASetVertexBuffers(0, 1, &model.GetSkinCluter().vertexBufferView);
 	commandList_->IASetIndexBuffer(&modelData.mesh.indexBufferView_);
 	commandList_->SetGraphicsRootConstantBufferView(0, model.GetMaterialData().GetGPUVirtualAddress());
 	commandList_->SetGraphicsRootConstantBufferView(1, transformation_[drawNum_]->transformationResource->GetGPUVirtualAddress());
@@ -126,7 +122,6 @@ void DrawModelManager::Draw(const SkinningModel& model, const Camera& camera, co
 	commandList_->SetGraphicsRootConstantBufferView(4, camera.GetGPUVirtualAddress());
 	commandList_->SetGraphicsRootConstantBufferView(5, light.GetPointLightGPUVirtualAddress());
 	commandList_->SetGraphicsRootConstantBufferView(6, light.GetSpotLightGPUVirtualAddress());
-	commandList_->SetGraphicsRootDescriptorTable(7, skinCluter.paletteSrvHandle->gpuHandle);
 	commandList_->DrawIndexedInstanced(UINT(modelData.mesh.indices.size()), 1, 0, 0, 0);
 	drawNum_++;
 }

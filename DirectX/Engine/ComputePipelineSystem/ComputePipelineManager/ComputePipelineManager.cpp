@@ -26,6 +26,6 @@ void ComputePipelineManager::PreCompute(ComputePipelineType type)
 		if (pipelineMap_.find(type) == pipelineMap_.end()) {
 			pipelineMap_[currentPiplineType_].reset(pipelineFactory_->CreateComputePipeline(currentPiplineType_));
 		}
-		pipelineMap_[type]->PreCompute();
 	}
+	pipelineMap_[type]->PreCompute();
 }

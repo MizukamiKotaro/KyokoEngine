@@ -5,6 +5,7 @@
 #include <wrl.h>
 #include <d3d12.h>
 #include "Matrix4x4.h"
+#include "ModelData/VertexData3D.h"
 #include "Base/DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
 
 const uint32_t kNumMaxInfluence = 4;
@@ -18,7 +19,7 @@ struct WellForGPU
 	Matrix4x4 skeletonSpaceMatrix; // 位置用
 	Matrix4x4 skeletonSpaceInverseTransposeMatrix; // 法線用
 };
-struct SkinCluter
+struct SkinCluster
 {
 	std::vector<Matrix4x4> inverseBindPoseMatrices;
 	Microsoft::WRL::ComPtr<ID3D12Resource> influenceResouce;
@@ -27,4 +28,13 @@ struct SkinCluter
 	Microsoft::WRL::ComPtr<ID3D12Resource> paletteResouce;
 	std::span<WellForGPU> mappedPalette;
 	const DescriptorHandles* paletteSrvHandle;
+
+	const DescriptorHandles* inputVertexSrvHandle;
+	Microsoft::WRL::ComPtr<ID3D12Resource> outputVertexResouce;
+	const DescriptorHandles* outputVertexSrvHandle;
+	const DescriptorHandles* influenceSrvHandle;
+	Microsoft::WRL::ComPtr<ID3D12Resource> informationResouce;
+	uint32_t* information;
+	VertexData* outputData_;
+	D3D12_VERTEX_BUFFER_VIEW vertexBufferView{};
 };

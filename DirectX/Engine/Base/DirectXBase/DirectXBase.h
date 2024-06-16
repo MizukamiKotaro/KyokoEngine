@@ -49,7 +49,7 @@ public: // メンバ関数
 
 public:
 
-	static ID3D12Resource* CreateBufferResource(size_t sizeInBytes);
+	static ID3D12Resource* CreateBufferResource(size_t sizeInBytes, D3D12_RESOURCE_FLAGS resourceFlags = D3D12_RESOURCE_FLAG_NONE);
 
 private:
 
