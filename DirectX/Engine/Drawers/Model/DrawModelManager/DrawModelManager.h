@@ -11,6 +11,7 @@ enum class BlendMode;
 class Model;
 class RigidAnimationModel;
 class SkinningModel;
+class BaseModel;
 
 class DrawModelManager : public IDrawManager
 {
@@ -21,6 +22,7 @@ public:
 	void Draw(const SkinningModel& model, const Camera& camera, const BlendMode& blendMode);
 
 private:
+	void Draw(const BaseModel& model, const Camera& camera, const BlendMode& blendMode, const D3D12_VERTEX_BUFFER_VIEW& vertexBufferView);
 	class Transformation
 	{
 	public:

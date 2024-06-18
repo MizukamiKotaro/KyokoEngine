@@ -16,6 +16,7 @@ RigidAnimationModel::RigidAnimationModel(const std::string& fileName)
 	LoadGLTF(fileName);
 	CreateResources();
 	InitVariables();
+	AnimationUpdate(0.0f);
 }
 
 RigidAnimationModel::RigidAnimationModel(const ModelData* modelData, const std::string& fileName)
@@ -26,6 +27,7 @@ RigidAnimationModel::RigidAnimationModel(const ModelData* modelData, const std::
 	LoadAnimation(fileName);
 	CreateResources();
 	InitVariables();
+	AnimationUpdate(0.0f);
 }
 
 void RigidAnimationModel::Update(const float& time)
@@ -52,6 +54,12 @@ void RigidAnimationModel::AnimationUpdate(const float& time)
 			animationTime_ += time;
 			animationTime_ = std::fmod(animationTime_, animation_->duration);
 		}
+
+		NodeAnimation& rootNodeAnimation = animation_->nodeAnimations[modelData_->rootNode.name];
+		animTransform_.translate_ = CalculateValue(rootNodeAnimation.translate, animationTime_);
+		animTransform_.rotate_ = CalculateValue(rootNodeAnimation.rotate, animationTime_);
+		animTransform_.scale_ = CalculateValue(rootNodeAnimation.scale, animationTime_);
+		animTransform_.Update();
 	}
 }
 

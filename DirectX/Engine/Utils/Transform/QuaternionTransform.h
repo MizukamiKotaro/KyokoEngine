@@ -7,8 +7,11 @@ class QuaternionTransform {
 public:
 	QuaternionTransform();
 
+	void Update();
+
 public:
 	Vector3 scale_;
 	Quaternion rotate_;
 	Vector3 translate_;
+	Matrix4x4 matrix_;
 };

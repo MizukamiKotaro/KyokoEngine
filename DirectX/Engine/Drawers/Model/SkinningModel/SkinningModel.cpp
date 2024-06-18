@@ -161,11 +161,6 @@ void SkinningModel::CreateSkinCluster()
 	skinCluster.mappedInfluence = { mappedInfluence,modelData_->mesh.verteces.size() };
 	skinCluster.influenceSrvHandle = DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->GetNewDescriptorHandles();
 
-	// influence用のVBVを作成
-	skinCluster.influenceBufferView.BufferLocation = skinCluster.influenceResouce->GetGPUVirtualAddress();
-	skinCluster.influenceBufferView.SizeInBytes = UINT(sizeof(VertexInfluence) * modelData_->mesh.verteces.size());
-	skinCluster.influenceBufferView.StrideInBytes = sizeof(VertexInfluence);
-
 	// influence用のsrvの作成。StructuredBufferでアクセスできるようにする
 	D3D12_SHADER_RESOURCE_VIEW_DESC influenceSRVDesc{};
 	influenceSRVDesc.Format = DXGI_FORMAT_UNKNOWN;
@@ -215,19 +210,7 @@ void SkinningModel::CreateSkinCluster()
 
 	// outputVertex用のuavの作成
 	skinCluster.outputVertexResouce = DirectXBase::CreateBufferResource(sizeof(VertexData) * modelData_->mesh.verteces.size(), D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
-	/*D3D12_RESOURCE_BARRIER barrierDesc{};
-	barrierDesc.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-	barrierDesc.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-	barrierDesc.Transition.pResource = skinCluster.outputVertexResouce.Get();
-	barrierDesc.Transition.StateBefore = D3D12_RESOURCE_STATE_COMMON;
-	barrierDesc.Transition.StateAfter = D3D12_RESOURCE_STATE_UNORDERED_ACCESS;
-	barrierDesc.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
-
-	commandList_->ResourceBarrier(1, &barrierDesc);*/
-
-	/*skinCluster.outputData_ = nullptr;
-	skinCluster.outputVertexResouce->Map(0, nullptr, reinterpret_cast<void**>(&skinCluster.outputData_));
-	std::memcpy(skinCluster.outputData_, modelData_->mesh.verteces.data(), sizeof(VertexData)* modelData_->mesh.verteces.size());*/
+	
 	skinCluster.outputVertexSrvHandle = DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->GetNewDescriptorHandles();
 	D3D12_UNORDERED_ACCESS_VIEW_DESC outputVertexUAVDesc{};
 	outputVertexUAVDesc.Format = DXGI_FORMAT_UNKNOWN;
