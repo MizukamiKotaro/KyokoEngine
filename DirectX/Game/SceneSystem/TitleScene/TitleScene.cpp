@@ -83,7 +83,7 @@ void TitleScene::Update()
 	ImGui::End();
 
 	ImGui::Begin("RadialBlur");
-	ImGui::SliderFloat("width", &radial_->radialBlurData_->width, 0.0f, 1.0f);
+	ImGui::SliderFloat("width", &radial_->radialBlurData_->width, -1.0f, 1.0f);
 	ImGui::SliderInt("numSamples", &radial_->radialBlurData_->numSamples, 0, 30);
 	ImGui::End();
 

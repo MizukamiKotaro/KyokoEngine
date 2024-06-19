@@ -30,6 +30,7 @@ PixelShaderOutput main(VertexShaderOutput input) {
 	float32_t ndcDepth = gDepthTexture.Sample(gSamplerPoint, input.texcoord);
 	float32_t4 viewSpace = mul(float32_t4(0.0f,0.0f,ndcDepth,1.0f),gOutline.projectionInverse);
 	float32_t viewZ = viewSpace.z * rcp(viewSpace.w);
+	float32_t baseZ = viewZ;
 
 	uint32_t width, height;
 	gTexture.GetDimensions(width,height);
@@ -70,7 +71,7 @@ PixelShaderOutput main(VertexShaderOutput input) {
 				ndcDepth = gDepthTexture.Sample(gSamplerPoint, texcoord);
 				viewSpace = mul(float32_t4(0.0f,0.0f,ndcDepth,1.0f),gOutline.projectionInverse);
 				viewZ = viewSpace.z * rcp(viewSpace.w);
-				if(viewZ <= gOutline.lengthChange){
+				if(viewZ <= gOutline.lengthChange && abs(viewZ - baseZ) >= 5){
 					continue;
 				}
 				difference.x += viewZ * x * k;
