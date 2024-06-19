@@ -47,7 +47,7 @@ void RadialBlur::CreateRadialBlurRes()
 	radialBlurResource_ = DirectXBase::CreateBufferResource(sizeof(RadialBlurData));
 	radialBlurResource_->Map(0, nullptr, reinterpret_cast<void**>(&radialBlurData_));
 	radialBlurData_->center = { 0.5f,0.5f };
-	radialBlurData_->width = 0.01f;
+	radialBlurData_->width = -0.05f;
 	radialBlurData_->numSamples = 10;
 }
 
