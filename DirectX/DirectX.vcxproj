@@ -165,6 +165,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Drawers\PostEffect\Noise\Noise.cpp" />
     <ClCompile Include="Engine\Drawers\PostEffect\Outline\Outline.cpp" />
     <ClCompile Include="Engine\Drawers\PostEffect\PostEffect\PostEffect.cpp" />
+    <ClCompile Include="Engine\Drawers\PostEffect\RadialBlur\RadialBlur.cpp" />
     <ClCompile Include="Engine\Drawers\PostEffect\RGBShift\RGBShift.cpp" />
     <ClCompile Include="Engine\Drawers\PostEffect\ScanNoise\ScanNoise.cpp" />
     <ClCompile Include="Engine\Drawers\PostEffect\Smoothing\Smoothing.cpp" />
@@ -187,6 +188,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\InstancingModelGraphicsPipline\InstancingModelGraphicsPipline.cpp" />
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\NoiseGraphicsPipeline\NoiseGraphicsPipeline.cpp" />
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\OutlineGraphicsPipeline\OutlineGraphicsPipeline.cpp" />
+    <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\RadialBlurGraphicsPipeline\RadialBlurGraphicsPipeline.cpp" />
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SkinningModelGraphicsPipline\SkinningModelGraphicsPipline.cpp" />
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SkyboxGraphicsPipeline\SkyboxGraphicsPipeline.cpp" />
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SmoothingGraphicsPipeline\SmoothingGraphicsPipeline.cpp" />
@@ -331,6 +333,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Drawers\PostEffect\Noise\Noise.h" />
     <ClInclude Include="Engine\Drawers\PostEffect\Outline\Outline.h" />
     <ClInclude Include="Engine\Drawers\PostEffect\PostEffect\PostEffect.h" />
+    <ClInclude Include="Engine\Drawers\PostEffect\RadialBlur\RadialBlur.h" />
     <ClInclude Include="Engine\Drawers\PostEffect\RGBShift\RGBShift.h" />
     <ClInclude Include="Engine\Drawers\PostEffect\ScanNoise\ScanNoise.h" />
     <ClInclude Include="Engine\Drawers\PostEffect\Smoothing\Smoothing.h" />
@@ -354,6 +357,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\InstancingModelGraphicsPipline\InstancingModelGraphicsPipline.h" />
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\NoiseGraphicsPipeline\NoiseGraphicsPipeline.h" />
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\OutlineGraphicsPipeline\OutlineGraphicsPipeline.h" />
+    <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\RadialBlurGraphicsPipeline\RadialBlurGraphicsPipeline.h" />
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SkinningModelGraphicsPipline\SkinningModelGraphicsPipline.h" />
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SkyboxGraphicsPipeline\SkyboxGraphicsPipeline.h" />
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SmoothingGraphicsPipeline\SmoothingGraphicsPipeline.h" />

@@ -75,6 +75,6 @@ void SkinningComputePipeline::InitializePSO()
 	assert(SUCCEEDED(hr));
 
 	//Shaderをコンパイルする
-	computeShaderBlob_ = CompileShader(L"Resources/Shaders/ComputeShader/Skinning.CS.hlsl", L"cs_6_0", dxcUtils_.Get(), dxcCompiler_.Get(), includeHandler_.Get());
+	computeShaderBlob_ = CompileShader(L"Resources/Shaders/ComputeShaders/SkinningShader/Skinning.CS.hlsl", L"cs_6_0", dxcUtils_.Get(), dxcCompiler_.Get(), includeHandler_.Get());
 	assert(computeShaderBlob_ != nullptr);
 }

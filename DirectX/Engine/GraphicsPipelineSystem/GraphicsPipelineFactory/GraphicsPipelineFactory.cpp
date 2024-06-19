@@ -22,6 +22,7 @@
 #include "GraphicsPipelineSystem/GraphicsPipelines/SmoothingGraphicsPipeline/SmoothingGraphicsPipeline.h"
 #include "GraphicsPipelineSystem/GraphicsPipelines/SkyboxGraphicsPipeline/SkyboxGraphicsPipeline.h"
 #include "GraphicsPipelineSystem/GraphicsPipelines/OutlineGraphicsPipeline/OutlineGraphicsPipeline.h"
+#include "GraphicsPipelineSystem/GraphicsPipelines/RadialBlurGraphicsPipeline/RadialBlurGraphicsPipeline.h"
 #include "GraphicsPipelineSystem/PipelineTypeConfig.h"
 
 GraphicsPipeline* GraphicsPipelineFactory::CreateGraphicsPipeline(PipelineType pipelineType)
@@ -98,6 +99,9 @@ GraphicsPipeline* GraphicsPipelineFactory::CreateGraphicsPipeline(PipelineType p
 		break;
 	case PipelineType::OUTLINE:
 		graphicsPipeline = new OutlineGraphicsPipeline();
+		break;
+	case PipelineType::RADIAL_BLUR:
+		graphicsPipeline = new RadialBlurGraphicsPipeline();
 		break;
 	default:
 		break;

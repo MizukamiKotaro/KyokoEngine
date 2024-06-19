@@ -18,6 +18,7 @@
 #include "Vignette/Vignette.h"
 #include "Noise/Noise.h"
 #include "Bloom/Bloom.h"
+#include "RadialBlur/RadialBlur.h"
 
 class TitleScene : public IScene
 {
@@ -58,6 +59,7 @@ private:
 	std::unique_ptr<Noise> noise_;
 	
 	std::unique_ptr<Bloom> bloom_;
+	std::unique_ptr<RadialBlur> radial_;
 
 	Audio se_;
 };

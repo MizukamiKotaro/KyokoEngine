@@ -1,14 +1,14 @@
-#include "BlurGraphicsPipeline.h"
+#include "RadialBlurGraphicsPipeline.h"
 #include "Engine/Base/DebugLog/DebugLog.h"
 #include "GraphicsPipelineSystem/BlendModeConfig.h"
 #include <cassert>
 
-BlurGraphicsPipeline::BlurGraphicsPipeline()
+RadialBlurGraphicsPipeline::RadialBlurGraphicsPipeline()
 {
 	Initialize();
 }
 
-void BlurGraphicsPipeline::InitializePSO()
+void RadialBlurGraphicsPipeline::InitializePSO()
 {
 	//DescriptorRange
 	D3D12_DESCRIPTOR_RANGE descriptorRange[1] = {};
@@ -73,7 +73,7 @@ void BlurGraphicsPipeline::InitializePSO()
 	vertexShaderBlob_ = CompileShader(L"Resources/Shaders/GraphicsShaders/BasePostEffectShader/BasePostEffect.VS.hlsl", L"vs_6_0", dxcUtils_.Get(), dxcCompiler_.Get(), includeHandler_.Get());
 	assert(vertexShaderBlob_ != nullptr);
 
-	pixelShaderBlob_ = CompileShader(L"Resources/Shaders/GraphicsShaders/BlurShader/Blur.PS.hlsl", L"ps_6_0", dxcUtils_.Get(), dxcCompiler_.Get(), includeHandler_.Get());
+	pixelShaderBlob_ = CompileShader(L"Resources/Shaders/GraphicsShaders/RadialBlurShader/RadialBlur.PS.hlsl", L"ps_6_0", dxcUtils_.Get(), dxcCompiler_.Get(), includeHandler_.Get());
 	assert(pixelShaderBlob_ != nullptr);
 
 	// DepthStencilStateの設定

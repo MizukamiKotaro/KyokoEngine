@@ -421,6 +421,12 @@
     <Filter Include="Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\OutlineGraphicsPipeline">
       <UniqueIdentifier>{e5b244f1-ae88-4639-a5ba-83dcdb5c67c2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\RadialBlurGraphicsPipeline">
+      <UniqueIdentifier>{b15e4e22-cfe8-477d-8f4c-010266691cda}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Drawers\PostEffect\RadialBlur">
+      <UniqueIdentifier>{07b36b12-f5b7-4896-a0e7-c0caa70eb453}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -860,6 +866,12 @@
     </ClCompile>
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\OutlineGraphicsPipeline\OutlineGraphicsPipeline.cpp">
       <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\OutlineGraphicsPipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\RadialBlurGraphicsPipeline\RadialBlurGraphicsPipeline.cpp">
+      <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\RadialBlurGraphicsPipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Drawers\PostEffect\RadialBlur\RadialBlur.cpp">
+      <Filter>Engine\Drawers\PostEffect\RadialBlur</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1369,6 +1381,12 @@
     </ClInclude>
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\OutlineGraphicsPipeline\OutlineGraphicsPipeline.h">
       <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\OutlineGraphicsPipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\RadialBlurGraphicsPipeline\RadialBlurGraphicsPipeline.h">
+      <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\RadialBlurGraphicsPipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drawers\PostEffect\RadialBlur\RadialBlur.h">
+      <Filter>Engine\Drawers\PostEffect\RadialBlur</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

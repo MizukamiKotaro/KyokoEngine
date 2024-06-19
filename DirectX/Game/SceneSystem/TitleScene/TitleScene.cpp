@@ -42,6 +42,7 @@ TitleScene::TitleScene()
 	vignette_->color_ = { 0.0f,1.0f,0.2f,1.0f };
 	noise_ = std::make_unique<Noise>();
 	bloom_ = std::make_unique<Bloom>();
+	radial_ = std::make_unique<RadialBlur>();
 
 	se_.Load("SE/select.mp3","決定音");
 }
@@ -81,6 +82,11 @@ void TitleScene::Update()
 	ImGui::SliderFloat("シフトする大きさ", &rgbShift_->rgbShiftData_->shift, -1.0f, 1.0f);
 	ImGui::End();
 
+	ImGui::Begin("RadialBlur");
+	ImGui::SliderFloat("width", &radial_->radialBlurData_->width, 0.0f, 1.0f);
+	ImGui::SliderInt("numSamples", &radial_->radialBlurData_->numSamples, 0, 30);
+	ImGui::End();
+
 	ImGui::Begin("カメラ");
 	ImGui::DragFloat3("位置", &camera_->transform_.translate_.x, 0.01f);
 	ImGui::DragFloat3("角度", &camera_->transform_.rotate_.x, 0.01f);
@@ -99,8 +105,12 @@ void TitleScene::Draw()
 {
 	WrightPostEffect();
 
-	Kyoko::Engine::PreDraw();
+	radial_->PreDrawScene();
 	bloom_->Draw();
+	radial_->PostDrawScene();
+
+	Kyoko::Engine::PreDraw();
+	radial_->Draw();
 	Kyoko::Engine::PostDraw();
 }
 

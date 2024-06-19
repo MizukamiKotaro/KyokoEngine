@@ -23,4 +23,5 @@ enum class PipelineType {
 	SMOOTHING,
 	SKYBOX,
 	OUTLINE,
+	RADIAL_BLUR,
 };
