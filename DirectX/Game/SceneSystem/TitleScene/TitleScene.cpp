@@ -67,6 +67,10 @@ void TitleScene::Update()
 	}
 
 #ifdef _DEBUG
+	if (input_->PressedKey(DIK_Q)) {
+		ChangeScene(STAGE);
+		se_.Play();
+	}
 	ImGui::Begin("スキャンノイズ");
 	ImGui::SliderFloat("スクリーン座標の最小のy座標", &scanNoise_->scanNoiseData_->minY, 0.0f, 1.0f);
 	ImGui::SliderFloat("ノイズを行う縦幅", &scanNoise_->scanNoiseData_->width, 0.0f, 1.0f);

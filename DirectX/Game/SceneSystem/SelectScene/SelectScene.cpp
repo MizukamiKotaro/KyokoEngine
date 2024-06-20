@@ -18,7 +18,11 @@ SelectScene::SelectScene()
 	space_->pos_ = { 640.0f,560.0f };
 	space_->Update();
 
-	se_.Load("SE/select.mp3", "決定音");
+	se_ = std::make_unique<Audio>();
+	se_->Load("SE/select.mp3", "決定音");
+
+	music_ = std::make_unique<LiveMusics>();
+	music_->Initialize();
 }
 
 void SelectScene::Initialize()
@@ -28,11 +32,16 @@ void SelectScene::Initialize()
 
 void SelectScene::Update()
 {
+	music_->Update();
+	if (music_->IsFinish()) {
+		music_->Initialize();
+	}
+
 	if (input_->PressedGamePadButton(Input::GamePadButton::A)) {
 		// シーン切り替え
-		stageNo_ = 0;
+		stageNo_ = SHINING_STAR;
 		ChangeScene(STAGE);
-		se_.Play();
+		se_->Play();
 	}
 }
 

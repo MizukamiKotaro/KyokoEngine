@@ -4,29 +4,25 @@
 #include "GameElement/Notes/Notes.h"
 #include "GameElement/Score/Score.h"
 #include "GameElement/StageUI/StageUI.h"
+#include "GameElement/Live/LiveMusics/LiveMusics.h"
+#include "GameElement/Live/FinishLive/FinishLive.h"
 #include "Camera.h"
 #include "Audio.h"
 #include "Input.h"
-#include "GameElement/Live/LiveMusics/LiveMusics.h"
 
 class Game {
 public: 
-
 	Game(Camera* camera);
 
 	void Initialize();
-
 	void Update();
-
 	void Draw();
-
-	const bool GetIsClear() const { return isClear_; }
+	const bool& GetIsClear() const { return finishLive_->IsClear(); }
 
 private:
 
 private:
 	Input* input_ = nullptr;
-
 	Camera* camera_ = nullptr;
 
 private:
@@ -35,16 +31,8 @@ private:
 	std::unique_ptr<Score> score_;
 	std::unique_ptr<StageUI> stageUI_;
 	std::unique_ptr<LiveMusics> music_;
+	std::unique_ptr<FinishLive> finishLive_;
 	NotesList* notesList_ = nullptr;
 
-
 	float time_;
-
-	float finishCount_;
-
-	bool isClear_;
-
-	bool isFinish_;
-
-	Audio se_;
 };

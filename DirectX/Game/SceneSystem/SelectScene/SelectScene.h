@@ -4,6 +4,7 @@
 #include "GameElement/Live/Stage/Stage.h"
 #include "GameElement/Live/Dome/Dome.h"
 #include "GameElement/Live/Screen/Screen.h"
+#include "GameElement/Live/LiveMusics/LiveMusics.h"
 #include "Sprite.h"
 #include <array>
 
@@ -26,6 +27,7 @@ private:
 
 	std::unique_ptr<Sprite> space_;
 
-	Audio se_;
+	std::unique_ptr<Audio> se_;
+	std::unique_ptr<LiveMusics> music_;
 };
 

@@ -27,7 +27,6 @@ private:
 	ScoreManager& operator=(const ScoreManager&) = delete;
 
 private:
-
 	std::array<std::unique_ptr<Score>, STAGE::COUNT_STAGE> memoryScores_;
 
 	std::unique_ptr<Score> clearScore_;

@@ -7,15 +7,11 @@
 Game::Game(Camera* camera)
 {
 	input_ = Input::GetInstance();
-
 	camera_ = camera;
 
-	finishCount_ = 0.0f;
-	isClear_ = false;
-
 	live_ = std::make_unique<Live>(camera_);
-
 	music_ = std::make_unique<LiveMusics>();
+	finishLive_ = std::make_unique<FinishLive>();
 	
 	notesList_ = NotesList::GetInstance();
 	notesList_->Initialize();
@@ -27,8 +23,6 @@ Game::Game(Camera* camera)
 	stageUI_->SetScore(score_.get());
 
 	HitSystem::SetScore(score_.get());
-
-	se_.Load("SE/finish.mp3", "ライブ終わりの歓声");
 }
 
 void Game::Initialize()
@@ -38,34 +32,26 @@ void Game::Initialize()
 	notesList_->PopCommands();
 
 	score_->Reset();
-	finishCount_ = 0.0f;
-	isClear_ = false;
 
 	stageUI_->Initialize();
 
 	HitSystem::Initialize();
 
-	isFinish_ = false;
 	music_->Initialize();
+	finishLive_->Initialize();
 }
 
 void Game::Update()
 {
 	music_->Update();
-	time_ += FrameInfo::GetInstance()->GetDeltaTime();
+	float deltaTime = FrameInfo::GetInstance()->GetDeltaTime();
+	time_ += deltaTime;
 	live_->Update(time_);
 	HitSystem::Update(time_);
 
 	if (music_->IsFinish()) {
-		finishCount_ += FrameInfo::GetInstance()->GetDeltaTime();
-
-		if (!isFinish_) {
-			isFinish_ = true;
-			se_.Play();
-		}
-
-		if (finishCount_ >= 0.75f) {
-			isClear_ = true;
+		finishLive_->Update(deltaTime);
+		if (finishLive_->IsClear()) {
 			ScoreManager::GetInstance()->SetClearScore(score_.get());
 		}
 	}
