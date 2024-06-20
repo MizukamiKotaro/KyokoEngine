@@ -11,14 +11,11 @@ Game::Game(Camera* camera)
 	camera_ = camera;
 
 	finishCount_ = 0.0f;
-	isMusicFinish_ = false;
-	isStartMusic_ = false;
 	isClear_ = false;
 
 	live_ = std::make_unique<Live>(camera_);
 
-	music_ = std::make_unique<Audio>();
-	music_->Load("Music/maou_short_14_shining_star.mp3", "シャイニングスター");
+	music_ = std::make_unique<LiveMusics>();
 	
 	notesList_ = NotesList::GetInstance();
 	notesList_->Initialize();
@@ -26,7 +23,7 @@ Game::Game(Camera* camera)
 	score_ = std::make_unique<Score>();
 
 	stageUI_ = std::make_unique<StageUI>();
-	stageUI_->SetIsMusicFinish(&isMusicFinish_);
+	stageUI_->SetIsMusicFinish(&music_->IsFinish());
 	stageUI_->SetScore(score_.get());
 
 	HitSystem::SetScore(score_.get());
@@ -37,15 +34,11 @@ Game::Game(Camera* camera)
 void Game::Initialize()
 {
 	live_->Initialize();
-
 	time_ = 0.0f;
-
 	notesList_->PopCommands();
 
 	score_->Reset();
 	finishCount_ = 0.0f;
-	isMusicFinish_ = false;
-	isStartMusic_ = false;
 	isClear_ = false;
 
 	stageUI_->Initialize();
@@ -53,26 +46,17 @@ void Game::Initialize()
 	HitSystem::Initialize();
 
 	isFinish_ = false;
+	music_->Initialize();
 }
 
 void Game::Update()
 {
-	if (!isStartMusic_) {
-		isStartMusic_ = true;
-		music_->Play();
-	}
-
-	if (!music_->IsPlaying()) {
-		isMusicFinish_ = true;
-	}
-
+	music_->Update();
 	time_ += FrameInfo::GetInstance()->GetDeltaTime();
-
 	live_->Update(time_);
-
 	HitSystem::Update(time_);
 
-	if (isMusicFinish_) {
+	if (music_->IsFinish()) {
 		finishCount_ += FrameInfo::GetInstance()->GetDeltaTime();
 
 		if (!isFinish_) {
@@ -90,9 +74,7 @@ void Game::Update()
 void Game::Draw()
 {
 	live_->Draw();
-
 	notesList_->Draw(camera_);
-
 	stageUI_->Draw();
 }
 

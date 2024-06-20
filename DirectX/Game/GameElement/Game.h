@@ -7,6 +7,7 @@
 #include "Camera.h"
 #include "Audio.h"
 #include "Input.h"
+#include "GameElement/Live/LiveMusics/LiveMusics.h"
 
 class Game {
 public: 
@@ -33,18 +34,13 @@ private:
 	std::unique_ptr<Live> live_;
 	std::unique_ptr<Score> score_;
 	std::unique_ptr<StageUI> stageUI_;
+	std::unique_ptr<LiveMusics> music_;
 	NotesList* notesList_ = nullptr;
-
-	std::unique_ptr<Audio> music_;
 
 
 	float time_;
 
-	bool isStartMusic_;
-
 	float finishCount_;
-
-	bool isMusicFinish_;
 
 	bool isClear_;
 

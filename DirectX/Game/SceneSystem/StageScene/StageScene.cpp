@@ -31,8 +31,6 @@ void StageScene::Update()
 
 void StageScene::Draw()
 {
-
-
 	Kyoko::Engine::PreDraw();
 
 	game_->Draw();

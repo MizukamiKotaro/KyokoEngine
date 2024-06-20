@@ -224,6 +224,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\GameElement\Live\DancingIdol\DancingIdol.cpp" />
     <ClCompile Include="Game\GameElement\Live\Dome\Dome.cpp" />
     <ClCompile Include="Game\GameElement\Live\Live.cpp" />
+    <ClCompile Include="Game\GameElement\Live\LiveMusics\LiveMusics.cpp" />
     <ClCompile Include="Game\GameElement\Live\MultipleScreen\MultipleScreen.cpp" />
     <ClCompile Include="Game\GameElement\Live\Screen\Screen.cpp" />
     <ClCompile Include="Game\GameElement\Live\SpotLightBoxAnimation\SpotLightBoxAnimation.cpp" />
@@ -414,6 +415,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\GameElement\Live\DancingIdol\DancingIdol.h" />
     <ClInclude Include="Game\GameElement\Live\Dome\Dome.h" />
     <ClInclude Include="Game\GameElement\Live\Live.h" />
+    <ClInclude Include="Game\GameElement\Live\LiveMusics\LiveMusics.h" />
     <ClInclude Include="Game\GameElement\Live\MultipleScreen\MultipleScreen.h" />
     <ClInclude Include="Game\GameElement\Live\Screen\Screen.h" />
     <ClInclude Include="Game\GameElement\Live\SpotLightBoxAnimation\SpotLightBoxAnimation.h" />

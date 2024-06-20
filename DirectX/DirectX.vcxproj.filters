@@ -427,6 +427,9 @@
     <Filter Include="Engine\Drawers\PostEffect\RadialBlur">
       <UniqueIdentifier>{07b36b12-f5b7-4896-a0e7-c0caa70eb453}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\GameElement\Live\LiveMusics">
+      <UniqueIdentifier>{9bf042b9-e50a-4aa2-acfd-ccadb8bb5543}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -872,6 +875,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Drawers\PostEffect\RadialBlur\RadialBlur.cpp">
       <Filter>Engine\Drawers\PostEffect\RadialBlur</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameElement\Live\LiveMusics\LiveMusics.cpp">
+      <Filter>Game\GameElement\Live\LiveMusics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1387,6 +1393,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Drawers\PostEffect\RadialBlur\RadialBlur.h">
       <Filter>Engine\Drawers\PostEffect\RadialBlur</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameElement\Live\LiveMusics\LiveMusics.h">
+      <Filter>Game\GameElement\Live\LiveMusics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
