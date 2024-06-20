@@ -63,5 +63,3 @@ void Game::Draw()
 	notesList_->Draw(camera_);
 	stageUI_->Draw();
 }
-
-

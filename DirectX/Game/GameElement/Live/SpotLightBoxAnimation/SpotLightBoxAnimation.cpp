@@ -94,7 +94,7 @@ void SpotLightBoxAnimation::ApplyGlobalVariable()
 
 void SpotLightBoxAnimation::LightUpdate()
 {
-	spotLights_[0]->light_->direction = Vector3{ 1.0f,0.0f,0.0f } *box_->GetRotateMatrix();
+	spotLights_[0]->light_->direction = Vector3{ 1.0f,0.0f,0.0f } * box_->GetRotateMatrix();
 	spotLights_[1]->light_->direction = spotLights_[0]->light_->direction;
 	spotLights_[1]->light_->distance = spotLights_[0]->light_->distance;
 	point_->light_->position = box_->transform_.translate_;

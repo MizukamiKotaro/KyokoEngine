@@ -84,7 +84,7 @@ const Matrix4x4 RigidAnimationModel::GetRotateMatrix()
 {
 	NodeAnimation& rootNodeAnimation = animation_->nodeAnimations[modelData_->rootNode.name];
 	Quaternion rotate = CalculateValue(rootNodeAnimation.rotate, animationTime_);
-	return Matrix4x4::MakeRotateXYZMatrix(transform_.rotate_) * Matrix4x4::MakeRotateMatrix(rotate);
+	return  Matrix4x4::MakeRotateMatrix(rotate) * Matrix4x4::MakeRotateXYZMatrix(transform_.rotate_);
 }
 
 Vector3 RigidAnimationModel::CalculateValue(const AnimationCurve<Vector3>& keyframes, const float& time)

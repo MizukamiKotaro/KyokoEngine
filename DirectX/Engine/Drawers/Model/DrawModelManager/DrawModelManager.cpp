@@ -52,8 +52,8 @@ void DrawModelManager::Draw(const RigidAnimationModel& model, const Camera& came
 
 	transformation_[drawNum_]->transformationData->World = animTransform.matrix_ * model.transform_.worldMat_;
 	transformation_[drawNum_]->transformationData->WVP = animTransform.matrix_ * model.transform_.worldMat_ * camera.GetViewProjection();
-	transformation_[drawNum_]->transformationData->WorldInverse = Matrix4x4::Inverse(Matrix4x4::MakeScaleMatrix(model.transform_.scale_) * Matrix4x4::MakeScaleMatrix(animTransform.scale_)) *
-		(Matrix4x4::MakeRotateXYZMatrix(model.transform_.rotate_) * Matrix4x4::MakeRotateMatrix(animTransform.rotate_)) * (Matrix4x4::MakeTranslateMatrix(model.transform_.translate_) * Matrix4x4::MakeTranslateMatrix(animTransform.translate_));
+	transformation_[drawNum_]->transformationData->WorldInverse = Matrix4x4::Inverse(Matrix4x4::MakeScaleMatrix(animTransform.scale_) * Matrix4x4::MakeScaleMatrix(model.transform_.scale_)) *
+		(Matrix4x4::MakeRotateMatrix(animTransform.rotate_) * Matrix4x4::MakeRotateXYZMatrix(model.transform_.rotate_)) * (Matrix4x4::MakeTranslateMatrix(animTransform.translate_) * Matrix4x4::MakeTranslateMatrix(model.transform_.translate_));
 
 	Draw(model, camera, blendMode, model.GetModelData().mesh.vertexBufferView_);
 }
