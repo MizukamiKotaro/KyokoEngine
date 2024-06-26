@@ -12,8 +12,7 @@
 #include "GraphicsPipelineSystem/GraphicsPiplineManager/GraphicsPiplineManager.h"
 #include "AudioManager/AudioManager.h"
 #include "FrameInfo/FrameInfo.h"
-#include "Sprite.h"
-#include "Model.h"
+#include "SkinningModel/SkinningModel.h"
 #include "BasePostEffect/BasePostEffect.h"
 #include "LightSingleton/LightSingleton.h"
 #include "Drawers/IDrawer/IDrawer.h"
@@ -64,11 +63,11 @@ void Kyoko::Engine::Initialize(const char* windowName, int width, int height)
 
 	IDrawer::StaticInitialize();
 	IDrawManager::StaticInitialize();
-	Sprite::StaticInitialize();
 	BasePostEffect::StaticInitialize();
 	ParticleManager::GetInstance()->FirstInitialize();
 	drawManager = DrawManager::GetInstance();
 	drawManager->Initialize();
+	SkinningModel::StaticInitialize();
 
 	LevelDataLoader::GetInstance()->LoadFiles();
 

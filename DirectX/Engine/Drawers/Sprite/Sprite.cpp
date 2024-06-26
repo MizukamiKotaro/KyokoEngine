@@ -128,11 +128,6 @@ Sprite::~Sprite()
 	materialResource_->Release();
 }
 
-void Sprite::StaticInitialize()
-{
-
-}
-
 void Sprite::Initialize()
 {
 	

@@ -74,7 +74,7 @@ const Texture* TextureManager::LoadTexture(const std::string& filePath)
 		srvDesc.Texture2D.MipLevels = UINT(metadata.mipLevels);
 	}
 
-	textureMap_[filePath]->handles_ = srvHeap_->GetNewDescriptorHandles();
+	textureMap_[filePath]->handles_ = srvHeap_->GetNewTextureDescriptorHandles();
 
 	device_->CreateShaderResourceView(textureMap_[filePath]->resource_.Get(), &srvDesc, textureMap_[filePath]->handles_->cpuHandle);
 

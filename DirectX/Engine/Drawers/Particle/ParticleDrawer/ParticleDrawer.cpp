@@ -42,6 +42,7 @@ ParticleDrawer::~ParticleDrawer()
 {
 	instancingResource_->Release();
 	materialResource_->Release();
+	DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->DeleteDescriptor(srvHandles_);
 }
 
 void ParticleDrawer::Draw(const Camera& camera, std::list<ParticleData>& blocks, BlendMode blendMode)

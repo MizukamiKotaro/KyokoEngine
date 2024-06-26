@@ -179,7 +179,7 @@ void BasePostEffect::CreateTexRes()
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D; // 2Dテクスチャ
 	srvDesc.Texture2D.MipLevels = 1;
 
-	srvHandles_ = srvHeap_->GetNewDescriptorHandles();
+	srvHandles_ = srvHeap_->GetNewTextureDescriptorHandles();
 
 	device_->CreateShaderResourceView(texResource_.Get(), &srvDesc, srvHandles_->cpuHandle);
 }

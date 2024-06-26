@@ -12,6 +12,8 @@
 #include "ComputePipelineSystem/ComputePipelineManager/ComputePipelineManager.h"
 #include "ComputePipelineSystem/ComputePipelineTypeConfig.h"
 
+DescriptorHeap* SkinningModel::srvHeap_ = nullptr;
+
 SkinningModel::SkinningModel(const std::string& fileName)
 {
 	LoadGLTF(fileName);
@@ -27,6 +29,10 @@ SkinningModel::~SkinningModel()
 	skinCluter_->paletteResouce->Release();
 	skinCluter_->informationResouce->Release();
 	skinCluter_->outputVertexResouce->Release();
+	srvHeap_->DeleteDescriptor(skinCluter_->influenceSrvHandle);
+	srvHeap_->DeleteDescriptor(skinCluter_->inputVertexSrvHandle);
+	srvHeap_->DeleteDescriptor(skinCluter_->outputVertexSrvHandle);
+	srvHeap_->DeleteDescriptor(skinCluter_->paletteSrvHandle);
 }
 
 void SkinningModel::Update(const float& time)
@@ -58,6 +64,11 @@ void SkinningModel::AnimationUpdate(float time)
 		UpdateSkeleton();
 		UpdateSkinAnimation();
 	}
+}
+
+void SkinningModel::StaticInitialize()
+{
+	srvHeap_ = DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap();
 }
 
 void SkinningModel::LoadGLTF(const std::string& fileName)
@@ -140,7 +151,7 @@ void SkinningModel::CreateSkinCluster()
 	WellForGPU* mappedPalette = nullptr;
 	skinCluster.paletteResouce->Map(0, nullptr, reinterpret_cast<void**>(&mappedPalette));
 	skinCluster.mappedPalette = { mappedPalette,skeleton_->joints.size() };
-	skinCluster.paletteSrvHandle = DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->GetNewDescriptorHandles();
+	skinCluster.paletteSrvHandle = srvHeap_->GetNewDescriptorHandles();
 
 	// palette用のsrvの作成。StructuredBufferでアクセスできるようにする
 	D3D12_SHADER_RESOURCE_VIEW_DESC paletteSRVDesc{};
@@ -159,7 +170,7 @@ void SkinningModel::CreateSkinCluster()
 	skinCluster.influenceResouce->Map(0, nullptr, reinterpret_cast<void**>(&mappedInfluence));
 	std::memset(mappedInfluence, 0, sizeof(VertexInfluence) * modelData_->mesh.verteces.size());
 	skinCluster.mappedInfluence = { mappedInfluence,modelData_->mesh.verteces.size() };
-	skinCluster.influenceSrvHandle = DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->GetNewDescriptorHandles();
+	skinCluster.influenceSrvHandle = srvHeap_->GetNewDescriptorHandles();
 
 	// influence用のsrvの作成。StructuredBufferでアクセスできるようにする
 	D3D12_SHADER_RESOURCE_VIEW_DESC influenceSRVDesc{};
@@ -197,7 +208,7 @@ void SkinningModel::CreateSkinCluster()
 	}
 
 	// inputVertex用のsrvの作成。StructuredBufferでアクセスできるようにする
-	skinCluster.inputVertexSrvHandle = DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->GetNewDescriptorHandles();
+	skinCluster.inputVertexSrvHandle = srvHeap_->GetNewDescriptorHandles();
 	D3D12_SHADER_RESOURCE_VIEW_DESC inputVertexSRVDesc{};
 	inputVertexSRVDesc.Format = DXGI_FORMAT_UNKNOWN;
 	inputVertexSRVDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
@@ -211,7 +222,7 @@ void SkinningModel::CreateSkinCluster()
 	// outputVertex用のuavの作成
 	skinCluster.outputVertexResouce = DirectXBase::CreateBufferResource(sizeof(VertexData) * modelData_->mesh.verteces.size(), D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
 	
-	skinCluster.outputVertexSrvHandle = DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->GetNewDescriptorHandles();
+	skinCluster.outputVertexSrvHandle = srvHeap_->GetNewDescriptorHandles();
 	D3D12_UNORDERED_ACCESS_VIEW_DESC outputVertexUAVDesc{};
 	outputVertexUAVDesc.Format = DXGI_FORMAT_UNKNOWN;
 	outputVertexUAVDesc.ViewDimension = D3D12_UAV_DIMENSION_BUFFER;

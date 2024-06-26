@@ -19,6 +19,7 @@ Outline::Outline()
 Outline::~Outline()
 {
 	outlineResource_->Release();
+	srvHeap_->DeleteDescriptor(depthHandles_);
 }
 
 void Outline::Draw(BlendMode blendMode)

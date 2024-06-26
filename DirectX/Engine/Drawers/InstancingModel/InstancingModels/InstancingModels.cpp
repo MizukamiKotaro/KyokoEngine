@@ -42,6 +42,7 @@ InstancingModels::~InstancingModels()
 {
 	instancingResource_->Release();
 	materialResource_->Release();
+	DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->DeleteDescriptor(srvHandles_);
 }
 
 void InstancingModels::Draw(const Camera& camera, std::list<InstancingModelData>& blocks)
