@@ -1,6 +1,7 @@
 #include "ComputePipelineFactory.h"
 #include "ComputePipelineSystem/ComputePipelineTypeConfig.h"
 #include "ComputePipelineSystem/ComputePipelines/SkinningComputePipeline/SkinningComputePipeline.h"
+#include "ComputePipelineSystem/ComputePipelines/ParticleInitializeComputePipeline/ParticleInitializeComputePipeline.h"
 
 ComputePipeline* ComputePipelineFactory::CreateComputePipeline(ComputePipelineType pipelineType)
 {
@@ -9,6 +10,9 @@ ComputePipeline* ComputePipelineFactory::CreateComputePipeline(ComputePipelineTy
 	{
 	case ComputePipelineType::SKINNING:
 		pipeline = new SkinningComputePipeline();
+		break;
+	case ComputePipelineType::PARTICLE_INITIALIZE:
+		pipeline = new ParticleInitializeComputePipeline();
 		break;
 	default:
 		break;

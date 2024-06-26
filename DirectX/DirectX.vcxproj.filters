@@ -433,6 +433,15 @@
     <Filter Include="Game\GameElement\Live\FinishLive">
       <UniqueIdentifier>{40f6caee-f436-44bc-a7ae-ccb3c49c2fee}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\PipelineSystems\ComputePipelineSystem\ComputePipelines\ParticleInitializeComputePipeline">
+      <UniqueIdentifier>{bf1ffbc4-18e9-425d-8949-5aac31891334}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Drawers\GPUParticle">
+      <UniqueIdentifier>{9d4efa18-9e63-4735-b15e-49c6a50f1884}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Drawers\GPUParticle\IParticle.cpp">
+      <UniqueIdentifier>{eb6c6b6b-51f4-4d20-8a0e-b0f2b210fb30}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -884,6 +893,15 @@
     </ClCompile>
     <ClCompile Include="Game\GameElement\Live\FinishLive\FinishLive.cpp">
       <Filter>Game\GameElement\Live\FinishLive</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\ComputePipelineSystem\ComputePipelines\ParticleInitializeComputePipeline\ParticleInitializeComputePipeline.cpp">
+      <Filter>Engine\PipelineSystems\ComputePipelineSystem\ComputePipelines\ParticleInitializeComputePipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Drawers\GPUParticle\GPUParticle.cpp">
+      <Filter>Engine\Drawers\GPUParticle</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Drawers\GPUParticle\IParticle.cpp\IParticle.cpp">
+      <Filter>Engine\Drawers\GPUParticle\IParticle.cpp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1405,6 +1423,18 @@
     </ClInclude>
     <ClInclude Include="Game\GameElement\Live\FinishLive\FinishLive.h">
       <Filter>Game\GameElement\Live\FinishLive</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\ComputePipelineSystem\ComputePipelines\ParticleInitializeComputePipeline\ParticleInitializeComputePipeline.h">
+      <Filter>Engine\PipelineSystems\ComputePipelineSystem\ComputePipelines\ParticleInitializeComputePipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drawers\GPUParticle\GPUParticle.h">
+      <Filter>Engine\Drawers\GPUParticle</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drawers\GPUParticle\GPUParticleData.h">
+      <Filter>Engine\Drawers\GPUParticle</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drawers\GPUParticle\IParticle.cpp\IParticle.h">
+      <Filter>Engine\Drawers\GPUParticle\IParticle.cpp</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
