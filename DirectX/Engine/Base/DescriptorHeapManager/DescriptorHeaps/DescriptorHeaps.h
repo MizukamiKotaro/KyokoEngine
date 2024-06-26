@@ -5,6 +5,7 @@ class SRVDescriptorHeap : public DescriptorHeap
 {
 public:
 	SRVDescriptorHeap();
+	static const UINT& GetTextureMaxNum();
 };
 
 class RTVDescriptorHeap : public DescriptorHeap

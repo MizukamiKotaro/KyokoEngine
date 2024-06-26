@@ -2,6 +2,7 @@
 #include <cassert>
 #include "Engine/Base/DirectXBase/DirectXBase.h"
 #include "DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
+#include "DescriptorHeapManager/DescriptorHeaps/DescriptorHeaps.h"
 
 DescriptorHeap::~DescriptorHeap()
 {
@@ -12,18 +13,21 @@ DescriptorHeap::~DescriptorHeap()
 void DescriptorHeap::DeleteDescriptor(const DescriptorHandles* handles) 
 {
 	if (descriptors_.size() != 0) {
-		for (std::unique_ptr<Descriptor>& descriptor : descriptors_) {
-			if (descriptor->handles.no == handles->no) {
-				descriptor->isUse = false;
-				break;
-			}
-		}
+		descriptors_[handles->no]->isUse = false;
 	}
 }
 
 const DescriptorHandles* DescriptorHeap::GetNewDescriptorHandles()
 {
-	if (descriptors_.size() != 0) {
+	if (heapType_ == D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV) {
+		for (UINT i = SRVDescriptorHeap::GetTextureMaxNum(); i < UINT(descriptors_.size()); i++) {
+			if (!descriptors_[i]->isUse) {
+				descriptors_[i]->isUse = true;
+				return &descriptors_[i]->handles;
+			}
+		}
+	}
+	else {
 		for (std::unique_ptr<Descriptor>& descriptor : descriptors_) {
 			if (!descriptor->isUse) {
 				descriptor->isUse = true;
@@ -32,23 +36,24 @@ const DescriptorHandles* DescriptorHeap::GetNewDescriptorHandles()
 		}
 	}
 
-	Descriptor descriptor;
+	return nullptr;
+}
 
-	ID3D12Device* device = DirectXBase::GetInstance()->GetDevice();
-
-	descriptor.isUse = true;
-	descriptor.handles.no = descriptors_.size();
-	descriptor.handles.cpuHandle = heap_->GetCPUDescriptorHandleForHeapStart();
-	descriptor.handles.cpuHandle.ptr += (device->GetDescriptorHandleIncrementSize(heapType_) * descriptor.handles.no);
-
-	if (heap_->GetDesc().Flags == D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE) {
-		descriptor.handles.gpuHandle = heap_->GetGPUDescriptorHandleForHeapStart();
-		descriptor.handles.gpuHandle.ptr += (device->GetDescriptorHandleIncrementSize(heapType_) * descriptor.handles.no);
+const DescriptorHandles* DescriptorHeap::GetNewTextureDescriptorHandles()
+{
+	for (UINT i = 0; i < SRVDescriptorHeap::GetTextureMaxNum(); i++) {
+		if (!descriptors_[i]->isUse) {
+			descriptors_[i]->isUse = true;
+			return &descriptors_[i]->handles;
+		}
 	}
-	
-	descriptors_.push_back(std::make_unique<Descriptor>(descriptor));
-	
-	return &descriptors_.back()->handles;
+
+	return nullptr;
+}
+
+const D3D12_GPU_DESCRIPTOR_HANDLE& DescriptorHeap::GetTextureHandle()
+{
+	return descriptors_[0]->handles.gpuHandle;
 }
 
 ID3D12DescriptorHeap* DescriptorHeap::CreateDescriptorHeap(ID3D12Device* device, D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescriptors, bool shaderVisible)
@@ -63,4 +68,25 @@ ID3D12DescriptorHeap* DescriptorHeap::CreateDescriptorHeap(ID3D12Device* device,
 	//ディスクリプタヒープが作られなかったので起動しない
 	assert(SUCCEEDED(hr));
 	return descriptorHeap;
+}
+
+void DescriptorHeap::Initialize(UINT numDescriptors)
+{
+	ID3D12Device* device = DirectXBase::GetInstance()->GetDevice();
+	descriptors_.clear();
+	descriptors_.resize(numDescriptors);
+	Descriptor descriptor;
+	for (UINT i = 0; i < numDescriptors; i++) {
+		descriptor.isUse = false;
+		descriptor.handles.no = i;
+		descriptor.handles.cpuHandle = heap_->GetCPUDescriptorHandleForHeapStart();
+		descriptor.handles.cpuHandle.ptr += (device->GetDescriptorHandleIncrementSize(heapType_) * descriptor.handles.no);
+
+		if (heap_->GetDesc().Flags == D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE) {
+			descriptor.handles.gpuHandle = heap_->GetGPUDescriptorHandleForHeapStart();
+			descriptor.handles.gpuHandle.ptr += (device->GetDescriptorHandleIncrementSize(heapType_) * descriptor.handles.no);
+		}
+
+		descriptors_[i] = std::make_unique<Descriptor>(descriptor);
+	}
 }
