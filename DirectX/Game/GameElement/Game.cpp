@@ -9,7 +9,7 @@ Game::Game(Camera* camera)
 	input_ = Input::GetInstance();
 	camera_ = camera;
 
-	live_ = std::make_unique<Live>(camera_);
+	live_ = std::make_unique<LiveEditor>(camera_);
 	music_ = std::make_unique<LiveMusics>();
 	finishLive_ = std::make_unique<FinishLive>();
 	
@@ -46,7 +46,7 @@ void Game::Update()
 	music_->Update();
 	float deltaTime = FrameInfo::GetInstance()->GetDeltaTime();
 	time_ += deltaTime;
-	live_->Update(time_);
+	live_->Update(deltaTime);
 	HitSystem::Update(time_);
 
 	if (music_->IsFinish()) {

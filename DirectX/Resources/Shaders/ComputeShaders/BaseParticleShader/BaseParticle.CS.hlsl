@@ -12,7 +12,7 @@ static const uint32_t kMaxParticles = 1024;
 [numthreads(1024,1,1)]
 void main(uint32_t3 DTid : SV_DispatchThreadID)
 {
-	uint32_t index = DTid..x;
+	uint32_t index = DTid.x;
 	if(index < kMaxParticles){
 		gParticles[index] = (Particle)0;
 	}

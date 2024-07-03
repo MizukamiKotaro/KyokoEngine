@@ -87,27 +87,6 @@ void ModelDataManager::LoadObjFile(const std::string& directoryPath, const std::
 		aiMesh* mesh = scene_->mMeshes[meshIndex];
 		assert(mesh->HasNormals()); // 法線がないmeshは非対応
 		assert(mesh->HasTextureCoords(0)); // texCoordがないmeshは非対応
-
-		// faceを解析
-		//for (uint32_t faceIndex = 0; faceIndex < mesh->mNumFaces; faceIndex++) {
-		//	aiFace& face = mesh->mFaces[faceIndex];
-		//	assert(face.mNumIndices == 3); // 三角形のみサポート
-
-		//	// vertexを解析
-		//	for (uint32_t element = 0; element < face.mNumIndices; element++) {
-		//		uint32_t vertexIndex = face.mIndices[element];
-		//		aiVector3D& position = mesh->mVertices[vertexIndex];
-		//		aiVector3D& normal = mesh->mNormals[vertexIndex];
-		//		aiVector3D& texcoord = mesh->mTextureCoords[0][vertexIndex];
-
-		//		VertexData vertex;
-		//		vertex.vertexPos = { -position.x,position.y,position.z,1.0f };
-		//		vertex.normal = { -normal.x,normal.y,normal.z };
-		//		vertex.texcoord = { texcoord.x,texcoord.y };
-
-		//		modelDatas_.back()->mesh.verteces.push_back(vertex);
-		//	}
-		//}
 		
 		// vertexを解析
 		modelDatas_.back()->mesh.verteces.resize(mesh->mNumVertices);

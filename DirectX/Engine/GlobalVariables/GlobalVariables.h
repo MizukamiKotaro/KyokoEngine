@@ -3,6 +3,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include "Vector4.h"
 
 class Vector2;
 class Vector3;
@@ -113,7 +114,12 @@ private:
 	GlobalVariables(const GlobalVariables& obj) = delete;
 	GlobalVariables& operator=(const GlobalVariables& obj) = delete;
 
-	using Item = std::variant<int32_t, float, Vector2, Vector3, bool, std::string>;
+	struct GlobalColor
+	{
+		Vector4 color;
+	};
+
+	using Item = std::variant<int32_t, float, Vector2, Vector3, bool, std::string, GlobalColor>;
 
 	using Group = std::map<std::string, Item>;
 	using GroupPtr = std::map<std::string, Item*>;

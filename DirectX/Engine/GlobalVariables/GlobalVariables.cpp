@@ -1811,5 +1811,9 @@ void GlobalVariables::PreparationImGui(const std::string& itemName, Item& item)
 		bool* ptr = std::get_if<bool>(&item);
 		ImGui::Checkbox(itemName.c_str(), ptr);
 	}
+	else if (std::holds_alternative<GlobalColor>(item)) {
+		GlobalColor* ptr = std::get_if<GlobalColor>(&item);
+		ImGui::ColorEdit4(itemName.c_str(), &ptr->color.x);
+	}
 }
 #endif // _DEBUG

@@ -6,3 +6,9 @@ StageEditor::StageEditor(const std::string& tree1, const std::string& tree2, con
 	preStageNo_ = IScene::stageNo_;
 	global_ = std::make_unique<GlobalVariableUser>("StageEditor", "Stage" + std::to_string(preStageNo_), tree1, tree2, tree3, tree4, tree5);
 }
+
+StageEditor::StageEditor()
+{
+	preStageNo_ = IScene::stageNo_;
+	global_ = std::make_unique<GlobalVariableUser>("StageEditor", "Stage" + std::to_string(preStageNo_));
+}

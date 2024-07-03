@@ -442,6 +442,33 @@
     <Filter Include="Engine\Drawers\GPUParticle\IParticle.cpp">
       <UniqueIdentifier>{eb6c6b6b-51f4-4d20-8a0e-b0f2b210fb30}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\GameElement\IStageEditorObject">
+      <UniqueIdentifier>{a5b5c285-b99d-4172-98d1-909df46a0ac4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameElement\IStageEditorObject\StageObjectFactory">
+      <UniqueIdentifier>{1eda677c-125f-4bf8-9bfb-bbc18e725cc0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameElement\LiveEditor">
+      <UniqueIdentifier>{860ee303-93d9-4a34-adcc-d3cf8726fc8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameElement\LiveEditor\DancingIdolEditor">
+      <UniqueIdentifier>{6e61f964-b581-49c5-a2e9-36abaf280a6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameElement\LiveEditor\MultipleScreenEditor">
+      <UniqueIdentifier>{7f3b21e3-e1aa-4b50-966b-3cebb2f2e2bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameElement\LiveEditor\ScreenEditor">
+      <UniqueIdentifier>{bb2fcbb5-6bfc-4689-9a0d-698e9459f1d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameElement\LiveEditor\SpotLightBoxAnimationEditor">
+      <UniqueIdentifier>{d7720bc1-0778-41a7-9316-2ac817d1ed0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameElement\LiveEditor\DomeEditor">
+      <UniqueIdentifier>{6998bd07-1242-4d9c-89de-d557ddada5f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameElement\LiveEditor\StageFloorEditor">
+      <UniqueIdentifier>{3669c61b-d169-4465-ab25-ca8f19129468}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -902,6 +929,42 @@
     </ClCompile>
     <ClCompile Include="Engine\Drawers\GPUParticle\IParticle.cpp\IParticle.cpp">
       <Filter>Engine\Drawers\GPUParticle\IParticle.cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameElement\Live\SpotLightBoxAnimation\TwinSpotLightBoxAnimation.cpp">
+      <Filter>Game\GameElement\Live\SpotLightBox</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameElement\IStageObject\IStageObject.cpp">
+      <Filter>Game\GameElement\IStageEditorObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameElement\IStageObject\IStageObjectManager.cpp">
+      <Filter>Game\GameElement\IStageEditorObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameElement\IStageObject\StageObjectFactory\StageObjectFactory.cpp">
+      <Filter>Game\GameElement\IStageEditorObject\StageObjectFactory</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameElement\LiveEditor\LiveEditor.cpp">
+      <Filter>Game\GameElement\LiveEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameElement\LiveEditor\DancingIdolEditor\DancingIdolEditor.cpp">
+      <Filter>Game\GameElement\LiveEditor\DancingIdolEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameElement\LiveEditor\MultipleScreenEditor\MultipleScreenEditor.cpp">
+      <Filter>Game\GameElement\LiveEditor\MultipleScreenEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameElement\LiveEditor\ScreenEditor\ScreenEditor.cpp">
+      <Filter>Game\GameElement\LiveEditor\ScreenEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameElement\LiveEditor\SpotLightBoxAnimationEditor\SpotLightBoxAnimationEditor.cpp">
+      <Filter>Game\GameElement\LiveEditor\SpotLightBoxAnimationEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameElement\LiveEditor\SpotLightBoxAnimationEditor\TwinSpotLightBoxAnimationEditor.cpp">
+      <Filter>Game\GameElement\LiveEditor\SpotLightBoxAnimationEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameElement\LiveEditor\DomeEditor\DomeEditor.cpp">
+      <Filter>Game\GameElement\LiveEditor\DomeEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameElement\LiveEditor\StageFloorEditor\StageFloorEditor.cpp">
+      <Filter>Game\GameElement\LiveEditor\StageFloorEditor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1435,6 +1498,45 @@
     </ClInclude>
     <ClInclude Include="Engine\Drawers\GPUParticle\IParticle.cpp\IParticle.h">
       <Filter>Engine\Drawers\GPUParticle\IParticle.cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameElement\Live\SpotLightBoxAnimation\TwinSpotLightBoxAnimation.h">
+      <Filter>Game\GameElement\Live\SpotLightBox</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameElement\IStageObject\IStageObject.h">
+      <Filter>Game\GameElement\IStageEditorObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameElement\IStageObject\IStageObjectManager.h">
+      <Filter>Game\GameElement\IStageEditorObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameElement\IStageObject\StageObjectConfig.h">
+      <Filter>Game\GameElement\IStageEditorObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameElement\IStageObject\StageObjectFactory\StageObjectFactory.h">
+      <Filter>Game\GameElement\IStageEditorObject\StageObjectFactory</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameElement\LiveEditor\LiveEditor.h">
+      <Filter>Game\GameElement\LiveEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameElement\LiveEditor\DancingIdolEditor\DancingIdolEditor.h">
+      <Filter>Game\GameElement\LiveEditor\DancingIdolEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameElement\LiveEditor\MultipleScreenEditor\MultipleScreenEditor.h">
+      <Filter>Game\GameElement\LiveEditor\MultipleScreenEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameElement\LiveEditor\ScreenEditor\ScreenEditor.h">
+      <Filter>Game\GameElement\LiveEditor\ScreenEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameElement\LiveEditor\SpotLightBoxAnimationEditor\SpotLightBoxAnimationEditor.h">
+      <Filter>Game\GameElement\LiveEditor\SpotLightBoxAnimationEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameElement\LiveEditor\SpotLightBoxAnimationEditor\TwinSpotLightBoxAnimationEditor.h">
+      <Filter>Game\GameElement\LiveEditor\SpotLightBoxAnimationEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameElement\LiveEditor\DomeEditor\DomeEditor.h">
+      <Filter>Game\GameElement\LiveEditor\DomeEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameElement\LiveEditor\StageFloorEditor\StageFloorEditor.h">
+      <Filter>Game\GameElement\LiveEditor\StageFloorEditor</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

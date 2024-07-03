@@ -1,6 +1,6 @@
 #pragma once
 #include <memory>
-#include "GameElement/Live/Live.h"
+#include "GameElement/LiveEditor/LiveEditor.h"
 #include "GameElement/Notes/Notes.h"
 #include "GameElement/Score/Score.h"
 #include "GameElement/StageUI/StageUI.h"
@@ -27,7 +27,7 @@ private:
 
 private:
 	
-	std::unique_ptr<Live> live_;
+	std::unique_ptr<LiveEditor> live_;
 	std::unique_ptr<Score> score_;
 	std::unique_ptr<StageUI> stageUI_;
 	std::unique_ptr<LiveMusics> music_;
