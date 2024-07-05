@@ -41,6 +41,7 @@ void SelectScene::Update()
 		// シーン切り替え
 		stageNo_ = SHINING_STAR;
 		ChangeScene(STAGE);
+		Audio::AllStop();
 		se_->Play();
 	}
 #ifdef _DEBUG
@@ -48,6 +49,7 @@ void SelectScene::Update()
 		// シーン切り替え
 		stageNo_ = SHINING_STAR;
 		ChangeScene(STAGE);
+		Audio::AllStop();
 		se_->Play();
 	}
 #endif // _DEBUG
