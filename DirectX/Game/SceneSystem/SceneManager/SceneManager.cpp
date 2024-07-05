@@ -47,6 +47,7 @@ int SceneManager::Run()
 		if (preSceneNo_ != currentSceneNo_) {
 			scene_.reset(sceneFactory_->CreateScene(IScene::sceneNo_));
 			scene_->Initialize();
+			scene_->FirstUpdate();
 		}
 
 		scene_->Play();

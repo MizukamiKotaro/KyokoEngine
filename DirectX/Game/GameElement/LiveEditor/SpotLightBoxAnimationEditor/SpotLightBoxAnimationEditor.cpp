@@ -26,26 +26,9 @@ void SpotLightBoxAnimationEditor::Update(const float& time)
 {
 #ifdef _DEBUG
 	UpdateGlobalVariable();
-	/*ImGui::Begin("SpotLightBox");
-	ImGui::DragFloat3("位置", &box_->transform_.translate_.x, 0.01f);
-	ImGui::SliderFloat3("角度", &spotLights_[0]->light_->direction.x, -1.0f, 1.0f);
-	ImGui::ColorEdit3("外のスポットライトの色", &spotLights_[0]->light_->color.x);
-	ImGui::SliderFloat("外のスポットライトの輝度", &spotLights_[0]->light_->intensity, 0.0f, 100.0f);
-	ImGui::SliderFloat("外のスポットライトの開く減衰率", &spotLights_[0]->light_->decay, 0.0f, 100.0f);
-	ImGui::SliderFloat("外のスポットライトの開く角度", &spotLights_[0]->light_->cosAngle, -1.0f, 1.0f);
-	ImGui::SliderFloat("外のスポットライトの減衰し始める角度", &spotLights_[0]->light_->cosFalloffStart, -1.0f, 1.0f);
-	ImGui::SliderFloat("外のスポットライトの距離", &spotLights_[0]->light_->distance, 0.0f, 100.0f);
-	ImGui::ColorEdit3("内のスポットライトの色", &spotLights_[1]->light_->color.x);
-	ImGui::SliderFloat("内のスポットライトの輝度", &spotLights_[1]->light_->intensity, 0.0f, 100.0f);
-	ImGui::SliderFloat("内のスポットライトの開く減衰率", &spotLights_[1]->light_->decay, 0.0f, 100.0f);
-	ImGui::SliderFloat("内のスポットライトの開く角度", &spotLights_[1]->light_->cosAngle, -1.0f, 1.0f);
-	ImGui::SliderFloat("内のスポットライトの減衰し始める角度", &spotLights_[1]->light_->cosFalloffStart, -1.0f, 1.0f);
-	ImGui::SliderFloat("内のスポットライトの距離", &spotLights_[1]->light_->distance, 0.0f, 100.0f);
-	ImGui::End();*/
 #endif // _DEBUG
 
 	box_->Update(time);
-
 	LightUpdate();
 }
 
@@ -60,14 +43,52 @@ void SpotLightBoxAnimationEditor::Draw(const Camera& camera)
 void SpotLightBoxAnimationEditor::SetGlobalVariable()
 {
 	stageEditor_->AddItem("位置", box_->transform_.translate_);
-	stageEditor_->AddItem("角度", box_->transform_.rotate_);
+	stageEditor_->AddItem("回転", box_->transform_.rotate_);
+	stageEditor_->AddItem("外のライトの輝度", spotLights_[0]->light_->intensity, "ライトの調整");
+	stageEditor_->AddItem("外のライトの減衰率", spotLights_[0]->light_->decay, "ライトの調整");
+	stageEditor_->AddItem("外のライトの開く角度", spotLights_[0]->light_->cosAngle, "ライトの調整");
+	stageEditor_->AddItem("外のライトの減衰し始める角度", spotLights_[0]->light_->cosFalloffStart, "ライトの調整");
+	stageEditor_->AddItem("外のライトの距離", spotLights_[0]->light_->distance, "ライトの調整");
+	stageEditor_->AddItem("内のライトの輝度", spotLights_[1]->light_->intensity, "ライトの調整");
+	stageEditor_->AddItem("内のライトの減衰率", spotLights_[1]->light_->decay, "ライトの調整");
+	stageEditor_->AddItem("内のライトの開く角度", spotLights_[1]->light_->cosAngle, "ライトの調整");
+	stageEditor_->AddItem("内のライトの減衰し始める角度", spotLights_[1]->light_->cosFalloffStart, "ライトの調整");
+	stageEditor_->AddItem("内のライトの距離", spotLights_[1]->light_->distance, "ライトの調整");
 	ApplyGlobalVariable();
 }
 
 void SpotLightBoxAnimationEditor::ApplyGlobalVariable()
 {
 	box_->transform_.translate_ = stageEditor_->GetVector3Value("位置");
-	box_->transform_.rotate_ = stageEditor_->GetVector3Value("角度");
+	box_->transform_.rotate_ = stageEditor_->GetVector3Value("回転");
+	spotLights_[0]->light_->intensity = stageEditor_->GetFloatValue("外のライトの輝度", "ライトの調整");
+	spotLights_[0]->light_->decay = stageEditor_->GetFloatValue("外のライトの減衰率", "ライトの調整");
+	spotLights_[0]->light_->cosAngle = stageEditor_->GetFloatValue("外のライトの開く角度", "ライトの調整");
+	spotLights_[0]->light_->cosFalloffStart = stageEditor_->GetFloatValue("外のライトの減衰し始める角度", "ライトの調整");
+	spotLights_[0]->light_->distance = stageEditor_->GetFloatValue("外のライトの距離", "ライトの調整");
+
+	spotLights_[1]->light_->intensity = stageEditor_->GetFloatValue("内のライトの輝度", "ライトの調整");
+	spotLights_[1]->light_->decay = stageEditor_->GetFloatValue("内のライトの減衰率", "ライトの調整");
+	spotLights_[1]->light_->cosAngle = stageEditor_->GetFloatValue("内のライトの開く角度", "ライトの調整");
+	spotLights_[1]->light_->cosFalloffStart = stageEditor_->GetFloatValue("内のライトの減衰し始める角度", "ライトの調整");
+	spotLights_[1]->light_->distance = stageEditor_->GetFloatValue("内のライトの距離", "ライトの調整");
+
+	for (uint32_t i = 0; i < 2; i++) {
+		spotLights_[i]->light_->cosAngle = std::clamp<float>(spotLights_[i]->light_->cosAngle, -1.0f, 0.998f);
+		spotLights_[i]->light_->cosFalloffStart = std::clamp<float>(spotLights_[i]->light_->cosFalloffStart, spotLights_[i]->light_->cosAngle + 0.001f, 0.999f);
+
+		if (spotLights_[i]->light_->distance <= 0.0f) {
+			spotLights_[i]->light_->distance = 0.01f;
+		}
+	}
+
+	stageEditor_->SetVariable("外のライトの開く角度", spotLights_[0]->light_->cosAngle, "ライトの調整");
+	stageEditor_->SetVariable("外のライトの減衰し始める角度", spotLights_[0]->light_->cosFalloffStart, "ライトの調整");
+	stageEditor_->SetVariable("外のライトの距離", spotLights_[0]->light_->distance, "ライトの調整");
+	stageEditor_->SetVariable("内のライトの開く角度", spotLights_[1]->light_->cosAngle, "ライトの調整");
+	stageEditor_->SetVariable("内のライトの減衰し始める角度", spotLights_[1]->light_->cosAngle, "ライトの調整");
+	stageEditor_->SetVariable("内のライトの距離", spotLights_[1]->light_->cosAngle, "ライトの調整");
+	
 	box_->Update(0.0f);
 	LightUpdate();
 }

@@ -43,6 +43,15 @@ void SelectScene::Update()
 		ChangeScene(STAGE);
 		se_->Play();
 	}
+#ifdef _DEBUG
+	else if (input_->PressedKey(DIK_SPACE)) {
+		// シーン切り替え
+		stageNo_ = SHINING_STAR;
+		ChangeScene(STAGE);
+		se_->Play();
+	}
+#endif // _DEBUG
+
 }
 
 void SelectScene::Draw()

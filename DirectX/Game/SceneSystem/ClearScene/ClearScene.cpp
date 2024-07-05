@@ -36,6 +36,13 @@ void ClearScene::Update()
 		ChangeScene(SELECT);
 		se_.Play();
 	}
+#ifdef _DEBUG
+	else if (input_->PressedKey(DIK_SPACE)) {
+		// シーン切り替え
+		ChangeScene(SELECT);
+		se_.Play();
+	}
+#endif // _DEBUG
 }
 
 void ClearScene::Draw()

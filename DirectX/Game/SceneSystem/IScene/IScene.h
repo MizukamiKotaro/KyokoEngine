@@ -51,6 +51,8 @@ public:
 	virtual void ToBlackInitialize();
 	virtual void ToBlackUpdate();
 
+	virtual void FirstUpdate();
+
 	void ChangeScene(int sceneNo);
 
 	virtual void BlackDraw() { black_->Draw(*camera_.get()); }

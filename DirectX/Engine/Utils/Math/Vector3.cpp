@@ -1,5 +1,6 @@
 #include "Vector3.h"
 #include <cmath>
+#include <algorithm>
 
 float Vector3::Length() {
 	float result = static_cast<float>(sqrt(powf(this->x, 2) + powf(this->y, 2) + powf(this->z, 2)));
@@ -21,6 +22,11 @@ Vector3 Vector3::Normalize() {
 	}
 
 	return result;
+}
+
+Vector3 Vector3::Clamp(const float& min, const float& max)
+{
+	return Vector3(std::clamp(x,min,max), std::clamp(y, min, max), std::clamp(z, min, max));
 }
 
 

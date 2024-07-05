@@ -17,6 +17,7 @@ public:
 	void Initialize();
 	void Update();
 	void Draw();
+	void FirstUpdate();
 	const bool& GetIsClear() const { return finishLive_->IsClear(); }
 
 private:
@@ -35,4 +36,8 @@ private:
 	NotesList* notesList_ = nullptr;
 
 	float time_;
+#ifdef _DEBUG
+	bool isEdit_;
+#endif // _DEBUG
+
 };

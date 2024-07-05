@@ -8,9 +8,13 @@ Bloom::Bloom()
 
 	highLumi_ = std::make_unique<HighLumi>();
 	highLumi_->Initialize();
+	highLumi_->highLumiData_->min = 0.110f;
+	highLumi_->highLumiData_->max = 0.390f;
 
 	gaussianBlur_ = std::make_unique<GaussianBlur>();
 	gaussianBlur_->Initialize();
+	gaussianBlur_->SetSize(20);
+	gaussianBlur_->SetSigma(14.0f);
 }
 
 Bloom::~Bloom()

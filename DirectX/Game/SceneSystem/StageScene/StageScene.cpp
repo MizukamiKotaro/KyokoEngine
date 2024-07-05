@@ -16,14 +16,16 @@ void StageScene::Initialize()
 
 void StageScene::Update()
 {
-	if (input_->PressedKey(DIK_RETURN) || game_->GetIsClear()) {
+	if (game_->GetIsClear()) {
 		// シーン切り替え
 		ChangeScene(CLEAR);
 	}
 
 #ifdef _DEBUG
-	
-
+	if (input_->PressedKey(DIK_SPACE)) {
+		// シーン切り替え
+		ChangeScene(CLEAR);
+	}
 #endif // _DEBUG
 
 	game_->Update();
@@ -39,5 +41,10 @@ void StageScene::Draw()
 
 	// フレームの終了
 	Kyoko::Engine::PostDraw();
+}
+
+void StageScene::FirstUpdate()
+{
+	game_->FirstUpdate();
 }
 

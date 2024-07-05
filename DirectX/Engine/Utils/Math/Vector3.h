@@ -61,6 +61,8 @@ public:
 
 	Vector3 Normalize();
 
+	Vector3 Clamp(const float& min, const float& max);
+
 public:
 	float x;
 	float y;

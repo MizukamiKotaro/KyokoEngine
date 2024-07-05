@@ -50,4 +50,5 @@ void IStageObject::UpdateGlobalVariable(const uint32_t& no)
 		}
 	}
 #endif // _DEBUG
+	uint32_t a = no; a = 0;
 }

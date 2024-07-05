@@ -11,7 +11,6 @@ DancingIdolEditor::DancingIdolEditor(const std::string& mainName, const std::str
 	idol_->transform_.scale_ *= 5;
 	idol_->SetColor(Vector4{ 0.8f,0.8f,0.2f,1.0f });
 	SetGlobalVariable();
-	//idol_->Update(0.0f);
 }
 
 void DancingIdolEditor::Update(const float& time) 

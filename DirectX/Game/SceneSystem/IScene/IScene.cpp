@@ -124,6 +124,10 @@ void IScene::ToBlackUpdate()
 	}
 }
 
+void IScene::FirstUpdate()
+{
+}
+
 void IScene::ChangeScene(int sceneNo)
 {
 	nextScene_ = sceneNo;

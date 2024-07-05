@@ -53,7 +53,6 @@ private:
 
 	std::unique_ptr<SpotLightBoxAnimation> spotLightBox_;
 	std::unique_ptr<SpotLightBoxAnimation> spotLightBox2_;
-	std::unique_ptr<Sprite> puniru_;
 
 	std::unique_ptr<Vignette> vignette_;
 	std::unique_ptr<Noise> noise_;

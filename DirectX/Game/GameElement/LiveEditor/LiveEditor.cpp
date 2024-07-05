@@ -36,10 +36,6 @@ void LiveEditor::Initialize()
 	idolManager_->Initialize();
 	floor_->Initialize();
 	dome_->Initialize();
-
-	WriteScreen();
-	WriteScreen();
-	WriteOutline();
 }
 
 void LiveEditor::Update(const float& time)
