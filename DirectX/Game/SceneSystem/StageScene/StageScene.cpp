@@ -19,12 +19,14 @@ void StageScene::Update()
 	if (game_->GetIsClear()) {
 		// シーン切り替え
 		ChangeScene(CLEAR);
+		Audio::AllStop();
 	}
 
 #ifdef _DEBUG
 	if (input_->PressedKey(DIK_SPACE)) {
 		// シーン切り替え
 		ChangeScene(CLEAR);
+		Audio::AllStop();
 	}
 #endif // _DEBUG
 
