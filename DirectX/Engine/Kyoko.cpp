@@ -154,7 +154,9 @@ void Kyoko::Engine::PostDraw()
 void Kyoko::Engine::Finalize()
 {
 #pragma region 基盤システムの終了
+#ifdef _DEBUG
 	globalVariables->Finalize();
+#endif // _DEBUG
 	ImGuiManager::Finalize();
 	
 	CoUninitialize();
