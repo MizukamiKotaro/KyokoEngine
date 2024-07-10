@@ -1,5 +1,4 @@
 #include "GlobalVariables.h"
-#include "Externals/nlohmann/json.hpp"
 #include "ImGuiManager/ImGuiManager.h"
 #include <fstream>
 #include "WindowsInfo/WindowsInfo.h"
@@ -1615,8 +1614,8 @@ bool GlobalVariables::IsTreeOpen(const std::string& chunkName, const std::string
 	}
 }
 
-void GlobalVariables::SaveFile(const std::string& chunkName, const std::string& groupName, const bool& isFin) {
-
+void GlobalVariables::SaveFile(const std::string& chunkName, const std::string& groupName, const bool& isFin)
+{
 	std::map<std::string, Chunk>::iterator itChunk = datas_.find(chunkName);
 
 	assert(itChunk != datas_.end());
@@ -1628,39 +1627,83 @@ void GlobalVariables::SaveFile(const std::string& chunkName, const std::string& 
 	nlohmann::json root;
 
 	root = nlohmann::json::object();
-	
+
 	root[groupName] = nlohmann::json::object();
 
-
 	for (std::map<std::string, Item>::iterator itItem = itGroup->second.begin();
-	     itItem != itGroup->second.end(); ++itItem) {
-		
+		itItem != itGroup->second.end(); ++itItem) {
+
 		const std::string& itemName = itItem->first;
 
 		Item& item = itItem->second;
 
-		if (std::holds_alternative<int32_t>(item)) {
-			
-			root[groupName][itemName] = std::get<int32_t>(item);
-		} else if (std::holds_alternative<float>(item)) {
+		size_t pos = itemName.find(kTreeName_[0]);
+		if (pos != std::string::npos) {
+			size_t underscorePos = itemName.find("_", pos + 5);
+			std::string tree1 = itemName.substr(pos + 5, underscorePos - pos - 5);
 
-			root[groupName][itemName] = std::get<float>(item);
-		} else if (std::holds_alternative<Vector2>(item)) {
+			std::string text = itemName.substr(underscorePos + 1);
+			pos = text.find(kTreeName_[1]);
+			if (pos != std::string::npos) {
+				underscorePos = text.find("_", pos + 5);
+				std::string tree2 = text.substr(pos + 5, underscorePos - pos - 5);
 
-			Vector2 value = std::get<Vector2>(item);
-			root[groupName][itemName] = nlohmann::json::array({value.x, value.y});
-		} else if (std::holds_alternative<Vector3>(item)) {
+				text = text.substr(underscorePos + 1);
+				pos = text.find(kTreeName_[2]);
+				if (pos != std::string::npos) {
 
-			Vector3 value = std::get<Vector3>(item);
-			root[groupName][itemName] = nlohmann::json::array({ value.x, value.y, value.z });
-		} else if (std::holds_alternative<bool>(item)) {
+					underscorePos = text.find("_", pos + 5);
+					std::string tree3 = text.substr(pos + 5, underscorePos - pos - 5);
 
-			root[groupName][itemName] = std::get<bool>(item);
-		} else if (std::holds_alternative<std::string>(item)) {
+					text = text.substr(underscorePos + 1);
+					pos = text.find(kTreeName_[3]);
+					if (pos != std::string::npos) {
 
-			root[groupName][itemName] = std::get<std::string>(item);
+						underscorePos = text.find("_", pos + 5);
+						std::string tree4 = text.substr(pos + 5, underscorePos - pos - 5);
+
+						text = text.substr(underscorePos + 1);
+						pos = text.find(kTreeName_[4]);
+						if (pos != std::string::npos) {
+
+							underscorePos = text.find("_", pos + 5);
+							std::string tree5 = text.substr(pos + 5, underscorePos - pos - 5);
+
+							text = text.substr(underscorePos + 1);
+							pos = text.find(kTreeName_[5]);
+							if (pos != std::string::npos) {
+
+
+								underscorePos = text.find("_", pos + 5);
+								if (underscorePos != std::string::npos) {
+									std::string tree6 = text.substr(pos + 5, underscorePos - pos - 5);
+									text = text.substr(underscorePos + 1);
+									ItemToRoot(root, groupName, item, text, tree1, tree2, tree3, tree4, tree5, tree6);
+								}
+							}
+							else {
+								ItemToRoot(root, groupName, item, text, tree1, tree2, tree3, tree4, tree5);
+							}
+						}
+						else {
+							ItemToRoot(root, groupName, item, text, tree1, tree2, tree3, tree4);
+						}
+					}
+					else {
+						ItemToRoot(root, groupName, item, text, tree1, tree2, tree3);
+					}
+				}
+				else {
+					ItemToRoot(root, groupName, item, text, tree1, tree2);
+				}
+			}
+			else {
+				ItemToRoot(root, groupName, item, text, tree1);
+			}
 		}
-
+		else {
+			ItemToRoot(root, groupName, item, itemName);
+		}
 	}
 
 	std::filesystem::path dir(kDirectoryPath);
@@ -1756,34 +1799,412 @@ void GlobalVariables::LoadFile(const std::string& chunkName, const std::string& 
 
 
 	for (nlohmann::json::iterator itItem = itGroup->begin(); itItem != itGroup->end(); ++itItem) {
-		
+
 		const std::string& itemName = itItem.key();
 
-
-		if (itItem->is_number_integer()) {
+		if (itItem->is_object()) {
 			
+			for (nlohmann::json::iterator i2 = itItem->begin(); i2 != itItem->end(); ++i2) {
+				const std::string& itemName2 = i2.key();
+
+				if (i2->is_object()) {
+
+					for (nlohmann::json::iterator i3 = i2->begin(); i3 != i2->end(); ++i3) {
+						const std::string& itemName3 = i3.key();
+
+						if (i3->is_object()) {
+
+							for (nlohmann::json::iterator i4 = i3->begin(); i4 != i3->end(); ++i4) {
+								const std::string& itemName4 = i4.key();
+
+								if (i4->is_object()) {
+
+									for (nlohmann::json::iterator i5 = i4->begin(); i5 != i4->end(); ++i5) {
+										const std::string& itemName5 = i5.key();
+
+										if (i5->is_object()) {
+
+											for (nlohmann::json::iterator i6 = i5->begin(); i6 != i5->end(); ++i6) {
+												const std::string& itemName6 = i6.key();
+
+												if (i6->is_object()) {
+
+													for (nlohmann::json::iterator i7 = i6->begin(); i7 != i6->end(); ++i7) {
+														const std::string& itemName7 = i7.key();
+
+														/*if (i7->is_object()) {
+
+															for (nlohmann::json::iterator i7 = i6->begin(); i7 != i6->end(); ++i7) {
+																const std::string& itemName7 = i7.key();
+
+
+															}
+														}
+														else */if (i7->is_number_integer()) {
+															int32_t value = i7->get<int32_t>();
+															SetValue(chunkName, groupName, itemName7, value, itemName, itemName2, itemName3, itemName4, itemName5, itemName6);
+														}
+														else if (i7->is_number_float()) {
+															double value = i7->get<double>();
+															SetValue(chunkName, groupName, itemName7, static_cast<float>(value), itemName, itemName2, itemName3, itemName4, itemName5, itemName6);
+														}
+														else if (i7->is_array() && i7->size() == 2) {
+															Vector2 value = { i7->at(0), i7->at(1) };
+															SetValue(chunkName, groupName, itemName7, value, itemName, itemName2, itemName3, itemName4, itemName5, itemName6);
+														}
+														else if (i7->is_array() && i7->size() == 3) {
+															Vector3 value = { i7->at(0), i7->at(1), i7->at(2) };
+															SetValue(chunkName, groupName, itemName7, value, itemName, itemName2, itemName3, itemName4, itemName5, itemName6);
+														}
+														else if (i7->is_boolean()) {
+															bool value = i7->get<bool>();
+															SetValue(chunkName, groupName, itemName7, value, itemName, itemName2, itemName3, itemName4, itemName5, itemName6);
+														}
+														else if (i7->is_string()) {
+															std::string value = i7->get<std::string>();
+															SetValue(chunkName, groupName, itemName7, value, itemName, itemName2, itemName3, itemName4, itemName5, itemName6);
+														}
+													}
+												}
+												else if (i6->is_number_integer()) {
+													int32_t value = i6->get<int32_t>();
+													SetValue(chunkName, groupName, itemName6, value, itemName, itemName2, itemName3, itemName4, itemName5);
+												}
+												else if (i6->is_number_float()) {
+													double value = i6->get<double>();
+													SetValue(chunkName, groupName, itemName6, static_cast<float>(value), itemName, itemName2, itemName3, itemName4, itemName5);
+												}
+												else if (i6->is_array() && i6->size() == 2) {
+													Vector2 value = { i6->at(0), i6->at(1) };
+													SetValue(chunkName, groupName, itemName6, value, itemName, itemName2, itemName3, itemName4, itemName5);
+												}
+												else if (i6->is_array() && i6->size() == 3) {
+													Vector3 value = { i6->at(0), i6->at(1), i6->at(2) };
+													SetValue(chunkName, groupName, itemName6, value, itemName, itemName2, itemName3, itemName4, itemName5);
+												}
+												else if (i6->is_boolean()) {
+													bool value = i6->get<bool>();
+													SetValue(chunkName, groupName, itemName6, value, itemName, itemName2, itemName3, itemName4, itemName5);
+												}
+												else if (i6->is_string()) {
+													std::string value = i6->get<std::string>();
+													SetValue(chunkName, groupName, itemName6, value, itemName, itemName2, itemName3, itemName4, itemName5);
+												}
+											}
+										}
+										else if (i5->is_number_integer()) {
+											int32_t value = i5->get<int32_t>();
+											SetValue(chunkName, groupName, itemName5, value, itemName, itemName2, itemName3, itemName4);
+										}
+										else if (i5->is_number_float()) {
+											double value = i5->get<double>();
+											SetValue(chunkName, groupName, itemName5, static_cast<float>(value), itemName, itemName2, itemName3, itemName4);
+										}
+										else if (i5->is_array() && i5->size() == 2) {
+											Vector2 value = { i5->at(0), i5->at(1) };
+											SetValue(chunkName, groupName, itemName5, value, itemName, itemName2, itemName3, itemName4);
+										}
+										else if (i5->is_array() && i5->size() == 3) {
+											Vector3 value = { i5->at(0), i5->at(1), i5->at(2) };
+											SetValue(chunkName, groupName, itemName5, value, itemName, itemName2, itemName3, itemName4);
+										}
+										else if (i5->is_boolean()) {
+											bool value = i5->get<bool>();
+											SetValue(chunkName, groupName, itemName5, value, itemName, itemName2, itemName3, itemName4);
+										}
+										else if (i5->is_string()) {
+											std::string value = i5->get<std::string>();
+											SetValue(chunkName, groupName, itemName5, value, itemName, itemName2, itemName3, itemName4);
+										}
+									}
+								}
+								else if (i4->is_number_integer()) {
+									int32_t value = i4->get<int32_t>();
+									SetValue(chunkName, groupName, itemName4, value, itemName, itemName2, itemName3);
+								}
+								else if (i4->is_number_float()) {
+									double value = i4->get<double>();
+									SetValue(chunkName, groupName, itemName4, static_cast<float>(value), itemName, itemName2, itemName3);
+								}
+								else if (i4->is_array() && i4->size() == 2) {
+									Vector2 value = { i4->at(0), i4->at(1) };
+									SetValue(chunkName, groupName, itemName4, value, itemName, itemName2, itemName3);
+								}
+								else if (i4->is_array() && i4->size() == 3) {
+									Vector3 value = { i4->at(0), i4->at(1), i4->at(2) };
+									SetValue(chunkName, groupName, itemName4, value, itemName, itemName2, itemName3);
+								}
+								else if (i4->is_boolean()) {
+									bool value = i4->get<bool>();
+									SetValue(chunkName, groupName, itemName4, value, itemName, itemName2, itemName3);
+								}
+								else if (i4->is_string()) {
+									std::string value = i4->get<std::string>();
+									SetValue(chunkName, groupName, itemName4, value, itemName, itemName2, itemName3);
+								}
+							}
+						}
+						else if (i3->is_number_integer()) {
+							int32_t value = i3->get<int32_t>();
+							SetValue(chunkName, groupName, itemName3, value, itemName, itemName2);
+						}
+						else if (i3->is_number_float()) {
+							double value = i3->get<double>();
+							SetValue(chunkName, groupName, itemName3, static_cast<float>(value), itemName, itemName2);
+						}
+						else if (i3->is_array() && i3->size() == 2) {
+							Vector2 value = { i3->at(0), i3->at(1) };
+							SetValue(chunkName, groupName, itemName3, value, itemName, itemName2);
+						}
+						else if (i3->is_array() && i3->size() == 3) {
+							Vector3 value = { i3->at(0), i3->at(1), i3->at(2) };
+							SetValue(chunkName, groupName, itemName3, value, itemName, itemName2);
+						}
+						else if (i3->is_boolean()) {
+							bool value = i3->get<bool>();
+							SetValue(chunkName, groupName, itemName3, value, itemName, itemName2);
+						}
+						else if (i3->is_string()) {
+							std::string value = i3->get<std::string>();
+							SetValue(chunkName, groupName, itemName3, value, itemName, itemName2);
+						}
+					}
+				}
+				else if (i2->is_number_integer()) {
+					int32_t value = i2->get<int32_t>();
+					SetValue(chunkName, groupName, itemName2, value, itemName);
+				}
+				else if (i2->is_number_float()) {
+					double value = i2->get<double>();
+					SetValue(chunkName, groupName, itemName2, static_cast<float>(value), itemName);
+				}
+				else if (i2->is_array() && i2->size() == 2) {
+					Vector2 value = { i2->at(0), i2->at(1) };
+					SetValue(chunkName, groupName, itemName2, value, itemName);
+				}
+				else if (i2->is_array() && i2->size() == 3) {
+					Vector3 value = { i2->at(0), i2->at(1), i2->at(2) };
+					SetValue(chunkName, groupName, itemName2, value, itemName);
+				}
+				else if (i2->is_boolean()) {
+					bool value = i2->get<bool>();
+					SetValue(chunkName, groupName, itemName2, value, itemName);
+				}
+				else if (i2->is_string()) {
+					std::string value = i2->get<std::string>();
+					SetValue(chunkName, groupName, itemName2, value, itemName);
+				}
+			}
+		}
+		else if (itItem->is_number_integer()) {
 			int32_t value = itItem->get<int32_t>();
 			SetValue(chunkName, groupName, itemName, value);
-		} else if (itItem->is_number_float()) {
-
+		}
+		else if (itItem->is_number_float()) {
 			double value = itItem->get<double>();
 			SetValue(chunkName, groupName, itemName, static_cast<float>(value));
-		} else if (itItem->is_array() && itItem->size() == 2) {
-
-			Vector2 value = {itItem->at(0), itItem->at(1)};
+		}
+		else if (itItem->is_array() && itItem->size() == 2) {
+			Vector2 value = { itItem->at(0), itItem->at(1) };
 			SetValue(chunkName, groupName, itemName, value);
-		} else if (itItem->is_array() && itItem->size() == 3) {
-
+		}
+		else if (itItem->is_array() && itItem->size() == 3) {
 			Vector3 value = { itItem->at(0), itItem->at(1), itItem->at(2) };
 			SetValue(chunkName, groupName, itemName, value);
-		} else if (itItem->is_boolean()) {
-
+		}
+		else if (itItem->is_boolean()) {
 			bool value = itItem->get<bool>();
 			SetValue(chunkName, groupName, itemName, value);
-		} else if (itItem->is_string()) {
-
+		}
+		else if (itItem->is_string()) {
 			std::string value = itItem->get<std::string>();
 			SetValue(chunkName, groupName, itemName, value);
+		}
+	}
+}
+
+void GlobalVariables::ItemToRoot(nlohmann::json& root, const std::string& groupName, Item& item, const std::string& text, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
+{
+	if (tree1 == "_") {
+		if (std::holds_alternative<int32_t>(item)) {
+			root[groupName][text] = std::get<int32_t>(item);
+		}
+		else if (std::holds_alternative<float>(item)) {
+			root[groupName][text] = std::get<float>(item);
+		}
+		else if (std::holds_alternative<Vector2>(item)) {
+			Vector2 value = std::get<Vector2>(item);
+			root[groupName][text] = nlohmann::json::array({ value.x, value.y });
+		}
+		else if (std::holds_alternative<Vector3>(item)) {
+			Vector3 value = std::get<Vector3>(item);
+			root[groupName][text] = nlohmann::json::array({ value.x, value.y, value.z });
+		}
+		else if (std::holds_alternative<bool>(item)) {
+			root[groupName][text] = std::get<bool>(item);
+		}
+		else if (std::holds_alternative<std::string>(item)) {
+			root[groupName][text] = std::get<std::string>(item);
+		}
+	}
+	else {
+		if (!root[groupName][tree1].is_object()) {
+			root[groupName][tree1] = nlohmann::json::object();
+		}
+		if (tree2 == "_") {
+			if (std::holds_alternative<int32_t>(item)) {
+				root[groupName][tree1][text] = std::get<int32_t>(item);
+			}
+			else if (std::holds_alternative<float>(item)) {
+				root[groupName][tree1][text] = std::get<float>(item);
+			}
+			else if (std::holds_alternative<Vector2>(item)) {
+				Vector2 value = std::get<Vector2>(item);
+				root[groupName][tree1][text] = nlohmann::json::array({ value.x, value.y });
+			}
+			else if (std::holds_alternative<Vector3>(item)) {
+				Vector3 value = std::get<Vector3>(item);
+				root[groupName][tree1][text] = nlohmann::json::array({ value.x, value.y, value.z });
+			}
+			else if (std::holds_alternative<bool>(item)) {
+				root[groupName][tree1][text] = std::get<bool>(item);
+			}
+			else if (std::holds_alternative<std::string>(item)) {
+				root[groupName][tree1][text] = std::get<std::string>(item);
+			}
+		}
+		else {
+			if (!root[groupName][tree1][tree2].is_object()) {
+				root[groupName][tree1][tree2] = nlohmann::json::object();
+			}
+			if (tree3 == "_") {
+				if (std::holds_alternative<int32_t>(item)) {
+					root[groupName][tree1][tree2][text] = std::get<int32_t>(item);
+				}
+				else if (std::holds_alternative<float>(item)) {
+					root[groupName][tree1][tree2][text] = std::get<float>(item);
+				}
+				else if (std::holds_alternative<Vector2>(item)) {
+					Vector2 value = std::get<Vector2>(item);
+					root[groupName][tree1][tree2][text] = nlohmann::json::array({ value.x, value.y });
+				}
+				else if (std::holds_alternative<Vector3>(item)) {
+					Vector3 value = std::get<Vector3>(item);
+					root[groupName][tree1][tree2][text] = nlohmann::json::array({ value.x, value.y, value.z });
+				}
+				else if (std::holds_alternative<bool>(item)) {
+					root[groupName][tree1][tree2][text] = std::get<bool>(item);
+				}
+				else if (std::holds_alternative<std::string>(item)) {
+					root[groupName][tree1][tree2][text] = std::get<std::string>(item);
+				}
+			}
+			else {
+				if (!root[groupName][tree1][tree2][tree3].is_object()) {
+					root[groupName][tree1][tree2][tree3] = nlohmann::json::object();
+				}
+				if (tree4 == "_") {
+					if (std::holds_alternative<int32_t>(item)) {
+						root[groupName][tree1][tree2][tree3][text] = std::get<int32_t>(item);
+					}
+					else if (std::holds_alternative<float>(item)) {
+						root[groupName][tree1][tree2][tree3][text] = std::get<float>(item);
+					}
+					else if (std::holds_alternative<Vector2>(item)) {
+						Vector2 value = std::get<Vector2>(item);
+						root[groupName][tree1][tree2][tree3][text] = nlohmann::json::array({ value.x, value.y });
+					}
+					else if (std::holds_alternative<Vector3>(item)) {
+						Vector3 value = std::get<Vector3>(item);
+						root[groupName][tree1][tree2][tree3][text] = nlohmann::json::array({ value.x, value.y, value.z });
+					}
+					else if (std::holds_alternative<bool>(item)) {
+						root[groupName][tree1][tree2][tree3][text] = std::get<bool>(item);
+					}
+					else if (std::holds_alternative<std::string>(item)) {
+						root[groupName][tree1][tree2][tree3][text] = std::get<std::string>(item);
+					}
+				}
+				else {
+					if (!root[groupName][tree1][tree2][tree3][tree4].is_object()) {
+						root[groupName][tree1][tree2][tree3][tree4] = nlohmann::json::object();
+					}
+					if (tree5 == "_") {
+						if (std::holds_alternative<int32_t>(item)) {
+							root[groupName][tree1][tree2][tree3][tree4][text] = std::get<int32_t>(item);
+						}
+						else if (std::holds_alternative<float>(item)) {
+							root[groupName][tree1][tree2][tree3][tree4][text] = std::get<float>(item);
+						}
+						else if (std::holds_alternative<Vector2>(item)) {
+							Vector2 value = std::get<Vector2>(item);
+							root[groupName][tree1][tree2][tree3][tree4][text] = nlohmann::json::array({ value.x, value.y });
+						}
+						else if (std::holds_alternative<Vector3>(item)) {
+							Vector3 value = std::get<Vector3>(item);
+							root[groupName][tree1][tree2][tree3][tree4][text] = nlohmann::json::array({ value.x, value.y, value.z });
+						}
+						else if (std::holds_alternative<bool>(item)) {
+							root[groupName][tree1][tree2][tree3][tree4][text] = std::get<bool>(item);
+						}
+						else if (std::holds_alternative<std::string>(item)) {
+							root[groupName][tree1][tree2][tree3][tree4][text] = std::get<std::string>(item);
+						}
+					}
+					else {
+						if (!root[groupName][tree1][tree2][tree3][tree4][tree5].is_object()) {
+							root[groupName][tree1][tree2][tree3][tree4][tree5] = nlohmann::json::object();
+						}
+						if (tree6 == "_") {
+							if (std::holds_alternative<int32_t>(item)) {
+								root[groupName][tree1][tree2][tree3][tree4][tree5][text] = std::get<int32_t>(item);
+							}
+							else if (std::holds_alternative<float>(item)) {
+								root[groupName][tree1][tree2][tree3][tree4][tree5][text] = std::get<float>(item);
+							}
+							else if (std::holds_alternative<Vector2>(item)) {
+								Vector2 value = std::get<Vector2>(item);
+								root[groupName][tree1][tree2][tree3][tree4][tree5][text] = nlohmann::json::array({ value.x, value.y });
+							}
+							else if (std::holds_alternative<Vector3>(item)) {
+								Vector3 value = std::get<Vector3>(item);
+								root[groupName][tree1][tree2][tree3][tree4][tree5][text] = nlohmann::json::array({ value.x, value.y, value.z });
+							}
+							else if (std::holds_alternative<bool>(item)) {
+								root[groupName][tree1][tree2][tree3][tree4][tree5][text] = std::get<bool>(item);
+							}
+							else if (std::holds_alternative<std::string>(item)) {
+								root[groupName][tree1][tree2][tree3][tree4][tree5][text] = std::get<std::string>(item);
+							}
+						}
+						else {
+							if (!root[groupName][tree1][tree2][tree3][tree4][tree5][tree6].is_object()) {
+								root[groupName][tree1][tree2][tree3][tree4][tree5][tree6] = nlohmann::json::object();
+							}
+							if (std::holds_alternative<int32_t>(item)) {
+								root[groupName][tree1][tree2][tree3][tree4][tree5][tree6][text] = std::get<int32_t>(item);
+							}
+							else if (std::holds_alternative<float>(item)) {
+								root[groupName][tree1][tree2][tree3][tree4][tree5][tree6][text] = std::get<float>(item);
+							}
+							else if (std::holds_alternative<Vector2>(item)) {
+								Vector2 value = std::get<Vector2>(item);
+								root[groupName][tree1][tree2][tree3][tree4][tree5][tree6][text] = nlohmann::json::array({ value.x, value.y });
+							}
+							else if (std::holds_alternative<Vector3>(item)) {
+								Vector3 value = std::get<Vector3>(item);
+								root[groupName][tree1][tree2][tree3][tree4][tree5][tree6][text] = nlohmann::json::array({ value.x, value.y, value.z });
+							}
+							else if (std::holds_alternative<bool>(item)) {
+								root[groupName][tree1][tree2][tree3][tree4][tree5][tree6][text] = std::get<bool>(item);
+							}
+							else if (std::holds_alternative<std::string>(item)) {
+								root[groupName][tree1][tree2][tree3][tree4][tree5][tree6][text] = std::get<std::string>(item);
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 }

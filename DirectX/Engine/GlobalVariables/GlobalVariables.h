@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include "Vector4.h"
+#include "Externals/nlohmann/json.hpp"
 
 class Vector2;
 class Vector3;
@@ -100,9 +101,11 @@ public:
 	template<typename T>
 	void SaveAndSetVariableDontTouchImGui(const std::string& key, const T& value);
 
-	bool IsTreeOpen(const std::string& chunkName, const std::string& groupName, const std::string& tree1, const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
+	bool IsTreeOpen(const std::string& chunkName, const std::string& groupName, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
 
 	void SaveFile(const std::string& chunkName, const std::string& groupName, const bool& isFin = false);
+
+	//void SaveF(const std::string& chunkName, const std::string& groupName, const bool& isFin = false);
 
 	void LoadFiles();
 
@@ -131,6 +134,8 @@ private:
 
 	template<typename T>
 	void SetValue(const std::string& chunkName, const std::string& groupName, const std::string& key, const T& value, const std::string& tree1, const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
+
+	void ItemToRoot(nlohmann::json& root, const std::string& groupName, Item& item, const std::string& text, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
 
 #ifdef _DEBUG
 	void PreparationImGui(const std::string& itemName, Item& item);
