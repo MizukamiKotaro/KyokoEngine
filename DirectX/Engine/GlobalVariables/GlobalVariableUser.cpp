@@ -167,6 +167,33 @@ void GlobalVariableUser::AddItem(const std::string& key, const Vector3& value, c
 	}
 }
 
+void GlobalVariableUser::AddItem(const std::string& key, const Vector4& value, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
+{
+	if (tree_.size() == 0) {
+		if (tree1 == "_") {
+			global_->AddItem(chunkName_, groupName_, key, value);
+		}
+		else {
+			global_->AddItem(chunkName_, groupName_, key, value, 0, tree1, tree2, tree3, tree4, tree5, tree6);
+		}
+	}
+	else if (tree_.size() == 1) {
+		global_->AddItem(chunkName_, groupName_, key, value, 0, tree_[0], tree1, tree2, tree3, tree4, tree5);
+	}
+	else if (tree_.size() == 2) {
+		global_->AddItem(chunkName_, groupName_, key, value, 0, tree_[0], tree_[1], tree1, tree2, tree3, tree4);
+	}
+	else if (tree_.size() == 3) {
+		global_->AddItem(chunkName_, groupName_, key, value, 0, tree_[0], tree_[1], tree_[2], tree1, tree2, tree3);
+	}
+	else if (tree_.size() == 4) {
+		global_->AddItem(chunkName_, groupName_, key, value, 0, tree_[0], tree_[1], tree_[2], tree_[3], tree1, tree2);
+	}
+	else if (tree_.size() == 5) {
+		global_->AddItem(chunkName_, groupName_, key, value, 0, tree_[0], tree_[1], tree_[2], tree_[3], tree_[4], tree1);
+	}
+}
+
 void GlobalVariableUser::AddItem(const std::string& key, const bool& value, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
 {
 	if (tree_.size() == 0) {
@@ -218,6 +245,28 @@ void GlobalVariableUser::AddItem(const std::string& key, const std::string& valu
 	}
 	else if (tree_.size() == 5) {
 		global_->AddItem(chunkName_, groupName_, key, value, 0, tree_[0], tree_[1], tree_[2], tree_[3], tree_[4], tree1);
+	}
+}
+
+void GlobalVariableUser::AddItemColor(const std::string& key, const Vector4& value, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
+{
+	if (tree_.size() == 0) {
+		global_->AddItemColor(chunkName_, groupName_, key, value, tree1, tree2, tree3, tree4, tree5, tree6);
+	}
+	else if (tree_.size() == 1) {
+		global_->AddItemColor(chunkName_, groupName_, key, value, tree_[0], tree1, tree2, tree3, tree4, tree5);
+	}
+	else if (tree_.size() == 2) {
+		global_->AddItemColor(chunkName_, groupName_, key, value, tree_[0], tree_[1], tree1, tree2, tree3, tree4);
+	}
+	else if (tree_.size() == 3) {
+		global_->AddItemColor(chunkName_, groupName_, key, value, tree_[0], tree_[1], tree_[2], tree1, tree2, tree3);
+	}
+	else if (tree_.size() == 4) {
+		global_->AddItemColor(chunkName_, groupName_, key, value, tree_[0], tree_[1], tree_[2], tree_[3], tree1, tree2);
+	}
+	else if (tree_.size() == 5) {
+		global_->AddItemColor(chunkName_, groupName_, key, value, tree_[0], tree_[1], tree_[2], tree_[3], tree_[4], tree1);
 	}
 }
 
@@ -325,6 +374,32 @@ const Vector3& GlobalVariableUser::GetVector3Value(const std::string& key, const
 	}
 }
 
+const Vector4& GlobalVariableUser::GetVector4Value(const std::string& key, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6) const
+{
+	if (tree_.size() == 1) {
+		return global_->GetVector4Value(chunkName_, groupName_, key, 0, tree_[0], tree1, tree2, tree3, tree4, tree5);
+	}
+	else if (tree_.size() == 2) {
+		return global_->GetVector4Value(chunkName_, groupName_, key, 0, tree_[0], tree_[1], tree1, tree2, tree3, tree4);
+	}
+	else if (tree_.size() == 3) {
+		return global_->GetVector4Value(chunkName_, groupName_, key, 0, tree_[0], tree_[1], tree_[2], tree1, tree2, tree3);
+	}
+	else if (tree_.size() == 4) {
+		return global_->GetVector4Value(chunkName_, groupName_, key, 0, tree_[0], tree_[1], tree_[2], tree_[3], tree1, tree2);
+	}
+	else if (tree_.size() == 5) {
+		return global_->GetVector4Value(chunkName_, groupName_, key, 0, tree_[0], tree_[1], tree_[2], tree_[3], tree_[4], tree1);
+	}
+
+	if (tree1 == "_") {
+		return global_->GetVector4Value(chunkName_, groupName_, key);
+	}
+	else {
+		return global_->GetVector4Value(chunkName_, groupName_, key, 0, tree1, tree2, tree3, tree4, tree5, tree6);
+	}
+}
+
 const bool& GlobalVariableUser::GetBoolValue(const std::string& key, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6) const
 {
 	if (tree_.size() == 1) {
@@ -375,6 +450,26 @@ const std::string& GlobalVariableUser::GetStringValue(const std::string& key, co
 	else {
 		return global_->GetStringValue(chunkName_, groupName_, key, 0, tree1, tree2, tree3, tree4, tree5, tree6);
 	}
+}
+
+const Vector4& GlobalVariableUser::GetColor(const std::string& key, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6) const
+{
+	if (tree_.size() == 1) {
+		return global_->GetColor(chunkName_, groupName_, key, tree_[0], tree1, tree2, tree3, tree4, tree5);
+	}
+	else if (tree_.size() == 2) {
+		return global_->GetColor(chunkName_, groupName_, key, tree_[0], tree_[1], tree1, tree2, tree3, tree4);
+	}
+	else if (tree_.size() == 3) {
+		return global_->GetColor(chunkName_, groupName_, key, tree_[0], tree_[1], tree_[2], tree1, tree2, tree3);
+	}
+	else if (tree_.size() == 4) {
+		return global_->GetColor(chunkName_, groupName_, key, tree_[0], tree_[1], tree_[2], tree_[3], tree1, tree2);
+	}
+	else if (tree_.size() == 5) {
+		return global_->GetColor(chunkName_, groupName_, key, tree_[0], tree_[1], tree_[2], tree_[3], tree_[4], tree1);
+	}
+	return global_->GetColor(chunkName_, groupName_, key, tree1, tree2, tree3, tree4, tree5, tree6);
 }
 
 void GlobalVariableUser::SetVariable(const std::string& key, const int32_t& value, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
@@ -465,6 +560,28 @@ void GlobalVariableUser::SetVariable(const std::string& key, const Vector3& valu
 	}
 }
 
+void GlobalVariableUser::SetVariable(const std::string& key, const Vector4& value, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
+{
+	if (tree_.size() == 0) {
+		global_->SetVariable(chunkName_, groupName_, key, value, tree1, tree2, tree3, tree4, tree5, tree6);
+	}
+	else if (tree_.size() == 1) {
+		global_->SetVariable(chunkName_, groupName_, key, value, tree_[0], tree1, tree2, tree3, tree4, tree5);
+	}
+	else if (tree_.size() == 2) {
+		global_->SetVariable(chunkName_, groupName_, key, value, tree_[0], tree_[1], tree1, tree2, tree3, tree4);
+	}
+	else if (tree_.size() == 3) {
+		global_->SetVariable(chunkName_, groupName_, key, value, tree_[0], tree_[1], tree_[2], tree1, tree2, tree3);
+	}
+	else if (tree_.size() == 4) {
+		global_->SetVariable(chunkName_, groupName_, key, value, tree_[0], tree_[1], tree_[2], tree_[3], tree1, tree2);
+	}
+	else if (tree_.size() == 5) {
+		global_->SetVariable(chunkName_, groupName_, key, value, tree_[0], tree_[1], tree_[2], tree_[3], tree_[4], tree1);
+	}
+}
+
 void GlobalVariableUser::SetVariable(const std::string& key, const bool& value, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
 {
 	if (tree_.size() == 0) {
@@ -529,6 +646,11 @@ void GlobalVariableUser::AddItemDontTouchImGui(const std::string& key, const Vec
 	global_->AddItemDontTouchImGui(key, value);
 }
 
+void GlobalVariableUser::AddItemDontTouchImGui(const std::string& key, const Vector4& value)
+{
+	global_->AddItemDontTouchImGui(key, value);
+}
+
 void GlobalVariableUser::AddItemDontTouchImGui(const std::string& key, const bool& value)
 {
 	global_->AddItemDontTouchImGui(key, value);
@@ -559,6 +681,11 @@ const Vector3& GlobalVariableUser::GetVector3ValueDontTouchImGui(const std::stri
 	return global_->GetVector3ValueDontTouchImGui(key);
 }
 
+const Vector4& GlobalVariableUser::GetVector4ValueDontTouchImGui(const std::string& key) const
+{
+	return global_->GetVector4ValueDontTouchImGui(key);
+}
+
 const bool& GlobalVariableUser::GetBoolValueDontTouchImGui(const std::string& key) const
 {
 	return global_->GetBoolValueDontTouchImGui(key);
@@ -585,6 +712,11 @@ void GlobalVariableUser::SaveDontTouchImGui(const std::string& key, const Vector
 }
 
 void GlobalVariableUser::SaveDontTouchImGui(const std::string& key, const Vector3& value)
+{
+	global_->SaveAndSetVariableDontTouchImGui(key, value);
+}
+
+void GlobalVariableUser::SaveDontTouchImGui(const std::string& key, const Vector4& value)
 {
 	global_->SaveAndSetVariableDontTouchImGui(key, value);
 }
