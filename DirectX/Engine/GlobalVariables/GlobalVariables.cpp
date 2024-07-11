@@ -46,15 +46,13 @@ void GlobalVariables::Update() {
 
 	for (std::map<std::string, Chunk>::iterator itChunk = datas_.begin();
 		itChunk != datas_.end(); ++itChunk) {
-
 		const std::string& chunkName = itChunk->first;
 
-		/*if (chunkName == "aaDontTouchPlayData") {
+		if (chunkName == "aaDontTouchPlayData") {
 			continue;
-		}*/
+		}
 
 		Chunk& chunk = itChunk->second;
-
 		if (!ImGui::Begin(chunkName.c_str(), nullptr, ImGuiWindowFlags_MenuBar)) {
 			ImGui::End();
 			continue;
@@ -65,242 +63,38 @@ void GlobalVariables::Update() {
 
 		for (std::map<std::string, Group>::iterator itGroup = chunk.begin();
 			itGroup != chunk.end(); ++itGroup) {
-
 			const std::string& groupName = itGroup->first;
-
 			Group& group = itGroup->second;
-
 			if (!ImGui::BeginMenu(groupName.c_str())) {
 				continue;
 			}
 
 			std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, GroupPtr>>>>>> treeMap;
-
 			for (std::map<std::string, Item>::iterator itItem = group.begin();
 				itItem != group.end(); ++itItem) {
-
 				const std::string& itemName = itItem->first;
-
 				Item& item = itItem->second;
-
-				size_t pos = itemName.find(kTreeName_[0]);
-				if (pos != std::string::npos) {
-					size_t underscorePos = itemName.find("_", pos + 5);
-					std::string tree1 = itemName.substr(pos + 5, underscorePos - pos - 5);
-
-					std::string text = itemName.substr(underscorePos + 1);
-					pos = text.find(kTreeName_[1]);
-					if (pos != std::string::npos) {
-						underscorePos = text.find("_", pos + 5);
-						std::string tree2 = text.substr(pos + 5, underscorePos - pos - 5);
-
-						text = text.substr(underscorePos + 1);
-						pos = text.find(kTreeName_[2]);
-						if (pos != std::string::npos) {
-
-							underscorePos = text.find("_", pos + 5);
-							std::string tree3 = text.substr(pos + 5, underscorePos - pos - 5);
-
-							text = text.substr(underscorePos + 1);
-							pos = text.find(kTreeName_[3]);
-							if (pos != std::string::npos) {
-
-								underscorePos = text.find("_", pos + 5);
-								std::string tree4 = text.substr(pos + 5, underscorePos - pos - 5);
-
-								text = text.substr(underscorePos + 1);
-								pos = text.find(kTreeName_[4]);
-								if (pos != std::string::npos) {
-
-									underscorePos = text.find("_", pos + 5);
-									std::string tree5 = text.substr(pos + 5, underscorePos - pos - 5);
-
-									text = text.substr(underscorePos + 1);
-									pos = text.find(kTreeName_[5]);
-									if (pos != std::string::npos) {
-
-
-										underscorePos = text.find("_", pos + 5);
-										if (underscorePos != std::string::npos) {
-											std::string tree6 = text.substr(pos + 5, underscorePos - pos - 5);
-											text = text.substr(underscorePos + 1);
-											treeMap[tree1][tree2][tree3][tree4][tree5][tree6][text] = &item;
-											isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6] = false;
-										}
-									}
-									else {
-										treeMap[tree1][tree2][tree3][tree4][tree5]["_"][text] = &item;
-										isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5] = false;
-									}
-								}
-								else {
-									treeMap[tree1][tree2][tree3][tree4]["_"]["_"][text] = &item;
-									isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4] = false;
-								}
-							}
-							else {
-								treeMap[tree1][tree2][tree3]["_"]["_"]["_"][text] = &item;
-								isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3] = false;
-							}
-						}
-						else {
-							treeMap[tree1][tree2]["_"]["_"]["_"]["_"][text] = &item;
-							isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2] = false;
-						}
-					}
-					else {
-						treeMap[tree1]["_"]["_"]["_"]["_"]["_"][text] = &item;
-						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1] = false;
-					}
-				}
-				else {
-					PreparationImGui(itemName, item);
-				}
+				std::vector<std::string> treeNames(6, "_");
+				MakeTreeMap(chunkName, groupName, treeMap, item, itemName, treeNames);
 			}
 
-			for (std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, GroupPtr>>>>>>::iterator itTree1 = treeMap.begin();
-				itTree1 != treeMap.end(); ++itTree1) {
+			for (std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, GroupPtr>>>>>>::iterator itTree1 = treeMap.begin(); itTree1 != treeMap.end(); ++itTree1) {
 				const std::string& tree1 = itTree1->first;
 				if (ImGui::TreeNode(tree1.c_str())) {
 					isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1] = true;
-					for (std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, GroupPtr>>>>>::iterator itTree2 = itTree1->second.begin();
-						itTree2 != itTree1->second.end(); ++itTree2) {
-						const std::string& tree2 = itTree2->first;
-						if (tree2 == "_") {
-							for (std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, GroupPtr>>>>::iterator itTree3 = itTree2->second.begin();
-								itTree3 != itTree2->second.end(); ++itTree3) {
-								for (std::map<std::string, std::map<std::string, std::map<std::string, GroupPtr>>>::iterator itTree4 = itTree3->second.begin();
-									itTree4 != itTree3->second.end(); ++itTree4) {
-									for (std::map<std::string, std::map<std::string, GroupPtr>>::iterator itTree5 = itTree4->second.begin();
-										itTree5 != itTree4->second.end(); ++itTree5) {
-										for (std::map<std::string, GroupPtr>::iterator itTree6 = itTree5->second.begin();
-											itTree6 != itTree5->second.end(); ++itTree6) {
-											for (std::map<std::string, Item*>::iterator itItem = itTree6->second.begin();
-												itItem != itTree6->second.end(); ++itItem) {
-
-												PreparationImGui(itItem->first, *itItem->second);
-											}
-										}
-									}
-								}
-							}
-						}
-						else {
-							if (ImGui::TreeNode(tree2.c_str())) {
-								isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2] = true;
-								for (std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, GroupPtr>>>>::iterator itTree3 = itTree2->second.begin();
-									itTree3 != itTree2->second.end(); ++itTree3) {
-									const std::string& tree3 = itTree3->first;
-									if (tree3 == "_") {
-										for (std::map<std::string, std::map<std::string, std::map<std::string, GroupPtr>>>::iterator itTree4 = itTree3->second.begin();
-											itTree4 != itTree3->second.end(); ++itTree4) {
-											for (std::map<std::string, std::map<std::string, GroupPtr>>::iterator itTree5 = itTree4->second.begin();
-												itTree5 != itTree4->second.end(); ++itTree5) {
-												for (std::map<std::string, GroupPtr>::iterator itTree6 = itTree5->second.begin();
-													itTree6 != itTree5->second.end(); ++itTree6) {
-													for (std::map<std::string, Item*>::iterator itItem = itTree6->second.begin();
-														itItem != itTree6->second.end(); ++itItem) {
-
-														PreparationImGui(itItem->first, *itItem->second);
-													}
-												}
-											}
-										}
-									}
-									else {
-										if (ImGui::TreeNode(tree3.c_str())) {
-											isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3] = true;
-											for (std::map<std::string, std::map<std::string, std::map<std::string, GroupPtr>>>::iterator itTree4 = itTree3->second.begin();
-												itTree4 != itTree3->second.end(); ++itTree4) {
-												const std::string& tree4 = itTree4->first;
-												if (tree4 == "_") {
-													for (std::map<std::string, std::map<std::string, GroupPtr>>::iterator itTree5 = itTree4->second.begin();
-														itTree5 != itTree4->second.end(); ++itTree5) {
-														for (std::map<std::string, GroupPtr>::iterator itTree6 = itTree5->second.begin();
-															itTree6 != itTree5->second.end(); ++itTree6) {
-															for (std::map<std::string, Item*>::iterator itItem = itTree6->second.begin();
-																itItem != itTree6->second.end(); ++itItem) {
-
-																PreparationImGui(itItem->first, *itItem->second);
-															}
-														}
-													}
-												}
-												else {
-													if (ImGui::TreeNode(tree4.c_str())) {
-														isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4] = true;
-														for (std::map<std::string, std::map<std::string, GroupPtr>>::iterator itTree5 = itTree4->second.begin();
-															itTree5 != itTree4->second.end(); ++itTree5) {
-															const std::string& tree5 = itTree5->first;
-															if (tree5 == "_") {
-																for (std::map<std::string, GroupPtr>::iterator itTree6 = itTree5->second.begin();
-																	itTree6 != itTree5->second.end(); ++itTree6) {
-																	for (std::map<std::string, Item*>::iterator itItem = itTree6->second.begin();
-																		itItem != itTree6->second.end(); ++itItem) {
-
-																		PreparationImGui(itItem->first, *itItem->second);
-																	}
-																}
-															}
-															else {
-																if (ImGui::TreeNode(tree5.c_str())) {
-																	isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5] = true;
-																	for (std::map<std::string, GroupPtr>::iterator itTree6 = itTree5->second.begin();
-																		itTree6 != itTree5->second.end(); ++itTree6) {
-																		const std::string& tree6 = itTree6->first;
-																		if (tree6 == "_") {
-																			for (std::map<std::string, Item*>::iterator itItem = itTree6->second.begin();
-																				itItem != itTree6->second.end(); ++itItem) {
-
-																				PreparationImGui(itItem->first, *itItem->second);
-																			}
-																		}
-																		else {
-																			if (ImGui::TreeNode(tree6.c_str())) {
-																				isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6] = true;
-
-																				for (std::map<std::string, Item*>::iterator itItem = itTree6->second.begin();
-																					itItem != itTree6->second.end(); ++itItem) {
-
-																					PreparationImGui(itItem->first, *itItem->second);
-																				}
-
-
-																				ImGui::TreePop();
-																			}
-																		}
-																	}
-																	ImGui::TreePop();
-																}
-															}
-														}
-														ImGui::TreePop();
-													}
-												}
-											}
-											ImGui::TreePop();
-										}
-									}
-								}
-								ImGui::TreePop();
-							}
-						}
-					}
+					DrawTreeImGui(itTree1->second, chunkName, groupName, kTreeName_[0] + tree1);
 					ImGui::TreePop();
 				}
 			}
 
 			ImGui::Text("\n");
-
 			if (ImGui::Button("Save")) {
 				SaveFile(chunkName, groupName);
 				std::string message = std::format("{}.json saved", chunkName + "_" + groupName);
 				MessageBoxA(nullptr, message.c_str(), "GlobalVariables", 0);
 			}
-
 			ImGui::EndMenu();
 		}
-
 		ImGui::EndMenuBar();
 		ImGui::End();
 	}
@@ -325,19 +119,12 @@ void GlobalVariables::CreateGroup(const std::string& groupName)
 template<typename T>
 void GlobalVariables::SetValue(const std::string& chunkName, const std::string& groupName, const std::string& key, const T& value) {
 	Group& group = datas_[chunkName][groupName];
-	
-	Item newItem{};
-	newItem = value;
-	
-	group[key] = newItem;
+	if (group.find(key) == group.end()) {
+		Item newItem{};
+		newItem = value;
+		group[key] = newItem;
+	}
 }
-
-template void GlobalVariables::SetValue<int32_t>(const std::string&, const std::string&, const std::string&, const int32_t&);
-template void GlobalVariables::SetValue<float>(const std::string&, const std::string&, const std::string&, const float&);
-template void GlobalVariables::SetValue<Vector2>(const std::string&, const std::string&, const std::string&, const Vector2&);
-template void GlobalVariables::SetValue<Vector3>(const std::string&, const std::string&, const std::string&, const Vector3&);
-template void GlobalVariables::SetValue<bool>(const std::string&, const std::string&, const std::string&, const bool&);
-template void GlobalVariables::SetValue<std::string>(const std::string&, const std::string&, const std::string&, const std::string&);
 
 template<typename T>
 void GlobalVariables::SetValue(const std::string& chunkName, const std::string& groupName, const std::string& key, const T& value, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
@@ -346,87 +133,40 @@ void GlobalVariables::SetValue(const std::string& chunkName, const std::string& 
 
 	Item newItem{};
 	newItem = value;
+	uint32_t i = 0;
 
-	if (tree2 == "_") {
-		std::string name = kTreeName_[0] + tree1 + "_" + key;
-		if (group.find(name) == group.end()) {
-			isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1] = false;
-		}
-		group[name] = newItem;
-	}
-	else {
-		if (tree3 == "_") {
-			std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + key;
+	std::vector<std::string> tree;
+	tree.resize(7);
+	tree[0] = tree1; tree[1] = tree2; tree[2] = tree3; tree[3] = tree4; tree[4] = tree5; tree[5] = tree6; tree[6] = "_";
+
+	std::string name;
+	for (std::string& treeName : tree) {
+		if (treeName == "_") {
+			name += "_" + key;
 			if (group.find(name) == group.end()) {
-				isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1] = false;
-				isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2] = false;
-			}
-			group[name] = newItem;
-		}
-		else {
-			if (tree4 == "_") {
-				std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + key;
-				if (group.find(name) == group.end()) {
-					isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1] = false;
-					isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2] = false;
-					isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3] = false;
+				std::string tName;
+				for (uint32_t n = 0; n < i; n++) {
+					tName += kTreeName_[n] + tree[n];
+					isTreeOpen_[chunkName][groupName][tName] = false;
+					tName += "_";
 				}
 				group[name] = newItem;
 			}
-			else {
-				if (tree5 == "_") {
-					std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + key;
-					if (group.find(name) == group.end()) {
-						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1] = false;
-						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2] = false;
-						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3] = false;
-						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4] = false;
-					}
-					group[name] = newItem;
-				}
-				else {
-					if (tree6 == "_") {
-						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + key;
-						if (group.find(name) == group.end()) {
-							isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1] = false;
-							isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2] = false;
-							isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3] = false;
-							isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4] = false;
-							isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5] = false;
-						}
-						group[name] = newItem;
-					}
-					else {
-						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6 + "_" + key;
-						if (group.find(name) == group.end()) {
-							isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1] = false;
-							isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2] = false;
-							isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3] = false;
-							isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4] = false;
-							isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5] = false;
-							isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6] = false;
-						}
-						group[name] = newItem;
-					}
-				}
+			break;
+		}
+		else {
+			if (i != 0) {
+				name += "_";
 			}
+			name += kTreeName_[i] + treeName;
+			i++;
 		}
 	}
 }
-template void GlobalVariables::SetValue<int32_t>(const std::string&, const std::string&, const std::string&, const int32_t&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&);
-template void GlobalVariables::SetValue<float>(const std::string&, const std::string&, const std::string&, const float&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&);
-template void GlobalVariables::SetValue<Vector2>(const std::string&, const std::string&, const std::string&, const Vector2&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&);
-template void GlobalVariables::SetValue<Vector3>(const std::string&, const std::string&, const std::string&, const Vector3&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&);
-template void GlobalVariables::SetValue<bool>(const std::string&, const std::string&, const std::string&, const bool&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&);
-template void GlobalVariables::SetValue<std::string>(const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&);
-
 
 template<typename T>
 void GlobalVariables::AddItem(const std::string& chunkName, const std::string& groupName, const std::string& key, const T& value) {
-	Group& group = datas_[chunkName][groupName];
-	if (group.find(key) == group.end()) {
-		SetValue(chunkName, groupName, key, value);
-	}
+	SetValue(chunkName, groupName, key, value);
 }
 template void GlobalVariables::AddItem<int32_t>(const std::string&, const std::string&, const std::string&, const int32_t&);
 template void GlobalVariables::AddItem<float>(const std::string&, const std::string&, const std::string&, const float&);
@@ -436,71 +176,16 @@ template void GlobalVariables::AddItem<bool>(const std::string&, const std::stri
 template void GlobalVariables::AddItem<std::string>(const std::string&, const std::string&, const std::string&, const std::string&);
 
 template<typename T>
-void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, const T& value) {
-	Group& group = datas_[kChunkName][groupName];
-	if (group.find(key) == group.end()) {
-		SetValue(kChunkName, groupName, key, value);
-	}
+void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, const T& value) 
+{
+	SetValue(kChunkName, groupName, key, value);
 }
-template void GlobalVariables::AddItem<int32_t>(const std::string&, const std::string&, const int32_t&);
-template void GlobalVariables::AddItem<float>(const std::string&, const std::string&, const float&);
-template void GlobalVariables::AddItem<Vector2>(const std::string&, const std::string&, const Vector2&);
-template void GlobalVariables::AddItem<Vector3>(const std::string&, const std::string&, const Vector3&);
-template void GlobalVariables::AddItem<bool>(const std::string&, const std::string&, const bool&);
-template void GlobalVariables::AddItem<std::string>(const std::string&, const std::string&, const std::string&);
 
 template<typename T>
 void GlobalVariables::AddItem(const std::string& chunkName, const std::string& groupName, const std::string& key, const T& value, const int& treeNum, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
 {
-	Group& group = datas_[chunkName][groupName];
-	std::string name;
-
 	if(treeNum){}
-
-	if (tree2 == "_") {
-		name = kTreeName_[0] + tree1 + "_" + key;
-		if (group.find(name) == group.end()) {
-			SetValue(chunkName, groupName, key, value, tree1);
-		}
-	}
-	else {
-		if (tree3 == "_") {
-			name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + key;
-			if (group.find(name) == group.end()) {
-				SetValue(chunkName, groupName, key, value, tree1, tree2);
-			}
-		}
-		else {
-			if (tree4 == "_") {
-				name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + key;
-				if (group.find(name) == group.end()) {
-					SetValue(chunkName, groupName, key, value, tree1, tree2, tree3);
-				}
-			}
-			else {
-				if (tree5 == "_") {
-					name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + key;
-					if (group.find(name) == group.end()) {
-						SetValue(chunkName, groupName, key, value, tree1, tree2, tree3, tree4);
-					}
-				}
-				else {
-					if (tree6 == "_") {
-						name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + key;
-						if (group.find(name) == group.end()) {
-							SetValue(chunkName, groupName, key, value, tree1, tree2, tree3, tree4, tree5);
-						}
-					}
-					else {
-						name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6 + "_" + key;
-						if (group.find(name) == group.end()) {
-							SetValue(chunkName, groupName, key, value, tree1, tree2, tree3, tree4, tree5, tree6);
-						}
-					}
-				}
-			}
-		}
-	}
+	SetValue(chunkName, groupName, key, value, tree1, tree2, tree3, tree4, tree5, tree6);
 }
 template void GlobalVariables::AddItem<int32_t>(const std::string&, const std::string&, const std::string&, const int32_t&, const int&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&);
 template void GlobalVariables::AddItem<float>(const std::string&, const std::string&, const std::string&, const float&, const int&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&);
@@ -512,63 +197,9 @@ template void GlobalVariables::AddItem<std::string>(const std::string&, const st
 template<typename T>
 void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, const T& value, const int& treeNum, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
 {
-	Group& group = datas_[kChunkName][groupName];
-	std::string name;
-
 	if (treeNum) {}
-
-	if (tree2 == "_") {
-		name = kTreeName_[0] + tree1 + "_" + key;
-		if (group.find(name) == group.end()) {
-			SetValue(kChunkName, groupName, key, value, tree1);
-		}
-	}
-	else {
-		if (tree3 == "_") {
-			name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + key;
-			if (group.find(name) == group.end()) {
-				SetValue(kChunkName, groupName, key, value, tree1, tree2);
-			}
-		}
-		else {
-			if (tree4 == "_") {
-				name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + key;
-				if (group.find(name) == group.end()) {
-					SetValue(kChunkName, groupName, key, value, tree1, tree2, tree3);
-				}
-			}
-			else {
-				if (tree5 == "_") {
-					name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + key;
-					if (group.find(name) == group.end()) {
-						SetValue(kChunkName, groupName, key, value, tree1, tree2, tree3, tree4);
-					}
-				}
-				else {
-					if (tree6 == "_") {
-						name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + key;
-						if (group.find(name) == group.end()) {
-							SetValue(kChunkName, groupName, key, value, tree1, tree2, tree3, tree4, tree5);
-						}
-					}
-					else {
-						name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6 + "_" + key;
-						if (group.find(name) == group.end()) {
-							SetValue(kChunkName, groupName, key, value, tree1, tree2, tree3, tree4, tree5, tree6);
-						}
-					}
-				}
-			}
-		}
-	}
+	SetValue(kChunkName, groupName, key, value, tree1, tree2, tree3, tree4, tree5, tree6);
 }
-template void GlobalVariables::AddItem<int32_t>(const std::string&, const std::string&, const int32_t&, const int&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&);
-template void GlobalVariables::AddItem<float>(const std::string&, const std::string&, const float&, const int&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&);
-template void GlobalVariables::AddItem<Vector2>(const std::string&, const std::string&, const Vector2&, const int&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&);
-template void GlobalVariables::AddItem<Vector3>(const std::string&, const std::string&, const Vector3&, const int&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&);
-template void GlobalVariables::AddItem<bool>(const std::string&, const std::string&, const bool&, const int&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&);
-template void GlobalVariables::AddItem<std::string>(const std::string&, const std::string&, const std::string&, const int&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&);
-
 
 template<typename T>
 void GlobalVariables::GetValue(T& value, const std::string& chunkName, const std::string& groupName, const std::string& key) const {
@@ -581,12 +212,6 @@ void GlobalVariables::GetValue(T& value, const std::string& chunkName, const std
 	assert(group.find(key) != group.end());
 	value = std::get<T>(group.find(key)->second);
 }
-template void GlobalVariables::GetValue<int32_t>(int32_t&, const std::string&, const std::string&, const std::string&) const;
-template void GlobalVariables::GetValue<float>(float&, const std::string&, const std::string&, const std::string&) const;
-template void GlobalVariables::GetValue<Vector2>(Vector2&, const std::string&, const std::string&, const std::string&) const;
-template void GlobalVariables::GetValue<Vector3>(Vector3&, const std::string&, const std::string&, const std::string&) const;
-template void GlobalVariables::GetValue<bool>(bool&, const std::string&, const std::string&, const std::string&) const;
-template void GlobalVariables::GetValue<std::string>(std::string&, const std::string&, const std::string&, const std::string&) const;
 
 const int32_t& GlobalVariables::GetIntValue(const std::string& chunkName, const std::string& groupName, const std::string& key) const {
 
@@ -660,7 +285,6 @@ const std::string& GlobalVariables::GetStringValue(const std::string& chunkName,
 	return std::get<std::string>(group.find(key)->second);
 }
 
-
 template<typename T>
 void GlobalVariables::GetValue(T& value, const std::string& groupName, const std::string& key) const {
 	assert(datas_.find(kChunkName) != datas_.end());
@@ -672,12 +296,6 @@ void GlobalVariables::GetValue(T& value, const std::string& groupName, const std
 	assert(group.find(key) != group.end());
 	value = std::get<T>(group.find(key)->second);
 }
-template void GlobalVariables::GetValue<int32_t>(int32_t&, const std::string&, const std::string&) const;
-template void GlobalVariables::GetValue<float>(float&, const std::string&, const std::string&) const;
-template void GlobalVariables::GetValue<Vector2>(Vector2&, const std::string&, const std::string&) const;
-template void GlobalVariables::GetValue<Vector3>(Vector3&, const std::string&, const std::string&) const;
-template void GlobalVariables::GetValue<bool>(bool&, const std::string&, const std::string&) const;
-template void GlobalVariables::GetValue<std::string>(std::string&, const std::string&, const std::string&) const;
 
 const int32_t& GlobalVariables::GetIntValue(const std::string& groupName, const std::string& key) const
 {
@@ -755,704 +373,416 @@ template<typename T>
 void GlobalVariables::GetValue(T& value, const std::string& chunkName, const std::string& groupName, const std::string& key, const int& treeNum, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6) const {
 	assert(datas_.find(chunkName) != datas_.end());
 	const Chunk& chunk = datas_.at(chunkName);
-
 	assert(chunk.find(groupName) != chunk.end());
 	const Group& group = chunk.at(groupName);
-
 	if (treeNum) {}
 
-	if (tree2 == "_") {
-		std::string name = kTreeName_[0] + tree1 + "_" + key;
-		assert(group.find(name) != group.end());
-		value = std::get<T>(group.find(name)->second);
-	}
-	else {
-		if (tree3 == "_") {
-			std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + key;
+	uint32_t i = 0;
+	std::vector<std::string> tree;
+	tree.resize(7);
+	tree[0] = tree1; tree[1] = tree2; tree[2] = tree3; tree[3] = tree4; tree[4] = tree5; tree[5] = tree6; tree[6] = "_";
+
+	std::string name;
+	for (std::string& treeName : tree) {
+		if (treeName == "_") {
+			name += key;
 			assert(group.find(name) != group.end());
 			value = std::get<T>(group.find(name)->second);
+			break;
 		}
 		else {
-			if (tree4 == "_") {
-				std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + key;
-				assert(group.find(name) != group.end());
-				value = std::get<T>(group.find(name)->second);
-			}
-			else {
-				if (tree5 == "_") {
-					std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + key;
-					assert(group.find(name) != group.end());
-					value = std::get<T>(group.find(name)->second);
-				}
-				else {
-					if (tree6 == "_") {
-						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + key;
-						assert(group.find(name) != group.end());
-						value = std::get<T>(group.find(name)->second);
-					}
-					else {
-						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6 + "_" + key;
-						assert(group.find(name) != group.end());
-						value = std::get<T>(group.find(name)->second);
-					}
-				}
-			}
+			name += kTreeName_[i] + treeName + "_";
+			i++;
 		}
 	}
 }
-template void GlobalVariables::GetValue<int32_t>(int32_t&, const std::string&, const std::string&, const std::string&, const int&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&) const;
-template void GlobalVariables::GetValue<float>(float&, const std::string&, const std::string&, const std::string&, const int&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&) const;
-template void GlobalVariables::GetValue<Vector2>(Vector2&, const std::string&, const std::string&, const std::string&, const int&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&) const;
-template void GlobalVariables::GetValue<Vector3>(Vector3&, const std::string&, const std::string&, const std::string&, const int&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&) const;
-template void GlobalVariables::GetValue<bool>(bool&, const std::string&, const std::string&, const std::string&, const int&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&) const;
-template void GlobalVariables::GetValue<std::string>(std::string&, const std::string&, const std::string&, const std::string&, const int&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&) const;
-
 
 const int32_t& GlobalVariables::GetIntValue(const std::string& chunkName, const std::string& groupName, const std::string& key, const int& treeNum, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6) const
 {
 	assert(datas_.find(chunkName) != datas_.end());
 	const Chunk& chunk = datas_.at(chunkName);
-
 	assert(chunk.find(groupName) != chunk.end());
 	const Group& group = chunk.at(groupName);
 	if (treeNum) {}
 
-	if (tree2 == "_") {
-		std::string name = kTreeName_[0] + tree1 + "_" + key;
-		assert(group.find(name) != group.end());
-		return std::get<int32_t>(group.find(name)->second);
-	}
-	else {
-		if (tree3 == "_") {
-			std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + key;
+	uint32_t i = 0;
+	std::vector<std::string> tree;
+	tree.resize(7);
+	tree[0] = tree1; tree[1] = tree2; tree[2] = tree3; tree[3] = tree4; tree[4] = tree5; tree[5] = tree6; tree[6] = "_";
+
+	std::string name;
+	for (std::string& treeName : tree) {
+		if (treeName == "_") {
+			name += key;
 			assert(group.find(name) != group.end());
 			return std::get<int32_t>(group.find(name)->second);
 		}
 		else {
-			if (tree4 == "_") {
-				std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + key;
-				assert(group.find(name) != group.end());
-				return std::get<int32_t>(group.find(name)->second);
-			}
-			else {
-				if (tree5 == "_") {
-					std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + key;
-					assert(group.find(name) != group.end());
-					return std::get<int32_t>(group.find(name)->second);
-				}
-				else {
-					if (tree6 == "_") {
-						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + key;
-						assert(group.find(name) != group.end());
-						return std::get<int32_t>(group.find(name)->second);
-					}
-					else {
-						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6 + "_" + key;
-						assert(group.find(name) != group.end());
-						return std::get<int32_t>(group.find(name)->second);
-					}
-				}
-			}
+			name += kTreeName_[i] + treeName + "_";
+			i++;
 		}
 	}
+	name += key;
+	assert(group.find(name) != group.end());
+	return std::get<int32_t>(group.find(name)->second);
 }
 
 const float& GlobalVariables::GetFloatValue(const std::string& chunkName, const std::string& groupName, const std::string& key, const int& treeNum, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6) const
 {
 	assert(datas_.find(chunkName) != datas_.end());
 	const Chunk& chunk = datas_.at(chunkName);
-
 	assert(chunk.find(groupName) != chunk.end());
 	const Group& group = chunk.at(groupName);
 	if (treeNum) {}
 
-	if (tree2 == "_") {
-		std::string name = kTreeName_[0] + tree1 + "_" + key;
-		assert(group.find(name) != group.end());
-		return std::get<float>(group.find(name)->second);
-	}
-	else {
-		if (tree3 == "_") {
-			std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + key;
+	uint32_t i = 0;
+	std::vector<std::string> tree;
+	tree.resize(7);
+	tree[0] = tree1; tree[1] = tree2; tree[2] = tree3; tree[3] = tree4; tree[4] = tree5; tree[5] = tree6; tree[6] = "_";
+
+	std::string name;
+	for (std::string& treeName : tree) {
+		if (treeName == "_") {
+			name += key;
 			assert(group.find(name) != group.end());
 			return std::get<float>(group.find(name)->second);
 		}
 		else {
-			if (tree4 == "_") {
-				std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + key;
-				assert(group.find(name) != group.end());
-				return std::get<float>(group.find(name)->second);
-			}
-			else {
-				if (tree5 == "_") {
-					std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + key;
-					assert(group.find(name) != group.end());
-					return std::get<float>(group.find(name)->second);
-				}
-				else {
-					if (tree6 == "_") {
-						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + key;
-						assert(group.find(name) != group.end());
-						return std::get<float>(group.find(name)->second);
-					}
-					else {
-						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6 + "_" + key;
-						assert(group.find(name) != group.end());
-						return std::get<float>(group.find(name)->second);
-					}
-				}
-			}
+			name += kTreeName_[i] + treeName + "_";
+			i++;
 		}
 	}
+	name += key;
+	assert(group.find(name) != group.end());
+	return std::get<float>(group.find(name)->second);
 }
 
 const Vector2& GlobalVariables::GetVector2Value(const std::string& chunkName, const std::string& groupName, const std::string& key, const int& treeNum, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6) const
 {
 	assert(datas_.find(chunkName) != datas_.end());
 	const Chunk& chunk = datas_.at(chunkName);
-
 	assert(chunk.find(groupName) != chunk.end());
 	const Group& group = chunk.at(groupName);
 	if (treeNum) {}
 
-	if (tree2 == "_") {
-		std::string name = kTreeName_[0] + tree1 + "_" + key;
-		assert(group.find(name) != group.end());
-		return std::get<Vector2>(group.find(name)->second);
-	}
-	else {
-		if (tree3 == "_") {
-			std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + key;
+	uint32_t i = 0;
+	std::vector<std::string> tree;
+	tree.resize(7);
+	tree[0] = tree1; tree[1] = tree2; tree[2] = tree3; tree[3] = tree4; tree[4] = tree5; tree[5] = tree6; tree[6] = "_";
+
+	std::string name;
+	for (std::string& treeName : tree) {
+		if (treeName == "_") {
+			name += key;
 			assert(group.find(name) != group.end());
 			return std::get<Vector2>(group.find(name)->second);
 		}
 		else {
-			if (tree4 == "_") {
-				std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + key;
-				assert(group.find(name) != group.end());
-				return std::get<Vector2>(group.find(name)->second);
-			}
-			else {
-				if (tree5 == "_") {
-					std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + key;
-					assert(group.find(name) != group.end());
-					return std::get<Vector2>(group.find(name)->second);
-				}
-				else {
-					if (tree6 == "_") {
-						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + key;
-						assert(group.find(name) != group.end());
-						return std::get<Vector2>(group.find(name)->second);
-					}
-					else {
-						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6 + "_" + key;
-						assert(group.find(name) != group.end());
-						return std::get<Vector2>(group.find(name)->second);
-					}
-				}
-			}
+			name += kTreeName_[i] + treeName + "_";
+			i++;
 		}
 	}
+	name += key;
+	assert(group.find(name) != group.end());
+	return std::get<Vector2>(group.find(name)->second);
 }
 
 const Vector3& GlobalVariables::GetVector3Value(const std::string& chunkName, const std::string& groupName, const std::string& key, const int& treeNum, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6) const
 {
 	assert(datas_.find(chunkName) != datas_.end());
 	const Chunk& chunk = datas_.at(chunkName);
-
 	assert(chunk.find(groupName) != chunk.end());
 	const Group& group = chunk.at(groupName);
 	if (treeNum) {}
 
-	if (tree2 == "_") {
-		std::string name = kTreeName_[0] + tree1 + "_" + key;
-		assert(group.find(name) != group.end());
-		return std::get<Vector3>(group.find(name)->second);
-	}
-	else {
-		if (tree3 == "_") {
-			std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + key;
+	uint32_t i = 0;
+	std::vector<std::string> tree;
+	tree.resize(7);
+	tree[0] = tree1; tree[1] = tree2; tree[2] = tree3; tree[3] = tree4; tree[4] = tree5; tree[5] = tree6; tree[6] = "_";
+
+	std::string name;
+	for (std::string& treeName : tree) {
+		if (treeName == "_") {
+			name += key;
 			assert(group.find(name) != group.end());
 			return std::get<Vector3>(group.find(name)->second);
 		}
 		else {
-			if (tree4 == "_") {
-				std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + key;
-				assert(group.find(name) != group.end());
-				return std::get<Vector3>(group.find(name)->second);
-			}
-			else {
-				if (tree5 == "_") {
-					std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + key;
-					assert(group.find(name) != group.end());
-					return std::get<Vector3>(group.find(name)->second);
-				}
-				else {
-					if (tree6 == "_") {
-						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + key;
-						assert(group.find(name) != group.end());
-						return std::get<Vector3>(group.find(name)->second);
-					}
-					else {
-						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6 + "_" + key;
-						assert(group.find(name) != group.end());
-						return std::get<Vector3>(group.find(name)->second);
-					}
-				}
-			}
+			name += kTreeName_[i] + treeName + "_";
+			i++;
 		}
 	}
+	name += key;
+	assert(group.find(name) != group.end());
+	return std::get<Vector3>(group.find(name)->second);
 }
 
 const bool& GlobalVariables::GetBoolValue(const std::string& chunkName, const std::string& groupName, const std::string& key, const int& treeNum, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6) const
 {
 	assert(datas_.find(chunkName) != datas_.end());
 	const Chunk& chunk = datas_.at(chunkName);
-
 	assert(chunk.find(groupName) != chunk.end());
 	const Group& group = chunk.at(groupName);
 	if (treeNum) {}
 
-	if (tree2 == "_") {
-		std::string name = kTreeName_[0] + tree1 + "_" + key;
-		assert(group.find(name) != group.end());
-		return std::get<bool>(group.find(name)->second);
-	}
-	else {
-		if (tree3 == "_") {
-			std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + key;
+	uint32_t i = 0;
+	std::vector<std::string> tree;
+	tree.resize(7);
+	tree[0] = tree1; tree[1] = tree2; tree[2] = tree3; tree[3] = tree4; tree[4] = tree5; tree[5] = tree6; tree[6] = "_";
+
+	std::string name;
+	for (std::string& treeName : tree) {
+		if (treeName == "_") {
+			name += key;
 			assert(group.find(name) != group.end());
 			return std::get<bool>(group.find(name)->second);
 		}
 		else {
-			if (tree4 == "_") {
-				std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + key;
-				assert(group.find(name) != group.end());
-				return std::get<bool>(group.find(name)->second);
-			}
-			else {
-				if (tree5 == "_") {
-					std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + key;
-					assert(group.find(name) != group.end());
-					return std::get<bool>(group.find(name)->second);
-				}
-				else {
-					if (tree6 == "_") {
-						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + key;
-						assert(group.find(name) != group.end());
-						return std::get<bool>(group.find(name)->second);
-					}
-					else {
-						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6 + "_" + key;
-						assert(group.find(name) != group.end());
-						return std::get<bool>(group.find(name)->second);
-					}
-				}
-			}
+			name += kTreeName_[i] + treeName + "_";
+			i++;
 		}
 	}
+	name += key;
+	assert(group.find(name) != group.end());
+	return std::get<bool>(group.find(name)->second);
 }
 
 const std::string& GlobalVariables::GetStringValue(const std::string& chunkName, const std::string& groupName, const std::string& key, const int& treeNum, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6) const
 {
 	assert(datas_.find(chunkName) != datas_.end());
 	const Chunk& chunk = datas_.at(chunkName);
-
 	assert(chunk.find(groupName) != chunk.end());
 	const Group& group = chunk.at(groupName);
 	if (treeNum) {}
 
-	if (tree2 == "_") {
-		std::string name = kTreeName_[0] + tree1 + "_" + key;
-		assert(group.find(name) != group.end());
-		return std::get<std::string>(group.find(name)->second);
-	}
-	else {
-		if (tree3 == "_") {
-			std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + key;
+	uint32_t i = 0;
+	std::vector<std::string> tree;
+	tree.resize(7);
+	tree[0] = tree1; tree[1] = tree2; tree[2] = tree3; tree[3] = tree4; tree[4] = tree5; tree[5] = tree6; tree[6] = "_";
+
+	std::string name;
+	for (std::string& treeName : tree) {
+		if (treeName == "_") {
+			name += key;
 			assert(group.find(name) != group.end());
 			return std::get<std::string>(group.find(name)->second);
 		}
 		else {
-			if (tree4 == "_") {
-				std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + key;
-				assert(group.find(name) != group.end());
-				return std::get<std::string>(group.find(name)->second);
-			}
-			else {
-				if (tree5 == "_") {
-					std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + key;
-					assert(group.find(name) != group.end());
-					return std::get<std::string>(group.find(name)->second);
-				}
-				else {
-					if (tree6 == "_") {
-						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + key;
-						assert(group.find(name) != group.end());
-						return std::get<std::string>(group.find(name)->second);
-					}
-					else {
-						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6 + "_" + key;
-						assert(group.find(name) != group.end());
-						return std::get<std::string>(group.find(name)->second);
-					}
-				}
-			}
+			name += kTreeName_[i] + treeName + "_";
+			i++;
 		}
 	}
+	name += key;
+	assert(group.find(name) != group.end());
+	return std::get<std::string>(group.find(name)->second);
 }
-
-
 
 template<typename T>
 void GlobalVariables::GetValue(T& value, const std::string& groupName, const std::string& key, const int& treeNum, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6) const {
 	assert(datas_.find(kChunkName) != datas_.end());
 	const Chunk& chunk = datas_.at(kChunkName);
-
 	assert(chunk.find(groupName) != chunk.end());
 	const Group& group = chunk.at(groupName);
-
 	if (treeNum) {}
 
-	if (tree2 == "_") {
-		std::string name = kTreeName_[0] + tree1 + "_" + key;
-		assert(group.find(name) != group.end());
-		value = std::get<T>(group.find(name)->second);
-	}
-	else {
-		if (tree3 == "_") {
-			std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + key;
+	uint32_t i = 0;
+	std::vector<std::string> tree;
+	tree.resize(7);
+	tree[0] = tree1; tree[1] = tree2; tree[2] = tree3; tree[3] = tree4; tree[4] = tree5; tree[5] = tree6; tree[6] = "_";
+
+	std::string name;
+	for (std::string& treeName : tree) {
+		if (treeName == "_") {
+			name += key;
 			assert(group.find(name) != group.end());
 			value = std::get<T>(group.find(name)->second);
+			break;
 		}
 		else {
-			if (tree4 == "_") {
-				std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + key;
-				assert(group.find(name) != group.end());
-				value = std::get<T>(group.find(name)->second);
-			}
-			else {
-				if (tree5 == "_") {
-					std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + key;
-					assert(group.find(name) != group.end());
-					value = std::get<T>(group.find(name)->second);
-				}
-				else {
-					if (tree6 == "_") {
-						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + key;
-						assert(group.find(name) != group.end());
-						value = std::get<T>(group.find(name)->second);
-					}
-					else {
-						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6 + "_" + key;
-						assert(group.find(name) != group.end());
-						value = std::get<T>(group.find(name)->second);
-					}
-				}
-			}
+			name += kTreeName_[i] + treeName + "_";
+			i++;
 		}
 	}
 }
-template void GlobalVariables::GetValue<int32_t>(int32_t&, const std::string&, const std::string&, const int&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&) const;
-template void GlobalVariables::GetValue<float>(float&, const std::string&, const std::string&, const int&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&) const;
-template void GlobalVariables::GetValue<Vector2>(Vector2&, const std::string&, const std::string&, const int&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&) const;
-template void GlobalVariables::GetValue<Vector3>(Vector3&, const std::string&, const std::string&, const int&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&) const;
-template void GlobalVariables::GetValue<bool>(bool&, const std::string&, const std::string&, const int&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&) const;
-template void GlobalVariables::GetValue<std::string>(std::string&, const std::string&, const std::string&, const int&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&) const;
-
 
 const int32_t& GlobalVariables::GetIntValue(const std::string& groupName, const std::string& key, const int& treeNum, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6) const
 {
 	assert(datas_.find(kChunkName) != datas_.end());
 	const Chunk& chunk = datas_.at(kChunkName);
-
 	assert(chunk.find(groupName) != chunk.end());
 	const Group& group = chunk.at(groupName);
 	if (treeNum) {}
 
-	if (tree2 == "_") {
-		std::string name = kTreeName_[0] + tree1 + "_" + key;
-		assert(group.find(name) != group.end());
-		return std::get<int32_t>(group.find(name)->second);
-	}
-	else {
-		if (tree3 == "_") {
-			std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + key;
+	uint32_t i = 0;
+	std::vector<std::string> tree;
+	tree.resize(7);
+	tree[0] = tree1; tree[1] = tree2; tree[2] = tree3; tree[3] = tree4; tree[4] = tree5; tree[5] = tree6; tree[6] = "_";
+
+	std::string name;
+	for (std::string& treeName : tree) {
+		if (treeName == "_") {
+			name += key;
 			assert(group.find(name) != group.end());
 			return std::get<int32_t>(group.find(name)->second);
 		}
 		else {
-			if (tree4 == "_") {
-				std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + key;
-				assert(group.find(name) != group.end());
-				return std::get<int32_t>(group.find(name)->second);
-			}
-			else {
-				if (tree5 == "_") {
-					std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + key;
-					assert(group.find(name) != group.end());
-					return std::get<int32_t>(group.find(name)->second);
-				}
-				else {
-					if (tree6 == "_") {
-						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + key;
-						assert(group.find(name) != group.end());
-						return std::get<int32_t>(group.find(name)->second);
-					}
-					else {
-						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6 + "_" + key;
-						assert(group.find(name) != group.end());
-						return std::get<int32_t>(group.find(name)->second);
-					}
-				}
-			}
+			name += kTreeName_[i] + treeName + "_";
+			i++;
 		}
 	}
+	name += key;
+	assert(group.find(name) != group.end());
+	return std::get<int32_t>(group.find(name)->second);
 }
 
 const float& GlobalVariables::GetFloatValue(const std::string& groupName, const std::string& key, const int& treeNum, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6) const
 {
 	assert(datas_.find(kChunkName) != datas_.end());
 	const Chunk& chunk = datas_.at(kChunkName);
-
 	assert(chunk.find(groupName) != chunk.end());
 	const Group& group = chunk.at(groupName);
 	if (treeNum) {}
 
-	if (tree2 == "_") {
-		std::string name = kTreeName_[0] + tree1 + "_" + key;
-		assert(group.find(name) != group.end());
-		return std::get<float>(group.find(name)->second);
-	}
-	else {
-		if (tree3 == "_") {
-			std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + key;
+	uint32_t i = 0;
+	std::vector<std::string> tree;
+	tree.resize(7);
+	tree[0] = tree1; tree[1] = tree2; tree[2] = tree3; tree[3] = tree4; tree[4] = tree5; tree[5] = tree6; tree[6] = "_";
+
+	std::string name;
+	for (std::string& treeName : tree) {
+		if (treeName == "_") {
+			name += key;
 			assert(group.find(name) != group.end());
 			return std::get<float>(group.find(name)->second);
 		}
 		else {
-			if (tree4 == "_") {
-				std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + key;
-				assert(group.find(name) != group.end());
-				return std::get<float>(group.find(name)->second);
-			}
-			else {
-				if (tree5 == "_") {
-					std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + key;
-					assert(group.find(name) != group.end());
-					return std::get<float>(group.find(name)->second);
-				}
-				else {
-					if (tree6 == "_") {
-						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + key;
-						assert(group.find(name) != group.end());
-						return std::get<float>(group.find(name)->second);
-					}
-					else {
-						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6 + "_" + key;
-						assert(group.find(name) != group.end());
-						return std::get<float>(group.find(name)->second);
-					}
-				}
-			}
+			name += kTreeName_[i] + treeName + "_";
+			i++;
 		}
 	}
+	name += key;
+	assert(group.find(name) != group.end());
+	return std::get<float>(group.find(name)->second);
 }
 
 const Vector2& GlobalVariables::GetVector2Value(const std::string& groupName, const std::string& key, const int& treeNum, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6) const
 {
 	assert(datas_.find(kChunkName) != datas_.end());
 	const Chunk& chunk = datas_.at(kChunkName);
-
 	assert(chunk.find(groupName) != chunk.end());
 	const Group& group = chunk.at(groupName);
 	if (treeNum) {}
 
-	if (tree2 == "_") {
-		std::string name = kTreeName_[0] + tree1 + "_" + key;
-		assert(group.find(name) != group.end());
-		return std::get<Vector2>(group.find(name)->second);
-	}
-	else {
-		if (tree3 == "_") {
-			std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + key;
+	uint32_t i = 0;
+	std::vector<std::string> tree;
+	tree.resize(7);
+	tree[0] = tree1; tree[1] = tree2; tree[2] = tree3; tree[3] = tree4; tree[4] = tree5; tree[5] = tree6; tree[6] = "_";
+
+	std::string name;
+	for (std::string& treeName : tree) {
+		if (treeName == "_") {
+			name += key;
 			assert(group.find(name) != group.end());
 			return std::get<Vector2>(group.find(name)->second);
 		}
 		else {
-			if (tree4 == "_") {
-				std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + key;
-				assert(group.find(name) != group.end());
-				return std::get<Vector2>(group.find(name)->second);
-			}
-			else {
-				if (tree5 == "_") {
-					std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + key;
-					assert(group.find(name) != group.end());
-					return std::get<Vector2>(group.find(name)->second);
-				}
-				else {
-					if (tree6 == "_") {
-						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + key;
-						assert(group.find(name) != group.end());
-						return std::get<Vector2>(group.find(name)->second);
-					}
-					else {
-						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6 + "_" + key;
-						assert(group.find(name) != group.end());
-						return std::get<Vector2>(group.find(name)->second);
-					}
-				}
-			}
+			name += kTreeName_[i] + treeName + "_";
+			i++;
 		}
 	}
+	name += key;
+	assert(group.find(name) != group.end());
+	return std::get<Vector2>(group.find(name)->second);
 }
 
 const Vector3& GlobalVariables::GetVector3Value(const std::string& groupName, const std::string& key, const int& treeNum, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6) const
 {
 	assert(datas_.find(kChunkName) != datas_.end());
 	const Chunk& chunk = datas_.at(kChunkName);
-
 	assert(chunk.find(groupName) != chunk.end());
 	const Group& group = chunk.at(groupName);
 	if (treeNum) {}
 
-	if (tree2 == "_") {
-		std::string name = kTreeName_[0] + tree1 + "_" + key;
-		assert(group.find(name) != group.end());
-		return std::get<Vector3>(group.find(name)->second);
-	}
-	else {
-		if (tree3 == "_") {
-			std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + key;
+	uint32_t i = 0;
+	std::vector<std::string> tree;
+	tree.resize(7);
+	tree[0] = tree1; tree[1] = tree2; tree[2] = tree3; tree[3] = tree4; tree[4] = tree5; tree[5] = tree6; tree[6] = "_";
+
+	std::string name;
+	for (std::string& treeName : tree) {
+		if (treeName == "_") {
+			name += key;
 			assert(group.find(name) != group.end());
 			return std::get<Vector3>(group.find(name)->second);
 		}
 		else {
-			if (tree4 == "_") {
-				std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + key;
-				assert(group.find(name) != group.end());
-				return std::get<Vector3>(group.find(name)->second);
-			}
-			else {
-				if (tree5 == "_") {
-					std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + key;
-					assert(group.find(name) != group.end());
-					return std::get<Vector3>(group.find(name)->second);
-				}
-				else {
-					if (tree6 == "_") {
-						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + key;
-						assert(group.find(name) != group.end());
-						return std::get<Vector3>(group.find(name)->second);
-					}
-					else {
-						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6 + "_" + key;
-						assert(group.find(name) != group.end());
-						return std::get<Vector3>(group.find(name)->second);
-					}
-				}
-			}
+			name += kTreeName_[i] + treeName + "_";
+			i++;
 		}
 	}
+	name += key;
+	assert(group.find(name) != group.end());
+	return std::get<Vector3>(group.find(name)->second);
 }
 
 const bool& GlobalVariables::GetBoolValue(const std::string& groupName, const std::string& key, const int& treeNum, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6) const
 {
 	assert(datas_.find(kChunkName) != datas_.end());
 	const Chunk& chunk = datas_.at(kChunkName);
-
 	assert(chunk.find(groupName) != chunk.end());
 	const Group& group = chunk.at(groupName);
 	if (treeNum) {}
 
-	if (tree2 == "_") {
-		std::string name = kTreeName_[0] + tree1 + "_" + key;
-		assert(group.find(name) != group.end());
-		return std::get<bool>(group.find(name)->second);
-	}
-	else {
-		if (tree3 == "_") {
-			std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + key;
+	uint32_t i = 0;
+	std::vector<std::string> tree;
+	tree.resize(7);
+	tree[0] = tree1; tree[1] = tree2; tree[2] = tree3; tree[3] = tree4; tree[4] = tree5; tree[5] = tree6; tree[6] = "_";
+
+	std::string name;
+	for (std::string& treeName : tree) {
+		if (treeName == "_") {
+			name += key;
 			assert(group.find(name) != group.end());
 			return std::get<bool>(group.find(name)->second);
 		}
 		else {
-			if (tree4 == "_") {
-				std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + key;
-				assert(group.find(name) != group.end());
-				return std::get<bool>(group.find(name)->second);
-			}
-			else {
-				if (tree5 == "_") {
-					std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + key;
-					assert(group.find(name) != group.end());
-					return std::get<bool>(group.find(name)->second);
-				}
-				else {
-					if (tree6 == "_") {
-						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + key;
-						assert(group.find(name) != group.end());
-						return std::get<bool>(group.find(name)->second);
-					}
-					else {
-						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6 + "_" + key;
-						assert(group.find(name) != group.end());
-						return std::get<bool>(group.find(name)->second);
-					}
-				}
-			}
+			name += kTreeName_[i] + treeName + "_";
+			i++;
 		}
 	}
+	name += key;
+	assert(group.find(name) != group.end());
+	return std::get<bool>(group.find(name)->second);
 }
 
 const std::string& GlobalVariables::GetStringValue(const std::string& groupName, const std::string& key, const int& treeNum, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6) const
 {
 	assert(datas_.find(kChunkName) != datas_.end());
 	const Chunk& chunk = datas_.at(kChunkName);
-
 	assert(chunk.find(groupName) != chunk.end());
 	const Group& group = chunk.at(groupName);
 	if (treeNum) {}
 
-	if (tree2 == "_") {
-		std::string name = kTreeName_[0] + tree1 + "_" + key;
-		assert(group.find(name) != group.end());
-		return std::get<std::string>(group.find(name)->second);
-	}
-	else {
-		if (tree3 == "_") {
-			std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + key;
+	uint32_t i = 0;
+	std::vector<std::string> tree;
+	tree.resize(7);
+	tree[0] = tree1; tree[1] = tree2; tree[2] = tree3; tree[3] = tree4; tree[4] = tree5; tree[5] = tree6; tree[6] = "_";
+
+	std::string name;
+	for (std::string& treeName : tree) {
+		if (treeName == "_") {
+			name += key;
 			assert(group.find(name) != group.end());
 			return std::get<std::string>(group.find(name)->second);
 		}
 		else {
-			if (tree4 == "_") {
-				std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + key;
-				assert(group.find(name) != group.end());
-				return std::get<std::string>(group.find(name)->second);
-			}
-			else {
-				if (tree5 == "_") {
-					std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + key;
-					assert(group.find(name) != group.end());
-					return std::get<std::string>(group.find(name)->second);
-				}
-				else {
-					if (tree6 == "_") {
-						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + key;
-						assert(group.find(name) != group.end());
-						return std::get<std::string>(group.find(name)->second);
-					}
-					else {
-						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6 + "_" + key;
-						assert(group.find(name) != group.end());
-						return std::get<std::string>(group.find(name)->second);
-					}
-				}
-			}
+			name += kTreeName_[i] + treeName + "_";
+			i++;
 		}
 	}
+	name += key;
+	assert(group.find(name) != group.end());
+	return std::get<std::string>(group.find(name)->second);
 }
 
 template<typename T>
@@ -1465,23 +795,11 @@ void GlobalVariables::SetVariable(const std::string& chunkName, const std::strin
 		SetValue(chunkName, groupName, key, value, tree1, tree2, tree3, tree4, tree5, tree6);
 	}
 }
-template void GlobalVariables::SetVariable<int32_t>(const std::string&, const std::string&, const std::string&, const int32_t&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&);
-template void GlobalVariables::SetVariable<float>(const std::string&, const std::string&, const std::string&, const float&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&);
-template void GlobalVariables::SetVariable<Vector2>(const std::string&, const std::string&, const std::string&, const Vector2&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&);
-template void GlobalVariables::SetVariable<Vector3>(const std::string&, const std::string&, const std::string&, const Vector3&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&);
-template void GlobalVariables::SetVariable<bool>(const std::string&, const std::string&, const std::string&, const bool&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&);
-template void GlobalVariables::SetVariable<std::string>(const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&);
 
 template<typename T>
 void GlobalVariables::SaveAndSetVariable(const std::string& chunkName, const std::string& groupName, const std::string& key, const T& value, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
 {
-	if (tree1 == "_") {
-		SetValue(chunkName, groupName, key, value);
-	}
-	else {
-		SetValue(chunkName, groupName, key, value, tree1, tree2, tree3, tree4, tree5, tree6);
-	}
-
+	SetVariable(chunkName, groupName, key, value, tree1, tree2, tree3, tree4, tree5, tree6);
 	SaveFile(chunkName, groupName);
 }
 template void GlobalVariables::SaveAndSetVariable<int32_t>(const std::string&, const std::string&, const std::string&, const int32_t&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&);
@@ -1556,62 +874,36 @@ bool GlobalVariables::IsTreeOpen(const std::string& chunkName, const std::string
 		return false;
 	}
 	const Chunk& chunk = isTreeOpen_.at(chunkName);
-
 	if (chunk.find(groupName) == chunk.end()) {
 		return false;
 	}
 	const Group& group = chunk.at(groupName);
 
-	if (tree2 == "_") {
-		std::string name = kTreeName_[0] + tree1;
-		if (group.find(name) == group.end()) {
-			return false;
-		}
-		return std::get<bool>(group.find(name)->second);
-	}
-	else {
-		if (tree3 == "_") {
-			std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2;
+	uint32_t i = 0;
+	std::vector<std::string> tree;
+	tree.resize(7);
+	tree[0] = tree1; tree[1] = tree2; tree[2] = tree3; tree[3] = tree4; tree[4] = tree5; tree[5] = tree6; tree[6] = "_";
+
+	std::string name;
+	for (std::string& treeName : tree) {
+		if (treeName == "_") {
 			if (group.find(name) == group.end()) {
 				return false;
 			}
 			return std::get<bool>(group.find(name)->second);
 		}
 		else {
-			if (tree4 == "_") {
-				std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3;
-				if (group.find(name) == group.end()) {
-					return false;
-				}
-				return std::get<bool>(group.find(name)->second);
+			if (i != 0) {
+				name += "_";
 			}
-			else {
-				if (tree5 == "_") {
-					std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4;
-					if (group.find(name) == group.end()) {
-						return false;
-					}
-					return std::get<bool>(group.find(name)->second);
-				}
-				else {
-					if (tree6 == "_") {
-						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5;
-						if (group.find(name) == group.end()) {
-							return false;
-						}
-						return std::get<bool>(group.find(name)->second);
-					}
-					else {
-						std::string name = kTreeName_[0] + tree1 + "_" + kTreeName_[1] + tree2 + "_" + kTreeName_[2] + tree3 + "_" + kTreeName_[3] + tree4 + "_" + kTreeName_[4] + tree5 + "_" + kTreeName_[5] + tree6;
-						if (group.find(name) == group.end()) {
-							return false;
-						}
-						return std::get<bool>(group.find(name)->second);
-					}
-				}
-			}
+			name += kTreeName_[i] + treeName;
+			i++;
 		}
 	}
+	if (group.find(name) == group.end()) {
+		return false;
+	}
+	return std::get<bool>(group.find(name)->second);
 }
 
 void GlobalVariables::SaveFile(const std::string& chunkName, const std::string& groupName, const bool& isFin)
@@ -1633,77 +925,13 @@ void GlobalVariables::SaveFile(const std::string& chunkName, const std::string& 
 	for (std::map<std::string, Item>::iterator itItem = itGroup->second.begin();
 		itItem != itGroup->second.end(); ++itItem) {
 
-		const std::string& itemName = itItem->first;
+		std::string itemName = itItem->first;
+		std::vector<std::string> treeNames(6, "_");
 
+		MakeTreeNames(itemName, treeNames);
 		Item& item = itItem->second;
 
-		size_t pos = itemName.find(kTreeName_[0]);
-		if (pos != std::string::npos) {
-			size_t underscorePos = itemName.find("_", pos + 5);
-			std::string tree1 = itemName.substr(pos + 5, underscorePos - pos - 5);
-
-			std::string text = itemName.substr(underscorePos + 1);
-			pos = text.find(kTreeName_[1]);
-			if (pos != std::string::npos) {
-				underscorePos = text.find("_", pos + 5);
-				std::string tree2 = text.substr(pos + 5, underscorePos - pos - 5);
-
-				text = text.substr(underscorePos + 1);
-				pos = text.find(kTreeName_[2]);
-				if (pos != std::string::npos) {
-
-					underscorePos = text.find("_", pos + 5);
-					std::string tree3 = text.substr(pos + 5, underscorePos - pos - 5);
-
-					text = text.substr(underscorePos + 1);
-					pos = text.find(kTreeName_[3]);
-					if (pos != std::string::npos) {
-
-						underscorePos = text.find("_", pos + 5);
-						std::string tree4 = text.substr(pos + 5, underscorePos - pos - 5);
-
-						text = text.substr(underscorePos + 1);
-						pos = text.find(kTreeName_[4]);
-						if (pos != std::string::npos) {
-
-							underscorePos = text.find("_", pos + 5);
-							std::string tree5 = text.substr(pos + 5, underscorePos - pos - 5);
-
-							text = text.substr(underscorePos + 1);
-							pos = text.find(kTreeName_[5]);
-							if (pos != std::string::npos) {
-
-
-								underscorePos = text.find("_", pos + 5);
-								if (underscorePos != std::string::npos) {
-									std::string tree6 = text.substr(pos + 5, underscorePos - pos - 5);
-									text = text.substr(underscorePos + 1);
-									ItemToRoot(root, groupName, item, text, tree1, tree2, tree3, tree4, tree5, tree6);
-								}
-							}
-							else {
-								ItemToRoot(root, groupName, item, text, tree1, tree2, tree3, tree4, tree5);
-							}
-						}
-						else {
-							ItemToRoot(root, groupName, item, text, tree1, tree2, tree3, tree4);
-						}
-					}
-					else {
-						ItemToRoot(root, groupName, item, text, tree1, tree2, tree3);
-					}
-				}
-				else {
-					ItemToRoot(root, groupName, item, text, tree1, tree2);
-				}
-			}
-			else {
-				ItemToRoot(root, groupName, item, text, tree1);
-			}
-		}
-		else {
-			ItemToRoot(root, groupName, item, itemName);
-		}
+		ItemToRoot(root[groupName], item, itemName, treeNames);
 	}
 
 	std::filesystem::path dir(kDirectoryPath);
@@ -1770,11 +998,8 @@ void GlobalVariables::LoadFile(const std::string& chunkName, const std::string& 
 	if (chunkName == "zzESC") {
 		return;
 	}
-
 	std::string filePath = kDirectoryPath + chunkName + "_" + groupName + ".json";
-
 	std::ifstream ifs;
-
 	ifs.open(filePath);
 
 	if (ifs.fail()) {
@@ -1787,422 +1012,119 @@ void GlobalVariables::LoadFile(const std::string& chunkName, const std::string& 
 	}
 
 	nlohmann::json root;
-
 	ifs >> root;
-
 	ifs.close();
-
-
 	nlohmann::json::iterator itGroup = root.find(groupName);
-
 	assert(itGroup != root.end());
 
-
-	for (nlohmann::json::iterator itItem = itGroup->begin(); itItem != itGroup->end(); ++itItem) {
-
-		const std::string& itemName = itItem.key();
-
-		if (itItem->is_object()) {
-			
-			for (nlohmann::json::iterator i2 = itItem->begin(); i2 != itItem->end(); ++i2) {
-				const std::string& itemName2 = i2.key();
-
-				if (i2->is_object()) {
-
-					for (nlohmann::json::iterator i3 = i2->begin(); i3 != i2->end(); ++i3) {
-						const std::string& itemName3 = i3.key();
-
-						if (i3->is_object()) {
-
-							for (nlohmann::json::iterator i4 = i3->begin(); i4 != i3->end(); ++i4) {
-								const std::string& itemName4 = i4.key();
-
-								if (i4->is_object()) {
-
-									for (nlohmann::json::iterator i5 = i4->begin(); i5 != i4->end(); ++i5) {
-										const std::string& itemName5 = i5.key();
-
-										if (i5->is_object()) {
-
-											for (nlohmann::json::iterator i6 = i5->begin(); i6 != i5->end(); ++i6) {
-												const std::string& itemName6 = i6.key();
-
-												if (i6->is_object()) {
-
-													for (nlohmann::json::iterator i7 = i6->begin(); i7 != i6->end(); ++i7) {
-														const std::string& itemName7 = i7.key();
-
-														/*if (i7->is_object()) {
-
-															for (nlohmann::json::iterator i7 = i6->begin(); i7 != i6->end(); ++i7) {
-																const std::string& itemName7 = i7.key();
-
-
-															}
-														}
-														else */if (i7->is_number_integer()) {
-															int32_t value = i7->get<int32_t>();
-															SetValue(chunkName, groupName, itemName7, value, itemName, itemName2, itemName3, itemName4, itemName5, itemName6);
-														}
-														else if (i7->is_number_float()) {
-															double value = i7->get<double>();
-															SetValue(chunkName, groupName, itemName7, static_cast<float>(value), itemName, itemName2, itemName3, itemName4, itemName5, itemName6);
-														}
-														else if (i7->is_array() && i7->size() == 2) {
-															Vector2 value = { i7->at(0), i7->at(1) };
-															SetValue(chunkName, groupName, itemName7, value, itemName, itemName2, itemName3, itemName4, itemName5, itemName6);
-														}
-														else if (i7->is_array() && i7->size() == 3) {
-															Vector3 value = { i7->at(0), i7->at(1), i7->at(2) };
-															SetValue(chunkName, groupName, itemName7, value, itemName, itemName2, itemName3, itemName4, itemName5, itemName6);
-														}
-														else if (i7->is_boolean()) {
-															bool value = i7->get<bool>();
-															SetValue(chunkName, groupName, itemName7, value, itemName, itemName2, itemName3, itemName4, itemName5, itemName6);
-														}
-														else if (i7->is_string()) {
-															std::string value = i7->get<std::string>();
-															SetValue(chunkName, groupName, itemName7, value, itemName, itemName2, itemName3, itemName4, itemName5, itemName6);
-														}
-													}
-												}
-												else if (i6->is_number_integer()) {
-													int32_t value = i6->get<int32_t>();
-													SetValue(chunkName, groupName, itemName6, value, itemName, itemName2, itemName3, itemName4, itemName5);
-												}
-												else if (i6->is_number_float()) {
-													double value = i6->get<double>();
-													SetValue(chunkName, groupName, itemName6, static_cast<float>(value), itemName, itemName2, itemName3, itemName4, itemName5);
-												}
-												else if (i6->is_array() && i6->size() == 2) {
-													Vector2 value = { i6->at(0), i6->at(1) };
-													SetValue(chunkName, groupName, itemName6, value, itemName, itemName2, itemName3, itemName4, itemName5);
-												}
-												else if (i6->is_array() && i6->size() == 3) {
-													Vector3 value = { i6->at(0), i6->at(1), i6->at(2) };
-													SetValue(chunkName, groupName, itemName6, value, itemName, itemName2, itemName3, itemName4, itemName5);
-												}
-												else if (i6->is_boolean()) {
-													bool value = i6->get<bool>();
-													SetValue(chunkName, groupName, itemName6, value, itemName, itemName2, itemName3, itemName4, itemName5);
-												}
-												else if (i6->is_string()) {
-													std::string value = i6->get<std::string>();
-													SetValue(chunkName, groupName, itemName6, value, itemName, itemName2, itemName3, itemName4, itemName5);
-												}
-											}
-										}
-										else if (i5->is_number_integer()) {
-											int32_t value = i5->get<int32_t>();
-											SetValue(chunkName, groupName, itemName5, value, itemName, itemName2, itemName3, itemName4);
-										}
-										else if (i5->is_number_float()) {
-											double value = i5->get<double>();
-											SetValue(chunkName, groupName, itemName5, static_cast<float>(value), itemName, itemName2, itemName3, itemName4);
-										}
-										else if (i5->is_array() && i5->size() == 2) {
-											Vector2 value = { i5->at(0), i5->at(1) };
-											SetValue(chunkName, groupName, itemName5, value, itemName, itemName2, itemName3, itemName4);
-										}
-										else if (i5->is_array() && i5->size() == 3) {
-											Vector3 value = { i5->at(0), i5->at(1), i5->at(2) };
-											SetValue(chunkName, groupName, itemName5, value, itemName, itemName2, itemName3, itemName4);
-										}
-										else if (i5->is_boolean()) {
-											bool value = i5->get<bool>();
-											SetValue(chunkName, groupName, itemName5, value, itemName, itemName2, itemName3, itemName4);
-										}
-										else if (i5->is_string()) {
-											std::string value = i5->get<std::string>();
-											SetValue(chunkName, groupName, itemName5, value, itemName, itemName2, itemName3, itemName4);
-										}
-									}
-								}
-								else if (i4->is_number_integer()) {
-									int32_t value = i4->get<int32_t>();
-									SetValue(chunkName, groupName, itemName4, value, itemName, itemName2, itemName3);
-								}
-								else if (i4->is_number_float()) {
-									double value = i4->get<double>();
-									SetValue(chunkName, groupName, itemName4, static_cast<float>(value), itemName, itemName2, itemName3);
-								}
-								else if (i4->is_array() && i4->size() == 2) {
-									Vector2 value = { i4->at(0), i4->at(1) };
-									SetValue(chunkName, groupName, itemName4, value, itemName, itemName2, itemName3);
-								}
-								else if (i4->is_array() && i4->size() == 3) {
-									Vector3 value = { i4->at(0), i4->at(1), i4->at(2) };
-									SetValue(chunkName, groupName, itemName4, value, itemName, itemName2, itemName3);
-								}
-								else if (i4->is_boolean()) {
-									bool value = i4->get<bool>();
-									SetValue(chunkName, groupName, itemName4, value, itemName, itemName2, itemName3);
-								}
-								else if (i4->is_string()) {
-									std::string value = i4->get<std::string>();
-									SetValue(chunkName, groupName, itemName4, value, itemName, itemName2, itemName3);
-								}
-							}
-						}
-						else if (i3->is_number_integer()) {
-							int32_t value = i3->get<int32_t>();
-							SetValue(chunkName, groupName, itemName3, value, itemName, itemName2);
-						}
-						else if (i3->is_number_float()) {
-							double value = i3->get<double>();
-							SetValue(chunkName, groupName, itemName3, static_cast<float>(value), itemName, itemName2);
-						}
-						else if (i3->is_array() && i3->size() == 2) {
-							Vector2 value = { i3->at(0), i3->at(1) };
-							SetValue(chunkName, groupName, itemName3, value, itemName, itemName2);
-						}
-						else if (i3->is_array() && i3->size() == 3) {
-							Vector3 value = { i3->at(0), i3->at(1), i3->at(2) };
-							SetValue(chunkName, groupName, itemName3, value, itemName, itemName2);
-						}
-						else if (i3->is_boolean()) {
-							bool value = i3->get<bool>();
-							SetValue(chunkName, groupName, itemName3, value, itemName, itemName2);
-						}
-						else if (i3->is_string()) {
-							std::string value = i3->get<std::string>();
-							SetValue(chunkName, groupName, itemName3, value, itemName, itemName2);
-						}
-					}
-				}
-				else if (i2->is_number_integer()) {
-					int32_t value = i2->get<int32_t>();
-					SetValue(chunkName, groupName, itemName2, value, itemName);
-				}
-				else if (i2->is_number_float()) {
-					double value = i2->get<double>();
-					SetValue(chunkName, groupName, itemName2, static_cast<float>(value), itemName);
-				}
-				else if (i2->is_array() && i2->size() == 2) {
-					Vector2 value = { i2->at(0), i2->at(1) };
-					SetValue(chunkName, groupName, itemName2, value, itemName);
-				}
-				else if (i2->is_array() && i2->size() == 3) {
-					Vector3 value = { i2->at(0), i2->at(1), i2->at(2) };
-					SetValue(chunkName, groupName, itemName2, value, itemName);
-				}
-				else if (i2->is_boolean()) {
-					bool value = i2->get<bool>();
-					SetValue(chunkName, groupName, itemName2, value, itemName);
-				}
-				else if (i2->is_string()) {
-					std::string value = i2->get<std::string>();
-					SetValue(chunkName, groupName, itemName2, value, itemName);
-				}
-			}
-		}
-		else if (itItem->is_number_integer()) {
-			int32_t value = itItem->get<int32_t>();
-			SetValue(chunkName, groupName, itemName, value);
-		}
-		else if (itItem->is_number_float()) {
-			double value = itItem->get<double>();
-			SetValue(chunkName, groupName, itemName, static_cast<float>(value));
-		}
-		else if (itItem->is_array() && itItem->size() == 2) {
-			Vector2 value = { itItem->at(0), itItem->at(1) };
-			SetValue(chunkName, groupName, itemName, value);
-		}
-		else if (itItem->is_array() && itItem->size() == 3) {
-			Vector3 value = { itItem->at(0), itItem->at(1), itItem->at(2) };
-			SetValue(chunkName, groupName, itemName, value);
-		}
-		else if (itItem->is_boolean()) {
-			bool value = itItem->get<bool>();
-			SetValue(chunkName, groupName, itemName, value);
-		}
-		else if (itItem->is_string()) {
-			std::string value = itItem->get<std::string>();
-			SetValue(chunkName, groupName, itemName, value);
-		}
-	}
+	std::vector<std::string> treeNames(6, "_");
+	RootToSetValue(chunkName, groupName, itGroup, treeNames);
 }
 
-void GlobalVariables::ItemToRoot(nlohmann::json& root, const std::string& groupName, Item& item, const std::string& text, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
+void GlobalVariables::ItemToRoot(nlohmann::json& root, Item& item, const std::string& key, const std::vector<std::string>& treeNames, uint32_t level)
 {
-	if (tree1 == "_") {
+	if (treeNames[level] == "_") {
 		if (std::holds_alternative<int32_t>(item)) {
-			root[groupName][text] = std::get<int32_t>(item);
+			root[key] = std::get<int32_t>(item);
 		}
 		else if (std::holds_alternative<float>(item)) {
-			root[groupName][text] = std::get<float>(item);
+			root[key] = std::get<float>(item);
 		}
 		else if (std::holds_alternative<Vector2>(item)) {
 			Vector2 value = std::get<Vector2>(item);
-			root[groupName][text] = nlohmann::json::array({ value.x, value.y });
+			root[key] = nlohmann::json::array({ value.x, value.y });
 		}
 		else if (std::holds_alternative<Vector3>(item)) {
 			Vector3 value = std::get<Vector3>(item);
-			root[groupName][text] = nlohmann::json::array({ value.x, value.y, value.z });
+			root[key] = nlohmann::json::array({ value.x, value.y, value.z });
 		}
 		else if (std::holds_alternative<bool>(item)) {
-			root[groupName][text] = std::get<bool>(item);
+			root[key] = std::get<bool>(item);
 		}
 		else if (std::holds_alternative<std::string>(item)) {
-			root[groupName][text] = std::get<std::string>(item);
+			root[key] = std::get<std::string>(item);
 		}
 	}
 	else {
-		if (!root[groupName][tree1].is_object()) {
-			root[groupName][tree1] = nlohmann::json::object();
+		if (!root[treeNames[level]].is_object()) {
+			root[treeNames[level]] = nlohmann::json::object();
 		}
-		if (tree2 == "_") {
-			if (std::holds_alternative<int32_t>(item)) {
-				root[groupName][tree1][text] = std::get<int32_t>(item);
-			}
-			else if (std::holds_alternative<float>(item)) {
-				root[groupName][tree1][text] = std::get<float>(item);
-			}
-			else if (std::holds_alternative<Vector2>(item)) {
-				Vector2 value = std::get<Vector2>(item);
-				root[groupName][tree1][text] = nlohmann::json::array({ value.x, value.y });
-			}
-			else if (std::holds_alternative<Vector3>(item)) {
-				Vector3 value = std::get<Vector3>(item);
-				root[groupName][tree1][text] = nlohmann::json::array({ value.x, value.y, value.z });
-			}
-			else if (std::holds_alternative<bool>(item)) {
-				root[groupName][tree1][text] = std::get<bool>(item);
-			}
-			else if (std::holds_alternative<std::string>(item)) {
-				root[groupName][tree1][text] = std::get<std::string>(item);
-			}
+		ItemToRoot(root[treeNames[level]], item, key, treeNames, level + 1);
+	}
+}
+
+void GlobalVariables::MakeTreeNames(std::string& key, std::vector<std::string>& treeNames, uint32_t level)
+{
+	size_t pos = key.find(kTreeName_[level]);
+	if (pos != std::string::npos) {
+		size_t underscorePos = key.find("_", pos + 5);
+		treeNames[level] = key.substr(pos + 5, underscorePos - pos - 5);
+
+		key = key.substr(underscorePos + 1);
+		MakeTreeNames(key, treeNames, level + 1);
+	}
+}
+
+void GlobalVariables::RootToSetValue(const std::string& chunkName, const std::string& groupName, nlohmann::json::iterator& itGroup, const std::vector<std::string>& treeNames, uint32_t level)
+{
+	for (nlohmann::json::iterator itItem = itGroup->begin(); itItem != itGroup->end(); ++itItem) {
+		const std::string& itemName = itItem.key();
+		if (itItem->is_object()) {
+			std::vector<std::string> tNames = treeNames;
+			tNames[level] = itemName;
+			RootToSetValue(chunkName, groupName, itItem, tNames, level + 1);
 		}
 		else {
-			if (!root[groupName][tree1][tree2].is_object()) {
-				root[groupName][tree1][tree2] = nlohmann::json::object();
-			}
-			if (tree3 == "_") {
-				if (std::holds_alternative<int32_t>(item)) {
-					root[groupName][tree1][tree2][text] = std::get<int32_t>(item);
+			if (level == 0) {
+				if (itItem->is_number_integer()) {
+					int32_t value = itItem->get<int32_t>();
+					SetValue(chunkName, groupName, itemName, value);
 				}
-				else if (std::holds_alternative<float>(item)) {
-					root[groupName][tree1][tree2][text] = std::get<float>(item);
+				else if (itItem->is_number_float()) {
+					double value = itItem->get<double>();
+					SetValue(chunkName, groupName, itemName, static_cast<float>(value));
 				}
-				else if (std::holds_alternative<Vector2>(item)) {
-					Vector2 value = std::get<Vector2>(item);
-					root[groupName][tree1][tree2][text] = nlohmann::json::array({ value.x, value.y });
+				else if (itItem->is_array() && itItem->size() == 2) {
+					Vector2 value = { itItem->at(0), itItem->at(1) };
+					SetValue(chunkName, groupName, itemName, value);
 				}
-				else if (std::holds_alternative<Vector3>(item)) {
-					Vector3 value = std::get<Vector3>(item);
-					root[groupName][tree1][tree2][text] = nlohmann::json::array({ value.x, value.y, value.z });
+				else if (itItem->is_array() && itItem->size() == 3) {
+					Vector3 value = { itItem->at(0), itItem->at(1), itItem->at(2) };
+					SetValue(chunkName, groupName, itemName, value);
 				}
-				else if (std::holds_alternative<bool>(item)) {
-					root[groupName][tree1][tree2][text] = std::get<bool>(item);
+				else if (itItem->is_boolean()) {
+					bool value = itItem->get<bool>();
+					SetValue(chunkName, groupName, itemName, value);
 				}
-				else if (std::holds_alternative<std::string>(item)) {
-					root[groupName][tree1][tree2][text] = std::get<std::string>(item);
+				else if (itItem->is_string()) {
+					std::string value = itItem->get<std::string>();
+					SetValue(chunkName, groupName, itemName, value);
 				}
 			}
 			else {
-				if (!root[groupName][tree1][tree2][tree3].is_object()) {
-					root[groupName][tree1][tree2][tree3] = nlohmann::json::object();
+				if (itItem->is_number_integer()) {
+					int32_t value = itItem->get<int32_t>();
+					SetValue(chunkName, groupName, itemName, value, treeNames[0], treeNames[1], treeNames[2], treeNames[3], treeNames[4], treeNames[5]);
 				}
-				if (tree4 == "_") {
-					if (std::holds_alternative<int32_t>(item)) {
-						root[groupName][tree1][tree2][tree3][text] = std::get<int32_t>(item);
-					}
-					else if (std::holds_alternative<float>(item)) {
-						root[groupName][tree1][tree2][tree3][text] = std::get<float>(item);
-					}
-					else if (std::holds_alternative<Vector2>(item)) {
-						Vector2 value = std::get<Vector2>(item);
-						root[groupName][tree1][tree2][tree3][text] = nlohmann::json::array({ value.x, value.y });
-					}
-					else if (std::holds_alternative<Vector3>(item)) {
-						Vector3 value = std::get<Vector3>(item);
-						root[groupName][tree1][tree2][tree3][text] = nlohmann::json::array({ value.x, value.y, value.z });
-					}
-					else if (std::holds_alternative<bool>(item)) {
-						root[groupName][tree1][tree2][tree3][text] = std::get<bool>(item);
-					}
-					else if (std::holds_alternative<std::string>(item)) {
-						root[groupName][tree1][tree2][tree3][text] = std::get<std::string>(item);
-					}
+				else if (itItem->is_number_float()) {
+					double value = itItem->get<double>();
+					SetValue(chunkName, groupName, itemName, static_cast<float>(value), treeNames[0], treeNames[1], treeNames[2], treeNames[3], treeNames[4], treeNames[5]);
 				}
-				else {
-					if (!root[groupName][tree1][tree2][tree3][tree4].is_object()) {
-						root[groupName][tree1][tree2][tree3][tree4] = nlohmann::json::object();
-					}
-					if (tree5 == "_") {
-						if (std::holds_alternative<int32_t>(item)) {
-							root[groupName][tree1][tree2][tree3][tree4][text] = std::get<int32_t>(item);
-						}
-						else if (std::holds_alternative<float>(item)) {
-							root[groupName][tree1][tree2][tree3][tree4][text] = std::get<float>(item);
-						}
-						else if (std::holds_alternative<Vector2>(item)) {
-							Vector2 value = std::get<Vector2>(item);
-							root[groupName][tree1][tree2][tree3][tree4][text] = nlohmann::json::array({ value.x, value.y });
-						}
-						else if (std::holds_alternative<Vector3>(item)) {
-							Vector3 value = std::get<Vector3>(item);
-							root[groupName][tree1][tree2][tree3][tree4][text] = nlohmann::json::array({ value.x, value.y, value.z });
-						}
-						else if (std::holds_alternative<bool>(item)) {
-							root[groupName][tree1][tree2][tree3][tree4][text] = std::get<bool>(item);
-						}
-						else if (std::holds_alternative<std::string>(item)) {
-							root[groupName][tree1][tree2][tree3][tree4][text] = std::get<std::string>(item);
-						}
-					}
-					else {
-						if (!root[groupName][tree1][tree2][tree3][tree4][tree5].is_object()) {
-							root[groupName][tree1][tree2][tree3][tree4][tree5] = nlohmann::json::object();
-						}
-						if (tree6 == "_") {
-							if (std::holds_alternative<int32_t>(item)) {
-								root[groupName][tree1][tree2][tree3][tree4][tree5][text] = std::get<int32_t>(item);
-							}
-							else if (std::holds_alternative<float>(item)) {
-								root[groupName][tree1][tree2][tree3][tree4][tree5][text] = std::get<float>(item);
-							}
-							else if (std::holds_alternative<Vector2>(item)) {
-								Vector2 value = std::get<Vector2>(item);
-								root[groupName][tree1][tree2][tree3][tree4][tree5][text] = nlohmann::json::array({ value.x, value.y });
-							}
-							else if (std::holds_alternative<Vector3>(item)) {
-								Vector3 value = std::get<Vector3>(item);
-								root[groupName][tree1][tree2][tree3][tree4][tree5][text] = nlohmann::json::array({ value.x, value.y, value.z });
-							}
-							else if (std::holds_alternative<bool>(item)) {
-								root[groupName][tree1][tree2][tree3][tree4][tree5][text] = std::get<bool>(item);
-							}
-							else if (std::holds_alternative<std::string>(item)) {
-								root[groupName][tree1][tree2][tree3][tree4][tree5][text] = std::get<std::string>(item);
-							}
-						}
-						else {
-							if (!root[groupName][tree1][tree2][tree3][tree4][tree5][tree6].is_object()) {
-								root[groupName][tree1][tree2][tree3][tree4][tree5][tree6] = nlohmann::json::object();
-							}
-							if (std::holds_alternative<int32_t>(item)) {
-								root[groupName][tree1][tree2][tree3][tree4][tree5][tree6][text] = std::get<int32_t>(item);
-							}
-							else if (std::holds_alternative<float>(item)) {
-								root[groupName][tree1][tree2][tree3][tree4][tree5][tree6][text] = std::get<float>(item);
-							}
-							else if (std::holds_alternative<Vector2>(item)) {
-								Vector2 value = std::get<Vector2>(item);
-								root[groupName][tree1][tree2][tree3][tree4][tree5][tree6][text] = nlohmann::json::array({ value.x, value.y });
-							}
-							else if (std::holds_alternative<Vector3>(item)) {
-								Vector3 value = std::get<Vector3>(item);
-								root[groupName][tree1][tree2][tree3][tree4][tree5][tree6][text] = nlohmann::json::array({ value.x, value.y, value.z });
-							}
-							else if (std::holds_alternative<bool>(item)) {
-								root[groupName][tree1][tree2][tree3][tree4][tree5][tree6][text] = std::get<bool>(item);
-							}
-							else if (std::holds_alternative<std::string>(item)) {
-								root[groupName][tree1][tree2][tree3][tree4][tree5][tree6][text] = std::get<std::string>(item);
-							}
-						}
-					}
+				else if (itItem->is_array() && itItem->size() == 2) {
+					Vector2 value = { itItem->at(0), itItem->at(1) };
+					SetValue(chunkName, groupName, itemName, value, treeNames[0], treeNames[1], treeNames[2], treeNames[3], treeNames[4], treeNames[5]);
+				}
+				else if (itItem->is_array() && itItem->size() == 3) {
+					Vector3 value = { itItem->at(0), itItem->at(1), itItem->at(2) };
+					SetValue(chunkName, groupName, itemName, value, treeNames[0], treeNames[1], treeNames[2], treeNames[3], treeNames[4], treeNames[5]);
+				}
+				else if (itItem->is_boolean()) {
+					bool value = itItem->get<bool>();
+					SetValue(chunkName, groupName, itemName, value, treeNames[0], treeNames[1], treeNames[2], treeNames[3], treeNames[4], treeNames[5]);
+				}
+				else if (itItem->is_string()) {
+					std::string value = itItem->get<std::string>();
+					SetValue(chunkName, groupName, itemName, value, treeNames[0], treeNames[1], treeNames[2], treeNames[3], treeNames[4], treeNames[5]);
 				}
 			}
 		}
@@ -2210,6 +1132,81 @@ void GlobalVariables::ItemToRoot(nlohmann::json& root, const std::string& groupN
 }
 
 #ifdef _DEBUG
+void GlobalVariables::MakeTreeMap(const std::string& chunkName, const std::string& groupName, std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, GroupPtr>>>>>>& treeMap, Item& item, const std::string& itemName, std::vector<std::string>& treeNames, uint32_t level)
+{
+	size_t pos = itemName.find(kTreeName_[level]);
+	std::string text = itemName;
+	if (pos != std::string::npos) {
+		size_t underscorePos = itemName.find("_", pos + 5);
+		treeNames[level] = itemName.substr(pos + 5, underscorePos - pos - 5);
+
+		text = itemName.substr(underscorePos + 1);
+		level++;
+		pos = text.find(kTreeName_[level]);
+		if (pos != std::string::npos) {
+			underscorePos = text.find("_", pos + 5);
+			treeNames[level] = text.substr(pos + 5, underscorePos - pos - 5);
+
+			text = text.substr(underscorePos + 1);
+			level++;
+			MakeTreeMap(chunkName, groupName, treeMap, item, text, treeNames, level);
+		}
+		else {
+			treeMap[treeNames[0]][treeNames[1]][treeNames[2]][treeNames[3]][treeNames[4]][treeNames[5]][text] = &item;
+			std::string openTreeName;
+			for (uint32_t i = 0; i < level; i++) {
+				if (i != 0) {
+					openTreeName += "_";
+				}
+				openTreeName += kTreeName_[i] + treeNames[i];
+			}
+			isTreeOpen_[chunkName][groupName][openTreeName] = false;
+		}
+	}
+	else if (level == 0){
+		PreparationImGui(itemName, item);
+	}
+	else {
+		treeMap[treeNames[0]][treeNames[1]][treeNames[2]][treeNames[3]][treeNames[4]][treeNames[5]][text] = &item;
+		std::string openTreeName;
+		for (uint32_t i = 0; i < level; i++) {
+			if (i != 0) {
+				openTreeName += "_";
+			}
+			openTreeName += kTreeName_[i] + treeNames[i];
+		}
+		isTreeOpen_[chunkName][groupName][openTreeName] = false;
+	}
+}
+
+template<typename T>
+void GlobalVariables::DrawTreeImGui(T& tree, const std::string& chunkName, const std::string& groupName, const std::string& treeName, uint32_t level)
+{
+	for (auto it = tree.begin(); it != tree.end(); ++it) {
+		const std::string& key = it->first;
+		if (key == "_") {
+			DrawTreeImGui(it->second, chunkName, groupName, treeName + "_" + kTreeName_[level] + key, level + 1);
+		}
+		else {
+			if (ImGui::TreeNode(key.c_str())) {
+				isTreeOpen_[chunkName][groupName][treeName + "_" + kTreeName_[level] + key] = true;
+				DrawTreeImGui(it->second, chunkName, groupName, treeName + "_" + kTreeName_[level] + key, level + 1);
+				ImGui::TreePop();
+			}
+		}
+	}
+}
+template <>
+void GlobalVariables::DrawTreeImGui<std::map<std::string, GlobalVariables::Item*>>(std::map<std::string, Item*>& tree, const std::string& chunkName, const std::string& groupName, const std::string& treeName, uint32_t level)
+{
+	std::string a = chunkName;
+	a = groupName + treeName;
+	level++;
+	for (std::map<std::string, Item*>::iterator it = tree.begin(); it != tree.end(); ++it) {
+		PreparationImGui(it->first, *it->second);
+	}
+}
+
 void GlobalVariables::PreparationImGui(const std::string& itemName, Item& item)
 {
 	if (std::holds_alternative<int32_t>(item)) {

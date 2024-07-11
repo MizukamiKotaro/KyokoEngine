@@ -105,8 +105,6 @@ public:
 
 	void SaveFile(const std::string& chunkName, const std::string& groupName, const bool& isFin = false);
 
-	//void SaveF(const std::string& chunkName, const std::string& groupName, const bool& isFin = false);
-
 	void LoadFiles();
 
 	void LoadFile(const std::string& chunkName, const std::string& groupName);
@@ -135,9 +133,18 @@ private:
 	template<typename T>
 	void SetValue(const std::string& chunkName, const std::string& groupName, const std::string& key, const T& value, const std::string& tree1, const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
 
-	void ItemToRoot(nlohmann::json& root, const std::string& groupName, Item& item, const std::string& text, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
+	void ItemToRoot(nlohmann::json& root, Item& item, const std::string& key, const std::vector<std::string>& treeNames, uint32_t level = 0);
+	void MakeTreeNames(std::string& key, std::vector<std::string>& treeNames, uint32_t level = 0);
 
+	void RootToSetValue(const std::string& chunkName, const std::string& groupName, nlohmann::json::iterator& itGroup, const std::vector<std::string>& treeNames, uint32_t level = 0);
 #ifdef _DEBUG
+	void MakeTreeMap(const std::string& chunkName, const std::string& groupName,
+		std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, GroupPtr>>>>>>& treeMap,
+		Item& item, const std::string& itemName, std::vector<std::string>& treeNames, uint32_t level = 0);
+
+	template <typename T>
+	void DrawTreeImGui(T& tree, const std::string& chunkName, const std::string& groupName, const std::string& treeName, uint32_t level = 1);
+
 	void PreparationImGui(const std::string& itemName, Item& item);
 #endif // _DEBUG
 
