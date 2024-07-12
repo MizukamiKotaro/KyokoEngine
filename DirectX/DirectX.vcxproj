@@ -227,6 +227,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\GameElement\IStageObject\IStageObject.cpp" />
     <ClCompile Include="Game\GameElement\IStageObject\IStageObjectManager.cpp" />
     <ClCompile Include="Game\GameElement\IStageObject\StageObjectFactory\StageObjectFactory.cpp" />
+    <ClCompile Include="Game\GameElement\LiveEditor\CameraEditor\CameraEditor.cpp" />
     <ClCompile Include="Game\GameElement\LiveEditor\DancingIdolEditor\DancingIdolEditor.cpp" />
     <ClCompile Include="Game\GameElement\LiveEditor\DomeEditor\DomeEditor.cpp" />
     <ClCompile Include="Game\GameElement\LiveEditor\LiveEditor.cpp" />
@@ -436,6 +437,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\GameElement\IStageObject\IStageObjectManager.h" />
     <ClInclude Include="Game\GameElement\IStageObject\StageObjectConfig.h" />
     <ClInclude Include="Game\GameElement\IStageObject\StageObjectFactory\StageObjectFactory.h" />
+    <ClInclude Include="Game\GameElement\LiveEditor\CameraEditor\CameraEditor.h" />
     <ClInclude Include="Game\GameElement\LiveEditor\DancingIdolEditor\DancingIdolEditor.h" />
     <ClInclude Include="Game\GameElement\LiveEditor\DomeEditor\DomeEditor.h" />
     <ClInclude Include="Game\GameElement\LiveEditor\LiveEditor.h" />

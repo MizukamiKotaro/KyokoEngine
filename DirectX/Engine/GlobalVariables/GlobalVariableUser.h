@@ -71,13 +71,15 @@ public:
 	void SaveDontTouchImGui(const std::string& key, const std::string& value);
 
 	bool IsTreeOpen(const std::string& tree1, const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
-	bool IsTreeOpen(const int& treeNo);
+	bool IsTreeOpen(const int32_t& treeNo);
 
 	const std::string& GetChunkName() const { return chunkName_; }
 
 private:
 	std::string chunkName_;
 	std::string groupName_;
+
+	std::vector<std::string> CreateTree(const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_") const;
 
 private:
 	static GlobalVariables* global_;

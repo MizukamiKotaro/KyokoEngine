@@ -23,8 +23,7 @@ void ScreenEditor::Update(const float& time) {
 #ifdef _DEBUG
 	UpdateGlobalVariable();
 #endif // _DEBUG
-	float a = time;
-	a = 0;
+	if (time) {}
 }
 
 void ScreenEditor::Draw(const Camera& camera) 

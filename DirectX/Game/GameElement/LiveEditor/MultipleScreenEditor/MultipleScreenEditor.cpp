@@ -28,7 +28,7 @@ void MultipleScreenEditor::Update(const float& time)
 		screenMap_[i]->Update(time);
 	}
 #endif // _DEBUG
-	float a = time; a = 0;
+	if(time){}
 }
 
 void MultipleScreenEditor::Draw(const Camera& camera)

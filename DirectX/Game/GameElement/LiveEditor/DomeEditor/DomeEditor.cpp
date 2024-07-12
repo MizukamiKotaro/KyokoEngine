@@ -22,8 +22,7 @@ void DomeEditor::Update(const float& time)
 #ifdef _DEBUG
 	UpdateGlobalVariable();
 #endif // _DEBUG
-	float a = time;
-	a = 0;
+	if(time){}
 }
 
 void DomeEditor::Draw(const Camera& camera)

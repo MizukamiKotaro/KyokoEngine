@@ -87,8 +87,8 @@ void TwinSpotLightBoxAnimationEditor::ApplyGlobalVariable()
 	stageEditor_->SetVariable("外のライトの減衰し始める角度", lights_[0]->spotLights_[0]->light_->cosFalloffStart, "ライトの調整");
 	stageEditor_->SetVariable("外のライトの距離", lights_[0]->spotLights_[0]->light_->distance, "ライトの調整");
 	stageEditor_->SetVariable("内のライトの開く角度", lights_[0]->spotLights_[1]->light_->cosAngle, "ライトの調整");
-	stageEditor_->SetVariable("内のライトの減衰し始める角度", lights_[0]->spotLights_[1]->light_->cosAngle, "ライトの調整");
-	stageEditor_->SetVariable("内のライトの距離", lights_[0]->spotLights_[1]->light_->cosAngle, "ライトの調整");
+	stageEditor_->SetVariable("内のライトの減衰し始める角度", lights_[0]->spotLights_[1]->light_->cosFalloffStart, "ライトの調整");
+	stageEditor_->SetVariable("内のライトの距離", lights_[0]->spotLights_[1]->light_->distance, "ライトの調整");
 
 	*lights_[1]->spotLights_[0]->light_ = *lights_[0]->spotLights_[0]->light_;
 	lights_[1]->spotLights_[0]->light_->direction.x *= -1;
