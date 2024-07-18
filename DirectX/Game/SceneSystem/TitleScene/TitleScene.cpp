@@ -1,6 +1,7 @@
 #include "TitleScene.h"
 #include "Kyoko.h"
 #include "ImGuiManager/ImGuiManager.h"
+#include "ImGuiManager/DopeSheet.h"
 
 TitleScene::TitleScene()
 {
@@ -67,6 +68,7 @@ void TitleScene::Update()
 	}
 
 #ifdef _DEBUG
+	ImGuiCommon::DopeSheet();
 	if (input_->PressedKey(DIK_Q)) {
 		ChangeScene(STAGE);
 		se_.Play();

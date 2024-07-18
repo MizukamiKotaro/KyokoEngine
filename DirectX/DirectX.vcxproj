@@ -209,6 +209,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\ScanNoiseGraphicsPipeline\ScanNoiseGraphicsPipeline.cpp" />
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SpriteGraphicsPipeline\SpriteGraphicsPipeline.cpp" />
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SpotLightGraphicsPipline\SpotLightGraphicsPipline.cpp" />
+    <ClCompile Include="Engine\ImGuiManager\DopeSheet.cpp" />
+    <ClCompile Include="Engine\ImGuiManager\Guizmo.cpp" />
     <ClCompile Include="Engine\ImGuiManager\ImGuiManager.cpp" />
     <ClCompile Include="Engine\Input\Input.cpp" />
     <ClCompile Include="Engine\Kyoko.cpp" />
@@ -399,6 +401,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\ScanNoiseGraphicsPipeline\ScanNoiseGraphicsPipeline.h" />
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SpriteGraphicsPipeline\SpriteGraphicsPipeline.h" />
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SpotLightGraphicsPipline\SpotLightGraphicsPipline.h" />
+    <ClInclude Include="Engine\ImGuiManager\DopeSheet.h" />
+    <ClInclude Include="Engine\ImGuiManager\Guizmo.h" />
     <ClInclude Include="Engine\ImGuiManager\ImGuiManager.h" />
     <ClInclude Include="Engine\Input\Input.h" />
     <ClInclude Include="Engine\Kyoko.h" />

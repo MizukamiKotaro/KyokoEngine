@@ -41,14 +41,13 @@ void IStageObject::InitializeEditor()
 	}
 }
 
-void IStageObject::UpdateGlobalVariable(const uint32_t& no)
+void IStageObject::UpdateGlobalVariable()
 {
 #ifdef _DEBUG
 	if (stageEditor_) {
-		if (stageEditor_->IsTreeOpen(no)) {
+		if (stageEditor_->IsTreeOpen()) {
 			ApplyGlobalVariable();
 		}
 	}
 #endif // _DEBUG
-	uint32_t a = no; a = 0;
 }

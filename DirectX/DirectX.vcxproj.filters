@@ -972,6 +972,12 @@
     <ClCompile Include="Game\GameElement\LiveEditor\CameraEditor\CameraEditor.cpp">
       <Filter>Game\GameElement\LiveEditor\CameraEditor</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\ImGuiManager\Guizmo.cpp">
+      <Filter>Engine\ImGuiManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\ImGuiManager\DopeSheet.cpp">
+      <Filter>Engine\ImGuiManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Utils\Math\calc.h">
@@ -1546,6 +1552,12 @@
     </ClInclude>
     <ClInclude Include="Game\GameElement\LiveEditor\CameraEditor\CameraEditor.h">
       <Filter>Game\GameElement\LiveEditor\CameraEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\ImGuiManager\Guizmo.h">
+      <Filter>Engine\ImGuiManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\ImGuiManager\DopeSheet.h">
+      <Filter>Engine\ImGuiManager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

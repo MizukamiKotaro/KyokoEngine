@@ -12,8 +12,9 @@ GlobalVariables* GlobalVariables::GetInstance() {
 
 void GlobalVariables::Initialize()
 {
-	kTreeName_.resize(6);
-	for (int i = 0; i < 6; i++) {
+	kMaxTreeNum_ = 8;
+	kTreeName_.resize(kMaxTreeNum_);
+	for (uint32_t i = 0; i < kMaxTreeNum_; i++) {
 		kTreeName_[i] = "Tree" + std::to_string(i + 1);
 	}
 }
@@ -76,7 +77,7 @@ void GlobalVariables::Update() {
 				itItem != group.end(); ++itItem) {
 				const std::string& itemName = itItem->first;
 				Item& item = itItem->second;
-				std::vector<std::string> treeNames(6, "_");
+				std::vector<std::string> treeNames(kMaxTreeNum_, "_");
 				MakeTreeMap(chunkName, groupName, treeMap, item, itemName, treeNames);
 			}
 
@@ -395,7 +396,7 @@ void GlobalVariables::SaveFile(const std::string& chunkName, const std::string& 
 		itItem != itGroup->second.end(); ++itItem) {
 
 		std::string itemName = itItem->first;
-		std::vector<std::string> treeNames(6, "_");
+		std::vector<std::string> treeNames(kMaxTreeNum_, "_");
 
 		MakeTreeNames(itemName, treeNames);
 		Item& item = itItem->second;
@@ -486,7 +487,7 @@ void GlobalVariables::LoadFile(const std::string& chunkName, const std::string& 
 	nlohmann::json::iterator itGroup = root.find(groupName);
 	assert(itGroup != root.end());
 
-	std::vector<std::string> treeNames(6, "_");
+	std::vector<std::string> treeNames(kMaxTreeNum_, "_");
 	RootToSetValue(chunkName, groupName, itGroup, treeNames);
 }
 

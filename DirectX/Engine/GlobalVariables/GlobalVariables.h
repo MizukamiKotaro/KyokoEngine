@@ -113,6 +113,7 @@ private:
 	std::map<std::string, Chunk> datas_;
 	std::map<std::string, Chunk> isTreeOpen_;
 
+	uint32_t kMaxTreeNum_;
 	const std::string kDirectoryPath = "Resources/GlobalVariables/";
 	std::vector<std::string> kTreeName_;
 	const std::string kColorName = "COLOR";
