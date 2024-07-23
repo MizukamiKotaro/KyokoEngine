@@ -1,5 +1,4 @@
 #include "DebugLog.h"
-
 #include <Windows.h>
 
 //出力ウィンドウに文字を出す

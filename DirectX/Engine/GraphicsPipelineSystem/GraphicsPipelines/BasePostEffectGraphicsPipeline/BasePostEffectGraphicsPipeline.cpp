@@ -1,14 +1,24 @@
-#include "BlurGraphicsPipeline.h"
+#include "BasePostEffectGraphicsPipeline.h"
 #include "Engine/Base/DebugLog/DebugLog.h"
-#include "GraphicsPipelineSystem/BlendModeConfig.h"
 #include <cassert>
+#include "Engine/Base/DirectXBase/DirectXBase.h"
+#include "GraphicsPipelineSystem/BlendModeConfig.h"
 
-BlurGraphicsPipeline::BlurGraphicsPipeline()
+BasePostEffectGraphicsPipeline::BasePostEffectGraphicsPipeline(const std::string& psFileName)
 {
-	Initialize();
+	device_ = DirectXBase::GetInstance()->GetDevice();
+	commandList_ = DirectXBase::GetInstance()->GetCommandList();
+	InitializeDXC();
+	InitializePSO(psFileName);
+	blendMode_ = BlendMode::kBlendModeNormal;
+	CreatePSO(blendMode_);
 }
 
-void BlurGraphicsPipeline::InitializePSO()
+void BasePostEffectGraphicsPipeline::InitializePSO()
+{
+}
+
+void BasePostEffectGraphicsPipeline::InitializePSO(const std::string& psFileName)
 {
 	//DescriptorRange
 	D3D12_DESCRIPTOR_RANGE descriptorRange[1] = {};
@@ -73,10 +83,14 @@ void BlurGraphicsPipeline::InitializePSO()
 	vertexShaderBlob_ = CompileShader(L"Resources/Shaders/GraphicsShaders/BasePostEffectShader/BasePostEffect.VS.hlsl", L"vs_6_0", dxcUtils_.Get(), dxcCompiler_.Get(), includeHandler_.Get());
 	assert(vertexShaderBlob_ != nullptr);
 
-	pixelShaderBlob_ = CompileShader(L"Resources/Shaders/GraphicsShaders/BlurShader/Blur.PS.hlsl", L"ps_6_0", dxcUtils_.Get(), dxcCompiler_.Get(), includeHandler_.Get());
+	pixelShaderBlob_ = CompileShader(DebugLog::ConvertString("Resources/Shaders/GraphicsShaders/" + psFileName), L"ps_6_0", dxcUtils_.Get(), dxcCompiler_.Get(), includeHandler_.Get());
 	assert(pixelShaderBlob_ != nullptr);
 
 	// DepthStencilStateの設定
 	// Depthの機能を有効化する
 	depthStencilDesc.DepthEnable = false;
+	// 書き込みします
+	depthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
+	// 比較関数はLessEqual。つまり、近ければ描画される
+	depthStencilDesc.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
 }

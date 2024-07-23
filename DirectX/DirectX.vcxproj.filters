@@ -202,36 +202,6 @@
     <Filter Include="Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\SpirteGraphicsPipeline">
       <UniqueIdentifier>{39ff2cbd-7c9e-42e7-8607-ed716620abb4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\ContrastGraphicsPipeline">
-      <UniqueIdentifier>{21daf958-b418-47d0-8266-70f092e3425d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\HighLumiGraphicsPipeline">
-      <UniqueIdentifier>{6a876953-5215-40c8-8a35-76f0bc4d574b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\BlurGraphicsPipeline">
-      <UniqueIdentifier>{d8077ef0-7063-44b0-9dbd-d45e7d53e593}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\GaussianBlurGraphicsPipeline">
-      <UniqueIdentifier>{bbe8e4d3-6a25-4c1e-a944-3c93974eb881}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\ScanNoiseGraphicsPipeline">
-      <UniqueIdentifier>{f18bcfe1-b27e-4dba-98b7-c47d94dc0d17}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\NegaPosiInverseGraphicsPipeline">
-      <UniqueIdentifier>{4eea2fee-c745-469c-b7dc-4ebd8ac5a979}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\MosaicGraphicsPipeline">
-      <UniqueIdentifier>{c4c5f3b5-a70e-4d50-b61f-a746f1342eb7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\RGBShiftGraphicsPipeline">
-      <UniqueIdentifier>{da928479-6b56-4ba3-a2dd-92a594be9826}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\NoiseGraphicsPipeline">
-      <UniqueIdentifier>{3009f1ca-8038-4152-b9d1-aa66a7247a4c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\WaterOutlineGraphicsPipeline">
-      <UniqueIdentifier>{043d44b1-346f-474e-8cb8-417c4b6ed53f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\CopyGraphicsPipeline">
       <UniqueIdentifier>{f8885181-0116-4298-a8e7-919b8d445d60}</UniqueIdentifier>
     </Filter>
@@ -240,9 +210,6 @@
     </Filter>
     <Filter Include="Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\VignetteGraphicsPipeline">
       <UniqueIdentifier>{8798557b-0b81-4eee-aaa6-dabd15ab56df}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\SmoothingGraphicsPipeline">
-      <UniqueIdentifier>{6784efbe-b443-4c7f-8f3f-b5e099eab870}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\InstancingModelGraphicsPipeline">
       <UniqueIdentifier>{dbdd92d8-2dcb-4fcc-ab69-a2b7a2089a0d}</UniqueIdentifier>
@@ -421,9 +388,6 @@
     <Filter Include="Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\OutlineGraphicsPipeline">
       <UniqueIdentifier>{e5b244f1-ae88-4639-a5ba-83dcdb5c67c2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\RadialBlurGraphicsPipeline">
-      <UniqueIdentifier>{b15e4e22-cfe8-477d-8f4c-010266691cda}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Drawers\PostEffect\RadialBlur">
       <UniqueIdentifier>{07b36b12-f5b7-4896-a0e7-c0caa70eb453}</UniqueIdentifier>
     </Filter>
@@ -471,6 +435,12 @@
     </Filter>
     <Filter Include="Game\GameElement\LiveEditor\CameraEditor">
       <UniqueIdentifier>{d9ac6021-6499-4041-b040-ba058b5ca8c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Drawers\PostEffect\HSVFilter">
+      <UniqueIdentifier>{0fe368f8-7e6c-454f-9702-0b68281f1bd7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\BasePostEffectGraphicsPipeline">
+      <UniqueIdentifier>{b6f726c8-bf7c-488e-add7-d828c74b247a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -591,18 +561,6 @@
     <ClCompile Include="Engine\Base\WindowsInfo\WindowsInfo.cpp">
       <Filter>Engine\Base\WindowsInfo</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\ContrastGraphicsPipeline\ContrastGraphicsPipeline.cpp">
-      <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\ContrastGraphicsPipeline</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\HighLumiGraphicsPipeline\HighLumiGraphicsPipeline.cpp">
-      <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\HighLumiGraphicsPipeline</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\BlurGraphicsPipeline\BlurGraphicsPipeline.cpp">
-      <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\BlurGraphicsPipeline</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\GaussianBlurGraphicsPipeline\GaussianBlurGraphicsPipeline.cpp">
-      <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\GaussianBlurGraphicsPipeline</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Base\DescriptorHeapManager\DescriptorHeap\DescriptorHeap.cpp">
       <Filter>Engine\Base\DescriptorHeapManager\DescriptorHeap</Filter>
     </ClCompile>
@@ -720,26 +678,14 @@
     <ClCompile Include="Engine\Drawers\Light\SpotLight\SpotLight.cpp">
       <Filter>Engine\Drawers\Light\SpotLight</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\ScanNoiseGraphicsPipeline\ScanNoiseGraphicsPipeline.cpp">
-      <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\ScanNoiseGraphicsPipeline</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Drawers\PostEffect\ScanNoise\ScanNoise.cpp">
       <Filter>Engine\Drawers\PostEffect\ScanNoise</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\NegaPosiInverseGraphicsPipeline\NegaPosiInverseGraphicsPipeline.cpp">
-      <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\NegaPosiInverseGraphicsPipeline</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Drawers\PostEffect\NegaPosiInverse\NegaPosiInverse.cpp">
       <Filter>Engine\Drawers\PostEffect\NegaPosiInverse</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\MosaicGraphicsPipeline\MosaicGraphicsPipeline.cpp">
-      <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\MosaicGraphicsPipeline</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Drawers\PostEffect\Mosaic\Mosaic.cpp">
       <Filter>Engine\Drawers\PostEffect\Mosaic</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\RGBShiftGraphicsPipeline\RGBShiftGraphicsPipeline.cpp">
-      <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\RGBShiftGraphicsPipeline</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Drawers\PostEffect\RGBShift\RGBShift.cpp">
       <Filter>Engine\Drawers\PostEffect\RGBShift</Filter>
@@ -777,9 +723,6 @@
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\InstancingModelGraphicsPipline\InstancingModelGraphicsPipline.cpp">
       <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\InstancingModelGraphicsPipeline</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\NoiseGraphicsPipeline\NoiseGraphicsPipeline.cpp">
-      <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\NoiseGraphicsPipeline</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Utils\Transform\QuaternionTransform.cpp">
       <Filter>Engine\Utils\Transform</Filter>
     </ClCompile>
@@ -806,9 +749,6 @@
     </ClCompile>
     <ClCompile Include="Engine\Drawers\PostEffect\Noise\Noise.cpp">
       <Filter>Engine\Drawers\PostEffect\Noise</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\WaterOutlineGraphicsPipeline\WaterOutlineGraphicsPipeline.cpp">
-      <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\WaterOutlineGraphicsPipeline</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Drawers\PostEffect\WaterOutline\WaterOutline.cpp">
       <Filter>Engine\Drawers\PostEffect\WaterOutline</Filter>
@@ -839,9 +779,6 @@
     </ClCompile>
     <ClCompile Include="Engine\Drawers\PostEffect\Smoothing\Smoothing.cpp">
       <Filter>Engine\Drawers\PostEffect\Smoothing</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SmoothingGraphicsPipeline\SmoothingGraphicsPipeline.cpp">
-      <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\SmoothingGraphicsPipeline</Filter>
     </ClCompile>
     <ClCompile Include="Engine\LevelDataLoader\LevelDataLoader.cpp">
       <Filter>Engine\LevelDataLoader</Filter>
@@ -912,9 +849,6 @@
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\OutlineGraphicsPipeline\OutlineGraphicsPipeline.cpp">
       <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\OutlineGraphicsPipeline</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\RadialBlurGraphicsPipeline\RadialBlurGraphicsPipeline.cpp">
-      <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\RadialBlurGraphicsPipeline</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Drawers\PostEffect\RadialBlur\RadialBlur.cpp">
       <Filter>Engine\Drawers\PostEffect\RadialBlur</Filter>
     </ClCompile>
@@ -977,6 +911,12 @@
     </ClCompile>
     <ClCompile Include="Engine\ImGuiManager\DopeSheet.cpp">
       <Filter>Engine\ImGuiManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Drawers\PostEffect\HSVFilter\HSVFilter.cpp">
+      <Filter>Engine\Drawers\PostEffect\HSVFilter</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\BasePostEffectGraphicsPipeline\BasePostEffectGraphicsPipeline.cpp">
+      <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\BasePostEffectGraphicsPipeline</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1105,18 +1045,6 @@
     </ClInclude>
     <ClInclude Include="Engine\Base\WindowsInfo\WindowsInfo.h">
       <Filter>Engine\Base\WindowsInfo</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\ContrastGraphicsPipeline\ContrastGraphicsPipeline.h">
-      <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\ContrastGraphicsPipeline</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\HighLumiGraphicsPipeline\HighLumiGraphicsPipeline.h">
-      <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\HighLumiGraphicsPipeline</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\BlurGraphicsPipeline\BlurGraphicsPipeline.h">
-      <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\BlurGraphicsPipeline</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\GaussianBlurGraphicsPipeline\GaussianBlurGraphicsPipeline.h">
-      <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\GaussianBlurGraphicsPipeline</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Base\DescriptorHeapManager\DescriptorHeap\DescriptorHeap.h">
       <Filter>Engine\Base\DescriptorHeapManager\DescriptorHeap</Filter>
@@ -1259,26 +1187,14 @@
     <ClInclude Include="Engine\Drawers\Light\SpotLight\SpotLight.h">
       <Filter>Engine\Drawers\Light\SpotLight</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\ScanNoiseGraphicsPipeline\ScanNoiseGraphicsPipeline.h">
-      <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\ScanNoiseGraphicsPipeline</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Drawers\PostEffect\ScanNoise\ScanNoise.h">
       <Filter>Engine\Drawers\PostEffect\ScanNoise</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\NegaPosiInverseGraphicsPipeline\NegaPosiInverseGraphicsPipeline.h">
-      <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\NegaPosiInverseGraphicsPipeline</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Drawers\PostEffect\NegaPosiInverse\NegaPosiInverse.h">
       <Filter>Engine\Drawers\PostEffect\NegaPosiInverse</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\MosaicGraphicsPipeline\MosaicGraphicsPipeline.h">
-      <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\MosaicGraphicsPipeline</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Drawers\PostEffect\Mosaic\Mosaic.h">
       <Filter>Engine\Drawers\PostEffect\Mosaic</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\RGBShiftGraphicsPipeline\RGBShiftGraphicsPipeline.h">
-      <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\RGBShiftGraphicsPipeline</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Drawers\PostEffect\RGBShift\RGBShift.h">
       <Filter>Engine\Drawers\PostEffect\RGBShift</Filter>
@@ -1334,9 +1250,6 @@
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\InstancingModelGraphicsPipline\InstancingModelGraphicsPipline.h">
       <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\InstancingModelGraphicsPipeline</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\NoiseGraphicsPipeline\NoiseGraphicsPipeline.h">
-      <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\NoiseGraphicsPipeline</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Utils\Transform\QuaternionTransform.h">
       <Filter>Engine\Utils\Transform</Filter>
     </ClInclude>
@@ -1369,9 +1282,6 @@
     </ClInclude>
     <ClInclude Include="Engine\Drawers\PostEffect\Noise\Noise.h">
       <Filter>Engine\Drawers\PostEffect\Noise</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\WaterOutlineGraphicsPipeline\WaterOutlineGraphicsPipeline.h">
-      <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\WaterOutlineGraphicsPipeline</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Drawers\PostEffect\WaterOutline\WaterOutline.h">
       <Filter>Engine\Drawers\PostEffect\WaterOutline</Filter>
@@ -1408,9 +1318,6 @@
     </ClInclude>
     <ClInclude Include="Engine\Drawers\PostEffect\Smoothing\Smoothing.h">
       <Filter>Engine\Drawers\PostEffect\Smoothing</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SmoothingGraphicsPipeline\SmoothingGraphicsPipeline.h">
-      <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\SmoothingGraphicsPipeline</Filter>
     </ClInclude>
     <ClInclude Include="Engine\LevelDataLoader\LevelDataLoader.h">
       <Filter>Engine\LevelDataLoader</Filter>
@@ -1487,9 +1394,6 @@
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\OutlineGraphicsPipeline\OutlineGraphicsPipeline.h">
       <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\OutlineGraphicsPipeline</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\RadialBlurGraphicsPipeline\RadialBlurGraphicsPipeline.h">
-      <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\RadialBlurGraphicsPipeline</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Drawers\PostEffect\RadialBlur\RadialBlur.h">
       <Filter>Engine\Drawers\PostEffect\RadialBlur</Filter>
     </ClInclude>
@@ -1558,6 +1462,12 @@
     </ClInclude>
     <ClInclude Include="Engine\ImGuiManager\DopeSheet.h">
       <Filter>Engine\ImGuiManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drawers\PostEffect\HSVFilter\HSVFilter.h">
+      <Filter>Engine\Drawers\PostEffect\HSVFilter</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\BasePostEffectGraphicsPipeline\BasePostEffectGraphicsPipeline.h">
+      <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\BasePostEffectGraphicsPipeline</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

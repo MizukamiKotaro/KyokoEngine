@@ -19,6 +19,7 @@
 #include "Noise/Noise.h"
 #include "Bloom/Bloom.h"
 #include "RadialBlur/RadialBlur.h"
+#include "HSVFilter/HSVFilter.h"
 
 class TitleScene : public IScene
 {
@@ -59,6 +60,7 @@ private:
 	
 	std::unique_ptr<Bloom> bloom_;
 	std::unique_ptr<RadialBlur> radial_;
+	std::unique_ptr<HSVFilter> hsvFilter_;
 
 	Audio se_;
 };

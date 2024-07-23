@@ -45,6 +45,8 @@ TitleScene::TitleScene()
 	radial_->radialBlurData_->width = 0.03f;
 	radial_->radialBlurData_->numSamples = 8;
 
+	hsvFilter_ = std::make_unique<HSVFilter>();
+
 	se_.Load("SE/select.mp3","決定音");
 }
 
@@ -77,29 +79,15 @@ void TitleScene::Update()
 		ChangeScene(SELECT);
 		se_.Play();
 	}
-	ImGui::Begin("スキャンノイズ");
-	ImGui::SliderFloat("スクリーン座標の最小のy座標", &scanNoise_->scanNoiseData_->minY, 0.0f, 1.0f);
-	ImGui::SliderFloat("ノイズを行う縦幅", &scanNoise_->scanNoiseData_->width, 0.0f, 1.0f);
-	ImGui::SliderFloat("ノイズの強さ", &scanNoise_->scanNoiseData_->power, 0.0f, 1.0f);
-	ImGui::End();
-
-	ImGui::Begin("モザイク");
-	ImGui::SliderFloat("モザイクのサイズ", &mosaic_->mosaicData_->density, 0.1f, 100.0f);
-	ImGui::SliderInt("正方形にするか", &mosaic_->mosaicData_->isSquare, 0, 1);
-	ImGui::End();
-
-	ImGui::Begin("RGBShift");
-	ImGui::SliderFloat("シフトする大きさ", &rgbShift_->rgbShiftData_->shift, -1.0f, 1.0f);
-	ImGui::End();
-
-	ImGui::Begin("RadialBlur");
-	ImGui::SliderFloat("width", &radial_->radialBlurData_->width, -0.1f, 1.0f);
-	ImGui::SliderInt("numSamples", &radial_->radialBlurData_->numSamples, 0, 30);
-	ImGui::End();
-
 	ImGui::Begin("カメラ");
 	ImGui::DragFloat3("位置", &camera_->transform_.translate_.x, 0.01f);
 	ImGui::DragFloat3("角度", &camera_->transform_.rotate_.x, 0.01f);
+	ImGui::End();
+
+	ImGui::Begin("hsv");
+	ImGui::SliderFloat("hue", &hsvFilter_->hsvData_->hue, -1.0f, 1.0f);
+	ImGui::SliderFloat("saturate", &hsvFilter_->hsvData_->saturate, -1.0f, 1.0f);
+	ImGui::SliderFloat("value", &hsvFilter_->hsvData_->value, -1.0f, 1.0f);
 	ImGui::End();
 
 	camera_->Update();
@@ -115,8 +103,12 @@ void TitleScene::Draw()
 {
 	WrightPostEffect();
 
-	Kyoko::Engine::PreDraw();
+	hsvFilter_->PreDrawScene();
 	bloom_->Draw();
+	hsvFilter_->PostDrawScene();
+
+	Kyoko::Engine::PreDraw();
+	hsvFilter_->Draw();
 	Kyoko::Engine::PostDraw();
 }
 

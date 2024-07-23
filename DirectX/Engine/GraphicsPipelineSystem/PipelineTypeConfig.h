@@ -24,4 +24,5 @@ enum class PipelineType {
 	SKYBOX,
 	OUTLINE,
 	RADIAL_BLUR,
+	HSV_FILTER,
 };
