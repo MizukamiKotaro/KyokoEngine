@@ -49,7 +49,7 @@ namespace ImGuiCommon {
 
     void DrawTimelineLines(ImDrawList* drawList, ImVec2 startPos, ImVec2 endPos, float scale, float offset)
     {
-        for (int i = 0; i < endPos.x / (10.0f * scale); ++i)
+        for (int i = 0; i < (endPos.x - startPos.x) / (10.0f * scale); ++i)
         {
             float linePos = i * 10.0f * scale - offset;
             ImVec2 lineStart = startPos + ImVec2(linePos, 0.0f);
@@ -73,7 +73,6 @@ namespace ImGuiCommon {
     {
         static float timelineScale = 1.0f;
         static float scrollOffset = 0.0f;
-        static int currentFrame = 0;
         static std::vector<Track> tracks = {
             {"Position", {{10,10, false}, {20,20, false}, {30,30, false}}},
             {"Rotation", {{15,15, false}, {25,25, false}, {35,35, false}}},
@@ -93,13 +92,17 @@ namespace ImGuiCommon {
         // タイムラインの背景を描画
         drawList->AddRectFilled(cursorScreenPos, cursorScreenPos + contentRegion, IM_COL32(50, 50, 50, 255));
 
+        // タイムラインの描画領域の幅を計算
+        float timelineWidth = (contentRegion.x - 100.0f) * timelineScale;
 
         // タイムラインの目盛りを描画
-        DrawTimelineLabels(drawList, cursorScreenPos + ImVec2(100.0f, 0.0f), cursorScreenPos + ImVec2(100.0f, 0.0f) + ImVec2(contentRegion.x - 150.0f, 20.0f), timelineScale, scrollOffset);
+        DrawTimelineLabels(drawList, cursorScreenPos + ImVec2(100.0f, 0.0f), cursorScreenPos + ImVec2(100.0f + timelineWidth, 20.0f), timelineScale, scrollOffset);
 
         // スクロールバーのサイズを設定
         ImGui::BeginChild("TimelineRegion", ImVec2(contentRegion.x, contentRegion.y), true, ImGuiWindowFlags_HorizontalScrollbar | ImGuiWindowFlags_AlwaysVerticalScrollbar);
-        ImGui::SetScrollX(scrollOffset);
+
+        // スクロールオフセットを取得
+        scrollOffset = ImGui::GetScrollX();
 
         // トラックごとに描画
         for (size_t t = 0; t < tracks.size(); ++t) {
@@ -120,7 +123,7 @@ namespace ImGuiCommon {
             drawList->AddLine(ImVec2(trackStart.x, trackStart.y + trackHeight), ImVec2(trackStart.x + contentRegion.x, trackStart.y + trackHeight), IM_COL32(100, 100, 100, 255));
 
             // タイムラインの目盛りを描画
-            DrawTimelineLines(drawList, keyframeStart, keyframeStart + ImVec2(contentRegion.x - 150.0f, trackHeight), timelineScale, scrollOffset);
+            DrawTimelineLines(drawList, keyframeStart, keyframeStart + ImVec2(timelineWidth, trackHeight), timelineScale, scrollOffset);
 
             for (Keyframe& keyframe : track.keyframes) {
                 float keyframePos = keyframe.frame * 10.0f * timelineScale - scrollOffset;
