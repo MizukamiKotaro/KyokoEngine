@@ -442,6 +442,9 @@
     <Filter Include="Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\BasePostEffectGraphicsPipeline">
       <UniqueIdentifier>{b6f726c8-bf7c-488e-add7-d828c74b247a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Editor\KeyframeData">
+      <UniqueIdentifier>{3d956010-d92d-4e9a-b37d-6e808706cc06}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1468,6 +1471,9 @@
     </ClInclude>
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\BasePostEffectGraphicsPipeline\BasePostEffectGraphicsPipeline.h">
       <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\BasePostEffectGraphicsPipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\KeyframeData.h">
+      <Filter>Engine\Editor\KeyframeData</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

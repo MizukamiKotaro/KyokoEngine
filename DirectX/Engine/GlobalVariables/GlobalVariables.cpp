@@ -12,6 +12,7 @@ GlobalVariables* GlobalVariables::GetInstance() {
 
 void GlobalVariables::Initialize()
 {
+	isDraw_ = true;
 	kMaxTreeNum_ = 8;
 	kTreeName_.resize(kMaxTreeNum_);
 	for (uint32_t i = 0; i < kMaxTreeNum_; i++) {
@@ -37,6 +38,23 @@ void GlobalVariables::Finalize()
 
 void GlobalVariables::Update() {
 #ifdef _DEBUG
+	bool preIsDraw = isDraw_;
+	ImGui::Begin("ImGuiManager");
+	ImGui::Checkbox("グローバル変数を描画するか", &isDraw_);
+	ImGui::End();
+	if (!isDraw_) {
+		if (preIsDraw) {
+			for (std::pair<const std::string, Chunk> chunk : isTreeOpen_) {
+				for (std::pair<const std::string, Group>& group : chunk.second) {
+					for (std::pair<const std::string, Item>& item : group.second) {
+						item.second = false;
+					}
+				}
+			}
+		}
+		return;
+	}
+
 	for (std::map<std::string, Chunk>::iterator itChunk = isTreeOpen_.begin(); itChunk != isTreeOpen_.end(); itChunk++) {
 		Chunk& chunk = itChunk->second;
 		for (std::map<std::string, Group>::iterator itGroup = chunk.begin(); itGroup != chunk.end(); ++itGroup) {

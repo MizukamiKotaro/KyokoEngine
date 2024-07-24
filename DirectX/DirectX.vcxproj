@@ -357,6 +357,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Drawers\Skybox\Skybox.h" />
     <ClInclude Include="Engine\Drawers\Sprite\Sprite.h" />
     <ClInclude Include="Engine\Editor\IEditor.h" />
+    <ClInclude Include="Engine\Editor\KeyframeData.h" />
     <ClInclude Include="Engine\Editor\StageEditor.h" />
     <ClInclude Include="Engine\Editor\TimerStageEditor.h" />
     <ClInclude Include="Engine\FrameInfo\FrameInfo.h" />

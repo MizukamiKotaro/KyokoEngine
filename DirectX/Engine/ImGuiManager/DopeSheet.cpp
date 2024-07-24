@@ -1,8 +1,7 @@
 #include "DopeSheet.h"
 #ifdef _DEBUG
 #include "Externals/imgui/imgui.h"
-#include <vector>
-#include <string>
+#include "Editor/KeyframeData.h"
 
 namespace ImGuiCommon {
     inline ImVec2 operator+(const ImVec2& lhs, const ImVec2& rhs)
@@ -13,17 +12,6 @@ namespace ImGuiCommon {
     {
         return ImVec2(lhs.x - rhs.x, lhs.y - rhs.y);
     }
-
-    struct Keyframe {
-        float frame;
-        float subFrame;
-        bool selected;
-    };
-
-    struct Track {
-        std::string name;
-        std::vector<Keyframe> keyframes;
-    };
 
     void DrawTimelineLabels(ImDrawList* drawList, ImVec2 startPos, ImVec2 endPos, float scale, float offset)
     {
@@ -40,16 +28,12 @@ namespace ImGuiCommon {
             {
                 drawList->AddText(lineStart, IM_COL32(255, 255, 255, 255), std::to_string(i).c_str()); // 数値を描画
             }
-            //else
-            //{
-            //    drawList->AddText(lineStart, IM_COL32(255, 255, 255, 255), std::to_string(i).c_str()); // 数値を描画
-            //}
         }
     }
 
     void DrawTimelineLines(ImDrawList* drawList, ImVec2 startPos, ImVec2 endPos, float scale, float offset)
     {
-        for (int i = 0; i < (endPos.x - startPos.x) / (10.0f * scale); ++i)
+        for (int i = 0; i < endPos.x / (10.0f * scale); ++i)
         {
             float linePos = i * 10.0f * scale - offset;
             ImVec2 lineStart = startPos + ImVec2(linePos, 0.0f);
@@ -73,10 +57,11 @@ namespace ImGuiCommon {
     {
         static float timelineScale = 1.0f;
         static float scrollOffset = 0.0f;
-        static std::vector<Track> tracks = {
-            {"Position", {{10,10, false}, {20,20, false}, {30,30, false}}},
-            {"Rotation", {{15,15, false}, {25,25, false}, {35,35, false}}},
-            {"Scale", {{12,12, false}, {22,22, false}, {32,32, false}}}
+        static int currentFrame = 0;
+        static std::vector<TimerTrack> tracks = {
+            {"Position", 0, {{10,10, false, false}, {20,20, false, false}, {30,30, false, false}}},
+            {"Rotation", 0, {{15,15, false, false}, {25,25, false, false}, {35,35, false, false}}},
+            {"Scale", 0, {{12,12, false, false}, {22,22, false, false}, {32,32, false, false}}}
         };
 
         ImGui::Begin("Dope Sheet");
@@ -104,9 +89,12 @@ namespace ImGuiCommon {
         // スクロールオフセットを取得
         scrollOffset = ImGui::GetScrollX();
 
+        static ImVec2 rightClickPos; // 右クリック位置を保存する変数
+        static int clickedTrackIndex = -1; // 右クリックされたトラックのインデックス
+
         // トラックごとに描画
         for (size_t t = 0; t < tracks.size(); ++t) {
-            Track& track = tracks[t];
+            TimerTrack& track = tracks[t];
             float trackHeight = 20.0f;
             ImVec2 trackStart = cursorScreenPos + ImVec2(0.0f, t * trackHeight + 2.0f * (t + 1) + 20.0f);
             ImVec2 keyframeStart = trackStart + ImVec2(100.0f, 0.0f); // 名前とキーフレームの間にスペースを追加
@@ -125,7 +113,8 @@ namespace ImGuiCommon {
             // タイムラインの目盛りを描画
             DrawTimelineLines(drawList, keyframeStart, keyframeStart + ImVec2(timelineWidth, trackHeight), timelineScale, scrollOffset);
 
-            for (Keyframe& keyframe : track.keyframes) {
+            bool rightClickOnEmptySpace = true;
+            for (TimerKeyframe& keyframe : track.keyframes) {
                 float keyframePos = keyframe.frame * 10.0f * timelineScale - scrollOffset;
                 ImVec2 keyframeCenter = keyframeStart + ImVec2(keyframePos, trackHeight / 2);
                 drawList->AddCircleFilled(keyframeCenter, 5.0f, keyframe.selected ? IM_COL32(0, 255, 0, 255) : IM_COL32(255, 0, 0, 255));
@@ -136,6 +125,7 @@ namespace ImGuiCommon {
                 if (ImGui::IsItemClicked(ImGuiMouseButton_Right)) {
                     keyframe.selected = !keyframe.selected;
                     ImGui::OpenPopup("KeyframeContextMenu");
+                    rightClickOnEmptySpace = false;
                 }
                 if (ImGui::IsItemActive() && ImGui::IsMouseDragging(ImGuiMouseButton_Left)) {
                     if (keyframe.selected) {
@@ -148,30 +138,68 @@ namespace ImGuiCommon {
                     }
                 }
             }
+
+            // キーフレームがない領域の右クリックを検出
+            if (rightClickOnEmptySpace) {
+                ImGui::SetCursorScreenPos(keyframeStart);
+                ImGui::InvisibleButton("##EmptySpace", ImVec2(contentRegion.x - 150.0f, trackHeight));
+                if (ImGui::IsItemClicked(ImGuiMouseButton_Right)) {
+                    rightClickPos = ImGui::GetMousePos();
+                    clickedTrackIndex = int(t);
+                    ImGui::OpenPopup("TrackContextMenu");
+                }
+            }
         }
 
         // コンテキストメニュー
         if (ImGui::BeginPopup("KeyframeContextMenu")) {
-            if (ImGui::MenuItem("追加")) {
-                for (Track& track : tracks) {
-                    bool isSelected = false;
-                    for (Keyframe& kf : track.keyframes) {
+            if (ImGui::MenuItem("編集")) {
+                for (TimerTrack& track : tracks) {
+                    for (TimerKeyframe& kf : track.keyframes) {
                         if (kf.selected) {
-                            isSelected = true;
-                            break;
+                            kf.isOpenImGui = true;
                         }
-                    }
-                    if (isSelected) {
-                        track.keyframes.push_back({ float(static_cast<int>(scrollOffset / (10.0f * timelineScale))), false });
                     }
                 }
             }
             if (ImGui::MenuItem("削除")) {
-                for (Track& track : tracks) {
+                for (TimerTrack& track : tracks) {
                     track.keyframes.erase(
-                        std::remove_if(track.keyframes.begin(), track.keyframes.end(), [](const Keyframe& kf) { return kf.selected; }),
+                        std::remove_if(track.keyframes.begin(), track.keyframes.end(), [](const TimerKeyframe& kf) { return kf.selected; }),
                         track.keyframes.end()
                     );
+                }
+            }
+            if (ImGui::MenuItem("コピー")) {
+                bool isSelected = false;
+                for (TimerTrack& track : tracks) {
+                    int no = 0;
+                    for (TimerKeyframe& kf : track.keyframes) {
+                        if (kf.selected) {
+                            track.copyNum = no;
+                            isSelected = true;
+                            break;
+                        }
+                        no++;
+                    }
+                    if (isSelected) {
+                        break;
+                    }
+                }
+            }
+            ImGui::EndPopup();
+        }
+
+        // トラックの空白部分に右クリックでキーフレームを追加するコンテキストメニュー
+        if (ImGui::BeginPopup("TrackContextMenu")) {
+            if (ImGui::MenuItem("キーフレーム追加")) {
+                if (clickedTrackIndex >= 0 && clickedTrackIndex < tracks.size()) {
+                    TimerTrack& track = tracks[clickedTrackIndex];
+                    float framePos = (rightClickPos.x - cursorScreenPos.x - 100.0f + scrollOffset) / (10.0f * timelineScale);
+                    track.keyframes.push_back({ framePos, framePos, false, false });
+                    if (track.copyNum == -1) {
+                        track.copyNum = int(track.keyframes.size()) - 1;
+                    }
                 }
             }
             ImGui::EndPopup();
