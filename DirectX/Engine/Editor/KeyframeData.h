@@ -18,7 +18,7 @@ struct TimerTrack {
     size_t copyNum;
     std::vector<TimerKeyframe> keyframes;
     std::vector<TimerTrack> children;
-    bool expanded = true; // 子トラックの展開状態
+    bool isOpen = true; // 子トラックの展開状態
 };
 
 //template <typename T>
