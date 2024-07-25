@@ -40,19 +40,34 @@ namespace ImGuiCommon {
         }
     }
 
+    void CloseTree(TimerTrack& track) {
+        track.isOpen = false;
+        for (TimerTrack& child : track.children) {
+            CloseTree(child);
+        }
+    }
+
     void DrawTrackName(TimerTrack& track, int& trackIndex) {
+        track.isOpen = true;
         // トラック名を描画
-        if (ImGui::TreeNodeEx((void*)(intptr_t)trackIndex, ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_SpanFullWidth, "  %s", track.name.c_str())) {
-            track.isOpen = true;
-            // 子トラックを描画
-            for (TimerTrack& child : track.children) {
-                trackIndex++;
-                DrawTrackName(child, trackIndex);
-            }
-            ImGui::TreePop();
+        if (track.children.size() == 0) {
+            ImGui::Text(track.name.c_str());
         }
         else {
-            track.isOpen = false;
+            if (ImGui::TreeNodeEx((void*)(intptr_t)trackIndex, ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_SpanFullWidth, "  %s", track.name.c_str())) {
+                track.isOpen = true;
+                // 子トラックを描画
+                for (TimerTrack& child : track.children) {
+                    trackIndex++;
+                    DrawTrackName(child, trackIndex);
+                }
+                ImGui::TreePop();
+            }
+            else {
+                for (TimerTrack& child : track.children) {
+                    CloseTree(child);
+                }
+            }
         }
     }
 
@@ -114,8 +129,60 @@ namespace ImGuiCommon {
                 DrawTrack(drawList, child, cursorScreenPos, contentRegion, timelineScale, scrollOffset, currentY, depth + 1, rightClickPos, clickedTrackIndex, trackIndex);
             }
         }
-        else {
-            currentY += trackHeight + 2.0f;
+    }
+
+    void EditKeyframes(TimerTrack& track) {
+        for (TimerKeyframe& kf : track.keyframes) {
+            if (kf.selected) {
+                kf.isOpenImGui = true;
+            }
+        }
+        for (TimerTrack& child : track.children) {
+            EditKeyframes(child);
+        }
+    }
+
+    void DeleteKeyframes(TimerTrack& track) {
+        track.keyframes.erase(
+            std::remove_if(track.keyframes.begin(), track.keyframes.end(), [](const TimerKeyframe& kf) { return kf.selected; }),
+            track.keyframes.end()
+        );
+        for (TimerTrack& child : track.children) {
+            DeleteKeyframes(child);
+        }
+    }
+
+    void CopyKeyframes(TimerTrack& track) {
+        bool isSelected = false;
+        int no = 0;
+        for (TimerKeyframe& kf : track.keyframes) {
+            if (kf.selected) {
+                track.copyNum = no;
+                isSelected = true;
+                break;
+            }
+            no++;
+        }
+        if (isSelected) {
+            return;
+        }
+        for (TimerTrack& child : track.children) {
+            CopyKeyframes(child);
+        }
+    }
+
+    void AddKeyframe(TimerTrack& track, int clickedTrackIndex, int& currentIndex, float framePos) {
+        if (currentIndex == clickedTrackIndex) {
+            track.keyframes.push_back({ framePos, framePos, false, false });
+            if (track.copyNum == -1) {
+                track.copyNum = int(track.keyframes.size()) - 1;
+            }
+        }
+        currentIndex++;
+        if (track.isOpen) {
+            for (TimerTrack& child : track.children) {
+                AddKeyframe(child, clickedTrackIndex, currentIndex, framePos);
+            }
         }
     }
 
@@ -131,7 +198,6 @@ namespace ImGuiCommon {
             {"Rotation", 0, {{15,15, false, false}, {25,25, false, false}, {35,35, false, false}}},
             {"Scale", 0, {{12,12, false, false}, {22,22, false, false}, {32,32, false, false}}}
         };
-
 
         int trackIndex = 0;
 
@@ -174,36 +240,17 @@ namespace ImGuiCommon {
         if (ImGui::BeginPopup("KeyframeContextMenu")) {
             if (ImGui::MenuItem("編集")) {
                 for (TimerTrack& track : tracks) {
-                    for (TimerKeyframe& kf : track.keyframes) {
-                        if (kf.selected) {
-                            kf.isOpenImGui = true;
-                        }
-                    }
+                    EditKeyframes(track);
                 }
             }
             if (ImGui::MenuItem("削除")) {
                 for (TimerTrack& track : tracks) {
-                    track.keyframes.erase(
-                        std::remove_if(track.keyframes.begin(), track.keyframes.end(), [](const TimerKeyframe& kf) { return kf.selected; }),
-                        track.keyframes.end()
-                    );
+                    DeleteKeyframes(track);
                 }
             }
             if (ImGui::MenuItem("コピー")) {
-                bool isSelected = false;
                 for (TimerTrack& track : tracks) {
-                    int no = 0;
-                    for (TimerKeyframe& kf : track.keyframes) {
-                        if (kf.selected) {
-                            track.copyNum = no;
-                            isSelected = true;
-                            break;
-                        }
-                        no++;
-                    }
-                    if (isSelected) {
-                        break;
-                    }
+                    CopyKeyframes(track);
                 }
             }
             ImGui::EndPopup();
@@ -213,24 +260,9 @@ namespace ImGuiCommon {
             if (ImGui::MenuItem("キーフレーム追加")) {
                 if (clickedTrackIndex >= 0) {
                     int index = 0;
-                    TimerTrack* track = nullptr;
-                    std::function<void(std::vector<TimerTrack>&)> findTrack = [&](std::vector<TimerTrack>& tracks) {
-                        for (TimerTrack& t : tracks) {
-                            if (index == clickedTrackIndex) {
-                                track = &t;
-                                return;
-                            }
-                            index++;
-                            findTrack(t.children);
-                        }
-                        };
-                    findTrack(tracks);
-                    if (track) {
-                        float framePos = (rightClickPos.x - cursorScreenPos.x - 100.0f + scrollOffset) / (10.0f * timelineScale);
-                        track->keyframes.push_back({ framePos, framePos, false, false });
-                        if (track->copyNum == -1) {
-                            track->copyNum = int(track->keyframes.size()) - 1;
-                        }
+                    float framePos = (rightClickPos.x - cursorScreenPos.x - 100.0f + scrollOffset) / (10.0f * timelineScale);
+                    for (TimerTrack& track : tracks) {
+                        AddKeyframe(track, clickedTrackIndex, index, framePos);
                     }
                 }
             }
@@ -240,5 +272,6 @@ namespace ImGuiCommon {
         ImGui::EndChild();
         ImGui::End();
     }
+
 }
 #endif // _DEBUG
