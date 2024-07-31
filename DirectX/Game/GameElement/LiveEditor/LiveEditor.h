@@ -30,8 +30,10 @@ private:
 	std::unique_ptr<IStageObject> floor_;
 	std::unique_ptr<IStageObject> dome_;
 
+	std::map<uint32_t, std::unique_ptr<ScreenEditor>>* screenMap_ = nullptr;
+	std::map<uint32_t, std::unique_ptr<Outline>>* outlineMap_ = nullptr;
+
 	std::unique_ptr<Outline> outline_;
-	std::unique_ptr<Outline> outline2_;
 	Camera* camera_ = nullptr;
 	std::unique_ptr<Camera> screenCamera_;
 };

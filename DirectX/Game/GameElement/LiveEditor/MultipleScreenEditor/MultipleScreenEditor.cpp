@@ -38,26 +38,6 @@ void MultipleScreenEditor::Draw(const Camera& camera)
 	}
 }
 
-void MultipleScreenEditor::PreDrawScene()
-{
-	//bloom_->PreDrawScene();
-	postEffect1_->PreDrawScene();
-}
-
-void MultipleScreenEditor::PostDrawScene()
-{
-	//bloom_->PostDrawScene();
-	postEffect1_->PostDrawScene();
-
-	postEffect_->PreDrawScene();
-
-	//bloom_->Draw();
-	postEffect1_->Draw();
-	screenSprite_->Draw(BlendMode::kBlendModeMultiply);
-
-	postEffect_->PostDrawScene();
-}
-
 void MultipleScreenEditor::SetGlobalVariable()
 {
 	stageEditor_->AddItem("スクリーンの数", 1);
@@ -81,7 +61,7 @@ void MultipleScreenEditor::CreateScreen()
 	for (uint32_t i = 0; i < screenNum_; i++) {
 		if (screenMap_.find(i) == screenMap_.end()) {
 			screenMap_[i] = std::make_unique<ScreenEditor>(treeName->main, treeName->name, treeName->tree, i);
-			screenMap_[i]->SetGPUHandle(postEffect_->GetSRVGPUDescriptorHandle());
+			outlineMap_[i] = std::make_unique<Outline>();
 		}
 	}
 }

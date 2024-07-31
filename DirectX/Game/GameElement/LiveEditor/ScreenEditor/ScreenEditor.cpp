@@ -9,6 +9,7 @@ ScreenEditor::ScreenEditor(const std::string& mainName, const std::string& name,
 {
 	CreateScreen();
 	CreateStageEditor(mainName, name, no);
+	camera_ = std::make_unique<Camera>();
 	SetGlobalVariable();
 }
 
@@ -16,6 +17,7 @@ ScreenEditor::ScreenEditor(const std::string& mainName, const std::string& name,
 {
 	CreateScreen();
 	CreateStageEditor(mainName, name, treeName, no);
+	camera_ = std::make_unique<Camera>();
 	SetGlobalVariable();
 }
 
@@ -24,6 +26,7 @@ void ScreenEditor::Update(const float& time) {
 	UpdateGlobalVariable();
 #endif // _DEBUG
 	if (time) {}
+	camera_->Update();
 }
 
 void ScreenEditor::Draw(const Camera& camera) 
@@ -66,6 +69,9 @@ void ScreenEditor::SetGlobalVariable()
 	stageEditor_->AddItem("ポジション", screen_->transform_.translate_);
 	stageEditor_->AddItem("向き", screen_->transform_.rotate_);
 
+	stageEditor_->AddItem("ポジション", Vector3{ 0.0f,6.0f,-40.0f }, "カメラ");
+	stageEditor_->AddItem("角度", Vector3{ 0.1f,0.0f,0.0f }, "カメラ");
+
 	ApplyGlobalVariable();
 }
 
@@ -75,8 +81,12 @@ void ScreenEditor::ApplyGlobalVariable()
 	screen_->transform_.translate_ = stageEditor_->GetVector3Value("ポジション");
 	screen_->transform_.rotate_ = stageEditor_->GetVector3Value("向き");
 
+	camera_->transform_.translate_ = stageEditor_->GetVector3Value("ポジション", "カメラ");
+	camera_->transform_.rotate_ = stageEditor_->GetVector3Value("角度", "カメラ");
+
 	screen_->transform_.scale_ = kScale * scale_;
 	screen_->Update();
+	camera_->Update();
 }
 
 void ScreenEditor::CreateScreen()

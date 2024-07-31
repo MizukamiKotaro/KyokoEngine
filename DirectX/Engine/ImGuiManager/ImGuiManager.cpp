@@ -9,6 +9,7 @@
 #include "Externals/imgui/imgui_impl_dx12.h"
 #include "Externals/imgui/imgui_impl_win32.h"
 #include "Externals/imgui/ImGuizmo.h"
+bool isDrawMonitor = false;
 #endif // _DEBUG
 
 void Kyoko::ImGuiManager::Initialize()
@@ -57,12 +58,24 @@ void Kyoko::ImGuiManager::Begin()
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
 	ImGuizmo::BeginFrame();
+
+	/*ImGui::Begin("ImGuiManager");
+	ImGui::Checkbox("ImGuiにはめ込み描画するか", &isDrawMonitor);
+	ImGui::End();*/
 #endif // _DEBUG
 }
 
 void Kyoko::ImGuiManager::End()
 {
 #ifdef _DEBUG
+	/*if (isDrawMonitor) {
+		ImTextureID my_tex_id = (ImTextureID)DirectXBase::GetInstance()->GetCurrentDescriptorHandle().ptr;
+		ImVec2 tex_size = ImVec2(512, 512);
+		ImGui::Image(my_tex_id, tex_size);
+		ImGui::Begin("My Texture Window");
+		ImGui::Image(my_tex_id, tex_size);
+		ImGui::End();
+	}*/
 	//ImGuiの内部コマンドを生成する
 	ImGui::Render();
 #endif // _DEBUG
@@ -70,8 +83,8 @@ void Kyoko::ImGuiManager::End()
 
 void Kyoko::ImGuiManager::Draw()
 {
-	//実際のcommandListのImGuiの描画コマンドを積む。描画処理の終わったタイミング
 #ifdef _DEBUG
+	//実際のcommandListのImGuiの描画コマンドを積む。描画処理の終わったタイミング
 	ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), DirectXBase::GetInstance()->GetCommandList());
 #endif // _DEBUG
 }

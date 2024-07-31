@@ -61,6 +61,7 @@ void SpotLightBoxAnimationEditor::SetGlobalVariable()
 
 void SpotLightBoxAnimationEditor::ApplyGlobalVariable()
 {
+
 	box_->transform_.translate_ = stageEditor_->GetVector3Value("位置");
 	box_->transform_.rotate_ = stageEditor_->GetVector3Value("回転");
 

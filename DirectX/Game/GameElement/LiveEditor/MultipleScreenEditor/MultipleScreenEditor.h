@@ -3,8 +3,9 @@
 #include "Sprite.h"
 #include "PostEffect/PostEffect.h"
 #include "Bloom/Bloom.h"
-#include <unordered_map>
+#include <map>
 #include "GameElement/IStageObject/IStageObject.h"
+#include "Outline/Outline.h"
 
 class ScreenEditor;
 
@@ -15,10 +16,11 @@ public:
 
 	void Update(const float& time) override;
 	void Draw(const Camera& camera) override;
-
-	void PreDrawScene();
-	void PostDrawScene();
 	D3D12_GPU_DESCRIPTOR_HANDLE GetSRVGPUDescriptorHandle() const { return postEffect_->GetSRVGPUDescriptorHandle(); }
+
+	uint32_t& GetScreenNum() { return screenNum_; }
+	std::map<uint32_t, std::unique_ptr<ScreenEditor>>* GetScreenMap() { return &screenMap_; }
+	std::map<uint32_t, std::unique_ptr<Outline>>* GetOutlineMap() { return &outlineMap_; }
 
 private:
 	void SetGlobalVariable() override;
@@ -29,11 +31,13 @@ private:
 	
 	uint32_t screenNum_ = 1;
 
-	std::unordered_map<uint32_t, std::unique_ptr<ScreenEditor>> screenMap_;
+	std::map<uint32_t, std::unique_ptr<ScreenEditor>> screenMap_;
 	std::unique_ptr<Sprite> screenSprite_;
 	std::unique_ptr<PostEffect> postEffect_;
 	std::unique_ptr<PostEffect> postEffect1_;
 	std::unique_ptr<Bloom> bloom_;
+
+	std::map<uint32_t, std::unique_ptr<Outline>> outlineMap_;
 
 	struct TreeNames
 	{

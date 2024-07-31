@@ -21,6 +21,8 @@ public:
 	void SetGPUHandle(D3D12_GPU_DESCRIPTOR_HANDLE srvGPUDescriptorHandle);
 	void Reset();
 
+	const Camera& GetCamera() const { return *camera_.get(); }
+
 private:
 	void SetGlobalVariable() override;
 	void ApplyGlobalVariable() override;
@@ -35,4 +37,6 @@ private:
 	std::unique_ptr<Bloom> bloom_;
 
 	std::unique_ptr<PostEffect> postEffect1_;
+
+	std::unique_ptr<Camera> camera_;
 };

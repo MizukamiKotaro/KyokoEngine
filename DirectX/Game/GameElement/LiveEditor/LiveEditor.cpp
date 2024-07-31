@@ -2,6 +2,7 @@
 #include "Camera.h"
 #include "GameElement/IStageObject/StageObjectConfig.h"
 #include "GameElement/IStageObject/StageObjectFactory/StageObjectFactory.h"
+#include "ScreenEditor/ScreenEditor.h"
 
 LiveEditor::LiveEditor(Camera* camera)
 {
@@ -10,16 +11,20 @@ LiveEditor::LiveEditor(Camera* camera)
 	
 	screenCamera_ = std::make_unique<Camera>();
 	outline_ = std::make_unique<Outline>();
-	outline2_ = std::make_unique<Outline>();
 
 	screenManager_ = std::make_unique<MultipleScreenEditor>("スクリーン", "マルチスクリーン", 0);
 	idolManager_ = std::make_unique<IStageObjectManager>();
 	idolManager_->AddType(StageObjectType::IDOL, "アイドル", "メインアイドル");
+
+
 	lightManager_ = std::make_unique<IStageObjectManager>();
 	lightManager_->AddType(StageObjectType::SPOTLIGHT, "ライト", "スポットライト");
 	lightManager_->AddType(StageObjectType::TWIN_SPOTLIGHT, "ライト", "ツインスポットライト");
 	floor_.reset(StageObjectFactory::CreateStageObject(StageObjectType::FLOOR, "ステージ床", "ステージ床", 0));
 	dome_.reset(StageObjectFactory::CreateStageObject(StageObjectType::DOME, "ドーム", "ドーム", 0));
+
+	screenMap_ = screenManager_->GetScreenMap();
+	outlineMap_ = screenManager_->GetOutlineMap();
 }
 
 void LiveEditor::Initialize()
@@ -69,16 +74,19 @@ void LiveEditor::Draw()
 
 void LiveEditor::WriteScreen()
 {
-	outline2_->PreDrawScene();
-	idolManager_->Draw(*screenCamera_.get());
-	outline2_->PostDrawScene();
+	for (uint32_t i = 0; i < screenManager_->GetScreenNum(); i++) {
+		const Camera& camera = (*screenMap_)[i]->GetCamera();
+		(*outlineMap_)[i]->PreDrawScene();
+		idolManager_->Draw(camera);
+		(*outlineMap_)[i]->PostDrawScene();
 
-	screenManager_->PreDrawScene();
-	dome_->Draw(*screenCamera_.get());
-	floor_->Draw(*screenCamera_.get());
-	outline2_->Draw(*screenCamera_.get());
-	lightManager_->Draw(*screenCamera_.get());
-	screenManager_->PostDrawScene();
+		(*screenMap_)[i]->PreDrawScene();
+		dome_->Draw(camera);
+		floor_->Draw(camera);
+		(*outlineMap_)[i]->Draw(camera);
+		lightManager_->Draw(camera);
+		(*screenMap_)[i]->PostDrawScene();
+	}
 }
 
 void LiveEditor::WriteOutline()
