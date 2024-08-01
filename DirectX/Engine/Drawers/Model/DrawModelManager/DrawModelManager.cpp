@@ -7,6 +7,10 @@
 #include "Model.h"
 #include "SkinningModel/SkinningModel.h"
 #include "RigidAnimationModel/RigidAnimationModel.h"
+#include "Texture/Texture.h"
+#include "TextureManager.h"
+
+const Texture* texCube = nullptr;
 
 DrawModelManager::Transformation::Transformation()
 {
@@ -23,6 +27,7 @@ DrawModelManager::Transformation::~Transformation()
 
 DrawModelManager::DrawModelManager()
 {
+	texCube = TextureManager::GetInstance()->LoadTexture("rostock_laage_airport_4k.dds");
 	drawNum_ = 0;
 	for (int32_t i = 0; i < 50; i++) {
 		transformation_.push_back(std::make_unique<Transformation>());
@@ -87,6 +92,7 @@ void DrawModelManager::Draw(const BaseModel& model, const Camera& camera, const 
 	commandList_->SetGraphicsRootConstantBufferView(4, camera.GetGPUVirtualAddress());
 	commandList_->SetGraphicsRootConstantBufferView(5, light.GetPointLightGPUVirtualAddress());
 	commandList_->SetGraphicsRootConstantBufferView(6, light.GetSpotLightGPUVirtualAddress());
+	commandList_->SetGraphicsRootDescriptorTable(7, texCube->handles_->gpuHandle);
 	commandList_->DrawIndexedInstanced(UINT(modelData.mesh.indices.size()), 1, 0, 0, 0);
 	drawNum_++;
 }
