@@ -72,11 +72,11 @@ void DrawLightManager::Draw(const SpotLight& light, const Camera& camera, const 
 	billboardMat.m[3][1] = 0.0f;
 	billboardMat.m[3][2] = 0.0f;
 
-	Vector3 project = Calc::Project(camera.transform_.worldPos_ * Matrix4x4::MakeRotateXYZMatrix(camera.transform_.rotate_) - light.light_->position, light.light_->direction);
+	Vector3 project = Calc::Project(camera.transform_.worldPos_ - light.light_->position, light.light_->direction);
 	Vector3 rotate = camera.transform_.worldPos_ - (light.light_->position + project);
 	rotate = rotate.Normalize();
 	if (rotate.z != -1.0f) {
-		billboardMat = billboardMat * Matrix4x4::DirectionToDirection({ 0.0f,0.0f,-1.0f }, rotate);
+		billboardMat = billboardMat * Matrix4x4::DirectionToDirection(Vector3{ 0.0f,0.0f,-1.0f } * Matrix4x4::MakeRotateXYZMatrix(camera.transform_.rotate_), rotate);
 	}
 	Matrix4x4 translateMat = Matrix4x4::MakeTranslateMatrix(light.light_->position + Vector3{ 0.0f,0.0f,0.1f } * billboardMat);
 
