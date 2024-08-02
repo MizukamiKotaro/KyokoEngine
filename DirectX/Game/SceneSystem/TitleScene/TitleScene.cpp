@@ -51,8 +51,8 @@ TitleScene::TitleScene()
 	sk_ = std::make_unique<Skybox>("rostock_laage_airport_4k.dds");
 	ski_ = std::make_unique<RigidAnimationModel>("AnimatedCube");
 
-	/*gp_ = std::make_unique<GPUParticle>("hoge", "circle.png");
-	gp_->Update(0.0f);*/
+	gp_ = std::make_unique<GPUParticle>("hoge", "circle.png");
+	gp_->Update(0.0f);
 }
 
 void TitleScene::Initialize()
@@ -103,7 +103,7 @@ void TitleScene::Update()
 	noise_->Update(0.001f);
 	bloom_->Update();
 	ski_->Update(0.001f);
-	//gp_->Update(0.0f);
+	gp_->Update(0.0f);
 }
 
 void TitleScene::Draw()
@@ -129,7 +129,7 @@ void TitleScene::Draw()
 
 	//space_->Draw();
 	sk_->Draw(*camera_.get());
-	//gp_->Draw(*camera_.get());
+	gp_->Draw(*camera_.get(), BlendMode::kBlendModeAdd);
 
 	BlackDraw();
 	Kyoko::Engine::PostDraw();

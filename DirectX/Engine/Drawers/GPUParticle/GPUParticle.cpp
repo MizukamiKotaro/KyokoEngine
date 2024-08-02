@@ -73,7 +73,7 @@ void GPUParticle::Update(const float& deltaTime)
 	barrierDesc.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
 	barrierDesc.Transition.pResource = particleResouce_.Get();
 	barrierDesc.Transition.StateBefore = D3D12_RESOURCE_STATE_UNORDERED_ACCESS; 
-	barrierDesc.Transition.StateAfter = D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER; 
+	barrierDesc.Transition.StateAfter = D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE; 
 	barrierDesc.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
 
 	commandList_->ResourceBarrier(1, &barrierDesc);

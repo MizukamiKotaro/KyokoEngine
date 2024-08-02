@@ -69,6 +69,6 @@ private:
 
 	std::unique_ptr<Skybox> sk_;
 	std::unique_ptr<RigidAnimationModel> ski_;
-	/*std::unique_ptr<GPUParticle> gp_;*/
+	std::unique_ptr<GPUParticle> gp_;
 };
 
