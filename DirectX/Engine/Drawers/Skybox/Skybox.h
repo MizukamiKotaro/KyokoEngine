@@ -14,7 +14,7 @@ class Skybox : public IDrawer
 {
 public:
 
-	Skybox(const std::string& filename, const Vector3& scale = { 100.0f,100.0f,100.0f }, const Vector3& rotate = { 0.0f,0.0f,0.0f }, const Vector3& position = { 0.0f,0.0f,0.0f }, const Vector4& color = { 1.0f,1.0f,1.0f,1.0f });
+	Skybox(const std::string& filename, const Vector3& scale = { 50.0f,50.0f,50.0f }, const Vector3& rotate = { 0.0f,0.0f,0.0f }, const Vector3& position = { 0.0f,0.0f,0.0f }, const Vector4& color = { 1.0f,1.0f,1.0f,1.0f });
 	~Skybox();
 
 	struct VertexData

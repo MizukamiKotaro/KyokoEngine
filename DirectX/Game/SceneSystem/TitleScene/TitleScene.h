@@ -20,6 +20,9 @@
 #include "Bloom/Bloom.h"
 #include "RadialBlur/RadialBlur.h"
 #include "HSVFilter/HSVFilter.h"
+#include "Drawers/Skybox/Skybox.h"
+#include "SkinningModel/SkinningModel.h"
+#include "Drawers/GPUParticle/GPUParticle.h"
 
 class TitleScene : public IScene
 {
@@ -63,5 +66,9 @@ private:
 	std::unique_ptr<HSVFilter> hsvFilter_;
 
 	Audio se_;
+
+	std::unique_ptr<Skybox> sk_;
+	std::unique_ptr<RigidAnimationModel> ski_;
+	/*std::unique_ptr<GPUParticle> gp_;*/
 };
 

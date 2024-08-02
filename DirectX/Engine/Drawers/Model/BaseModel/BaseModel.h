@@ -36,8 +36,6 @@ public:
 	const ModelData& GetModelData() const { return *modelData_; }
 	const D3D12_GPU_DESCRIPTOR_HANDLE& GetTextureData() const { return srvGPUDescriptorHandle_; }
 	ID3D12Resource& GetMaterialData() const { return *materialResource_.Get(); }
-
-protected:
 	struct Material
 	{
 		Vector4 color;
@@ -46,7 +44,11 @@ protected:
 		Matrix4x4 uvTransform;
 		float shininess; // 光沢度
 		Vector3 supeqularColor; // 鏡面反射の色
+		float skyboxAlpha; // スカイボックスの反射用の透明度
 	};
+	Material* GetMaterialData() { return materialData_; }
+
+protected:
 
 	struct TransformationMatrix {
 		Matrix4x4 WVP;

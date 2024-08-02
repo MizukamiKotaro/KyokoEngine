@@ -74,8 +74,6 @@ void ParticleDrawer::Draw(const Camera& camera, std::list<ParticleData>& blocks,
 	//TransformationMatrixCBufferの場所を設定
 	//commandList->SetGraphicsRootConstantBufferView(1, instancingResource_->GetGPUVirtualAddress());
 	commandList_->SetGraphicsRootDescriptorTable(1, srvHandles_->gpuHandle);
-	//平行光源CBufferの場所を設定
-	commandList_->SetGraphicsRootConstantBufferView(3, light_.GetDirectionalLightGPUVirtualAddress());
 	commandList_->SetGraphicsRootDescriptorTable(2, data_.texture_->handles_->gpuHandle);
 	//描画!!!!（DrawCall/ドローコール）
 	//commandList_->DrawInstanced(UINT(data_.modelData_->mesh.verteces.size()), instaceNum, 0, 0);

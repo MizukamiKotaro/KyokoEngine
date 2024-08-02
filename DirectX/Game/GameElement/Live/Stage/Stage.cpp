@@ -7,7 +7,7 @@ Stage::Stage()
 	model_ = std::make_unique<Model>("ground");
 	model_->SetTexture(TextureManager::GetInstance()->LoadTexture("Resources/Texture/white.png"));
 	model_->Update();
-	model_->UnUsedLight();
+	//model_->UnUsedLight();
 	model_->SetColor(Vector4{ 0.1f,0.1f,0.1f,1.0f });
 }
 

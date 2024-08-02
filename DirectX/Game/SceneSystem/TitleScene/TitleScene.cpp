@@ -48,6 +48,11 @@ TitleScene::TitleScene()
 	hsvFilter_ = std::make_unique<HSVFilter>();
 
 	se_.Load("SE/select.mp3","決定音");
+	sk_ = std::make_unique<Skybox>("rostock_laage_airport_4k.dds");
+	ski_ = std::make_unique<RigidAnimationModel>("AnimatedCube");
+
+	/*gp_ = std::make_unique<GPUParticle>("hoge", "circle.png");
+	gp_->Update(0.0f);*/
 }
 
 void TitleScene::Initialize()
@@ -93,10 +98,12 @@ void TitleScene::Update()
 	camera_->Update();
 #endif // _DEBUG
 	screen_->Update();
-	spotLightBox_->Update(0.01f);
-	spotLightBox2_->Update(-0.01f);
+	spotLightBox_->Update(0.001f);
+	spotLightBox2_->Update(-0.001f);
 	noise_->Update(0.001f);
 	bloom_->Update();
+	ski_->Update(0.001f);
+	//gp_->Update(0.0f);
 }
 
 void TitleScene::Draw()
@@ -108,7 +115,23 @@ void TitleScene::Draw()
 	hsvFilter_->PostDrawScene();
 
 	Kyoko::Engine::PreDraw();
-	hsvFilter_->Draw();
+	//dome_->Draw(camera_.get());
+	//stage_->Draw(camera_.get());
+	screen_->Draw(camera_.get());
+	//title_->Draw();
+
+	//scanNoise_->Draw();
+	//rgbShift_->Draw();
+	ski_->Draw(*camera_.get());
+
+	spotLightBox_->Draw(camera_.get());
+	spotLightBox2_->Draw(camera_.get());
+
+	//space_->Draw();
+	sk_->Draw(*camera_.get());
+	//gp_->Draw(*camera_.get());
+
+	BlackDraw();
 	Kyoko::Engine::PostDraw();
 }
 

@@ -10,6 +10,7 @@ struct Material {
 	float32_t4x4 uvTransform;
 	float32_t shininess;
 	float32_t3 speqularColor;
+	float32_t skyboxAlpha;
 };
 ConstantBuffer<Material> gMaterial : register(b0);
 struct PixelShaderOutput {
@@ -164,7 +165,7 @@ PixelShaderOutput main(VertexShaderOutput input) {
 		float32_t3 reflectedVector = reflect(cameraToPosition, normalize(input.normal));
 		float32_t4 enviromentColor = gEnviromentTexture.Sample(gSampler, reflectedVector);
 
-		output.color.rgb = diffuse + specular + diffusePL + specularPL + diffuseSL + specularSL + enviromentColor.rgb;
+		output.color.rgb = diffuse + specular + diffusePL + specularPL + diffuseSL + specularSL + enviromentColor.rgb * gMaterial.skyboxAlpha;
 		output.color.a = gMaterial.color.a * textureColor.a;
 	}
 	else {

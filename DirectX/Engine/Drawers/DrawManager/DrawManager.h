@@ -8,8 +8,10 @@ class RigidAnimationModel;
 class SkinningModel;
 class PointLight;
 class SpotLight;
+class GPUParticle;
 class DrawModelManager;
 class DrawLightManager;
+class DrawParticleManager;
 
 class DrawManager
 {
@@ -24,7 +26,7 @@ public:
 	void Draw(const SkinningModel& model, const Camera& camera, const BlendMode& blendMode);
 	void Draw(const PointLight& light, const Camera& camera, const BlendMode& blendMode);
 	void Draw(const SpotLight& light, const Camera& camera, const BlendMode& blendMode);
-
+	void Draw(const GPUParticle& particle, const Camera& camera, const BlendMode& blendMode);
 private:
 	DrawManager() = default;
 	~DrawManager() = default;
@@ -33,4 +35,5 @@ private:
 
 	std::unique_ptr<DrawModelManager> drawModelManager_;
 	std::unique_ptr<DrawLightManager> drawLightManager_;
+	std::unique_ptr<DrawParticleManager> drawParticleManager_;
 };

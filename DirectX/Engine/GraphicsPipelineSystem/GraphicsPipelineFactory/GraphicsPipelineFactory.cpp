@@ -7,11 +7,11 @@
 #include "GraphicsPipelineSystem/GraphicsPipelines/InstancingModelGraphicsPipline/InstancingModelGraphicsPipline.h"
 #include "GraphicsPipelineSystem/GraphicsPipelines/CopyGraphicsPipeline/CopyGraphicsPipeline.h"
 #include "GraphicsPipelineSystem/GraphicsPipelines/GrayscaleGraphicsPipeline/GrayscaleGraphicsPipeline.h"
-#include "GraphicsPipelineSystem/GraphicsPipelines/SkinningModelGraphicsPipline/SkinningModelGraphicsPipline.h"
 #include "GraphicsPipelineSystem/GraphicsPipelines/VignetteGraphicsPipeline/VignetteGraphicsPipeline.h"
 #include "GraphicsPipelineSystem/GraphicsPipelines/SkyboxGraphicsPipeline/SkyboxGraphicsPipeline.h"
 #include "GraphicsPipelineSystem/GraphicsPipelines/OutlineGraphicsPipeline/OutlineGraphicsPipeline.h"
 #include "GraphicsPipelineSystem/GraphicsPipelines/BasePostEffectGraphicsPipeline/BasePostEffectGraphicsPipeline.h"
+#include "GraphicsPipelineSystem/GraphicsPipelines/GPUParticleGraphicsPipeline/GPUParticleGraphicsPipeline.h"
 #include "GraphicsPipelineSystem/PipelineTypeConfig.h"
 
 GraphicsPipeline* GraphicsPipelineFactory::CreateGraphicsPipeline(PipelineType pipelineType)
@@ -74,9 +74,6 @@ GraphicsPipeline* GraphicsPipelineFactory::CreateGraphicsPipeline(PipelineType p
 	case PipelineType::GRAYSCALE:
 		graphicsPipeline = new GrayscaleGraphicsPipeline();
 		break;
-	case PipelineType::SKINNING_MODEL:
-		graphicsPipeline = new SkinningModelGraphicsPipeline();
-		break;
 	case PipelineType::VIGNETTE:
 		graphicsPipeline = new VignetteGraphicsPipeline();
 		break;
@@ -94,6 +91,9 @@ GraphicsPipeline* GraphicsPipelineFactory::CreateGraphicsPipeline(PipelineType p
 		break;
 	case PipelineType::HSV_FILTER:
 		graphicsPipeline = new BasePostEffectGraphicsPipeline("HSVFilterShader/HSVFilter.PS.hlsl");
+		break;
+	case PipelineType::GPU_PARTICLE:
+		graphicsPipeline = new GPUParticleGraphicsPipeline();
 		break;
 	default:
 		break;

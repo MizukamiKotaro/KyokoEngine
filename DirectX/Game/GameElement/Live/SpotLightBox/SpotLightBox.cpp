@@ -34,7 +34,7 @@ SpotLightBox::SpotLightBox()
 	box_->SetLight(point_.get());
 	box_->SetLight(spotLights_[0].get());
 	
-	Update();
+	/*Update();*/
 }
 
 void SpotLightBox::Initialize()
@@ -43,24 +43,24 @@ void SpotLightBox::Initialize()
 
 void SpotLightBox::Update()
 {
-//#ifdef _DEBUG
-//	ImGui::Begin("SpotLightBox");
-//	ImGui::DragFloat3("位置", &box_->transform_.translate_.x, 0.01f);
-//	ImGui::SliderFloat3("角度", &spots_[0]->light_->direction.x, -1.0f, 1.0f);
-//	ImGui::ColorEdit3("外のスポットライトの色", &spots_[0]->light_->color.x);
-//	ImGui::SliderFloat("外のスポットライトの輝度", &spots_[0]->light_->intensity, 0.0f, 100.0f);
-//	ImGui::SliderFloat("外のスポットライトの開く減衰率", &spots_[0]->light_->decay, 0.0f, 100.0f);
-//	ImGui::SliderFloat("外のスポットライトの開く角度", &spots_[0]->light_->cosAngle, -1.0f, 1.0f);
-//	ImGui::SliderFloat("外のスポットライトの減衰し始める角度", &spots_[0]->light_->cosFalloffStart, -1.0f, 1.0f);
-//	ImGui::SliderFloat("外のスポットライトの距離", &spots_[0]->light_->distance, 0.0f, 100.0f);
-//	ImGui::ColorEdit3("内のスポットライトの色", &spots_[1]->light_->color.x);
-//	ImGui::SliderFloat("内のスポットライトの輝度", &spots_[1]->light_->intensity, 0.0f, 100.0f);
-//	ImGui::SliderFloat("内のスポットライトの開く減衰率", &spots_[1]->light_->decay, 0.0f, 100.0f);
-//	ImGui::SliderFloat("内のスポットライトの開く角度", &spots_[1]->light_->cosAngle, -1.0f, 1.0f);
-//	ImGui::SliderFloat("内のスポットライトの減衰し始める角度", &spots_[1]->light_->cosFalloffStart, -1.0f, 1.0f);
-//	ImGui::SliderFloat("内のスポットライトの距離", &spots_[1]->light_->distance, 0.0f, 100.0f);
-//	ImGui::End();
-//#endif // _DEBUG
+#ifdef _DEBUG
+	ImGui::Begin("SpotLightBoxad");
+	ImGui::DragFloat3("位置", &box_->transform_.translate_.x, 0.01f);
+	ImGui::SliderFloat3("角度", &spotLights_[0]->light_->direction.x, -1.0f, 1.0f);
+	ImGui::ColorEdit3("外のスポットライトの色", &spotLights_[0]->light_->color.x);
+	ImGui::SliderFloat("外のスポットライトの輝度", &spotLights_[0]->light_->intensity, 0.0f, 100.0f);
+	ImGui::SliderFloat("外のスポットライトの開く減衰率", &spotLights_[0]->light_->decay, 0.0f, 100.0f);
+	ImGui::SliderFloat("外のスポットライトの開く角度", &spotLights_[0]->light_->cosAngle, -1.0f, 1.0f);
+	ImGui::SliderFloat("外のスポットライトの減衰し始める角度", &spotLights_[0]->light_->cosFalloffStart, -1.0f, 1.0f);
+	ImGui::SliderFloat("外のスポットライトの距離", &spotLights_[0]->light_->distance, 0.0f, 100.0f);
+	ImGui::ColorEdit3("内のスポットライトの色", &spotLights_[1]->light_->color.x);
+	ImGui::SliderFloat("内のスポットライトの輝度", &spotLights_[1]->light_->intensity, 0.0f, 100.0f);
+	ImGui::SliderFloat("内のスポットライトの開く減衰率", &spotLights_[1]->light_->decay, 0.0f, 100.0f);
+	ImGui::SliderFloat("内のスポットライトの開く角度", &spotLights_[1]->light_->cosAngle, -1.0f, 1.0f);
+	ImGui::SliderFloat("内のスポットライトの減衰し始める角度", &spotLights_[1]->light_->cosFalloffStart, -1.0f, 1.0f);
+	ImGui::SliderFloat("内のスポットライトの距離", &spotLights_[1]->light_->distance, 0.0f, 100.0f);
+	ImGui::End();
+#endif // _DEBUG
 
 	spotLights_[1]->light_->direction = spotLights_[0]->light_->direction;
 	spotLights_[1]->light_->distance = spotLights_[0]->light_->distance;

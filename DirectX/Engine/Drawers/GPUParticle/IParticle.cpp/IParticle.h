@@ -1,36 +1,33 @@
 #pragma once
-#include "../GPUParticleData.h"
 #include <memory>
 #include "Drawers/IDrawer/IDrawer.h"
 #include "Editor/StageEditor.h"
+#include "GraphicsPipelineSystem/BlendModeConfig.h"
 
 class Camera;
+class Texture;
 
 class IParticle : public IDrawer
 {
 public:
-	
-	static void StaticInitialize();
+	virtual void Initialize() = 0;
 
-	void Initialize();
+	virtual void Update(const float& deltaTime) = 0;
 
-	void Update(float deltaTime, Camera* camera);
+	virtual void Draw(const Camera& camera, const BlendMode& blend = BlendMode::kBlendModeNormal) = 0;
 
-	void Draw(Camera* camera);
+	const Texture* GetTexture() const;
 
 protected:
-	void CreateParticle(const std::string& particleName, const std::string& textureName, bool isStageEditor = false, BlendMode blendMode = BlendMode::kBlendModeNormal);
-	void CreateParticle(const std::string& particleName, const std::string& modelName, const std::string& textureName, bool isStageEditor = false, BlendMode blendMode = BlendMode::kBlendModeNormal);
+	void CreateParticle(const std::string& particleName, const std::string& textureName, bool isStageEditor = false);
 
 	virtual void SetGlobalVariable() = 0;
-
 	virtual void ApplyGlobalVariable() = 0;
 
 protected:
-	static const ModelData* plane_;
-	GPUParticleMeshTexData drawData_;
 
 	std::unique_ptr<GlobalVariableUser> globalVariable_;
 	std::unique_ptr<StageEditor> stageEditor_;
 
+	const Texture* texture_;
 };

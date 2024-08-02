@@ -220,9 +220,6 @@
     <Filter Include="Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\PointLightGraphicsPipeline">
       <UniqueIdentifier>{a77d6c70-8841-4f7a-8604-70eff20bf647}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\SkinningModelGraphicsPipeline">
-      <UniqueIdentifier>{af581741-f6d1-4251-b3da-ede878979d27}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\SpotLightGraphicsPipeline">
       <UniqueIdentifier>{e7bf65a2-ca95-41d1-9009-b581bcb00d2c}</UniqueIdentifier>
     </Filter>
@@ -444,6 +441,12 @@
     </Filter>
     <Filter Include="Engine\Editor\KeyframeData">
       <UniqueIdentifier>{3d956010-d92d-4e9a-b37d-6e808706cc06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Drawers\DrawManager\DrawParticleManager">
+      <UniqueIdentifier>{c358a80a-a162-4b13-b0e4-62db9dd97b8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\GPUParticleGraphicsPipeline">
+      <UniqueIdentifier>{d58d3c99-6b5d-46eb-a965-3e0dc0067b04}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -768,9 +771,6 @@
     <ClCompile Include="Engine\Drawers\PostEffect\Grayscale\Grayscale.cpp">
       <Filter>Engine\Drawers\PostEffect\Grayscale</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SkinningModelGraphicsPipline\SkinningModelGraphicsPipline.cpp">
-      <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\SkinningModelGraphicsPipeline</Filter>
-    </ClCompile>
     <ClCompile Include="Game\GameElement\Live\DancingIdol\DancingIdol.cpp">
       <Filter>Game\GameElement\Live\DancingIdol</Filter>
     </ClCompile>
@@ -792,9 +792,6 @@
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SkyboxGraphicsPipeline\SkyboxGraphicsPipeline.cpp">
       <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\SkyboxGraphicsPipeline</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Drawers\Light\DrawLightManager\DrawLightManager.cpp">
-      <Filter>Engine\Drawers\DrawManager\DrawLightManager</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Drawers\Model\SkinningModel\SkinningModel.cpp">
       <Filter>Engine\Drawers\Model\SkinningModel</Filter>
     </ClCompile>
@@ -803,9 +800,6 @@
     </ClCompile>
     <ClCompile Include="Engine\Drawers\Model\RigidAnimationModel\RigidAnimationModel.cpp">
       <Filter>Engine\Drawers\Model\RigidAnimationModel</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Drawers\Model\DrawModelManager\DrawModelManager.cpp">
-      <Filter>Engine\Drawers\DrawManager\DrawModelManager</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Drawers\DrawManager\DrawManager.cpp">
       <Filter>Engine\Drawers\DrawManager</Filter>
@@ -920,6 +914,18 @@
     </ClCompile>
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\BasePostEffectGraphicsPipeline\BasePostEffectGraphicsPipeline.cpp">
       <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\BasePostEffectGraphicsPipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Drawers\DrawManager\DrawModelManager\DrawModelManager.cpp">
+      <Filter>Engine\Drawers\DrawManager\DrawModelManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Drawers\DrawManager\DrawLightManager\DrawLightManager.cpp">
+      <Filter>Engine\Drawers\DrawManager\DrawLightManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Drawers\DrawManager\DrawParticleManager\DrawParticleManager.cpp">
+      <Filter>Engine\Drawers\DrawManager\DrawParticleManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\GPUParticleGraphicsPipeline\GPUParticleGraphicsPipeline.cpp">
+      <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\GPUParticleGraphicsPipeline</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1307,9 +1313,6 @@
     <ClInclude Include="Engine\Drawers\Model\ModelData\SkinClustr.h">
       <Filter>Engine\Drawers\Model\ModelData</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SkinningModelGraphicsPipline\SkinningModelGraphicsPipline.h">
-      <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\SkinningModelGraphicsPipeline</Filter>
-    </ClInclude>
     <ClInclude Include="Game\GameElement\Live\DancingIdol\DancingIdol.h">
       <Filter>Game\GameElement\Live\DancingIdol</Filter>
     </ClInclude>
@@ -1331,9 +1334,6 @@
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SkyboxGraphicsPipeline\SkyboxGraphicsPipeline.h">
       <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\SkyboxGraphicsPipeline</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Drawers\Light\DrawLightManager\DrawLightManager.h">
-      <Filter>Engine\Drawers\DrawManager\DrawLightManager</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Drawers\Model\SkinningModel\SkinningModel.h">
       <Filter>Engine\Drawers\Model\SkinningModel</Filter>
     </ClInclude>
@@ -1342,9 +1342,6 @@
     </ClInclude>
     <ClInclude Include="Engine\Drawers\Model\RigidAnimationModel\RigidAnimationModel.h">
       <Filter>Engine\Drawers\Model\RigidAnimationModel</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Drawers\Model\DrawModelManager\DrawModelManager.h">
-      <Filter>Engine\Drawers\DrawManager\DrawModelManager</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Drawers\DrawManager\DrawManager.h">
       <Filter>Engine\Drawers\DrawManager</Filter>
@@ -1474,6 +1471,18 @@
     </ClInclude>
     <ClInclude Include="Engine\Editor\KeyframeData.h">
       <Filter>Engine\Editor\KeyframeData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drawers\DrawManager\DrawModelManager\DrawModelManager.h">
+      <Filter>Engine\Drawers\DrawManager\DrawModelManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drawers\DrawManager\DrawLightManager\DrawLightManager.h">
+      <Filter>Engine\Drawers\DrawManager\DrawLightManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drawers\DrawManager\DrawParticleManager\DrawParticleManager.h">
+      <Filter>Engine\Drawers\DrawManager\DrawParticleManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\GPUParticleGraphicsPipeline\GPUParticleGraphicsPipeline.h">
+      <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\GPUParticleGraphicsPipeline</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

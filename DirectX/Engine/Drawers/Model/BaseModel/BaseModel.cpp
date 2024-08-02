@@ -89,10 +89,11 @@ void BaseModel::CreateMaterialResource()
 
 	materialData_->color = { 1.0f, 1.0f, 1.0f, 1.0f };
 	color_ = { 1.0f, 1.0f, 1.0f, 1.0f };
-	materialData_->enableLighting = 3;
+	materialData_->enableLighting = 4;
 	materialData_->uvTransform = Matrix4x4::MakeIdentity4x4();
 	materialData_->shininess = 40.0f;
 	materialData_->supeqularColor = { 1.0f, 1.0f, 1.0f };
+	materialData_->skyboxAlpha = 0.4f;
 }
 
 void BaseModel::CreateTransformationResource()
