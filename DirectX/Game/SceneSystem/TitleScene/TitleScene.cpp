@@ -51,6 +51,8 @@ TitleScene::TitleScene()
 
 	gp_ = std::make_unique<GPUParticle>("hoge", "circle.png");
 	gp_->Update(0.0f);
+
+	spotlightAndOutline_ = std::make_unique<SpotLightAndOutline>();
 }
 
 void TitleScene::Initialize()
@@ -107,13 +109,8 @@ void TitleScene::Draw()
 {
 	WrightPostEffect();
 
-	hsvFilter_->PreDrawScene();
-	bloom_->Draw();
-	hsvFilter_->PostDrawScene();
-
 	Kyoko::Engine::PreDraw();
 	bloom_->Draw();
-
 	BlackDraw();
 	Kyoko::Engine::PostDraw();
 }
@@ -151,14 +148,13 @@ void TitleScene::WrightPostEffect()
 	radial_->Draw();
 	screen_->PostDrawScene();
 
-	bloom_->PreDrawScene();
+	spotlightAndOutline_->PreDrawOutline();
+	spotlightAndOutline_->PostDrawOutline();
+
+	spotlightAndOutline_->PreDrawObject();
 	dome_->Draw(camera_.get());
 	stage_->Draw(camera_.get());
 	screen_->Draw(camera_.get());
-	//title_->Draw();
-
-	//scanNoise_->Draw();
-	//rgbShift_->Draw();
 
 	spotLightBox_->Draw(camera_.get());
 	spotLightBox2_->Draw(camera_.get());
@@ -166,7 +162,15 @@ void TitleScene::WrightPostEffect()
 	space_->Draw();
 
 	BlackDraw();
-	//vignette_->Draw();
+	spotlightAndOutline_->PostDrawObject();
+
+	spotlightAndOutline_->PreDrawLight();
+	spotLightBox_->DrawLight(*camera_.get());
+	spotLightBox2_->DrawLight(*camera_.get());
+	spotlightAndOutline_->PostDrawLight();
+
+	bloom_->PreDrawScene();
+	spotlightAndOutline_->Draw(*camera_.get());
 	bloom_->PostDrawScene();
 }
 

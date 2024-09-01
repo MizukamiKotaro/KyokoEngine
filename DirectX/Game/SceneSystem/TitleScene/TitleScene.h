@@ -23,6 +23,7 @@
 #include "Drawers/Skybox/Skybox.h"
 #include "SkinningModel/SkinningModel.h"
 #include "Drawers/GPUParticle/GPUParticle.h"
+#include "SpotLightAndOutline/SpotLightAndOutline.h"
 
 class TitleScene : public IScene
 {
@@ -67,5 +68,6 @@ private:
 
 	Audio se_;
 	std::unique_ptr<GPUParticle> gp_;
+	std::unique_ptr<SpotLightAndOutline> spotlightAndOutline_;
 };
 
