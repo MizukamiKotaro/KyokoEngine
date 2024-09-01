@@ -3,6 +3,7 @@
 #include "GameElement/IStageObject/StageObjectConfig.h"
 #include "GameElement/IStageObject/StageObjectFactory/StageObjectFactory.h"
 #include "ScreenEditor/ScreenEditor.h"
+#include "ParticleManager.h"
 
 LiveEditor::LiveEditor(Camera* camera)
 {
@@ -10,7 +11,7 @@ LiveEditor::LiveEditor(Camera* camera)
 	camera_->Initialize();
 	
 	screenCamera_ = std::make_unique<Camera>();
-	outline_ = std::make_unique<Outline>();
+	lightAndOutline_ = std::make_unique<SpotLightAndOutline>();
 
 	screenManager_ = std::make_unique<MultipleScreenEditor>("スクリーン", "マルチスクリーン", 0);
 	idolManager_ = std::make_unique<IStageObjectManager>();
@@ -23,8 +24,11 @@ LiveEditor::LiveEditor(Camera* camera)
 	floor_.reset(StageObjectFactory::CreateStageObject(StageObjectType::FLOOR, "ステージ床", "ステージ床", 0));
 	dome_.reset(StageObjectFactory::CreateStageObject(StageObjectType::DOME, "ドーム", "ドーム", 0));
 
+	fireManager_ = std::make_unique<IStageObjectManager>();
+	fireManager_->AddType(StageObjectType::FIRE_PARTICLE, "パーティクル", "炎");
+
 	screenMap_ = screenManager_->GetScreenMap();
-	outlineMap_ = screenManager_->GetOutlineMap();
+	lightAndOutlineMap_ = screenManager_->GetOutlineMap();
 }
 
 void LiveEditor::Initialize()
@@ -41,6 +45,7 @@ void LiveEditor::Initialize()
 	idolManager_->Initialize();
 	floor_->Initialize();
 	dome_->Initialize();
+	fireManager_->Initialize();
 }
 
 void LiveEditor::Update(const float& time)
@@ -59,6 +64,7 @@ void LiveEditor::Update(const float& time)
 	idolManager_->Update(time);
 	floor_->Update(time);
 	dome_->Update(time);
+	fireManager_->Update(time);
 
 	WriteScreen();
 	WriteOutline();
@@ -66,33 +72,50 @@ void LiveEditor::Update(const float& time)
 
 void LiveEditor::Draw()
 {
-	dome_->Draw(*camera_);
-	floor_->Draw(*camera_);
-	outline_->Draw(*camera_);
-	lightManager_->Draw(*camera_);
+	ParticleManager::GetInstance()->Clear();
+	lightAndOutline_->Draw(*camera_);
+	fireManager_->Draw(*camera_);
+	ParticleManager::GetInstance()->Draw(*camera_);
 }
 
 void LiveEditor::WriteScreen()
 {
 	for (uint32_t i = 0; i < screenManager_->GetScreenNum(); i++) {
 		const Camera& camera = (*screenMap_)[i]->GetCamera();
-		(*outlineMap_)[i]->PreDrawScene();
+		(*lightAndOutlineMap_)[i]->PreDrawOutline();
 		idolManager_->Draw(camera);
-		(*outlineMap_)[i]->PostDrawScene();
+		(*lightAndOutlineMap_)[i]->PostDrawOutline();
 
-		(*screenMap_)[i]->PreDrawScene();
+		(*lightAndOutlineMap_)[i]->PreDrawObject();
 		dome_->Draw(camera);
 		floor_->Draw(camera);
-		(*outlineMap_)[i]->Draw(camera);
 		lightManager_->Draw(camera);
+		(*lightAndOutlineMap_)[i]->PostDrawObject();
+
+		(*lightAndOutlineMap_)[i]->PreDrawLight();
+		lightManager_->DrawLight(camera);
+		(*lightAndOutlineMap_)[i]->PostDrawLight();
+
+		(*screenMap_)[i]->PreDrawScene();
+		(*lightAndOutlineMap_)[i]->Draw(camera);
 		(*screenMap_)[i]->PostDrawScene();
 	}
 }
 
 void LiveEditor::WriteOutline()
 {
-	outline_->PreDrawScene();
-	screenManager_->Draw(*camera_);
+	lightAndOutline_->PreDrawOutline();
 	idolManager_->Draw(*camera_);
-	outline_->PostDrawScene();
+	lightAndOutline_->PostDrawOutline();
+
+	lightAndOutline_->PreDrawObject();
+	dome_->Draw(*camera_);
+	floor_->Draw(*camera_);
+	screenManager_->Draw(*camera_);
+	lightManager_->Draw(*camera_);
+	lightAndOutline_->PostDrawObject();
+
+	lightAndOutline_->PreDrawLight();
+	lightManager_->DrawLight(*camera_);
+	lightAndOutline_->PostDrawLight();
 }

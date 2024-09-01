@@ -90,3 +90,13 @@ void DescriptorHeap::Initialize(UINT numDescriptors)
 		descriptors_[i] = std::make_unique<Descriptor>(descriptor);
 	}
 }
+
+uint32_t DescriptorHeap::GetTextureNum(const DescriptorHandles* handle)
+{
+	for (uint32_t i = 0; i < SRVDescriptorHeap::GetTextureMaxNum(); i++) {
+		if (descriptors_[i]->isUse && &descriptors_[i]->handles == handle) {
+			return i;
+		}
+	}
+	return 1;
+}

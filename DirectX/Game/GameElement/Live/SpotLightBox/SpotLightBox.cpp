@@ -77,8 +77,12 @@ void SpotLightBox::Update()
 
 void SpotLightBox::Draw(Camera* camera)
 {
-	//point_->Draw(*camera);
-	spotLights_[0]->Draw(*camera);
-	spotLights_[1]->Draw(*camera, BlendMode::kBlendModeAdd);
 	box_->Draw(*camera);
+}
+
+void SpotLightBox::DrawLight(const Camera& camera)
+{
+	//point_->Draw(*camera);
+	spotLights_[0]->Draw(camera);
+	spotLights_[1]->Draw(camera, BlendMode::kBlendModeAdd);
 }

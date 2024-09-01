@@ -25,4 +25,6 @@ enum class PipelineType {
 	RADIAL_BLUR,
 	HSV_FILTER,
 	GPU_PARTICLE,
+	LIGHT_DEPTH,
+	SPOT_LIGHT_DEPTH,
 };

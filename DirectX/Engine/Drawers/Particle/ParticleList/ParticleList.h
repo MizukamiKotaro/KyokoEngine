@@ -5,6 +5,7 @@
 #include "ParticleData.h"
 #include "ParticleDrawer/ParticleDrawer.h"
 #include "ILight/ILight.h"
+#include "GraphicsPipelineSystem/BlendModeConfig.h"
 
 class Camera;
 
@@ -13,7 +14,7 @@ public:
 
 	ParticleList(const ParticleMeshTexData& data);
 
-	void Draw(const Camera& camera);
+	void Draw(const Camera& camera, const BlendMode& blend = BlendMode::kBlendModeAdd);
 
 	void Clear();
 

@@ -32,9 +32,7 @@ void Outline::Draw(BlendMode blendMode)
 
 	ID3D12GraphicsCommandList* commandList = DirectXBase::GetInstance()->GetCommandList();
 
-	CD3DX12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(dsvResource_.Get(),
-		D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
-	commandList_->ResourceBarrier(1, &barrier);
+	ToReadBarrier();
 
 	commandList->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 	commandList->SetGraphicsRootDescriptorTable(1, srvHandles_->gpuHandle);
@@ -42,9 +40,7 @@ void Outline::Draw(BlendMode blendMode)
 	commandList->SetGraphicsRootDescriptorTable(3, depthHandles_->gpuHandle);
 	commandList->DrawInstanced(3, 1, 0, 0);
 
-	barrier = CD3DX12_RESOURCE_BARRIER::Transition(dsvResource_.Get(),
-		D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_DEPTH_WRITE);
-	commandList_->ResourceBarrier(1, &barrier);
+	ToWriteBarrier();
 }
 
 void Outline::Draw(const Camera& camera, BlendMode blendMode)
@@ -58,9 +54,7 @@ void Outline::Draw(const Camera& camera, BlendMode blendMode)
 
 	ID3D12GraphicsCommandList* commandList = DirectXBase::GetInstance()->GetCommandList();
 
-	CD3DX12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(dsvResource_.Get(),
-		D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
-	commandList_->ResourceBarrier(1, &barrier);
+	ToReadBarrier();
 
 	commandList->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 	commandList->SetGraphicsRootDescriptorTable(1, srvHandles_->gpuHandle);
@@ -68,7 +62,19 @@ void Outline::Draw(const Camera& camera, BlendMode blendMode)
 	commandList->SetGraphicsRootDescriptorTable(3, depthHandles_->gpuHandle);
 	commandList->DrawInstanced(3, 1, 0, 0);
 
-	barrier = CD3DX12_RESOURCE_BARRIER::Transition(dsvResource_.Get(),
+	ToWriteBarrier();
+}
+
+void Outline::ToReadBarrier()
+{
+	CD3DX12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(dsvResource_.Get(),
+		D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+	commandList_->ResourceBarrier(1, &barrier);
+}
+
+void Outline::ToWriteBarrier()
+{
+	CD3DX12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(dsvResource_.Get(),
 		D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_DEPTH_WRITE);
 	commandList_->ResourceBarrier(1, &barrier);
 }

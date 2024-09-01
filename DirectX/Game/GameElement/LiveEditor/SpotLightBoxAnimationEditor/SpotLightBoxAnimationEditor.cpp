@@ -34,10 +34,13 @@ void SpotLightBoxAnimationEditor::Update(const float& time)
 
 void SpotLightBoxAnimationEditor::Draw(const Camera& camera)
 {
-	//point_->Draw(*camera);
+	box_->Draw(camera);
+}
+
+void SpotLightBoxAnimationEditor::DrawLight(const Camera& camera)
+{
 	spotLights_[0]->Draw(camera);
 	spotLights_[1]->Draw(camera, BlendMode::kBlendModeAdd);
-	box_->Draw(camera);
 }
 
 void SpotLightBoxAnimationEditor::SetGlobalVariable()

@@ -11,6 +11,7 @@ public:
 	void Initialize();
 	void Update();
 	void Draw(Camera* camera);
+	void DrawLight(const Camera& camera);
 
 public:
 	std::unique_ptr<SpotLight> spotLights_[2];

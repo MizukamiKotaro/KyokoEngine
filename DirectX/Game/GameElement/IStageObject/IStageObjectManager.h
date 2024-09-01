@@ -6,6 +6,7 @@ class IStageObject;
 class StageEditor;
 class Camera;
 enum class StageObjectType;
+class DescriptorHandles;
 
 class IStageObjectManager {
 public:
@@ -14,6 +15,7 @@ public:
 	void Initialize();
 	void Update(const float& deltaTime);
 	void Draw(const Camera& camera) const;
+	void DrawLight(const Camera& camera) const;
 
 protected:
 	void ApplyGlobalVariable();

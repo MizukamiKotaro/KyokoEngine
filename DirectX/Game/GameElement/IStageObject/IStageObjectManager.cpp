@@ -54,6 +54,13 @@ void IStageObjectManager::Draw(const Camera& camera) const
 	}
 }
 
+void IStageObjectManager::DrawLight(const Camera& camera) const
+{
+	for (const std::unique_ptr<IStageObject>& object : objects_) {
+		object->DrawLight(camera);
+	}
+}
+
 void IStageObjectManager::ApplyGlobalVariable()
 {
 	bool change = false;

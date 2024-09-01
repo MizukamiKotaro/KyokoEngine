@@ -5,7 +5,7 @@
 #include "Bloom/Bloom.h"
 #include <map>
 #include "GameElement/IStageObject/IStageObject.h"
-#include "Outline/Outline.h"
+#include "SpotLightAndOutline/SpotLightAndOutline.h"
 
 class ScreenEditor;
 
@@ -20,7 +20,7 @@ public:
 
 	uint32_t& GetScreenNum() { return screenNum_; }
 	std::map<uint32_t, std::unique_ptr<ScreenEditor>>* GetScreenMap() { return &screenMap_; }
-	std::map<uint32_t, std::unique_ptr<Outline>>* GetOutlineMap() { return &outlineMap_; }
+	std::map<uint32_t, std::unique_ptr<SpotLightAndOutline>>* GetOutlineMap() { return &lightAndOutlineMap_; }
 
 private:
 	void SetGlobalVariable() override;
@@ -37,7 +37,7 @@ private:
 	std::unique_ptr<PostEffect> postEffect1_;
 	std::unique_ptr<Bloom> bloom_;
 
-	std::map<uint32_t, std::unique_ptr<Outline>> outlineMap_;
+	std::map<uint32_t, std::unique_ptr<SpotLightAndOutline>> lightAndOutlineMap_;
 
 	struct TreeNames
 	{

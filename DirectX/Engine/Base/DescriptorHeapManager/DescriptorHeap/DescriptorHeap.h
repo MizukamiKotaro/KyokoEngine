@@ -22,6 +22,8 @@ public:
 	static ID3D12DescriptorHeap* CreateDescriptorHeap(ID3D12Device* device, D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescriptors, bool shaderVisible);
 	void Initialize(UINT numDescriptors);
 
+	uint32_t GetTextureNum(const DescriptorHandles* handle);
+
 protected:
 
 	ComPtr<ID3D12DescriptorHeap> heap_;

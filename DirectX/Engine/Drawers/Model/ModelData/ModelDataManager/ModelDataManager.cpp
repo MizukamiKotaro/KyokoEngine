@@ -81,7 +81,7 @@ void ModelDataManager::LoadObjFile(const std::string& directoryPath, const std::
 	std::string filePath = directoryPath + "/" + fileName + "/" + fileName + ".obj";
 	const aiScene* scene_ = importer.ReadFile(filePath.c_str(), aiProcess_FlipWindingOrder | aiProcess_FlipUVs);
 	assert(scene_->HasMeshes());
-
+	uint32_t vertexNum = 0;
 	// meshを解析する
 	for (uint32_t meshIndex = 0; meshIndex < scene_->mNumMeshes; meshIndex++) {
 		aiMesh* mesh = scene_->mMeshes[meshIndex];
@@ -89,25 +89,24 @@ void ModelDataManager::LoadObjFile(const std::string& directoryPath, const std::
 		assert(mesh->HasTextureCoords(0)); // texCoordがないmeshは非対応
 		
 		// vertexを解析
-		modelDatas_.back()->mesh.verteces.resize(mesh->mNumVertices);
 		for (uint32_t vertexIndex = 0; vertexIndex < mesh->mNumVertices; vertexIndex++) {
 			aiVector3D& position = mesh->mVertices[vertexIndex];
 			aiVector3D& normal = mesh->mNormals[vertexIndex];
 			aiVector3D& texcoord = mesh->mTextureCoords[0][vertexIndex];
 
-			modelDatas_.back()->mesh.verteces[vertexIndex].vertexPos = { -position.x,position.y,position.z,1.0f };
-			modelDatas_.back()->mesh.verteces[vertexIndex].normal = { -normal.x,normal.y,normal.z };
-			modelDatas_.back()->mesh.verteces[vertexIndex].texcoord = { texcoord.x,texcoord.y };
+			modelDatas_.back()->mesh.verteces.push_back(VertexData{ { -position.x,position.y,position.z,1.0f },{ texcoord.x,texcoord.y },{ -normal.x,normal.y,normal.z } });
 		}
+
 
 		// indexを解析
 		for (uint32_t faceIndex = 0; faceIndex < mesh->mNumFaces; faceIndex++) {
 			aiFace& face = mesh->mFaces[faceIndex];
 			assert(face.mNumIndices == 3);
 			for (uint32_t element = 0; element < face.mNumIndices; element++) {
-				modelDatas_.back()->mesh.indices.push_back(face.mIndices[element]);
+				modelDatas_.back()->mesh.indices.push_back(face.mIndices[element] + vertexNum);
 			}
 		}
+		vertexNum += mesh->mNumVertices;
 	}
 	// rootNodeの解析
 	modelDatas_.back()->rootNode = ReadNode(scene_->mRootNode);
@@ -241,6 +240,7 @@ void ModelDataManager::LoadGLTFFile(const std::string& directoryPath, const std:
 	const aiScene* scene_ = importer.ReadFile(filePath.c_str(), aiProcess_FlipWindingOrder | aiProcess_FlipUVs);
 	assert(scene_->HasMeshes());
 
+	uint32_t vertexNum = 0;
 	// meshを解析する
 	for (uint32_t meshIndex = 0; meshIndex < scene_->mNumMeshes; meshIndex++) {
 		aiMesh* mesh = scene_->mMeshes[meshIndex];
@@ -248,15 +248,12 @@ void ModelDataManager::LoadGLTFFile(const std::string& directoryPath, const std:
 		assert(mesh->HasTextureCoords(0)); // texCoordがないmeshは非対応
 
 		// vertexを解析
-		modelDatas_.back()->mesh.verteces.resize(mesh->mNumVertices);
 		for (uint32_t vertexIndex = 0; vertexIndex < mesh->mNumVertices; vertexIndex++) {
 			aiVector3D& position = mesh->mVertices[vertexIndex];
 			aiVector3D& normal = mesh->mNormals[vertexIndex];
 			aiVector3D& texcoord = mesh->mTextureCoords[0][vertexIndex];
 
-			modelDatas_.back()->mesh.verteces[vertexIndex].vertexPos = { -position.x,position.y,position.z,1.0f };
-			modelDatas_.back()->mesh.verteces[vertexIndex].normal = { -normal.x,normal.y,normal.z };
-			modelDatas_.back()->mesh.verteces[vertexIndex].texcoord = { texcoord.x,texcoord.y };
+			modelDatas_.back()->mesh.verteces.push_back(VertexData{ { -position.x,position.y,position.z,1.0f },{ texcoord.x,texcoord.y },{ -normal.x,normal.y,normal.z } });
 		}
 
 		// indexを解析
@@ -264,9 +261,10 @@ void ModelDataManager::LoadGLTFFile(const std::string& directoryPath, const std:
 			aiFace& face = mesh->mFaces[faceIndex];
 			assert(face.mNumIndices == 3);
 			for (uint32_t element = 0; element < face.mNumIndices; element++) {
-				modelDatas_.back()->mesh.indices.push_back(face.mIndices[element]);
+				modelDatas_.back()->mesh.indices.push_back(face.mIndices[element] + vertexNum);
 			}
 		}
+		vertexNum += mesh->mNumVertices;
 	}
 	// rootNodeの解析
 	modelDatas_.back()->rootNode = ReadNode(scene_->mRootNode);

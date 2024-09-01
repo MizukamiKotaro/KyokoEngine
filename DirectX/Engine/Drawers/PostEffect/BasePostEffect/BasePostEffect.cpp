@@ -60,13 +60,8 @@ void BasePostEffect::Draw(BlendMode blendMode)
 
 	psoManager_->SetBlendMode(piplineType_, blendMode);
 
-	//Spriteの描画。変更に必要なものだけ変更する
-	//commandList_->IASetVertexBuffers(0, 1, &vertexBufferView_); // VBVを設定
-	//マテリアルCBufferの場所を設定
 	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
-	//TransformationMatrixCBufferの場所を設定
-	//commandList_->SetGraphicsRootConstantBufferView(1, transformResource_->GetGPUVirtualAddress());
-
+	
 	commandList_->SetGraphicsRootDescriptorTable(1, srvHandles_->gpuHandle);
 
 	//描画!!!!（DrawCall/ドローコール）

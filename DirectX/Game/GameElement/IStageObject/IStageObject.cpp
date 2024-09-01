@@ -4,6 +4,11 @@ void IStageObject::Initialize()
 {
 }
 
+void IStageObject::DrawLight(const Camera& camera)
+{
+	if(&camera){}
+}
+
 void IStageObject::CreateStageEditor(const std::string& mainName, const std::string& name, const uint32_t& no, const bool& isMany)
 {
 	if (isMany) {

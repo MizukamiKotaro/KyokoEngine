@@ -165,6 +165,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Drawers\PostEffect\Grayscale\Grayscale.cpp" />
     <ClCompile Include="Engine\Drawers\PostEffect\HighLumi\HighLumi.cpp" />
     <ClCompile Include="Engine\Drawers\PostEffect\HSVFilter\HSVFilter.cpp" />
+    <ClCompile Include="Engine\Drawers\PostEffect\LightDepth\LightDepth.cpp" />
+    <ClCompile Include="Engine\Drawers\PostEffect\MemoDepth\MemoDepth.cpp" />
     <ClCompile Include="Engine\Drawers\PostEffect\Mosaic\Mosaic.cpp" />
     <ClCompile Include="Engine\Drawers\PostEffect\NegaPosiInverse\NegaPosiInverse.cpp" />
     <ClCompile Include="Engine\Drawers\PostEffect\Noise\Noise.cpp" />
@@ -174,6 +176,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Drawers\PostEffect\RGBShift\RGBShift.cpp" />
     <ClCompile Include="Engine\Drawers\PostEffect\ScanNoise\ScanNoise.cpp" />
     <ClCompile Include="Engine\Drawers\PostEffect\Smoothing\Smoothing.cpp" />
+    <ClCompile Include="Engine\Drawers\PostEffect\SpotLightAndOutline\SpotLightAndOutline.cpp" />
     <ClCompile Include="Engine\Drawers\PostEffect\Vignette\Vignette.cpp" />
     <ClCompile Include="Engine\Drawers\PostEffect\WaterOutline\WaterOutline.cpp" />
     <ClCompile Include="Engine\Drawers\Skybox\Skybox.cpp" />
@@ -190,8 +193,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\GPUParticleGraphicsPipeline\GPUParticleGraphicsPipeline.cpp" />
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\GrayscaleGraphicsPipeline\GrayscaleGraphicsPipeline.cpp" />
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\InstancingModelGraphicsPipline\InstancingModelGraphicsPipline.cpp" />
+    <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\LightDepthPipeline\LightDepthPipeline.cpp" />
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\OutlineGraphicsPipeline\OutlineGraphicsPipeline.cpp" />
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SkyboxGraphicsPipeline\SkyboxGraphicsPipeline.cpp" />
+    <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SpotLightDepthGraphicsPipline\SpotLightDepthGraphicsPipline.cpp" />
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\VignetteGraphicsPipeline\VignetteGraphicsPipeline.cpp" />
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipeline\GraphicsPipeline.cpp" />
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPiplineManager\GraphicsPiplineManager.cpp" />
@@ -223,6 +228,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\GameElement\LiveEditor\CameraEditor\CameraEditor.cpp" />
     <ClCompile Include="Game\GameElement\LiveEditor\DancingIdolEditor\DancingIdolEditor.cpp" />
     <ClCompile Include="Game\GameElement\LiveEditor\DomeEditor\DomeEditor.cpp" />
+    <ClCompile Include="Game\GameElement\LiveEditor\FireParticleEditor\FireParticleEditor.cpp" />
     <ClCompile Include="Game\GameElement\LiveEditor\LiveEditor.cpp" />
     <ClCompile Include="Game\GameElement\LiveEditor\MultipleScreenEditor\MultipleScreenEditor.cpp" />
     <ClCompile Include="Game\GameElement\LiveEditor\ScreenEditor\ScreenEditor.cpp" />
@@ -345,6 +351,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Drawers\PostEffect\Grayscale\Grayscale.h" />
     <ClInclude Include="Engine\Drawers\PostEffect\HighLumi\HighLumi.h" />
     <ClInclude Include="Engine\Drawers\PostEffect\HSVFilter\HSVFilter.h" />
+    <ClInclude Include="Engine\Drawers\PostEffect\LightDepth\LightDepth.h" />
+    <ClInclude Include="Engine\Drawers\PostEffect\MemoDepth\MemoDepth.h" />
     <ClInclude Include="Engine\Drawers\PostEffect\Mosaic\Mosaic.h" />
     <ClInclude Include="Engine\Drawers\PostEffect\NegaPosiInverse\NegaPosiInverse.h" />
     <ClInclude Include="Engine\Drawers\PostEffect\Noise\Noise.h" />
@@ -354,6 +362,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Drawers\PostEffect\RGBShift\RGBShift.h" />
     <ClInclude Include="Engine\Drawers\PostEffect\ScanNoise\ScanNoise.h" />
     <ClInclude Include="Engine\Drawers\PostEffect\Smoothing\Smoothing.h" />
+    <ClInclude Include="Engine\Drawers\PostEffect\SpotLightAndOutline\SpotLightAndOutline.h" />
     <ClInclude Include="Engine\Drawers\PostEffect\Vignette\Vignette.h" />
     <ClInclude Include="Engine\Drawers\PostEffect\WaterOutline\WaterOutline.h" />
     <ClInclude Include="Engine\Drawers\Skybox\Skybox.h" />
@@ -372,8 +381,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\GPUParticleGraphicsPipeline\GPUParticleGraphicsPipeline.h" />
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\GrayscaleGraphicsPipeline\GrayscaleGraphicsPipeline.h" />
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\InstancingModelGraphicsPipline\InstancingModelGraphicsPipline.h" />
+    <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\LightDepthPipeline\LightDepthPipeline.h" />
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\OutlineGraphicsPipeline\OutlineGraphicsPipeline.h" />
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SkyboxGraphicsPipeline\SkyboxGraphicsPipeline.h" />
+    <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SpotLightDepthGraphicsPipline\SpotLightDepthGraphicsPipline.h" />
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\VignetteGraphicsPipeline\VignetteGraphicsPipeline.h" />
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipeline\GraphicsPipeline.h" />
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPiplineManager\GraphicsPiplineManager.h" />
@@ -427,6 +438,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\GameElement\LiveEditor\CameraEditor\CameraEditor.h" />
     <ClInclude Include="Game\GameElement\LiveEditor\DancingIdolEditor\DancingIdolEditor.h" />
     <ClInclude Include="Game\GameElement\LiveEditor\DomeEditor\DomeEditor.h" />
+    <ClInclude Include="Game\GameElement\LiveEditor\FireParticleEditor\FireParticleEditor.h" />
     <ClInclude Include="Game\GameElement\LiveEditor\LiveEditor.h" />
     <ClInclude Include="Game\GameElement\LiveEditor\MultipleScreenEditor\MultipleScreenEditor.h" />
     <ClInclude Include="Game\GameElement\LiveEditor\ScreenEditor\ScreenEditor.h" />

@@ -14,6 +14,7 @@ public:
 	SpotLightBoxAnimationEditor();
 	void Update(const float& time) override;
 	void Draw(const Camera& camera) override;
+	void DrawLight(const Camera& camera) override;
 
 private:
 	void SetGlobalVariable() override;

@@ -35,6 +35,12 @@ void TwinSpotLightBoxAnimationEditor::Draw(const Camera& camera)
 	lights_[1]->Draw(camera);
 }
 
+void TwinSpotLightBoxAnimationEditor::DrawLight(const Camera& camera)
+{
+	lights_[0]->DrawLight(camera);
+	lights_[1]->DrawLight(camera);
+}
+
 void TwinSpotLightBoxAnimationEditor::SetGlobalVariable()
 {
 	stageEditor_->AddItem("位置", Vector3{1.0f, 0.0f, 0.0f});

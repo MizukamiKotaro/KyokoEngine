@@ -97,5 +97,14 @@ void DrawLightManager::Draw(const SpotLight& light, const Camera& camera, const 
 	commandList_->SetGraphicsRootConstantBufferView(0, light.GetGPUVirtualAddress());
 	commandList_->DrawIndexedInstanced(UINT(modelData_->mesh.indices.size()), 1, 0, 0, 0);
 
+	psoManager_->PreDraw(PipelineType::SPOT_LIGHT_DEPTH);
+	psoManager_->SetBlendMode(PipelineType::SPOT_LIGHT_DEPTH, BlendMode::kBlendModeAdd);
+	commandList_->IASetVertexBuffers(0, 1, &modelData_->mesh.vertexBufferView_);
+	commandList_->IASetIndexBuffer(&modelData_->mesh.indexBufferView_);
+	commandList_->SetGraphicsRootConstantBufferView(1, transformation_[drawNum_]->transformationResource->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(2, camera.GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(0, light.GetGPUVirtualAddress());
+	commandList_->DrawIndexedInstanced(UINT(modelData_->mesh.indices.size()), 1, 0, 0, 0);
+
 	drawNum_++;
 }

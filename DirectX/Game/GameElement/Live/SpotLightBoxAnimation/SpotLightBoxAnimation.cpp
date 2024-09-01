@@ -72,10 +72,14 @@ void SpotLightBoxAnimation::Update(const float& time)
 
 void SpotLightBoxAnimation::Draw(Camera* camera)
 {
-	//point_->Draw(*camera);
-	spotLights_[0]->Draw(*camera);
-	spotLights_[1]->Draw(*camera, BlendMode::kBlendModeAdd);
 	box_->Draw(*camera);
+}
+
+void SpotLightBoxAnimation::DrawLight(const Camera& camera)
+{	
+	//point_->Draw(*camera);
+	spotLights_[0]->Draw(camera);
+	spotLights_[1]->Draw(camera, BlendMode::kBlendModeAdd);
 }
 
 void SpotLightBoxAnimation::SetGlobalVariable()

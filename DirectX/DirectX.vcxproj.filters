@@ -448,6 +448,21 @@
     <Filter Include="Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\GPUParticleGraphicsPipeline">
       <UniqueIdentifier>{d58d3c99-6b5d-46eb-a965-3e0dc0067b04}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Drawers\PostEffect\MemoDepth">
+      <UniqueIdentifier>{c3ff49a9-f6b3-4c0c-921f-65a2a406e862}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Drawers\PostEffect\LightDepth">
+      <UniqueIdentifier>{d90f48f5-a2ef-4a93-b763-958b459cf2b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\LightDepthPipeline">
+      <UniqueIdentifier>{613a85e9-028e-4cd8-9e7d-e164181e17ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\SpotLightDepthGraphicsPipline">
+      <UniqueIdentifier>{cf893627-ffa1-4b84-bab7-d9165c7e7e1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Drawers\PostEffect\SpotLightAndOutline">
+      <UniqueIdentifier>{4072ca5d-3295-4b14-bebb-5ee640099ebc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -926,6 +941,24 @@
     </ClCompile>
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\GPUParticleGraphicsPipeline\GPUParticleGraphicsPipeline.cpp">
       <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\GPUParticleGraphicsPipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameElement\LiveEditor\FireParticleEditor\FireParticleEditor.cpp">
+      <Filter>Game\GameElement\LiveEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Drawers\PostEffect\MemoDepth\MemoDepth.cpp">
+      <Filter>Engine\Drawers\PostEffect\MemoDepth</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Drawers\PostEffect\LightDepth\LightDepth.cpp">
+      <Filter>Engine\Drawers\PostEffect\LightDepth</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\LightDepthPipeline\LightDepthPipeline.cpp">
+      <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\LightDepthPipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SpotLightDepthGraphicsPipline\SpotLightDepthGraphicsPipline.cpp">
+      <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\SpotLightDepthGraphicsPipline</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Drawers\PostEffect\SpotLightAndOutline\SpotLightAndOutline.cpp">
+      <Filter>Engine\Drawers\PostEffect\SpotLightAndOutline</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1483,6 +1516,24 @@
     </ClInclude>
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\GPUParticleGraphicsPipeline\GPUParticleGraphicsPipeline.h">
       <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\GPUParticleGraphicsPipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameElement\LiveEditor\FireParticleEditor\FireParticleEditor.h">
+      <Filter>Game\GameElement\LiveEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drawers\PostEffect\MemoDepth\MemoDepth.h">
+      <Filter>Engine\Drawers\PostEffect\MemoDepth</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drawers\PostEffect\LightDepth\LightDepth.h">
+      <Filter>Engine\Drawers\PostEffect\LightDepth</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\LightDepthPipeline\LightDepthPipeline.h">
+      <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\LightDepthPipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SpotLightDepthGraphicsPipline\SpotLightDepthGraphicsPipline.h">
+      <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\SpotLightDepthGraphicsPipline</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drawers\PostEffect\SpotLightAndOutline\SpotLightAndOutline.h">
+      <Filter>Engine\Drawers\PostEffect\SpotLightAndOutline</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

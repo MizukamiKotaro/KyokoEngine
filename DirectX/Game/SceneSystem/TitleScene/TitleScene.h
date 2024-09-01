@@ -66,9 +66,6 @@ private:
 	std::unique_ptr<HSVFilter> hsvFilter_;
 
 	Audio se_;
-
-	std::unique_ptr<Skybox> sk_;
-	std::unique_ptr<RigidAnimationModel> ski_;
 	std::unique_ptr<GPUParticle> gp_;
 };
 

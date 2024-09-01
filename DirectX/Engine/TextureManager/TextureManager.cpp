@@ -49,7 +49,7 @@ const Texture* TextureManager::LoadTexture(const std::string& filePath)
 	if (!found) {
 		// なかった場合白にしてもいいけどエラーの方が気付きやすい
 		// このタイミングで白にしたら白が余計生成される
-		//tex = directoryPath_ + "white.png";
+		tex = directoryPath_ + "white.png";
 	}
 
 	textureMap_[filePath] = std::make_unique<Texture>();

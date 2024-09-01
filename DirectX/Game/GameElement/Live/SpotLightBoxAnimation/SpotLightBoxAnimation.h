@@ -12,7 +12,7 @@ public:
 	void Initialize();
 	void Update(const float& time);
 	void Draw(Camera* camera);
-
+	void DrawLight(const Camera& camera);
 private:
 	void SetGlobalVariable();
 

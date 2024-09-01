@@ -20,9 +20,9 @@ void ParticleList::SetLight(const ILight* light) {
 	drawer_->SetLight(light);
 }
 
-void ParticleList::Draw(const Camera& camera)
+void ParticleList::Draw(const Camera& camera, const BlendMode& blend)
 {
-	drawer_->Draw(camera, dataList_);
+	drawer_->Draw(camera, dataList_, blend);
 }
 
 void ParticleList::Clear()

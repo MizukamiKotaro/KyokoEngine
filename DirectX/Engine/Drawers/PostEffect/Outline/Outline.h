@@ -20,6 +20,10 @@ public:
 		float maxLength;
 		int32_t maxWidth;
 	};
+
+	const DescriptorHandles& GetDepthHandle() { return *depthHandles_; }
+	void ToReadBarrier();
+	void ToWriteBarrier();
 private:
 	void CreateOutlineRes();
 	void CreateDepthRes();
