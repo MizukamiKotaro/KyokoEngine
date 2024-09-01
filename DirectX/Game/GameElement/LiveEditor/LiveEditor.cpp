@@ -34,11 +34,11 @@ LiveEditor::LiveEditor(Camera* camera)
 void LiveEditor::Initialize()
 {
 	camera_->Initialize();
-	camera_->transform_.translate_ = { 0.0f,20.0f,-100.0f };
+	camera_->transform_.translate_ = { 0.0f,25.0f,-100.0f };
 	camera_->transform_.rotate_.x = 0.1f;
 	camera_->Update();
 
-	screenCamera_->transform_.translate_ = { 0.0f,6.0f,-40.0f };
+	screenCamera_->transform_.translate_ = { 0.0f,15.0f,-80.0f };
 	screenCamera_->Update();
 
 	lightManager_->Initialize();
@@ -84,6 +84,7 @@ void LiveEditor::WriteScreen()
 		const Camera& camera = (*screenMap_)[i]->GetCamera();
 		(*lightAndOutlineMap_)[i]->PreDrawOutline();
 		idolManager_->Draw(camera);
+		floor_->DrawSub(camera);
 		(*lightAndOutlineMap_)[i]->PostDrawOutline();
 
 		(*lightAndOutlineMap_)[i]->PreDrawObject();
@@ -106,6 +107,7 @@ void LiveEditor::WriteOutline()
 {
 	lightAndOutline_->PreDrawOutline();
 	idolManager_->Draw(*camera_);
+	floor_->DrawSub(*camera_);
 	lightAndOutline_->PostDrawOutline();
 
 	lightAndOutline_->PreDrawObject();

@@ -10,6 +10,7 @@ public:
 	virtual void Update(const float& deltaTime = 0) = 0;
 	virtual void Draw(const Camera& camera) = 0;
 	virtual void DrawLight(const Camera& camera);
+	virtual void DrawSub(const Camera& camera);
 
 protected:
 	void CreateStageEditor(const std::string& mainName, const std::string& name, const uint32_t& no, const bool& isMany = false);

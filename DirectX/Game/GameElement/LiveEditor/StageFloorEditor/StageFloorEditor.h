@@ -13,6 +13,7 @@ public:
 	void Initialize() override;
 	void Update(const float& time) override;
 	void Draw(const Camera& camera) override;
+	void DrawSub(const Camera& camera) override;
 
 private:
 	void SetGlobalVariable() override;
@@ -24,6 +25,8 @@ private:
 	std::unique_ptr<Model> model_;
 	std::unique_ptr<PostEffect> post_;
 	std::unique_ptr<Noise> noise_;
+	std::unique_ptr<Model> stage_;
 	uint32_t uneune_;
 	bool isWater_;
+	bool isStage_;
 };

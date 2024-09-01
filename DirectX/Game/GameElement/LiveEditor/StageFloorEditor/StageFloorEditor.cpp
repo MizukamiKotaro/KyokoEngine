@@ -9,7 +9,9 @@ StageFloorEditor::StageFloorEditor(const std::string& mainName, const std::strin
 	model_->Update();
 	model_->UnUsedLight();
 	model_->SetColor(Vector4{ 1.0f,1.0f,1.0f,1.0f });
+	stage_ = std::make_unique<Model>("stage");
 	isWater_ = true;
+	isStage_ = true;
 	WaterInitialize();
 	model_->SetSRVGPUDescriptorHandle_(post_->GetSRVGPUDescriptorHandle());
 	CreateStageEditor(mainName, name, no);
@@ -35,14 +37,26 @@ void StageFloorEditor::Draw(const Camera& camera)
 	model_->Draw(camera);
 }
 
+void StageFloorEditor::DrawSub(const Camera& camera)
+{
+	if (isStage_) {
+		stage_->Draw(camera);
+	}
+}
+
 void StageFloorEditor::SetGlobalVariable()
 {
 	stageEditor_->AddItem("スケール", 1.0f);
+	stageEditor_->AddItemColor("床の色", Vector4{ 0.1f,0.1f,0.1f,1.0f });
 	stageEditor_->AddItem("水にするか", isWater_);
 	stageEditor_->AddItem("水の色", Vector3{ 0.3f,1.0f,0.8f }, "水の設定");
 	stageEditor_->AddItem("うねうねの色", Vector3{ 0.8f,0.8f,0.8f }, "水の設定");
 	stageEditor_->AddItem("うねうねの動きにくさ", int(uneune_), "水の設定");
 	stageEditor_->AddItem("密度", noise_->noiseData_->density, "水の設定");
+	stageEditor_->AddItem("ステージを描画するか", isStage_);
+	stageEditor_->AddItemColor("色", Vector4{ 0.0f,0.0f,0.0f,1.0f }, "ステージの設定");
+	stageEditor_->AddItem("スケール", 2.0f, "ステージの設定");
+	stageEditor_->AddItem("位置", stage_->transform_.translate_, "ステージの設定");
 	ApplyGlobalVariable();
 }
 
@@ -77,8 +91,18 @@ void StageFloorEditor::ApplyGlobalVariable()
 	}
 	else if (preIsWater && !isWater_) {
 		model_->SetTexture(TextureManager::GetInstance()->LoadTexture("Resources/Texture/white.png"));
-		model_->SetColor(Vector4{ 0.1f,0.1f,0.1f,1.0f });
+		model_->SetColor(stageEditor_->GetColor("床の色"));
 	}
+	else if (!isWater_) {
+		model_->SetColor(stageEditor_->GetColor("床の色"));
+	}
+
+	float s = stageEditor_->GetFloatValue("スケール", "ステージの設定");
+	stage_->transform_.scale_ = { s,s,s };
+	isStage_ = stageEditor_->GetBoolValue("ステージを描画するか");
+	stage_->SetColor(stageEditor_->GetColor("色", "ステージの設定"));
+	stage_->transform_.translate_ = stageEditor_->GetVector3Value("位置", "ステージの設定");
+	stage_->Update();
 }
 
 void StageFloorEditor::WaterInitialize()
