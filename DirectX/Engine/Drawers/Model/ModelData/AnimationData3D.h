@@ -52,6 +52,7 @@ template <typename tValue>
 struct AnimationCurve
 {
 	std::vector<Keyframe<tValue>> keyframes;
+	size_t currentFrame;
 };
 
 struct NodeAnimation

@@ -10,6 +10,8 @@ Texture2D<float32_t4> gOutlineTexture : register(t2);
 Texture2D<float32_t> gOutlineDepthTexture : register(t3);
 Texture2D<float32_t4> gObjectTexture : register(t4);
 Texture2D<float32_t> gObjectDepthTexture : register(t5);
+Texture2D<float32_t4> gBloomTexture : register(t6);
+Texture2D<float32_t> gBloomDepthTexture : register(t7);
 
 struct Material {
 	float32_t4 color;
@@ -45,72 +47,99 @@ PixelShaderOutput main(VertexShaderOutput input) {
 
 	float32_t objectZ = MakeZ(gObjectDepthTexture, input.texcoord);
 
+	float32_t bloomZ = MakeZ(gBloomDepthTexture, input.texcoord);
+
 	float32_t4 color;
 	float32_t objZ;
 
 	if(baseZ <= objectZ){
-		objZ = baseZ;
+		if(baseZ <= bloomZ){
+			objZ = baseZ;
 
-		uint32_t width, height;
-		gTexture.GetDimensions(width,height);
-		float32_t2 uvStepSize = float32_t2(rcp(width), rcp(height));
-		float32_t2 difference = 0;
+			uint32_t width, height;
+			gTexture.GetDimensions(width,height);
+			float32_t2 uvStepSize = float32_t2(rcp(width), rcp(height));
+			float32_t2 difference = 0;
 
-		if(viewZ <= gOutline.lengthChange){
-			for(int32_t x = -1; x <= 1; x++){
-				for(int32_t y = -1; y <= 1; y++){
-					if(x == 0 && y == 0){
-						continue;
+			if(viewZ <= gOutline.lengthChange){
+				for(int32_t x = -1; x <= 1; x++){
+					for(int32_t y = -1; y <= 1; y++){
+						if(x == 0 && y == 0){
+							continue;
+						}
+						float32_t2 texcoord = input.texcoord + float32_t2(x,y) * uvStepSize;
+
+						ndcDepth = gOutlineDepthTexture.Sample(gSamplerPoint, texcoord);
+						viewSpace = mul(float32_t4(0.0f,0.0f,ndcDepth,1.0f),gOutline.projectionInverse);
+						viewZ = viewSpace.z * rcp(viewSpace.w);
+						difference.x += viewZ * x * rcp(6);
+						difference.y += viewZ * y * rcp(6);
 					}
-					float32_t2 texcoord = input.texcoord + float32_t2(x,y) * uvStepSize;
-
-					ndcDepth = gOutlineDepthTexture.Sample(gSamplerPoint, texcoord);
-					viewSpace = mul(float32_t4(0.0f,0.0f,ndcDepth,1.0f),gOutline.projectionInverse);
-					viewZ = viewSpace.z * rcp(viewSpace.w);
-					difference.x += viewZ * x * rcp(6);
-					difference.y += viewZ * y * rcp(6);
 				}
 			}
-		}
-		else{
-			viewZ -= gOutline.lengthChange;
-			viewZ = saturate(viewZ * rcp(gOutline.maxLength));
-			float32_t fWidth = floor((1.0 - viewZ) * 3 + viewZ * gOutline.maxWidth);
-			int32_t i = int32_t(fWidth);
-			int32_t halfi = i >> 1;
-			float32_t k = rcp(i * (i - 1));
+			else{
+				viewZ -= gOutline.lengthChange;
+				viewZ = saturate(viewZ * rcp(gOutline.maxLength));
+				float32_t fWidth = floor((1.0 - viewZ) * 3 + viewZ * gOutline.maxWidth);
+				int32_t i = int32_t(fWidth);
+				int32_t halfi = i >> 1;
+				float32_t k = rcp(i * (i - 1));
 
-			for(int32_t x = -halfi; x <= halfi; x++){
-				for(int32_t y = -halfi; y <= halfi; y++){
-					if(x == 0 && y == 0){
-						continue;
-					}
-					float32_t2 texcoord = input.texcoord + float32_t2(x,y) * uvStepSize;
+				for(int32_t x = -halfi; x <= halfi; x++){
+					for(int32_t y = -halfi; y <= halfi; y++){
+						if(x == 0 && y == 0){
+							continue;
+						}
+						float32_t2 texcoord = input.texcoord + float32_t2(x,y) * uvStepSize;
 
-					ndcDepth = gOutlineDepthTexture.Sample(gSamplerPoint, texcoord);
-					viewSpace = mul(float32_t4(0.0f,0.0f,ndcDepth,1.0f),gOutline.projectionInverse);
-					viewZ = viewSpace.z * rcp(viewSpace.w);
-					if(viewZ <= gOutline.lengthChange && abs(viewZ - baseZ) >= 5){
-						continue;
+						ndcDepth = gOutlineDepthTexture.Sample(gSamplerPoint, texcoord);
+						viewSpace = mul(float32_t4(0.0f,0.0f,ndcDepth,1.0f),gOutline.projectionInverse);
+						viewZ = viewSpace.z * rcp(viewSpace.w);
+						if(viewZ <= gOutline.lengthChange && abs(viewZ - baseZ) >= 5){
+							continue;
+						}
+						difference.x += viewZ * x * k;
+						difference.y += viewZ * y * k;
 					}
-					difference.x += viewZ * x * k;
-					difference.y += viewZ * y * k;
 				}
 			}
+
+			float32_t weight = length(difference);
+			weight = saturate(weight);
+
+			color = gOutlineTexture.Sample(gSampler,input.texcoord);
+			color.rgb = (1.0f - weight) * color.rgb;
+
+			if(color.a != 1.0f){
+				if(objectZ <= bloomZ){
+					float32_t4 objColor = gObjectTexture.Sample(gSampler,input.texcoord);
+					color.rgb = objColor.rgb * (1.0f - color.a) + color.rgb * color.a;
+				}
+				else {
+					float32_t4 bloomColor = gBloomTexture.Sample(gSampler,input.texcoord);
+					color.rgb = bloomColor.rgb * (1.0f - color.a) + color.rgb * color.a;
+				}
+			}
+			color.a = 1.0f;	
 		}
-
-		float32_t weight = length(difference);
-		weight = saturate(weight);
-
-		color = gOutlineTexture.Sample(gSampler,input.texcoord);
-		color.rgb = (1.0f - weight) * color.rgb;
-		color.a = 1.0f;
+		else {
+			objZ = bloomZ;
+			color = gBloomTexture.Sample(gSampler,input.texcoord);
+			color.a = 1.0f;	
+		}
 	}
 	else {
-		objZ = objectZ;
+		if(objectZ <= bloomZ){
+			objZ = objectZ;
 
-		color = gObjectTexture.Sample(gSampler,input.texcoord);
-		color.a = 1.0f;
+			color = gObjectTexture.Sample(gSampler,input.texcoord);
+			color.a = 1.0f;
+		}
+		else{
+			objZ = bloomZ;
+			color = gBloomTexture.Sample(gSampler,input.texcoord);
+			color.a = 1.0f;	
+		}
 	}
 
 	float32_t lightZ = MakeZ(gDepthTexture, input.texcoord);
@@ -118,7 +147,6 @@ PixelShaderOutput main(VertexShaderOutput input) {
 		output.color = color;
 	}
 	else{
-		// 半透明のテクスチャを前面に
 		float32_t4 lightColor = gTexture.Sample(gSampler,input.texcoord);
        
         output.color = lightColor + color;

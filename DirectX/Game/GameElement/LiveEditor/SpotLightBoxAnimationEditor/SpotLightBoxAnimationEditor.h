@@ -12,6 +12,7 @@ public:
 	SpotLightBoxAnimationEditor(const std::string& mainName, const std::string& name, const uint32_t& no);
 	SpotLightBoxAnimationEditor(const std::string& mainName, const std::string& name, const std::string& treeName, const uint32_t& no);
 	SpotLightBoxAnimationEditor();
+	void SetTime(const float& time) override;
 	void Update(const float& time) override;
 	void Draw(const Camera& camera) override;
 	void DrawLight(const Camera& camera) override;
@@ -22,6 +23,8 @@ private:
 
 	void LightUpdate();
 	void Create();
+	void MakeInstancingData();
+	void AddInstancing();
 
 public:
 	std::unique_ptr<SpotLight> spotLights_[2];

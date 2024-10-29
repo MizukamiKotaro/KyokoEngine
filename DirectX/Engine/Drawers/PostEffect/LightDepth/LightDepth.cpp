@@ -42,6 +42,8 @@ void LightDepth::Draw(BlendMode blendMode)
 	commandList->SetGraphicsRootDescriptorTable(5, outlineDepth_->gpuHandle);
 	commandList->SetGraphicsRootDescriptorTable(6, objectTex_);
 	commandList->SetGraphicsRootDescriptorTable(7, objectDepth_->gpuHandle);
+	commandList->SetGraphicsRootDescriptorTable(8, bloomTex_);
+	commandList->SetGraphicsRootDescriptorTable(9, bloomDepth_->gpuHandle);
 	commandList->DrawInstanced(3, 1, 0, 0);
 
 	ToWriteBarrier();
@@ -68,6 +70,8 @@ void LightDepth::Draw(const Camera& camera, BlendMode blendMode)
 	commandList->SetGraphicsRootDescriptorTable(5, outlineDepth_->gpuHandle);
 	commandList->SetGraphicsRootDescriptorTable(6, objectTex_);
 	commandList->SetGraphicsRootDescriptorTable(7, objectDepth_->gpuHandle);
+	commandList->SetGraphicsRootDescriptorTable(8, bloomTex_);
+	commandList->SetGraphicsRootDescriptorTable(9, bloomDepth_->gpuHandle);
 	commandList->DrawInstanced(3, 1, 0, 0);
 
 	ToWriteBarrier();

@@ -47,6 +47,13 @@ void IStageObjectManager::Update(const float& deltaTime)
 	}
 }
 
+void IStageObjectManager::SetTime(const float& time)
+{
+	for (std::unique_ptr<IStageObject>& object : objects_) {
+		object->SetTime(time);
+	}
+}
+
 void IStageObjectManager::Draw(const Camera& camera) const
 {
 	for (const std::unique_ptr<IStageObject>& object : objects_) {
@@ -61,6 +68,20 @@ void IStageObjectManager::DrawLight(const Camera& camera) const
 	}
 }
 
+void IStageObjectManager::DrawOutline(const Camera& camera)
+{
+	for (const std::unique_ptr<IStageObject>& object : objects_) {
+		object->DrawOutline(camera);
+	}
+}
+
+void IStageObjectManager::DrawBloom(const Camera& camera)
+{
+	for (const std::unique_ptr<IStageObject>& object : objects_) {
+		object->DrawBloom(camera);
+	}
+}
+
 void IStageObjectManager::ApplyGlobalVariable()
 {
 	bool change = false;
@@ -68,7 +89,14 @@ void IStageObjectManager::ApplyGlobalVariable()
 		type->num = stageEditor_->GetIntValue(type->mainName + "の数", type->mainName + "の設置", type->subName);
 		if (type->num != type->preNum) {
 			change = true;
-			type->preNum = type->num;
+			if (type->num < 0) {
+				type->num = 0;
+				type->preNum = 0;
+			}
+			else {
+				type->preNum = type->num;
+			}
+
 		}
 	}
 

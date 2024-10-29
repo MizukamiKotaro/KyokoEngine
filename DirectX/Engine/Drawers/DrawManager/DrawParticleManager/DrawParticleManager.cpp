@@ -11,7 +11,7 @@
 DrawParticleManager::DrawParticleManager()
 {
 	drawNum_ = 0;
-	modelData_ = ModelDataManager::GetInstance()->LoadObj("Plane");
+	modelData_ = ModelDataManager::GetInstance()->LoadObj("plane");
 }
 
 void DrawParticleManager::Draw(const GPUParticle& particle, const Camera& camera, const BlendMode& blendMode)

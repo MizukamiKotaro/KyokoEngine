@@ -11,6 +11,8 @@ struct VertexShaderInput {
 	float32_t4 vertexPos : POSITION0;
 	float32_t2 texcoord : TEXCOORD0;
 	float32_t3 normal : NORMAL0;
+	float32_t4 diffuseColor : COLOR0;
+	int32_t textureNum : TEXINDEX0;
 };
 
 VertexShaderOutput main(VertexShaderInput input) {
@@ -19,5 +21,7 @@ VertexShaderOutput main(VertexShaderInput input) {
 	output.texcoord = input.texcoord;
 	output.normal = normalize(mul(input.normal, (float32_t3x3)gTransformationMatrix.WorldInverse));
 	output.worldPosition = mul(input.vertexPos, gTransformationMatrix.World).xyz;
+	output.diffuseColor = input.diffuseColor;
+	output.textureNum = input.textureNum;
 	return output;
 }

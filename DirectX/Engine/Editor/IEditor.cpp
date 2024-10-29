@@ -3,7 +3,12 @@
 
 void IEditor::Initialize()
 {
-	global_->ResetGroupName("Stage" + std::to_string(IScene::stageNo_));
+	global_->ResetGroupName("Stage" + std::to_string(IScene::GetStageNo()));
+}
+
+void IEditor::AddComboName(const ComboNameType& type, const std::string& comboName)
+{
+	global_->AddComboName(type, comboName);
 }
 
 void IEditor::AddItem(const std::string& key, const int32_t& value, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
@@ -46,6 +51,11 @@ void IEditor::AddItemColor(const std::string& key, const Vector4& value, const s
 	global_->AddItemColor(key, value, tree2, tree3, tree4, tree5, tree6);
 }
 
+void IEditor::AddItemCombo(const std::string& key, const ComboNameType& type, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
+{
+	global_->AddItemCombo(key, type, tree2, tree3, tree4, tree5, tree6);
+}
+
 const int32_t& IEditor::GetIntValue(const std::string& key, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6) const
 {
 	return global_->GetIntValue(key, tree2, tree3, tree4, tree5, tree6);
@@ -84,6 +94,11 @@ const std::string& IEditor::GetStringValue(const std::string& key, const std::st
 const Vector4& IEditor::GetColor(const std::string& key, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6) const
 {
 	return global_->GetColor(key, tree2, tree3, tree4, tree5, tree6);
+}
+
+const std::string& IEditor::GetCombo(const std::string& key, const ComboNameType& type, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6) const
+{
+	return global_->GetCombo(key, type, tree2, tree3, tree4, tree5, tree6);
 }
 
 void IEditor::SetVariable(const std::string& key, const int32_t& value, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
@@ -133,8 +148,8 @@ bool IEditor::IsTreeOpen(const int& treeNo)
 
 const bool IEditor::IsChangedStage()
 {
-	if (preStageNo_ != IScene::stageNo_) {
-		preStageNo_ = IScene::stageNo_;
+	if (preStageNo_ != IScene::GetStageNo()) {
+		preStageNo_ = IScene::GetStageNo();
 		return true;
 	}
 	return false;

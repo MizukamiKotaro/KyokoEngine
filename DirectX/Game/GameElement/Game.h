@@ -21,8 +21,6 @@ public:
 	const bool& GetIsClear() const { return finishLive_->IsClear(); }
 
 private:
-
-private:
 	Input* input_ = nullptr;
 	Camera* camera_ = nullptr;
 

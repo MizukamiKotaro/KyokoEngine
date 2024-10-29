@@ -3,7 +3,7 @@ class Vector3
 {
 public:
 
-	bool operator==(const Vector3& obj) {
+	bool operator==(const Vector3& obj) const {
 		if (x == obj.x && y == obj.y && z == obj.z) {
 			return true;
 		}

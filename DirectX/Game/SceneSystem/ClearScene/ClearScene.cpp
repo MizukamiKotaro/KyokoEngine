@@ -42,6 +42,10 @@ void ClearScene::Update()
 		ChangeScene(SELECT);
 		se_.Play();
 	}
+	else if (input_->PressedKey(DIK_S)) {
+		ChangeScene(STAGE_EDITOR);
+		Audio::AllStop();
+	}
 #endif // _DEBUG
 }
 

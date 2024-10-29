@@ -20,9 +20,14 @@ void InstancingModelList::SetLight(const ILight* light) {
 	modelsResource_->SetLight(light);
 }
 
-void InstancingModelList::Draw(const Camera& camera)
+void InstancingModelList::Draw(const Camera& camera, const InstancingMeshTexData* modelData)
 {
-	modelsResource_->Draw(camera, modelList_);
+	modelsResource_->Draw(camera, modelList_, modelData);
+}
+
+void InstancingModelList::Draw(const Camera& camera, const std::string& tag)
+{
+	modelsResource_->Draw(camera, modelList_, tag);
 }
 
 void InstancingModelList::Clear()

@@ -6,13 +6,17 @@ DancingIdolEditor::DancingIdolEditor(const std::string& mainName, const std::str
 {
 	CreateStageEditor(mainName, name, no);
 	firstPosition_ = {};
-	idol_ = std::make_unique<SkinningModel>("CharactorSkinning");
+	idol_ = std::make_unique<SkinningModel>("lovemiku", true);
 	idol_->transform_.rotate_.y = 3.14f;
 	idol_->transform_.scale_ *= 5;
-	idol_->SetColor(Vector4{ 0.8f,0.8f,0.2f,1.0f });
 	BaseModel::Material* material = idol_->GetMaterialData();
 	material->enableLighting = 3;
 	SetGlobalVariable();
+}
+
+void DancingIdolEditor::SetTime(const float& time)
+{
+	idol_->SetTime(time);
 }
 
 void DancingIdolEditor::Update(const float& time) 
@@ -31,6 +35,7 @@ void DancingIdolEditor::Draw(const Camera& camera)
 void DancingIdolEditor::SetGlobalVariable()
 {
 	stageEditor_->AddItem("初期座標", firstPosition_);
+	stageEditor_->AddItem("スケール", 2.0f);
 	ApplyGlobalVariable();
 }
 
@@ -38,6 +43,9 @@ void DancingIdolEditor::ApplyGlobalVariable()
 {
 	Vector3 prePos = firstPosition_;
 	firstPosition_ = stageEditor_->GetVector3Value("初期座標");
+	float scale = stageEditor_->GetFloatValue("スケール");
+	idol_->transform_.scale_ = { scale ,scale ,scale };
+	idol_->transform_.UpdateMatrix();
 	if (firstPosition_ != prePos) {
 		idol_->transform_.translate_ = firstPosition_;
 	}

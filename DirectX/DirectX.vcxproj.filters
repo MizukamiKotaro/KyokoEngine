@@ -463,6 +463,18 @@
     <Filter Include="Engine\Drawers\PostEffect\SpotLightAndOutline">
       <UniqueIdentifier>{4072ca5d-3295-4b14-bebb-5ee640099ebc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\SceneSystem\StageEditorScene">
+      <UniqueIdentifier>{9d3f1e46-a1db-47a9-8166-0373333478fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameElement\LiveEditor\ObjectEditor">
+      <UniqueIdentifier>{ce638030-cea9-415b-a3e0-9663d382389f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\MMD">
+      <UniqueIdentifier>{09ef4216-2dce-43e0-8d08-c50c454a1082}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\MMD\CameraVMD">
+      <UniqueIdentifier>{4de68ada-3a19-4978-a901-b17edf8809e1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -959,6 +971,24 @@
     </ClCompile>
     <ClCompile Include="Engine\Drawers\PostEffect\SpotLightAndOutline\SpotLightAndOutline.cpp">
       <Filter>Engine\Drawers\PostEffect\SpotLightAndOutline</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\SceneSystem\StageEditorScene\StageEditorScene.cpp">
+      <Filter>Game\SceneSystem\StageEditorScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameElement\LiveEditor\ObjectEditor\ObjectEditor.cpp">
+      <Filter>Game\GameElement\LiveEditor\ObjectEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\GlobalVariables\GlobalVariableComboNames.cpp">
+      <Filter>Engine\GlobalVariables</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\MMD\CameraVMD\CameraVMDAnimation.cpp">
+      <Filter>Engine\MMD\CameraVMD</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\MMD\CameraVMD\CameraVMDDataManager.cpp">
+      <Filter>Engine\MMD\CameraVMD</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Drawers\InstancingModel\InstancingModels\InstancingResourceManager.cpp">
+      <Filter>Engine\Drawers\InstancingModel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1534,6 +1564,30 @@
     </ClInclude>
     <ClInclude Include="Engine\Drawers\PostEffect\SpotLightAndOutline\SpotLightAndOutline.h">
       <Filter>Engine\Drawers\PostEffect\SpotLightAndOutline</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\SceneSystem\StageEditorScene\StageEditorScene.h">
+      <Filter>Game\SceneSystem\StageEditorScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameElement\LiveEditor\ObjectEditor\ObjectEditor.h">
+      <Filter>Game\GameElement\LiveEditor\ObjectEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GlobalVariables\ComboNameConfig.h">
+      <Filter>Engine\GlobalVariables</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GlobalVariables\GlobalVariableComboNames.h">
+      <Filter>Engine\GlobalVariables</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\MMD\CameraVMD\CameraVMDAnimation.h">
+      <Filter>Engine\MMD\CameraVMD</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\MMD\CameraVMD\CameraVMDData.h">
+      <Filter>Engine\MMD\CameraVMD</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\MMD\CameraVMD\CameraVMDDataManager.h">
+      <Filter>Engine\MMD\CameraVMD</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drawers\InstancingModel\InstancingModels\InstancingResourceManager.h">
+      <Filter>Engine\Drawers\InstancingModel</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -14,9 +14,10 @@
 
 DescriptorHeap* SkinningModel::srvHeap_ = nullptr;
 
-SkinningModel::SkinningModel(const std::string& fileName)
+SkinningModel::SkinningModel(const std::string& fileName, const bool& ispmx)
 {
-	LoadGLTF(fileName);
+	isSetTime_ = false;
+	LoadGLTF(fileName, ispmx);
 
 	CreateResources();
 
@@ -33,6 +34,12 @@ SkinningModel::~SkinningModel()
 	srvHeap_->DeleteDescriptor(skinCluter_->inputVertexSrvHandle);
 	srvHeap_->DeleteDescriptor(skinCluter_->outputVertexSrvHandle);
 	srvHeap_->DeleteDescriptor(skinCluter_->paletteSrvHandle);
+}
+
+void SkinningModel::SetTime(const float& time)
+{
+	isSetTime_ = true;
+	animationTime_ = time;
 }
 
 void SkinningModel::Update(const float& time)
@@ -58,11 +65,16 @@ void SkinningModel::AnimationUpdate(float time)
 		}
 		else {
 			animationTime_ += time;
+			float t = animationTime_;
 			animationTime_ = std::fmod(animationTime_, animation_->duration);
+			if (t > animationTime_) {
+				isSetTime_ = true;
+			}
 		}
 		ApplyAnimation();
 		UpdateSkeleton();
 		UpdateSkinAnimation();
+		isSetTime_ = false;
 	}
 }
 
@@ -71,9 +83,9 @@ void SkinningModel::StaticInitialize()
 	srvHeap_ = DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap();
 }
 
-void SkinningModel::LoadGLTF(const std::string& fileName)
+void SkinningModel::LoadGLTF(const std::string& fileName, const bool& ispmx)
 {
-	modelData_ = modelDataManager_->LoadSkinAnimationModel(fileName);
+	modelData_ = modelDataManager_->LoadSkinAnimationModel(fileName, ispmx);
 
 	texture_ = modelData_->texture;
 
@@ -97,15 +109,16 @@ const Matrix4x4 SkinningModel::GetRotateMatrix()
 	return Matrix4x4::MakeRotateXYZMatrix(transform_.rotate_) * Matrix4x4::MakeRotateMatrix(rotate);
 }
 
-Vector3 SkinningModel::CalculateValue(const AnimationCurve<Vector3>& keyframes, const float& time)
+Vector3 SkinningModel::CalculateValue(AnimationCurve<Vector3>& keyframes, const float& time)
 {
 	assert(!keyframes.keyframes.empty());
 	if (keyframes.keyframes.size() == 1 || time <= keyframes.keyframes[0].time) {
 		return keyframes.keyframes[0].value;
 	}
-	for (size_t index = 0; index < keyframes.keyframes.size() - 1; index++) {
+	for (size_t index = keyframes.currentFrame; index < keyframes.keyframes.size() - 1; index++) {
 		size_t nextIndex = index + 1;
 		if (keyframes.keyframes[index].time <= time && time <= keyframes.keyframes[nextIndex].time) {
+			keyframes.currentFrame = index;
 			float t = (time - keyframes.keyframes[index].time) / (keyframes.keyframes[nextIndex].time - keyframes.keyframes[index].time);
 			return Calc::Lerp(keyframes.keyframes[index].value, keyframes.keyframes[nextIndex].value, t);
 		}
@@ -114,14 +127,15 @@ Vector3 SkinningModel::CalculateValue(const AnimationCurve<Vector3>& keyframes, 
 	return (*keyframes.keyframes.rbegin()).value;
 }
 
-Quaternion SkinningModel::CalculateValue(const AnimationCurve<Quaternion>& keyframes, const float& time) {
+Quaternion SkinningModel::CalculateValue(AnimationCurve<Quaternion>& keyframes, const float& time) {
 	assert(!keyframes.keyframes.empty());
 	if (keyframes.keyframes.size() == 1 || time <= keyframes.keyframes[0].time) {
 		return keyframes.keyframes[0].value;
 	}
-	for (size_t index = 0; index < keyframes.keyframes.size() - 1; index++) {
+	for (size_t index = keyframes.currentFrame; index < keyframes.keyframes.size() - 1; index++) {
 		size_t nextIndex = index + 1;
 		if (keyframes.keyframes[index].time <= time && time <= keyframes.keyframes[nextIndex].time) {
+			keyframes.currentFrame = index;
 			float t = (time - keyframes.keyframes[index].time) / (keyframes.keyframes[nextIndex].time - keyframes.keyframes[index].time);
 			return Quaternion::Slerp(keyframes.keyframes[index].value, keyframes.keyframes[nextIndex].value, t);
 		}
@@ -316,7 +330,12 @@ void SkinningModel::ApplyAnimation()
 {
 	for (Joint& joint : skeleton_->joints) {
 		if (auto it = animation_->nodeAnimations.find(joint.name); it != animation_->nodeAnimations.end()) {
-			const NodeAnimation& rootNodeAnimation = (*it).second;
+			NodeAnimation& rootNodeAnimation = (*it).second;
+			if (isSetTime_) {
+				rootNodeAnimation.translate.currentFrame = 0;
+				rootNodeAnimation.rotate.currentFrame = 0;
+				rootNodeAnimation.scale.currentFrame = 0;
+			}
 			joint.transform.translate_ = CalculateValue(rootNodeAnimation.translate, animationTime_);
 			joint.transform.rotate_ = CalculateValue(rootNodeAnimation.rotate, animationTime_);
 			joint.transform.scale_ = CalculateValue(rootNodeAnimation.scale, animationTime_);

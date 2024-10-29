@@ -336,14 +336,14 @@ Vector3 Calc::Cross(const Vector3& v1, const Vector3& v2) {
 }
 
 
-float Calc::Lerp(float p0, float p1, float t)
+float Calc::Lerp(const float& p0, const float& p1, const float& t)
 {
 	float result = 0.0f;
 	result = (1.0f - t) * p0 + t * p1;
 	return result;
 }
 
-Vector2 Calc::Lerp(const Vector2& p0, const Vector2& p1, float t)
+Vector2 Calc::Lerp(const Vector2& p0, const Vector2& p1, const float& t)
 {
 	Vector2 result = {};
 	result.x = (1.0f - t) * p0.x + t * p1.x;
@@ -351,7 +351,7 @@ Vector2 Calc::Lerp(const Vector2& p0, const Vector2& p1, float t)
 	return result;
 }
 
-Vector3 Calc::Lerp(const Vector3& p0, const Vector3& p1, float t) {
+Vector3 Calc::Lerp(const Vector3& p0, const Vector3& p1, const float& t) {
 	Vector3 result = {};
 	result.x = (1.0f - t) * p0.x + t * p1.x;
 	result.y = (1.0f - t) * p0.y + t * p1.y;
@@ -359,9 +359,21 @@ Vector3 Calc::Lerp(const Vector3& p0, const Vector3& p1, float t) {
 	return result;
 }
 
-Vector3 Calc::Bezier(const Vector3& p0, const Vector3& p1, const Vector3& p2, float t) {
+Vector3 Calc::Bezier(const Vector3& p0, const Vector3& p1, const Vector3& p2, const float& t) {
 	Vector3 result = Lerp(Lerp(p0, p1, t), Lerp(p1, p2, t), t);
 	return result;
+}
+
+float Calc::Bezier(const float& p0, const float& p1, const float& p2, const float& p3, const float& t)
+{
+	float p01 = Lerp(p0, p1, t);
+	float p12 = Lerp(p1, p2, t);
+	float p23 = Lerp(p2, p3, t);
+
+	float p012 = Lerp(p01, p12, t);
+	float p123 = Lerp(p12, p23, t);
+
+	return Lerp(p012, p123, t);
 }
 
 Vector3 Calc::Catmull_rom(const Vector3& p0, const Vector3& p1, const Vector3& p2, const Vector3& p3, float t) {

@@ -30,6 +30,17 @@ RigidAnimationModel::RigidAnimationModel(const ModelData* modelData, const std::
 	AnimationUpdate(0.0f);
 }
 
+void RigidAnimationModel::SetTime(const float& time)
+{
+	if (time < 0.0f) {
+		animationTime_ = std::fmod(-time, animation_->duration);
+		animationTime_ = animation_->duration - animationTime_;
+	}
+	else {
+		animationTime_ = time;
+	}
+}
+
 void RigidAnimationModel::Update(const float& time)
 {
 	TransformUpdate();

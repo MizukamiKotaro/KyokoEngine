@@ -1,5 +1,4 @@
 #include "StageScene.h"
-#include "ImGuiManager/ImGuiManager.h"
 #include "Kyoko.h"
 
 StageScene::StageScene()
@@ -26,6 +25,10 @@ void StageScene::Update()
 	if (input_->PressedKey(DIK_SPACE)) {
 		// シーン切り替え
 		ChangeScene(CLEAR);
+		Audio::AllStop();
+	}
+	else if (input_->PressedKey(DIK_S)) {
+		ChangeScene(STAGE_EDITOR);
 		Audio::AllStop();
 	}
 #endif // _DEBUG

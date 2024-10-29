@@ -3,25 +3,25 @@
 #include "Vector2.h"
 #include "Transform/Transform.h"
 
-class Camera;
 class Input;
 
 class DebugCamera {
 public:
-	DebugCamera(Camera* camera, Input* input);
+	DebugCamera();
 
-	void DebugUpdate();
-	void Update();
+	void DebugUpdate(EulerTransform& transform);
+	void Update(EulerTransform& transform);
 
-	const bool IsDebug() const { return isDebug_; }
+	const bool& IsDebug() const { return isDebug_; }
+	void StopDebug();
 
 private:
 	Input* input_;
-	Camera* camera_;
 	EulerTransform beforeDebugTransform_;
 	bool isDebug_;
 	bool isPreDebug_;
 	bool is2D_;
+	bool isMouseMove_;
 
 	Vector3 subRotate_;
 	Vector3 subTranslate_;

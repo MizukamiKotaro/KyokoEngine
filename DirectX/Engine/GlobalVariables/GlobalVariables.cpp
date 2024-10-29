@@ -4,6 +4,7 @@
 #include "WindowsInfo/WindowsInfo.h"
 #include "Vector2.h"
 #include "Vector3.h"
+#include "GlobalVariableComboNames.h"
 
 GlobalVariables* GlobalVariables::GetInstance() {
 	static GlobalVariables globalVariables;
@@ -18,6 +19,9 @@ void GlobalVariables::Initialize()
 	for (uint32_t i = 0; i < kMaxTreeNum_; i++) {
 		kTreeName_[i] = "Tree" + std::to_string(i + 1);
 	}
+	kUnderBar.resize(1);
+	kUnderBar[0] = "_";
+	GlobalVariableComboNames::GetInstance()->Initialize();
 }
 
 void GlobalVariables::Finalize()
@@ -66,7 +70,7 @@ void GlobalVariables::Update() {
 		itChunk != datas_.end(); ++itChunk) {
 		const std::string& chunkName = itChunk->first;
 
-		if (chunkName == "aaDontTouchPlayData" || !isDrawTitle_[chunkName]) {
+		if (chunkName == kDontTouchPlayData || !isDrawTitle_[chunkName]) {
 			continue;
 		}
 
@@ -140,6 +144,11 @@ void GlobalVariables::AddItemColor(const std::string& chunkName, const std::stri
 	SetValue(chunkName, groupName, kColorName + key, value, tree);
 }
 
+void GlobalVariables::AddItemCombo(const std::string& chunkName, const std::string& groupName, const std::string& key, const std::string& type, const std::string& value, const std::vector<std::string>& tree)
+{
+	SetValue(chunkName, groupName, kComboName + key + kComboTypeName + type, value, tree);
+}
+
 const int32_t& GlobalVariables::GetIntValue(const std::string& chunkName, const std::string& groupName, const std::string& key, const std::vector<std::string>& tree) const
 {
 	return GetValue<int32_t>(chunkName, groupName, key, tree);
@@ -178,6 +187,11 @@ const std::string& GlobalVariables::GetStringValue(const std::string& chunkName,
 const Vector4& GlobalVariables::GetColor(const std::string& chunkName, const std::string& groupName, const std::string& key, const std::vector<std::string>& tree) const
 {
 	return GetValue<Vector4>(chunkName, groupName, kColorName + key, tree);
+}
+
+const std::string& GlobalVariables::GetCombo(const std::string& chunkName, const std::string& groupName, const std::string& key, const std::string& type, const std::vector<std::string>& tree) const
+{
+	return GetValue<std::string>(chunkName, groupName, kComboName + key + kComboTypeName + type, tree);
 }
 
 const int32_t& GlobalVariables::GetIntValueDontTouchImGui(const std::string& key) const
@@ -326,10 +340,10 @@ void GlobalVariables::SaveAndSetVariable(const std::string& chunkName, const std
 template<typename T>
 void GlobalVariables::AddItemDontTouchImGui(const std::string& key, const T& value)
 {
-	Group& group = datas_["aaDontTouchPlayData"]["DontTouch"];
+	Group& group = datas_[kDontTouchPlayData][kDontTouch];
 	if (group.find(key) == group.end()) {
 		std::vector<std::string> tree(1, "_");
-		SetValue<T>("aaDontTouchPlayData", "DontTouch", key, value, tree);
+		SetValue<T>(kDontTouchPlayData, kDontTouch, key, value, tree);
 	}
 }
 template void GlobalVariables::AddItemDontTouchImGui<int32_t>(const std::string&, const int32_t&);
@@ -344,15 +358,15 @@ template<typename T>
 const T& GlobalVariables::GetValueDontTouchImGui(const std::string& key) const
 {
 	std::vector<std::string> tree(1, "_");
-	return GetValue<T>("aaDontTouchPlayData", "DontTouch", key, tree);
+	return GetValue<T>(kDontTouchPlayData, kDontTouch, key, tree);
 }
 
 template<typename T>
 void GlobalVariables::SaveAndSetVariableDontTouchImGui(const std::string& key, const T& value)
 {
 	std::vector<std::string> tree(1, "_");
-	SetValue<T>("aaDontTouchPlayData", "DontTouch", key, value, tree);
-	SaveFile("aaDontTouchPlayData", "DontTouch");
+	SetValue<T>(kDontTouchPlayData, kDontTouch, key, value, tree);
+	SaveFile(kDontTouchPlayData, kDontTouch);
 }
 template void GlobalVariables::SaveAndSetVariableDontTouchImGui<int32_t>(const std::string&, const int32_t&);
 template void GlobalVariables::SaveAndSetVariableDontTouchImGui<float>(const std::string&, const float&);
@@ -426,16 +440,21 @@ void GlobalVariables::SaveFile(const std::string& chunkName, const std::string& 
 	}
 
 	std::filesystem::path dir(kDirectoryPath);
-	if (!std::filesystem::exists(dir)) {
-		std::filesystem::create_directories(dir);
-	}
 
 	std::string filePath;
 	if (isFin) {
-		filePath = kDirectoryPath + "zzESC_" + chunkName + "_" + groupName + ".json";
+		dir /= kZZESC;
+		if (!std::filesystem::exists(dir)) {
+			std::filesystem::create_directories(dir);
+		}
+		filePath = dir.string() + "/" + kZZESC + "_" + chunkName + "_" + groupName + ".json";
 	}
 	else {
-		filePath = kDirectoryPath + chunkName + "_" + groupName + ".json";
+		dir /= chunkName;
+		if (!std::filesystem::exists(dir)) {
+			std::filesystem::create_directories(dir);
+		}
+		filePath = dir.string() + "/" + chunkName + "_" + groupName + ".json";
 	}
 
 	std::ofstream ofs;
@@ -464,7 +483,7 @@ void GlobalVariables::LoadFiles() {
 		return;
 	}
 
-	std::filesystem::directory_iterator dir_it(dir);
+	std::filesystem::recursive_directory_iterator dir_it(dir);
 	for (const std::filesystem::directory_entry& entry : dir_it) {
 		
 		const std::filesystem::path& filePath = entry.path();
@@ -486,10 +505,10 @@ void GlobalVariables::LoadFiles() {
 
 void GlobalVariables::LoadFile(const std::string& chunkName, const std::string& groupName) {
 
-	if (chunkName == "zzESC") {
+	if (chunkName == kZZESC) {
 		return;
 	}
-	std::string filePath = kDirectoryPath + chunkName + "_" + groupName + ".json";
+	std::string filePath = kDirectoryPath + chunkName + "/" + chunkName + "_" + groupName + ".json";
 	std::ifstream ifs;
 	ifs.open(filePath);
 
@@ -512,9 +531,34 @@ void GlobalVariables::LoadFile(const std::string& chunkName, const std::string& 
 	RootToSetValue(chunkName, groupName, itGroup, treeNames);
 }
 
+void GlobalVariables::AddComboName(const std::string& key, const std::string& comboName)
+{
+	SetValue(kGlobalCombo, key, comboName, comboName, kUnderBar);
+	SetComboName(key, comboName);
+}
+
+const std::map<std::string, std::vector<std::string>>* GlobalVariables::GetComboNameMap() const
+{
+	return &comboNames_;
+}
+
 std::string GlobalVariables::GetAfterName(const std::string& itemName, const std::string& findName)
 {
 	return itemName.substr(findName.length());
+}
+
+void GlobalVariables::SetComboName(const std::string& key, const std::string& comboName)
+{
+	bool isBe = false;
+	for (std::string& name : comboNames_[key]) {
+		if (name == comboName) {
+			isBe = true;
+			break;
+		}
+	}
+	if (!isBe) {
+		comboNames_[key].push_back(comboName);
+	}
 }
 
 void GlobalVariables::ItemToRoot(nlohmann::json& root, Item& item, const std::string& key, const std::vector<std::string>& treeNames, uint32_t level)
@@ -602,6 +646,9 @@ void GlobalVariables::RootToSetValue(const std::string& chunkName, const std::st
 			else if (itItem->is_string()) {
 				std::string value = itItem->get<std::string>();
 				SetValue(chunkName, groupName, itemName, value, treeNames);
+				if (chunkName == kGlobalCombo) {
+					SetComboName(groupName, value);
+				}
 			}
 		}
 	}
@@ -687,6 +734,32 @@ void GlobalVariables::PreparationImGui(const std::string& itemName, Item& item)
 		Vector4* ptr = std::get_if<Vector4>(&item);
 		ImGui::ColorEdit4(GetAfterName(itemName, kColorName).c_str(), reinterpret_cast<float*>(ptr));
 	}
+	else if (itemName.find(kComboName) == 0) {
+		size_t keyStart = itemName.find(kComboName);
+		keyStart += kComboName.length();  // keyの開始位置
+
+		// kComboTypeNameの開始位置を見つける
+		size_t keyEnd = itemName.find(kComboTypeName, keyStart);
+
+		// keyとtypeを抽出
+		std::string key = itemName.substr(keyStart, keyEnd - keyStart);  // key部分を抽出
+		std::string type = itemName.substr(keyEnd + kComboTypeName.length());  // type部分を抽出
+		int currentItem = 0;
+		int i = 0;
+		std::string* ptr = std::get_if<std::string>(&item);
+		std::vector<const char*> names;
+		names.resize(comboNames_[type].size());
+		for (std::string& name : comboNames_[type]) {
+			if (name == *ptr) {
+				currentItem = i;
+			}
+			names[i] = name.c_str();
+			i++;
+		}
+		if (ImGui::Combo(key.c_str(), &currentItem, names.data(), int(names.size()))) {
+			*ptr = comboNames_[type][currentItem];
+		}
+	}
 	else if (std::holds_alternative<int32_t>(item)) {
 		int32_t* ptr = std::get_if<int32_t>(&item);
 		ImGui::DragInt(itemName.c_str(), ptr, 1);
@@ -710,6 +783,11 @@ void GlobalVariables::PreparationImGui(const std::string& itemName, Item& item)
 	else if (std::holds_alternative<Vector4>(item)) {
 		Vector4* ptr = std::get_if<Vector4>(&item);
 		ImGui::DragFloat4(itemName.c_str(), reinterpret_cast<float*>(ptr), 0.01f);
+	}
+	else if (std::holds_alternative<std::string>(item)) {
+		std::string* ptr = std::get_if<std::string>(&item);
+		std::string text = itemName + ":" + (*ptr);
+		ImGui::Text(text.c_str());
 	}
 }
 #endif // _DEBUG

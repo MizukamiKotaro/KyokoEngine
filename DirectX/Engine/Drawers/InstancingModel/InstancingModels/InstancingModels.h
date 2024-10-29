@@ -11,30 +11,18 @@
 class Camera;
 enum class PipelineType;
 class ILight;
+class InstancingResourceManager;
 
 class InstancingModels : public IDrawer
 {
 public:
-	static const uint32_t kNumInstance = 100000;
+	static const uint32_t kNumInstance = 10000;
 
 	InstancingModels(const InstancingMeshTexData* modelData);
 	~InstancingModels();
 
-	struct Material
-	{
-		Vector4 color;
-		int32_t enableLighting;
-		//float padding[3];
-	};
-
-	struct ParticleForGPU {
-		Matrix4x4 WVP;
-		Matrix4x4 World;
-		Matrix4x4 uvMatrix;
-		Vector4 color;
-	};
-
-	void Draw(const Camera& camera, std::list<InstancingModelData>& blocks);
+	void Draw(const Camera& camera, std::list<InstancingModelData>& blocks, const InstancingMeshTexData* modelData);
+	void Draw(const Camera& camera, std::list<InstancingModelData>& blocks, const std::string& tag);
 
 	static void PreDraw();
 
@@ -43,15 +31,10 @@ public:
 	void SetLight(const ILight* light);
 
 private:
-
-	void CreateSRV();
+	void Draw(const Camera& camera, std::list<InstancingModelData>& blocks);
 
 private:
-	Microsoft::WRL::ComPtr<ID3D12Resource> materialResource_;
-	Material* materialData_;
-
-	Microsoft::WRL::ComPtr<ID3D12Resource> instancingResource_;
-	ParticleForGPU* instancingData_;
+	InstancingResourceManager* resourceManager_;
 
 	Light light_;
 
@@ -59,5 +42,4 @@ private:
 
 	static const PipelineType pipelineType_;
 	const InstancingMeshTexData* modelData_;
-	const DescriptorHandles* srvHandles_;
 };

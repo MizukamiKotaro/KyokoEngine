@@ -1,5 +1,6 @@
 #include "SpotLightBoxAnimationEditor.h"
 #include "Camera.h"
+#include "InstancingModelManager.h"
 
 const int kSpotNum = 2;
 
@@ -8,6 +9,7 @@ SpotLightBoxAnimationEditor::SpotLightBoxAnimationEditor(const std::string& main
 	Create();
 	CreateStageEditor(mainName, name, no, true);
 	SetGlobalVariable();
+	MakeInstancingData();
 }
 
 SpotLightBoxAnimationEditor::SpotLightBoxAnimationEditor(const std::string& mainName, const std::string& name, const std::string& treeName, const uint32_t& no)
@@ -15,11 +17,18 @@ SpotLightBoxAnimationEditor::SpotLightBoxAnimationEditor(const std::string& main
 	Create();
 	CreateStageEditor(mainName, name, treeName, no);
 	SetGlobalVariable();
+	MakeInstancingData();
 }
 
 SpotLightBoxAnimationEditor::SpotLightBoxAnimationEditor()
 {
 	Create();
+	MakeInstancingData();
+}
+
+void SpotLightBoxAnimationEditor::SetTime(const float& time)
+{
+	box_->SetTime(time);
 }
 
 void SpotLightBoxAnimationEditor::Update(const float& time)
@@ -27,9 +36,9 @@ void SpotLightBoxAnimationEditor::Update(const float& time)
 #ifdef _DEBUG
 	UpdateGlobalVariable();
 #endif // _DEBUG
-
 	box_->Update(time);
 	LightUpdate();
+	AddInstancing();
 }
 
 void SpotLightBoxAnimationEditor::Draw(const Camera& camera)
@@ -143,4 +152,15 @@ void SpotLightBoxAnimationEditor::Create()
 
 	box_->SetLight(point_.get());
 	box_->SetLight(spotLights_[0].get());
+}
+
+void SpotLightBoxAnimationEditor::MakeInstancingData()
+{
+	instancingData_ = instancingManager_->GetDrawData(InstancingMeshTexData{ "normal", &box_->GetModelData(), box_->GetModelData().texture,BlendMode::kBlendModeNormal });
+}
+
+void SpotLightBoxAnimationEditor::AddInstancing()
+{
+	Matrix4x4 matrix = box_->GetAnimTransform().matrix_ * box_->transform_.worldMat_;
+	instancingManager_->AddBox(instancingData_, InstancingModelData{ matrix, Matrix4x4::MakeIdentity4x4() , box_->color_});
 }

@@ -47,13 +47,24 @@ void LightDepthPipeline::InitializePSO()
 	descriptorRange5[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV; // SRVを使う
 	descriptorRange5[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND; // offsetを自動計算
 
+	D3D12_DESCRIPTOR_RANGE descriptorRange6[1] = {};
+	descriptorRange6[0].BaseShaderRegister = 6; // 0から始まる
+	descriptorRange6[0].NumDescriptors = 1; // 数は1つ
+	descriptorRange6[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV; // SRVを使う
+	descriptorRange6[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND; // offsetを自動計算
+
+	D3D12_DESCRIPTOR_RANGE descriptorRange7[1] = {};
+	descriptorRange7[0].BaseShaderRegister = 7; // 0から始まる
+	descriptorRange7[0].NumDescriptors = 1; // 数は1つ
+	descriptorRange7[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV; // SRVを使う
+	descriptorRange7[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND; // offsetを自動計算
 
 	//RootSignature作成
 	D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
 	descriptionRootSignature.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
 
 	//RootParameter作成。複数設定ができるので配列。
-	D3D12_ROOT_PARAMETER rootParameters[8] = {};
+	D3D12_ROOT_PARAMETER rootParameters[10] = {};
 	rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV; // CBVを使う
 	rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL; // PixelShaderで使う
 	rootParameters[0].Descriptor.ShaderRegister = 0; // レジスタ番号0とバインド
@@ -84,6 +95,14 @@ void LightDepthPipeline::InitializePSO()
 	rootParameters[7].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL; // PixelShaderで使う
 	rootParameters[7].DescriptorTable.pDescriptorRanges = descriptorRange5; // Tableの中の配列を指定
 	rootParameters[7].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange5); // Tableで利用する数
+	rootParameters[8].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE; // DesciptorTableを使う
+	rootParameters[8].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL; // PixelShaderで使う
+	rootParameters[8].DescriptorTable.pDescriptorRanges = descriptorRange6; // Tableの中の配列を指定
+	rootParameters[8].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange6); // Tableで利用する数
+	rootParameters[9].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE; // DesciptorTableを使う
+	rootParameters[9].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL; // PixelShaderで使う
+	rootParameters[9].DescriptorTable.pDescriptorRanges = descriptorRange7; // Tableの中の配列を指定
+	rootParameters[9].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange7); // Tableで利用する数
 	descriptionRootSignature.pParameters = rootParameters; // ルートパラメータ配列へのポインタ
 	descriptionRootSignature.NumParameters = _countof(rootParameters); // 配列の長さ
 

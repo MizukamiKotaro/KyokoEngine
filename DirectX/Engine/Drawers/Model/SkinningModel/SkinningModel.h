@@ -19,15 +19,16 @@ public:
 	/// モデルの生成
 	/// </summary>
 	/// <param name="fileName">.objが入っているフォルダの名前( "Cube" 等)</param>
-	SkinningModel(const std::string& fileName);
+	SkinningModel(const std::string& fileName, const bool& ispmx = false);
 	~SkinningModel();
 
+	void SetTime(const float& time);
 	void Update(const float& time = 0) override;
 	void Draw(const Camera& camera, const BlendMode& blendMode = BlendMode::kBlendModeNormal) const override;
 
 public:
 	static void StaticInitialize();
-	void LoadGLTF(const std::string& fileName);
+	void LoadGLTF(const std::string& fileName, const bool& ispmx = false);
 
 	const Matrix4x4 GetRotateMatrix() override;
 
@@ -37,8 +38,8 @@ private:
 	void AnimationUpdate(float time);
 	void LoadAnimation(const std::string& fileName);
 	
-	Vector3 CalculateValue(const AnimationCurve<Vector3>& keyframes, const float& time);
-	Quaternion CalculateValue(const AnimationCurve<Quaternion>& keyframes, const float& time);
+	Vector3 CalculateValue(AnimationCurve<Vector3>& keyframes, const float& time);
+	Quaternion CalculateValue(AnimationCurve<Quaternion>& keyframes, const float& time);
 
 	void CreateSkeleton();
 	void CreateSkinCluster();
@@ -56,4 +57,6 @@ private:
 	std::unique_ptr<Skeleton> skeleton_;
 	std::unique_ptr<SkinCluster> skinCluter_;
 	float animationTime_;
+
+	bool isSetTime_;
 };

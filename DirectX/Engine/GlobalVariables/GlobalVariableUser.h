@@ -2,11 +2,13 @@
 #include <string>
 #include <stdint.h>
 #include <vector>
+#include "ComboNameConfig.h"
 
 class Vector2;
 class Vector3;
 class Vector4;
 class GlobalVariables;
+class GlobalVariableComboNames;
 
 class GlobalVariableUser {
 public:
@@ -18,6 +20,8 @@ public:
 
 	void CreateGroup();
 
+	void AddComboName(const ComboNameType& type, const std::string& comboName);
+
 	void AddItem(const std::string& key, const int32_t& value, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
 	void AddItem(const std::string& key, const float& value, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
 	void AddItem(const std::string& key, const Vector2& value, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
@@ -27,6 +31,7 @@ public:
 	void AddItem(const std::string& key, const std::string& value, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
 
 	void AddItemColor(const std::string& key, const Vector4& value, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
+	void AddItemCombo(const std::string& key, const ComboNameType& type, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
 
 	const int32_t& GetIntValue(const std::string& key, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_") const;
 	const float& GetFloatValue(const std::string& key, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_") const;
@@ -37,6 +42,7 @@ public:
 	const std::string& GetStringValue(const std::string& key, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_") const;
 
 	const Vector4& GetColor(const std::string& key, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_") const;
+	const std::string& GetCombo(const std::string& key, const ComboNameType& type, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_") const;
 
 	void SetVariable(const std::string& key, const int32_t& value, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
 	void SetVariable(const std::string& key, const float& value, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
@@ -84,5 +90,6 @@ private:
 
 private:
 	static GlobalVariables* global_;
+	static GlobalVariableComboNames* globalCombo_;
 	std::vector<std::string> tree_;
 };

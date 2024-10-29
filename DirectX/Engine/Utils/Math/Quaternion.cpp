@@ -195,3 +195,58 @@ Vector3 Quaternion::RotateVector(const Vector3& vector)
 {
 	return vector * this->MakeRotateMatrix();
 }
+
+Quaternion Quaternion::EulerToQuaternion(const Vector3& eulerAngles)
+{
+	float cy = cos(eulerAngles.z * 0.5f);
+	float sy = sin(eulerAngles.z * 0.5f);
+	float cp = cos(eulerAngles.y * 0.5f);
+	float sp = sin(eulerAngles.y * 0.5f);
+	float cr = cos(eulerAngles.x * 0.5f);
+	float sr = sin(eulerAngles.x * 0.5f);
+
+	Quaternion q;
+	q.w = cr * cp * cy + sr * sp * sy;
+	q.x = sr * cp * cy - cr * sp * sy;
+	q.y = cr * sp * cy + sr * cp * sy;
+	q.z = cr * cp * sy - sr * sp * cy;
+
+	return q;
+}
+
+Vector3 Quaternion::QuaternionToEuler(const Quaternion& q)
+{
+	Vector3 eulerAngles;
+
+	// Z軸 (yaw) 計算 - 最初に Z 軸の回転
+	float siny_cosp = 2 * (q.w * q.z + q.x * q.y);
+	float cosy_cosp = 1 - 2 * (q.y * q.y + q.z * q.z);
+	if (cosy_cosp != 0) {
+		eulerAngles.z = atan2(siny_cosp, cosy_cosp);
+	}
+	else {
+		eulerAngles.z = (siny_cosp > 0) ? 3.1415f / 2 : -3.1415f / 2;  // 特殊ケース
+	}
+
+	// X軸 (roll) 計算 - 次に X 軸の回転
+	float sinx_cosp = 2 * (q.w * q.x + q.y * q.z);
+	float cosx_cosp = 1 - 2 * (q.x * q.x + q.y * q.y);
+	if (cosx_cosp != 0) {
+		eulerAngles.x = atan2(sinx_cosp, cosx_cosp);
+	}
+	else {
+		eulerAngles.x = (sinx_cosp > 0) ? 3.1415f / 2 : -3.1415f / 2;  // 特殊ケース
+	}
+
+	// Y軸 (pitch) 計算 - 最後に Y 軸の回転
+	float sinp = 2 * (q.w * q.y - q.z * q.x);
+	if (abs(sinp) >= 1) {
+		eulerAngles.y = copysign(3.1415f / 2, sinp); // -90° または 90°
+	}
+	else {
+		eulerAngles.y = asin(sinp);
+	}
+
+	return eulerAngles;
+
+}

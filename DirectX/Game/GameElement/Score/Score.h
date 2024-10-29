@@ -76,14 +76,6 @@ public:
 
 private:
 
-	/*int score_ = 0;
-	int combo_ = 0;
-	int perfectNum_ = 0;
-	int greatNum_ = 0;
-	int goodNum_ = 0;
-	int missNum_ = 0;
-	int hiCombo_ = 0;*/
-
 	std::array<int, END_PARAMETER> parameters_;
 
 	bool isFullCom_ = false;

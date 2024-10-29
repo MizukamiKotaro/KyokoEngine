@@ -1,5 +1,4 @@
 #include "SceneManager.h"
-
 #include "Kyoko.h"
 #include "Input.h"
 #include "FrameInfo/FrameInfo.h"
@@ -7,24 +6,25 @@
 #include "GameElement/ScoreManager/ScoreManager.h"
 #include "SceneSystem/SceneFactory/SceneFactory.h"
 
-FrameInfo* frameInfo = nullptr;
-
 SceneManager::SceneManager()
 {
+	// スコアの初期化
 	ScoreManager::GetInstance()->Initialize();
 
-	IScene::sceneNo_ = TITLE;
+	// タイトルシーンから
+	IScene::SetSceneNo(TITLE);
 
+	// シーンの作成
 	sceneFactory_ = std::make_unique<SceneFactory>();
+	scene_.reset(sceneFactory_->CreateScene(IScene::GetSceneNo()));
 
-	scene_.reset(sceneFactory_->CreateScene(IScene::sceneNo_));
 
-	currentSceneNo_ = IScene::sceneNo_;
+	currentSceneNo_ = IScene::GetSceneNo();
 	preSceneNo_ = currentSceneNo_;
-	IScene::stageNo_ = 0;
+	IScene::SetStageNo(0);
 
-	inputManager_ = Input::GetInstance();
-	frameInfo = FrameInfo::GetInstance();
+	input_ = Input::GetInstance();
+	frameInfo_ = FrameInfo::GetInstance();
 }
 
 int SceneManager::Run()
@@ -34,7 +34,8 @@ int SceneManager::Run()
 	// ウィンドウの×ボタンが押されるまでループ
 	while (true) {
 		// フレームの開始
-		if (Kyoko::Engine::ProcessMessage() || (inputManager_->PressedKey(DIK_ESCAPE) && IScene::sceneNo_ == TITLE)) {
+		int32_t sceneNo = IScene::GetSceneNo();
+		if (Kyoko::Engine::ProcessMessage() || (input_->PressedKey(DIK_ESCAPE) && sceneNo == TITLE)) {
 			break;
 		}
 
@@ -42,10 +43,10 @@ int SceneManager::Run()
 
 		// 更新処理
 		preSceneNo_ = currentSceneNo_;
-		currentSceneNo_ = IScene::sceneNo_;
+		currentSceneNo_ = sceneNo;
 
 		if (preSceneNo_ != currentSceneNo_) {
-			scene_.reset(sceneFactory_->CreateScene(IScene::sceneNo_));
+			scene_.reset(sceneFactory_->CreateScene(sceneNo));
 			scene_->Initialize();
 			scene_->FirstUpdate();
 		}
@@ -56,14 +57,17 @@ int SceneManager::Run()
 		ImGui::Begin("SCENE");
 		switch (currentSceneNo_)
 		{
-		case SCENE::SELECT:
-			ImGui::Text("SELECT");
-			break;
 		case SCENE::TITLE:
 			ImGui::Text("TITLE");
 			break;
+		case SCENE::SELECT:
+			ImGui::Text("SELECT");
+			break;
 		case SCENE::STAGE:
 			ImGui::Text("STAGE");
+			break;
+		case SCENE::STAGE_EDITOR:
+			ImGui::Text("STAGE_EDITOR");
 			break;
 		case SCENE::CLEAR:
 			ImGui::Text("CLEAR");
@@ -73,13 +77,14 @@ int SceneManager::Run()
 		}
 		ImGui::End();
 		ImGui::Begin("フレーム");
-		ImGui::Text("フレーム : %4.1f", frameInfo->GetFramerate());
+		ImGui::Text("フレーム : %4.1f", frameInfo_->GetFramerate());
 		ImGui::End();
 #endif // _DEBUG
 		
+		// 描画処理
 		scene_->Draw();
 
-		frameInfo->End();
+		frameInfo_->End();
 	}
 
 	scene_.reset();

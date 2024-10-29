@@ -4,23 +4,32 @@
 #include "SceneSystem/StageScene/StageScene.h"
 #include "SceneSystem/SelectScene/SelectScene.h"
 #include "SceneSystem/ClearScene/ClearScene.h"
+#include "SceneSystem/StageEditorScene/StageEditorScene.h"
 
-IScene* SceneFactory::CreateScene(int sceneNo)
+IScene* SceneFactory::CreateScene(const int32_t& sceneNo)
 {
 	IScene* newScene = nullptr;
 
-	if (sceneNo == TITLE) {
+	switch (sceneNo)
+	{
+	case SCENE::TITLE:
 		newScene = new TitleScene();
-	}
-	else if (sceneNo == SELECT) {
+		break;
+	case SCENE::SELECT:
 		newScene = new SelectScene();
-	}
-	else if (sceneNo == STAGE) {
+		break;
+	case SCENE::STAGE:
 		newScene = new StageScene();
-	}
-	else if (sceneNo == CLEAR) {
+		break;
+	case SCENE::STAGE_EDITOR:
+		newScene = new StageEditorScene();
+		break;
+	case SCENE::CLEAR:
 		newScene = new ClearScene();
+		break;
+	default:
+		break;
 	}
-
+	
 	return newScene;
 }

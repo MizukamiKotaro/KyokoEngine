@@ -31,9 +31,12 @@ void Kyoko::ImGuiManager::Initialize()
 		handles->cpuHandle,
 		handles->gpuHandle);
 
+	// 日本語対応
 	ImGuiIO& io = ImGui::GetIO();
 	io.Fonts->AddFontFromFileTTF("Resources/Font/GenShinGothic-Heavy.ttf", 16.0f, nullptr, ImGui::GetIO().Fonts->GetGlyphRangesJapanese());
 	io.ConfigFlags = ImGuiConfigFlags_DockingEnable;
+
+	// ギズモの設定
 	ImGuizmo::SetImGuiContext(ImGui::GetCurrentContext());
 	Vector2 size = WindowsInfo::GetInstance()->GetWindowSize();
 	ImGuizmo::SetOrthographic(false);
@@ -58,24 +61,12 @@ void Kyoko::ImGuiManager::Begin()
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
 	ImGuizmo::BeginFrame();
-
-	/*ImGui::Begin("ImGuiManager");
-	ImGui::Checkbox("ImGuiにはめ込み描画するか", &isDrawMonitor);
-	ImGui::End();*/
 #endif // _DEBUG
 }
 
 void Kyoko::ImGuiManager::End()
 {
 #ifdef _DEBUG
-	/*if (isDrawMonitor) {
-		ImTextureID my_tex_id = (ImTextureID)DirectXBase::GetInstance()->GetCurrentDescriptorHandle().ptr;
-		ImVec2 tex_size = ImVec2(512, 512);
-		ImGui::Image(my_tex_id, tex_size);
-		ImGui::Begin("My Texture Window");
-		ImGui::Image(my_tex_id, tex_size);
-		ImGui::End();
-	}*/
 	//ImGuiの内部コマンドを生成する
 	ImGui::Render();
 #endif // _DEBUG

@@ -8,6 +8,7 @@
 #include "GameElement/LiveEditor/StageFloorEditor/StageFloorEditor.h"
 #include "GameElement/LiveEditor/DomeEditor/DomeEditor.h"
 #include "GameElement/LiveEditor/FireParticleEditor/FireParticleEditor.h"
+#include "GameElement/LiveEditor/ObjectEditor/ObjectEditor.h"
 
 IStageObject* StageObjectFactory::CreateStageObject(const StageObjectType& type, const std::string& mainName, const std::string& name, const uint32_t& no)
 {
@@ -37,6 +38,9 @@ IStageObject* StageObjectFactory::CreateStageObject(const StageObjectType& type,
 		break;
 	case StageObjectType::FIRE_PARTICLE:
 		object = new FireParticleEditor(mainName, name, no);
+		break;
+	case StageObjectType::OBJECT:
+		object = new ObjectEditor(mainName, name, no);
 		break;
 	default:
 		break;

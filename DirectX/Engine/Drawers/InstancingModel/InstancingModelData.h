@@ -13,6 +13,7 @@ public:
 
 class InstancingMeshTexData {
 public:
+	const std::string tag_;
 	const ModelData* modelData_;
 	const Texture* texture_;
 	BlendMode blendMode_;

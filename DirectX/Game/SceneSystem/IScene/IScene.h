@@ -6,12 +6,12 @@
 #include "Input.h"
 #include "Audio.h"
 #include "Camera.h"
+#include "FrameInfo/FrameInfo.h"
 #include <optional>
 #include "Sprite.h"
 #include <memory>
-#include "DebugCamera/DebugCamera.h"
 
-enum SCENE { TITLE, SELECT, STAGE, CLEAR };
+enum SCENE { TITLE, SELECT, STAGE, STAGE_EDITOR, CLEAR };
 
 enum STAGE { SHINING_STAR, COUNT_STAGE };
 
@@ -21,18 +21,11 @@ enum class Transition{
 	kToBlack,
 };
 
-// シーン内での処理を行う基底クラス
+// シーンの基底クラス
 class IScene
 {
-public:
-	// シーン番号を管理する変数
-	static int sceneNo_;
-	// ステージ番号を管理する変数
-	static int stageNo_;
 
 public:
-	// 継承先で実装される関数
-	// 抽象クラスなので純粋仮想関数とする
 	virtual void Initialize() = 0;
 	virtual void Update() = 0;
 	virtual void Draw() = 0;
@@ -41,8 +34,11 @@ public:
 
 	// シーン番号のゲッター
 	void FirstInit();
-	int GetSceneNo();
-	int GetStageNo();
+	static const int32_t& GetSceneNo() { return sceneNo_; }
+	static const int32_t& GetStageNo() { return stageNo_; }
+
+	static void SetStageNo(const int32_t& no) { stageNo_ = no; }
+	static void SetSceneNo(const int32_t& no) { sceneNo_ = no; }
 
 	// シーン遷移用
 	virtual void FromBlackInitialize();
@@ -53,7 +49,7 @@ public:
 
 	virtual void FirstUpdate();
 
-	void ChangeScene(int sceneNo);
+	void ChangeScene(const int32_t& sceneNo);
 
 	virtual void BlackDraw() { black_->Draw(*camera_.get()); }
 
@@ -62,11 +58,15 @@ protected:
 	TextureManager* textureManager_ = nullptr;
 	ModelDataManager* modelDataManager_ = nullptr;
 	Input* input_ = nullptr;
+	FrameInfo* frameInfo_ = nullptr;
 
 protected:
+	// シーン番号を管理する変数
+	static int32_t sceneNo_;
+	// ステージ番号を管理する変数
+	static int32_t stageNo_;
 
 	std::unique_ptr<Camera> camera_;
-	std::unique_ptr<DebugCamera> debugCamera_;
 
 	std::optional<Transition> transitionRequest_ = std::nullopt;
 

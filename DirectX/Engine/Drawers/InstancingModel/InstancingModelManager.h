@@ -22,11 +22,12 @@ public:
 
 	void FirstInitialize();
 
-	void Draw(const Camera& camera);
+	void Draw(const Camera& camera, const InstancingMeshTexData* modelData);
+	void Draw(const Camera& camera, const std::string& tag = "normal");
 
 	const InstancingMeshTexData* GetDrawData(const InstancingMeshTexData& data);
 	// 板ポリの場合
-	const InstancingMeshTexData* GetDrawData(const std::string& texturePath, const BlendMode& blendMode = BlendMode::kBlendModeNormal);
+	const InstancingMeshTexData* GetDrawData(const std::string& texturePath, const std::string& tag = "normal", const BlendMode& blendMode = BlendMode::kBlendModeNormal);
 
 	InstancingModelData* const AddBox(const InstancingMeshTexData* modelData, InstancingModelData&& model);
 

@@ -7,6 +7,7 @@
 #include "Camera.h"
 #include "Light/Light.h"
 #include "ModelDataManager.h"
+#include "InstancingModels/InstancingResourceManager.h"
 
 InstancingModelManager* InstancingModelManager::GetInstance()
 {
@@ -19,20 +20,30 @@ void InstancingModelManager::FirstInitialize()
 	plane_ = modelDataManager_->LoadObj("plane");
 }
 
-void InstancingModelManager::Draw(const Camera& camera)
+void InstancingModelManager::Draw(const Camera& camera, const InstancingMeshTexData* modelData)
 {
 	InstancingModels::PreDraw();
 
 	for (const auto& [model, particleList] : instancingModelMap_) {
 		if (particleList->GetSize() == 0) { continue; }
-		particleList->Draw(camera);
+		particleList->Draw(camera, modelData);
+	}
+}
+
+void InstancingModelManager::Draw(const Camera& camera, const std::string& tag)
+{
+	InstancingModels::PreDraw();
+
+	for (const auto& [model, particleList] : instancingModelMap_) {
+		if (particleList->GetSize() == 0) { continue; }
+		particleList->Draw(camera, tag);
 	}
 }
 
 const InstancingMeshTexData* InstancingModelManager::GetDrawData(const InstancingMeshTexData& data)
 {
 	for (const std::unique_ptr<InstancingMeshTexData>& dataPtr : drawDatas_) {
-		if (dataPtr->modelData_ == data.modelData_ && dataPtr->texture_ == data.texture_ && dataPtr->blendMode_ == data.blendMode_) {
+		if (dataPtr->modelData_ == data.modelData_ && dataPtr->texture_ == data.texture_ && dataPtr->blendMode_ == data.blendMode_ && dataPtr->tag_ == data.tag_) {
 			return dataPtr.get();
 		}
 	}
@@ -40,16 +51,16 @@ const InstancingMeshTexData* InstancingModelManager::GetDrawData(const Instancin
 	return drawDatas_.back().get();
 }
 
-const InstancingMeshTexData* InstancingModelManager::GetDrawData(const std::string& texturePath, const BlendMode& blendMode)
+const InstancingMeshTexData* InstancingModelManager::GetDrawData(const std::string& texturePath, const std::string& tag, const BlendMode& blendMode)
 {
 	const Texture* texture = textureManager_->LoadTexture(texturePath);
 
 	for (const std::unique_ptr<InstancingMeshTexData>& dataPtr : drawDatas_) {
-		if (dataPtr->modelData_ == plane_ && dataPtr->texture_ == texture && dataPtr->blendMode_ == blendMode) {
+		if (dataPtr->modelData_ == plane_ && dataPtr->texture_ == texture && dataPtr->blendMode_ == blendMode && dataPtr->tag_ == tag) {
 			return dataPtr.get();
 		}
 	}
-	drawDatas_.push_back(std::make_unique<InstancingMeshTexData>(InstancingMeshTexData{ plane_,texture,blendMode }));
+	drawDatas_.push_back(std::make_unique<InstancingMeshTexData>(InstancingMeshTexData{ tag,plane_,texture,blendMode }));
 	return drawDatas_.back().get();
 }
 
@@ -67,6 +78,7 @@ void InstancingModelManager::Clear()
 	for (auto& modelList : instancingModelMap_) {
 		modelList.second->Clear();
 	}
+	InstancingResourceManager::GetInstance()->Clear();
 }
 
 void InstancingModelManager::SetLight(const InstancingMeshTexData* modelData, const ILight* light)

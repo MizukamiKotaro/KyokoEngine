@@ -142,7 +142,7 @@ void NotesList::LoadPopData()
 {// ファイルを開く
 	std::ifstream file;
 
-	switch (IScene::stageNo_)
+	switch (IScene::GetStageNo())
 	{
 	case SHINING_STAR:
 		file.open("Resources/CSV/shiningStar.csv");

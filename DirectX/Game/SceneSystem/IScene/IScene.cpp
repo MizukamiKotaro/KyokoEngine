@@ -14,10 +14,10 @@ void IScene::FirstInit()
 	textureManager_ = TextureManager::GetInstance();
 	modelDataManager_ = ModelDataManager::GetInstance();
 	input_ = Input::GetInstance();
+	frameInfo_ = FrameInfo::GetInstance();
 
 	camera_ = std::make_unique<Camera>();
 	camera_->Initialize();
-	debugCamera_ = std::make_unique<DebugCamera>(camera_.get(), input_);
 	black_ = std::make_unique<Sprite>("white.png");
 	black_->size_ = { 1280.0f,720.0f };
 	black_->pos_ = { 640.0f,360.0f };
@@ -25,10 +25,6 @@ void IScene::FirstInit()
 	black_->Update();
 
 }
-
-int IScene::GetSceneNo() { return sceneNo_; }
-
-int IScene::GetStageNo() { return stageNo_; }
 
 void IScene::FromBlackInitialize()
 {
@@ -128,7 +124,7 @@ void IScene::FirstUpdate()
 {
 }
 
-void IScene::ChangeScene(int sceneNo)
+void IScene::ChangeScene(const int32_t& sceneNo)
 {
 	nextScene_ = sceneNo;
 	transitionRequest_ = Transition::kToBlack;

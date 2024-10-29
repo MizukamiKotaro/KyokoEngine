@@ -1,17 +1,36 @@
 #include "IStageObject.h"
+#include "InstancingModelManager.h"
+#include "SceneSystem/IScene/IScene.h"
+
+InstancingModelManager* IStageObject::instancingManager_ = nullptr;
+
+void IStageObject::StaticInitialize()
+{
+	instancingManager_ = InstancingModelManager::GetInstance();
+}
 
 void IStageObject::Initialize()
 {
 }
 
-void IStageObject::DrawLight(const Camera& camera)
+void IStageObject::SetTime(const float& time)
 {
-	if(&camera){}
+	time;
 }
 
-void IStageObject::DrawSub(const Camera& camera)
+void IStageObject::DrawLight(const Camera& camera)
 {
-	if(&camera){}
+	camera;
+}
+
+void IStageObject::DrawOutline(const Camera& camera)
+{
+	camera;
+}
+
+void IStageObject::DrawBloom(const Camera& camera)
+{
+	camera;
 }
 
 void IStageObject::CreateStageEditor(const std::string& mainName, const std::string& name, const uint32_t& no, const bool& isMany)
@@ -55,8 +74,10 @@ void IStageObject::UpdateGlobalVariable()
 {
 #ifdef _DEBUG
 	if (stageEditor_) {
-		if (stageEditor_->IsTreeOpen()) {
-			ApplyGlobalVariable();
+		if (IScene::GetSceneNo() == STAGE_EDITOR) {
+			if (stageEditor_->IsTreeOpen()) {
+				ApplyGlobalVariable();
+			}
 		}
 	}
 #endif // _DEBUG

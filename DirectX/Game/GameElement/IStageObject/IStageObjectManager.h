@@ -14,8 +14,11 @@ public:
 	void Clear() { objects_.clear(); }
 	void Initialize();
 	void Update(const float& deltaTime);
+	void SetTime(const float& time);
 	void Draw(const Camera& camera) const;
 	void DrawLight(const Camera& camera) const;
+	void DrawOutline(const Camera& camera);
+	void DrawBloom(const Camera& camera);
 
 protected:
 	void ApplyGlobalVariable();

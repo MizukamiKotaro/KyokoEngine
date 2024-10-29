@@ -26,6 +26,8 @@ public:
 	void SetOutlineDepth(const DescriptorHandles& handle) { outlineDepth_ = &handle; }
 	void SetObjectsTex(const D3D12_GPU_DESCRIPTOR_HANDLE& handle) { objectTex_ = handle; }
 	void SetObjectsDepth(const DescriptorHandles& handle) { objectDepth_ = &handle; }
+	void SetBloomTex(const D3D12_GPU_DESCRIPTOR_HANDLE& handle) { bloomTex_ = handle; }
+	void SetBloomDepth(const DescriptorHandles& handle) { bloomDepth_ = &handle; }
 private:
 	void CreateOutlineRes();
 	void CreateDepthRes();
@@ -38,6 +40,9 @@ private:
 	D3D12_GPU_DESCRIPTOR_HANDLE outlineTex_;
 	const DescriptorHandles* objectDepth_;
 	D3D12_GPU_DESCRIPTOR_HANDLE objectTex_;
+
+	const DescriptorHandles* bloomDepth_;
+	D3D12_GPU_DESCRIPTOR_HANDLE bloomTex_;
 public:
 	OutlineData* outlineData_;
 

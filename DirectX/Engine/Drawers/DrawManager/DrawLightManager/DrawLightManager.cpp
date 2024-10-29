@@ -27,7 +27,7 @@ DrawLightManager::DrawLightManager()
 	drawNum_ = 0;
 	scaleMat_ = Matrix4x4::MakeScaleMatrix({ 1000.0f,1000.0f,1000.0f });
 	scaleInverseMat_ = Matrix4x4::Inverse(scaleMat_);
-	modelData_ = ModelDataManager::GetInstance()->LoadObj("Plane");
+	modelData_ = ModelDataManager::GetInstance()->LoadObj("plane");
 	for (int32_t i = 0; i < 50; i++) {
 		transformation_.push_back(std::make_unique<Transformation>());
 	}

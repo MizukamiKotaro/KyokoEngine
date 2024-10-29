@@ -4,6 +4,9 @@
 #include "Utils/Transform/Transform.h"
 #include <wrl.h>
 #include <d3d12.h>
+#include <memory>
+
+class DebugCamera;
 
 class Camera {
 
@@ -19,7 +22,10 @@ public:
 
 	void Initialize();
 
+	void DebugUpdate();
 	void Update();
+
+	const bool& GetIsDebug() const;
 
 	const Matrix4x4& GetViewProjection() const { return viewProjectionMatrix_; }
 
@@ -30,6 +36,8 @@ public:
 	const D3D12_GPU_VIRTUAL_ADDRESS GetGPUVirtualAddress() const { return cameraForGPUResource_->GetGPUVirtualAddress(); }
 
 	const bool InScreenCheck2D(const Vector3& position, const float& radius) const;
+
+	void StopDebug();
 
 private:
 	Microsoft::WRL::ComPtr<ID3D12Resource> cameraForGPUResource_;
@@ -44,6 +52,8 @@ public:
 	EulerTransform transform_;
 
 private:
+
+	std::unique_ptr<DebugCamera> debugCamera_;
 
 	Matrix4x4 projectionMatrix_;
 	Matrix4x4 inverseProjectionMatrix_;

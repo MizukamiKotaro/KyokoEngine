@@ -1,6 +1,7 @@
 #include "Camera.h"
 #include "Engine/Base/WindowsInfo/WindowsInfo.h"
 #include "DirectXBase/DirectXBase.h"
+#include "DebugCamera/DebugCamera.h"
 
 Matrix4x4 Camera::orthographicMat_ = Matrix4x4::MakeOrthographicMatrix(0.0f, 0.0f, 1280.0f, 720.0f, 0.0f, 1.0f);
 
@@ -21,6 +22,8 @@ Camera::Camera()
 	viewProjectionMatrix_ = viewMatrix * projectionMatrix_;
 
 	orthographicMat_ = Matrix4x4::MakeOrthographicMatrix(0.0f, 0.0f, windowSize.x, windowSize.y, 0.0f, 1.0f);
+
+	debugCamera_ = std::make_unique<DebugCamera>();
 }
 
 Camera::~Camera()
@@ -44,6 +47,11 @@ void Camera::Initialize()
 	viewProjectionMatrix_ = viewMatrix * projectionMatrix_;
 }
 
+void Camera::DebugUpdate()
+{
+	debugCamera_->Update(transform_);
+}
+
 void Camera::Update()
 {
 	transform_.UpdateMatrix();
@@ -51,6 +59,11 @@ void Camera::Update()
 	viewProjectionMatrix_ = viewMatrix * projectionMatrix_;
 
 	cameraForGPUData_->worldPosition = transform_.GetWorldPosition();
+}
+
+const bool& Camera::GetIsDebug() const
+{
+	return debugCamera_->IsDebug();
 }
 
 const bool Camera::InScreenCheck2D(const Vector3& position, const float& radius) const 
@@ -68,6 +81,11 @@ const bool Camera::InScreenCheck2D(const Vector3& position, const float& radius)
 		return false;
 	}
 	return true;
+}
+
+void Camera::StopDebug()
+{
+	debugCamera_->StopDebug();
 }
 
 void Camera::CreateResource()

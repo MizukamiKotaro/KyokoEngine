@@ -84,10 +84,10 @@ void TitleScene::Update()
 		ChangeScene(SELECT);
 		se_.Play();
 	}
-	ImGui::Begin("カメラ");
-	ImGui::DragFloat3("位置", &camera_->transform_.translate_.x, 0.01f);
-	ImGui::DragFloat3("角度", &camera_->transform_.rotate_.x, 0.01f);
-	ImGui::End();
+	else if (input_->PressedKey(DIK_S)) {
+		ChangeScene(STAGE_EDITOR);
+		se_.Play();
+	}
 
 	ImGui::Begin("hsv");
 	ImGui::SliderFloat("hue", &hsvFilter_->hsvData_->hue, -1.0f, 1.0f);
@@ -152,22 +152,23 @@ void TitleScene::WrightPostEffect()
 	spotlightAndOutline_->PostDrawOutline();
 
 	spotlightAndOutline_->PreDrawObject();
-	dome_->Draw(camera_.get());
-	stage_->Draw(camera_.get());
-	screen_->Draw(camera_.get());
 
 	spotLightBox_->Draw(camera_.get());
 	spotLightBox2_->Draw(camera_.get());
-
-	space_->Draw();
-
-	BlackDraw();
 	spotlightAndOutline_->PostDrawObject();
 
 	spotlightAndOutline_->PreDrawLight();
 	spotLightBox_->DrawLight(*camera_.get());
 	spotLightBox2_->DrawLight(*camera_.get());
 	spotlightAndOutline_->PostDrawLight();
+
+	spotlightAndOutline_->PreDrawBloom();
+	screen_->Draw(camera_.get());
+	dome_->Draw(camera_.get());
+	stage_->Draw(camera_.get());
+	space_->Draw();
+	BlackDraw();
+	spotlightAndOutline_->PostDrawBloom();
 
 	bloom_->PreDrawScene();
 	spotlightAndOutline_->Draw(*camera_.get());

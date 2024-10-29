@@ -1,5 +1,5 @@
 #pragma once
-
+#include <stdint.h>
 class IScene;
 
 class ISceneFactory
@@ -7,5 +7,5 @@ class ISceneFactory
 public:
 	virtual ~ISceneFactory() = default;
 
-	virtual IScene* CreateScene(int sceneNo) = 0;
+	virtual IScene* CreateScene(const int32_t& sceneNo) = 0;
 };

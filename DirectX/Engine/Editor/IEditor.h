@@ -6,6 +6,8 @@ class IEditor {
 public:
 	virtual void Initialize();
 
+	virtual void AddComboName(const ComboNameType& type, const std::string& comboName);
+
 	virtual void AddItem(const std::string& key, const int32_t& value, const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
 	virtual void AddItem(const std::string& key, const float& value, const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
 	virtual void AddItem(const std::string& key, const Vector2& value, const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
@@ -15,6 +17,7 @@ public:
 	virtual void AddItem(const std::string& key, const std::string& value, const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
 
 	virtual void AddItemColor(const std::string& key, const Vector4& value, const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
+	virtual void AddItemCombo(const std::string& key, const ComboNameType& type, const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
 
 	virtual const int32_t& GetIntValue(const std::string& key, const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_") const;
 	virtual const float& GetFloatValue(const std::string& key, const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_") const;
@@ -25,6 +28,7 @@ public:
 	virtual const std::string& GetStringValue(const std::string& key, const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_") const;
 
 	virtual const Vector4& GetColor(const std::string& key, const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_") const;
+	virtual const std::string& GetCombo(const std::string& key, const ComboNameType& type, const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_") const;
 
 	virtual void SetVariable(const std::string& key, const int32_t& value, const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
 	virtual void SetVariable(const std::string& key, const float& value, const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
@@ -39,6 +43,6 @@ public:
 
 	virtual const bool IsChangedStage();
 protected:
-	int preStageNo_;
+	int32_t preStageNo_;
 	std::unique_ptr<GlobalVariableUser> global_;
 };

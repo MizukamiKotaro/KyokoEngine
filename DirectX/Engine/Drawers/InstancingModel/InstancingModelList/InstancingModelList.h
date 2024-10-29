@@ -13,7 +13,8 @@ public:
 
 	InstancingModelList(const InstancingMeshTexData* modelData);
 
-	void Draw(const Camera& camera);
+	void Draw(const Camera& camera, const InstancingMeshTexData* modelData);
+	void Draw(const Camera& camera, const std::string& tag);
 
 public:
 

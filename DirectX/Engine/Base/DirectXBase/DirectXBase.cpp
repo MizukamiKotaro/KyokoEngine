@@ -236,7 +236,7 @@ void DirectXBase::InitializeDebugController()
 		//デバッグレイヤーを有効にする
 		debugController_->EnableDebugLayer();
 		//さらにGPU側でもチェックを行うようにする
-		debugController_->SetEnableGPUBasedValidation(TRUE);
+		debugController_->SetEnableGPUBasedValidation(FALSE);
 	}
 #endif // DEBUG
 }
@@ -344,7 +344,6 @@ void DirectXBase::CreateFinalRenderTargets() {
 
 	for (size_t i = 0; i < backBuffers_.size(); i++) {
 		rtvHandles_[i] = heap->GetNewDescriptorHandles();
-
 		device_->CreateRenderTargetView(backBuffers_[i].Get(), &rtvDesc, rtvHandles_[i]->cpuHandle);
 	}
 }

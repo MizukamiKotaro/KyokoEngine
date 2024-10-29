@@ -9,4 +9,7 @@ struct VertexData
 	Vector4 vertexPos;
 	Vector2 texcoord;
 	Vector3 normal;
+
+	Vector4 diffuseColor;
+	int32_t textureNum;
 };

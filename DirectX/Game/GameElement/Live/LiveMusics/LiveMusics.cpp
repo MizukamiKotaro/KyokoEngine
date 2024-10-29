@@ -11,7 +11,7 @@ void LiveMusics::Initialize()
 	if (music_->IsPlaying()) {
 		music_->Stop();
 	}
-	switch (IScene::stageNo_)
+	switch (IScene::GetStageNo())
 	{
 	case STAGE::SHINING_STAR:
 		music_->Load("maou_short_14_shining_star.mp3", "シャイニングスター");

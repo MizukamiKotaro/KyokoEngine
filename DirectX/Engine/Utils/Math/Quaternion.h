@@ -66,6 +66,10 @@ public:
 
 	Vector3 RotateVector(const Vector3& vector);
 
+	static Quaternion EulerToQuaternion(const Vector3& eulerAngles);
+	
+	static Vector3 QuaternionToEuler(const Quaternion& q);
+
 public:
 	float x;
 	float y;

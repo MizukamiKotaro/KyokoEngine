@@ -10,6 +10,12 @@ TwinSpotLightBoxAnimationEditor::TwinSpotLightBoxAnimationEditor(const std::stri
 	SetGlobalVariable();
 }
 
+void TwinSpotLightBoxAnimationEditor::SetTime(const float& time)
+{
+	lights_[0]->SetTime(time);
+	lights_[1]->SetTime(-time);
+}
+
 void TwinSpotLightBoxAnimationEditor::Update(const float& time)
 {
 #ifdef _DEBUG

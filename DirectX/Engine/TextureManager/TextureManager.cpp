@@ -48,7 +48,9 @@ const Texture* TextureManager::LoadTexture(const std::string& filePath)
 
 	if (!found) {
 		// なかった場合白にしてもいいけどエラーの方が気付きやすい
-		// このタイミングで白にしたら白が余計生成される
+		if (textureMap_.find("white.png") != textureMap_.end()) {
+			return textureMap_["white.png"].get();
+		}
 		tex = directoryPath_ + "white.png";
 	}
 
@@ -97,8 +99,8 @@ DirectX::ScratchImage TextureManager::Load(const std::string& filePath)
 
 	//ミップマップの生成
 	DirectX::ScratchImage mipImages{};
-	if (DirectX::IsCompressed(image.GetMetadata().format)) { // 圧縮フォーマットか動か調べる
-		mipImages = std::move(image); // 圧縮フォーマットならそのまま使うのでmoveする
+	if (DirectX::IsCompressed(image.GetMetadata().format)) { // 圧縮フォーマットか調べる
+		mipImages = std::move(image); // 圧縮フォーマットならそのまま使うのでmove
 	}
 	else {
 		hr = DirectX::GenerateMipMaps(image.GetImages(), image.GetImageCount(), image.GetMetadata(), DirectX::TEX_FILTER_SRGB, 0, mipImages);
@@ -124,9 +126,6 @@ ID3D12Resource* TextureManager::CreateTextureResource(const DirectX::TexMetadata
 	//2.利用するHeapの設定
 	D3D12_HEAP_PROPERTIES heapProperties{};
 	heapProperties.Type = D3D12_HEAP_TYPE_DEFAULT;
-
-	//heapProperties.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_WRITE_BACK; // WriteBackポリシーでCPUアクセス可能
-	//heapProperties.MemoryPoolPreference = D3D12_MEMORY_POOL_L0; // プロセッサの近くに配置
 
 	//3.Resourceの生成
 	ID3D12Resource* resource = nullptr;

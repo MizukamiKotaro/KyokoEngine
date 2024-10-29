@@ -8,6 +8,8 @@ struct Vertex {
 	float32_t4 position;
 	float32_t2 texcoord;
 	float32_t3 normal;
+	float32_t4 diffuseColor;
+	int32_t textureNum;
 };
 StructuredBuffer<Vertex> gInputVerteces : register(t1);
 
@@ -35,6 +37,8 @@ void main(uint32_t3 DTid : SV_DispatchThreadID)
 		Vertex skinned;
 
 		skinned.texcoord = input.texcoord;
+		skinned.diffuseColor = input.diffuseColor;
+		skinned.textureNum = input.textureNum;
 
 		skinned.position = mul(input.position, gMatrixPalette[influence.index.x].skeletonSpaceMatrix) * influence.weight.x;
 		skinned.position += mul(input.position, gMatrixPalette[influence.index.y].skeletonSpaceMatrix) * influence.weight.y;

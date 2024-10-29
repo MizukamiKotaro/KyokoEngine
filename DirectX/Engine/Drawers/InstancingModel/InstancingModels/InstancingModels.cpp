@@ -9,6 +9,7 @@
 
 #include "GraphicsPipelineSystem/PipelineTypeConfig.h"
 #include "ILight/ILight.h"
+#include "InstancingResourceManager.h"
 
 const PipelineType InstancingModels::pipelineType_ = PipelineType::INSTANCING_MODEL;
 
@@ -16,70 +17,30 @@ InstancingModels::InstancingModels(const InstancingMeshTexData* modelData)
 {
 	modelData_ = modelData;
 
-	materialResource_ = DirectXBase::CreateBufferResource(sizeof(Material));
-
-	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
-	*materialData_ = { Vector4(1.0f, 1.0f, 1.0f, 1.0f) , 2 };
-
-	//WVP用のリソースを作る。Matrix4x4　1つ分のサイズを用意する
-	instancingResource_ = DirectXBase::CreateBufferResource(sizeof(ParticleForGPU) * kNumInstance);
-	instancingData_ = nullptr;
-	instancingResource_->Map(0, nullptr, reinterpret_cast<void**>(&instancingData_));
-
-	for (uint32_t index = 0; index < kNumInstance; index++) {
-		instancingData_[index].WVP = Matrix4x4::MakeIdentity4x4();
-		instancingData_[index].World = Matrix4x4::MakeIdentity4x4();
-		instancingData_[index].uvMatrix = Matrix4x4::MakeIdentity4x4();
-		instancingData_[index].color = { 1.0f,1.0f,1.0f,0.0f };
-	}
-
-	CreateSRV();
+	resourceManager_ = InstancingResourceManager::GetInstance();
+	resourceManager_->AddResource(modelData_);
 
 	light_.Initialize();
 }
 
 InstancingModels::~InstancingModels()
 {
-	instancingResource_->Release();
-	materialResource_->Release();
-	DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->DeleteDescriptor(srvHandles_);
 }
 
-void InstancingModels::Draw(const Camera& camera, std::list<InstancingModelData>& blocks)
+void InstancingModels::Draw(const Camera& camera, std::list<InstancingModelData>& blocks, const InstancingMeshTexData* modelData)
 {
-	PreDraw();
-
-	uint32_t instaceNum = static_cast<uint32_t>(blocks.size());
-	instaceNum = std::clamp<uint32_t>(instaceNum, 0, kNumInstance);
-	uint32_t index = 0;
-
-	for (std::list<InstancingModelData>::iterator iter = blocks.begin(); iter != blocks.end(); iter++) {
-		if (index >= kNumInstance) {
-			break;
-		}
-
-		instancingData_[index].World = iter->matrix_;
-		instancingData_[index].WVP = instancingData_[index].World * camera.GetViewProjection();
-		instancingData_[index].uvMatrix = iter->uvMatrix_;
-		instancingData_[index].color = iter->color_;
-
-		index++;
+	if (modelData_ != modelData) {
+		return;
 	}
-	psoManager_->SetBlendMode(pipelineType_, modelData_->blendMode_);
-	//Spriteの描画。変更に必要なものだけ変更する
-	commandList_->IASetVertexBuffers(0, 1, &modelData_->modelData_->mesh.vertexBufferView_); // VBVを設定
-	commandList_->IASetIndexBuffer(&modelData_->modelData_->mesh.indexBufferView_);
-	//マテリアルCBufferの場所を設定
-	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
-	//TransformationMatrixCBufferの場所を設定
-	//commandList->SetGraphicsRootConstantBufferView(1, instancingResource_->GetGPUVirtualAddress());
-	commandList_->SetGraphicsRootDescriptorTable(1, srvHandles_->gpuHandle);
-	//平行光源CBufferの場所を設定
-	commandList_->SetGraphicsRootConstantBufferView(3, light_.GetDirectionalLightGPUVirtualAddress());
-	commandList_->SetGraphicsRootDescriptorTable(2, modelData_->texture_->handles_->gpuHandle);
-	//描画!!!!（DrawCall/ドローコール）
-	//commandList_->DrawInstanced(UINT(modelData_->modelData_->mesh.verteces.size()), instaceNum, 0, 0);
-	commandList_->DrawIndexedInstanced(UINT(modelData_->modelData_->mesh.indices.size()), instaceNum, 0, 0, 0);
+	Draw(camera, blocks);
+}
+
+void InstancingModels::Draw(const Camera& camera, std::list<InstancingModelData>& blocks, const std::string& tag)
+{
+	if (modelData_->tag_ != tag) {
+		return;
+	}
+	Draw(camera, blocks);
 }
 
 void InstancingModels::PreDraw()
@@ -97,18 +58,47 @@ void InstancingModels::SetLight(const ILight* light)
 	light_.SetLight(light);
 }
 
-void InstancingModels::CreateSRV()
+void InstancingModels::Draw(const Camera& camera, std::list<InstancingModelData>& blocks)
 {
-	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
-	srvDesc.Format = DXGI_FORMAT_UNKNOWN;
-	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
-	srvDesc.Buffer.FirstElement = 0;
-	srvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
-	srvDesc.Buffer.NumElements = kNumInstance;
-	srvDesc.Buffer.StructureByteStride = sizeof(ParticleForGPU);
+	PreDraw();
 
-	srvHandles_ = DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->GetNewDescriptorHandles();
+	uint32_t instaceNum = static_cast<uint32_t>(blocks.size());
+	instaceNum = std::clamp<uint32_t>(instaceNum, 0, kNumInstance);
+	uint32_t index = 0;
 
-	DirectXBase::GetInstance()->GetDevice()->CreateShaderResourceView(instancingResource_.Get(), &srvDesc, srvHandles_->cpuHandle);
+	InstancingResourceManager::Resources* resource = resourceManager_->GetResources(modelData_);
+
+	if (int32_t(resource->instancingResources_.size()) <= resource->instancingNum_) {
+		resourceManager_->CreateSRV(1, modelData_);
+	}
+
+	for (std::list<InstancingModelData>::iterator iter = blocks.begin(); iter != blocks.end(); iter++) {
+		if (index >= kNumInstance) {
+			break;
+		}
+
+		resource->instancingResources_[resource->instancingNum_].instancingData_[index].World = iter->matrix_;
+		resource->instancingResources_[resource->instancingNum_].instancingData_[index].WVP = resource->instancingResources_[resource->instancingNum_].instancingData_[index].World * camera.GetViewProjection();
+		resource->instancingResources_[resource->instancingNum_].instancingData_[index].uvMatrix = iter->uvMatrix_;
+		resource->instancingResources_[resource->instancingNum_].instancingData_[index].color = iter->color_;
+
+		index++;
+	}
+	psoManager_->SetBlendMode(pipelineType_, modelData_->blendMode_);
+	//Spriteの描画。変更に必要なものだけ変更する
+	commandList_->IASetVertexBuffers(0, 1, &modelData_->modelData_->mesh.vertexBufferView_); // VBVを設定
+	commandList_->IASetIndexBuffer(&modelData_->modelData_->mesh.indexBufferView_);
+	//マテリアルCBufferの場所を設定
+	commandList_->SetGraphicsRootConstantBufferView(0, resource->materialResource_->GetGPUVirtualAddress());
+	//TransformationMatrixCBufferの場所を設定
+	//commandList->SetGraphicsRootConstantBufferView(1, instancingResource_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootDescriptorTable(1, resource->instancingResources_[resource->instancingNum_].srvHandles_->gpuHandle);
+	//平行光源CBufferの場所を設定
+	commandList_->SetGraphicsRootConstantBufferView(3, light_.GetDirectionalLightGPUVirtualAddress());
+	commandList_->SetGraphicsRootDescriptorTable(2, modelData_->texture_->handles_->gpuHandle);
+	//描画!!!!（DrawCall/ドローコール）
+	//commandList_->DrawInstanced(UINT(modelData_->modelData_->mesh.verteces.size()), instaceNum, 0, 0);
+	commandList_->DrawIndexedInstanced(UINT(modelData_->modelData_->mesh.indices.size()), instaceNum, 0, 0, 0);
+
+	resource->instancingNum_++;
 }

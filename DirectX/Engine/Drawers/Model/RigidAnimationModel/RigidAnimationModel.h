@@ -7,6 +7,7 @@ public:
 	RigidAnimationModel(const std::string& fileName);
 	RigidAnimationModel(const ModelData* modelData, const std::string& fileName);
 
+	void SetTime(const float& time);
 	void Update(const float& time = 0.0f) override;
 	void Draw(const Camera& camera, const BlendMode& blendMode = BlendMode::kBlendModeNormal) const override;
 

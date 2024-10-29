@@ -278,9 +278,6 @@ Matrix4x4 Matrix4x4::MakeRotateMatrix(const Vector3& rotate, RotateType rotateOr
 
 Matrix4x4 Matrix4x4::MakeAffinMatrix(
 	const Vector3& scale, const Vector3& rotate, const Vector3& translate) {
-	/*Matrix4x4 result = Matrix4x4::Multiply(Matrix4x4::MakeScaleMatrix(scale),
-		Matrix4x4::Multiply(Matrix4x4::MakeRotateXYZMatrix(rotate),
-	   Matrix4x4::MakeTranslateMatrix(translate)));*/
 
 	Matrix4x4 rotateMatrix = Matrix4x4::MakeRotateXYZMatrix(rotate);
 
@@ -336,7 +333,7 @@ Matrix4x4 Matrix4x4::MakeAffinMatrix(const Vector3& scale, const Quaternion& rot
 }
 
 Matrix4x4 Matrix4x4::MakeAffinMatrix(const EulerTransform& transform) {
-	return MakeAffinMatrix(transform.scale_, transform.rotate_, transform.translate_);
+	return MakeAffinMatrix(transform.scale_, Quaternion::EulerToQuaternion(transform.rotate_), transform.translate_);
 }
 
 Matrix4x4 Matrix4x4::MakeAffinMatrix(const QuaternionTransform& transform)

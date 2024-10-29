@@ -9,14 +9,6 @@
 class Vector2;
 class Vector3;
 
-enum class ImGuiType {
-	DEFAULT,
-	SLIDER_DEFAULT,
-	DRAG_NORMALIZE,
-	SLIDER_NORMALIZE,
-	COLOR_EDIT,
-};
-
 class GlobalVariables {
 public:
 	
@@ -32,6 +24,7 @@ public:
 	template<typename T>
 	void AddItem(const std::string& chunkName, const std::string& groupName, const std::string& key, const T& value, const std::vector<std::string>& tree);
 	void AddItemColor(const std::string& chunkName, const std::string& groupName, const std::string& key, const Vector4& value, const std::vector<std::string>& tree);
+	void AddItemCombo(const std::string& chunkName, const std::string& groupName, const std::string& key, const std::string& type, const std::string& value, const std::vector<std::string>& tree);
 
 	const int32_t& GetIntValue(const std::string& chunkName, const std::string& groupName, const std::string& key, const std::vector<std::string>& tree) const;
 	const float& GetFloatValue(const std::string& chunkName, const std::string& groupName, const std::string& key, const std::vector<std::string>& tree) const;
@@ -41,7 +34,8 @@ public:
 	const bool& GetBoolValue(const std::string& chunkName, const std::string& groupName, const std::string& key, const std::vector<std::string>& tree) const;
 	const std::string& GetStringValue(const std::string& chunkName, const std::string& groupName, const std::string& key, const std::vector<std::string>& tree) const;
 	const Vector4& GetColor(const std::string& chunkName, const std::string& groupName, const std::string& key, const std::vector<std::string>& tree) const;
-	
+	const std::string& GetCombo(const std::string& chunkName, const std::string& groupName, const std::string& key, const std::string& type, const std::vector<std::string>& tree) const;
+
 	const int32_t& GetIntValueDontTouchImGui(const std::string& key) const;
 	const float& GetFloatValueDontTouchImGui(const std::string& key) const;
 	const Vector2& GetVector2ValueDontTouchImGui(const std::string& key) const;
@@ -70,6 +64,10 @@ public:
 
 	void LoadFile(const std::string& chunkName, const std::string& groupName);
 
+	void AddComboName(const std::string& key, const std::string& comboName);
+
+	const std::map<std::string, std::vector<std::string>>* GetComboNameMap() const;
+
 private:
 	GlobalVariables() = default;
 	~GlobalVariables() = default;
@@ -92,6 +90,8 @@ private:
 
 	template<typename T>
 	void SetValue(const std::string& chunkName, const std::string& groupName, const std::string& key, const T& value, const std::vector<std::string>& tree, const bool& isAddItem = true);
+
+	void SetComboName(const std::string& key, const std::string& comboName);
 
 	void ItemToRoot(nlohmann::json& root, Item& item, const std::string& key, const std::vector<std::string>& treeNames, uint32_t level = 0);
 	void MakeTreeNames(std::string& key, std::vector<std::string>& treeNames, uint32_t level = 0);
@@ -117,5 +117,15 @@ private:
 	uint32_t kMaxTreeNum_;
 	const std::string kDirectoryPath = "Resources/GlobalVariables/";
 	std::vector<std::string> kTreeName_;
+
+	const std::string kZZESC = "zzESC";
+	const std::string kDontTouchPlayData = "aaDontTouchPlayData";
+	const std::string kDontTouch = "DontTouch";
 	const std::string kColorName = "COLOR";
+	const std::string kGlobalCombo = "GlobalCombo";
+	const std::string kComboName = "COMBO";
+	const std::string kComboTypeName = "COMTYPE";
+	std::vector<std::string> kUnderBar;
+
+	std::map<std::string, std::vector<std::string>> comboNames_;
 };

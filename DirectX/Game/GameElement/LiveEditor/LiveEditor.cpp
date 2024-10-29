@@ -4,9 +4,14 @@
 #include "GameElement/IStageObject/StageObjectFactory/StageObjectFactory.h"
 #include "ScreenEditor/ScreenEditor.h"
 #include "ParticleManager.h"
+#include "InstancingModelManager.h"
+#include "ImGuiManager/ImGuiManager.h"
+#include "SceneSystem/IScene/IScene.h"
 
 LiveEditor::LiveEditor(Camera* camera)
 {
+	IStageObject::StaticInitialize();
+
 	camera_ = camera;
 	camera_->Initialize();
 	
@@ -14,57 +19,118 @@ LiveEditor::LiveEditor(Camera* camera)
 	lightAndOutline_ = std::make_unique<SpotLightAndOutline>();
 
 	screenManager_ = std::make_unique<MultipleScreenEditor>("スクリーン", "マルチスクリーン", 0);
-	idolManager_ = std::make_unique<IStageObjectManager>();
-	idolManager_->AddType(StageObjectType::IDOL, "アイドル", "メインアイドル");
 
+	for (std::unique_ptr<IStageObjectManager>& manager : objectManagers_) {
+		manager = std::make_unique<IStageObjectManager>();
+	}
+	
+	objectManagers_[ManagerNames::kIdol]->AddType(StageObjectType::IDOL, "アイドル", "メインアイドル");
 
-	lightManager_ = std::make_unique<IStageObjectManager>();
-	lightManager_->AddType(StageObjectType::SPOTLIGHT, "ライト", "スポットライト");
-	lightManager_->AddType(StageObjectType::TWIN_SPOTLIGHT, "ライト", "ツインスポットライト");
+	objectManagers_[ManagerNames::kLight]->AddType(StageObjectType::SPOTLIGHT, "ライト", "スポットライト");
+	objectManagers_[ManagerNames::kLight]->AddType(StageObjectType::TWIN_SPOTLIGHT, "ライト", "ツインスポットライト");
 	floor_.reset(StageObjectFactory::CreateStageObject(StageObjectType::FLOOR, "ステージ床", "ステージ床", 0));
 	dome_.reset(StageObjectFactory::CreateStageObject(StageObjectType::DOME, "ドーム", "ドーム", 0));
 
-	fireManager_ = std::make_unique<IStageObjectManager>();
-	fireManager_->AddType(StageObjectType::FIRE_PARTICLE, "パーティクル", "炎");
+	objectManagers_[ManagerNames::kFire]->AddType(StageObjectType::FIRE_PARTICLE, "パーティクル", "炎");
+
+	objectManagers_[ManagerNames::kObject]->AddType(StageObjectType::OBJECT, "オブジェクト", "オブジェクト");
 
 	screenMap_ = screenManager_->GetScreenMap();
 	lightAndOutlineMap_ = screenManager_->GetOutlineMap();
+
+	instancingManager_ = InstancingModelManager::GetInstance();
+
+	cameraAnim_ = std::make_unique<CameraVMDAnimation>("kisekisaemo");
+	cameraAnim_->Initialize();
+
+	debugTime_ = 0.0f;
+
+	isDebug_ = false;
 }
 
 void LiveEditor::Initialize()
 {
+	cameraAnim_->Initialize();
 	camera_->Initialize();
 	camera_->transform_.translate_ = { 0.0f,25.0f,-100.0f };
 	camera_->transform_.rotate_.x = 0.1f;
+	if (IScene::GetSceneNo() == SCENE::STAGE) {
+		camera_->transform_.translate_ = cameraAnim_->GetState().position;
+		camera_->transform_.rotate_ = cameraAnim_->GetState().rotation;
+		isDebug_ = false;
+	}
+	else {
+		isDebug_ = true;
+	}
 	camera_->Update();
 
 	screenCamera_->transform_.translate_ = { 0.0f,15.0f,-80.0f };
 	screenCamera_->Update();
 
-	lightManager_->Initialize();
-	idolManager_->Initialize();
+	for (std::unique_ptr<IStageObjectManager>& manager : objectManagers_) {
+		manager->Initialize();
+	}
 	floor_->Initialize();
 	dome_->Initialize();
-	fireManager_->Initialize();
+
+	debugTime_ = 0.0f;
 }
 
 void LiveEditor::Update(const float& time)
 {
+
+	instancingManager_->Clear();
 #ifdef _DEBUG
-	/*ImGui::Begin("Camera");
-	ImGui::DragFloat3("ポジション", &camera_->transform_.translate_.x, 0.01f);
-	ImGui::SliderFloat3("角度", &camera_->transform_.rotate_.x, -3.14f, 3.14f);
-	ImGui::End();*/
+	if (IScene::GetSceneNo() == SCENE::STAGE_EDITOR) {
+		ImGui::Begin("debug");
+		ImGui::DragFloat("タイム", &debugTime_, 0.01f, 0.0f);
+		if (ImGui::Button("Start")) {
+			isDebug_ = false;
+			camera_->StopDebug();
+		}
+		if (ImGui::Button("Stop")) {
+			isDebug_ = true;
+		}
+		ImGui::End();
+	}
+
+	if (isDebug_) {
+		cameraAnim_->SetTime(debugTime_);
+		cameraAnim_->Update(0.0f);
+		camera_->DebugUpdate();
+		for (std::unique_ptr<IStageObjectManager>& manager : objectManagers_) {
+			manager->SetTime(debugTime_);
+			manager->Update(0.0f);
+		}
+	}
+	else {
+		cameraAnim_->Update(time);
+		debugTime_ += time;
+		for (std::unique_ptr<IStageObjectManager>& manager : objectManagers_) {
+			manager->Update(time);
+		}
+	}
+
+	if (!camera_->GetIsDebug()) {
+		camera_->transform_.translate_ = cameraAnim_->GetState().position;
+		camera_->transform_.rotate_ = cameraAnim_->GetState().rotation;
+	}
+	// _DEBUG
+#else
+	// Release
+	cameraAnim_->Update(time);
+	camera_->transform_.translate_ = cameraAnim_->GetState().position;
+	camera_->transform_.rotate_ = cameraAnim_->GetState().rotation;
+	for (std::unique_ptr<IStageObjectManager>& manager : objectManagers_) {
+		manager->Update(time);
+	}
+#endif 
 	
-#endif // _DEBUG
 	camera_->Update();
 
-	lightManager_->Update(time);
 	screenManager_->Update(time);
-	idolManager_->Update(time);
 	floor_->Update(time);
 	dome_->Update(time);
-	fireManager_->Update(time);
 
 	WriteScreen();
 	WriteOutline();
@@ -74,7 +140,7 @@ void LiveEditor::Draw()
 {
 	ParticleManager::GetInstance()->Clear();
 	lightAndOutline_->Draw(*camera_);
-	fireManager_->Draw(*camera_);
+	objectManagers_[ManagerNames::kFire]->Draw(*camera_);
 	ParticleManager::GetInstance()->Draw(*camera_);
 }
 
@@ -82,20 +148,7 @@ void LiveEditor::WriteScreen()
 {
 	for (uint32_t i = 0; i < screenManager_->GetScreenNum(); i++) {
 		const Camera& camera = (*screenMap_)[i]->GetCamera();
-		(*lightAndOutlineMap_)[i]->PreDrawOutline();
-		idolManager_->Draw(camera);
-		floor_->DrawSub(camera);
-		(*lightAndOutlineMap_)[i]->PostDrawOutline();
-
-		(*lightAndOutlineMap_)[i]->PreDrawObject();
-		dome_->Draw(camera);
-		floor_->Draw(camera);
-		lightManager_->Draw(camera);
-		(*lightAndOutlineMap_)[i]->PostDrawObject();
-
-		(*lightAndOutlineMap_)[i]->PreDrawLight();
-		lightManager_->DrawLight(camera);
-		(*lightAndOutlineMap_)[i]->PostDrawLight();
+		Draw((*lightAndOutlineMap_)[i], camera);
 
 		(*screenMap_)[i]->PreDrawScene();
 		(*lightAndOutlineMap_)[i]->Draw(camera);
@@ -105,19 +158,29 @@ void LiveEditor::WriteScreen()
 
 void LiveEditor::WriteOutline()
 {
-	lightAndOutline_->PreDrawOutline();
-	idolManager_->Draw(*camera_);
-	floor_->DrawSub(*camera_);
-	lightAndOutline_->PostDrawOutline();
+	Draw(lightAndOutline_, *camera_);
+}
 
-	lightAndOutline_->PreDrawObject();
-	dome_->Draw(*camera_);
-	floor_->Draw(*camera_);
-	screenManager_->Draw(*camera_);
-	lightManager_->Draw(*camera_);
-	lightAndOutline_->PostDrawObject();
+void LiveEditor::Draw(std::unique_ptr<SpotLightAndOutline>& lightAndOutline, const Camera& camera)
+{
+	lightAndOutline->PreDrawOutline();
+	objectManagers_[ManagerNames::kIdol]->Draw(camera);
+	instancingManager_->Draw(camera, "outline");
+	lightAndOutline->PostDrawOutline();
 
-	lightAndOutline_->PreDrawLight();
-	lightManager_->DrawLight(*camera_);
-	lightAndOutline_->PostDrawLight();
+	lightAndOutline->PreDrawObject();
+	screenManager_->Draw(camera);
+	objectManagers_[ManagerNames::kObject]->Draw(camera);
+	instancingManager_->Draw(camera);
+	lightAndOutline->PostDrawObject();
+
+	lightAndOutline->PreDrawBloom();
+	dome_->Draw(camera);
+	floor_->Draw(camera);
+	instancingManager_->Draw(camera, "bloom");
+	lightAndOutline->PostDrawBloom();
+
+	lightAndOutline->PreDrawLight();
+	objectManagers_[ManagerNames::kLight]->DrawLight(camera);
+	lightAndOutline->PostDrawLight();
 }

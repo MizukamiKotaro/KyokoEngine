@@ -8,4 +8,5 @@ enum class StageObjectType {
 	FLOOR,
 	DOME,
 	FIRE_PARTICLE,
+	OBJECT,
 };

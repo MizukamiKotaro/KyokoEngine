@@ -14,7 +14,6 @@ LRESULT CALLBACK WindowsInfo::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPA
 		return true;
 	}
 #endif // _DEBUG
-	//メッセージに応じてゲーム固有の処理を行う
 	switch (msg) {
 		//ウィンドウが破棄された
 	case WM_DESTROY:
@@ -34,7 +33,6 @@ WindowsInfo* WindowsInfo::GetInstance() {
 
 void WindowsInfo::CreateGameWindow(const std::string& windowName, int width, int height) {
 	//COM(Component Object Model)の初期化
-
 	// システムタイマーの分解能を上げる
 	timeBeginPeriod(1);
 
@@ -43,7 +41,6 @@ void WindowsInfo::CreateGameWindow(const std::string& windowName, int width, int
 
 	//ウィンドウプロシージャ
 	wndClass_.lpfnWndProc = WindowProc;
-	//ウィンドウクラス名(なんでも良い)
 
 	const std::wstring&& titleName = DebugLog::ConvertString(windowName);
 	wndClass_.lpszClassName = titleName.c_str();
@@ -90,6 +87,7 @@ bool WindowsInfo::ProcessMessage() {
 	}
 
 	if (msg.message == WM_QUIT) {
+		// ウィンドウが閉じた
 		return true;
 	}
 
