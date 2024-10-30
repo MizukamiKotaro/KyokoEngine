@@ -28,6 +28,7 @@
 その他は読み込み関数Load(const std::string& filename, const std::string& tag = "_", float volume = 0.7f)
 を呼び出すと自動的に設定され調整できるようになります。
 
+![AudioのImGui](https://github.com/MizukamiKotaro/KyokoEngine/blob/master/githubResources/audio.gif)
 
 ### GlobalVariable
 jsonデータへの保存や読み込み、ImGuiでの調整ができるようになっています。
@@ -46,6 +47,7 @@ jsonデータへの保存や読み込み、ImGuiでの調整ができるよう�
     * ComboName (ImGui::Text)
 - 特徴
     * ImGuiをtreeで表示されるようにしたため、クラスや用途によってまとめることが可能
+    * treeが開いているかの情報の取得
     * 調整を必要としないデータの保存や上書きが可能
     * 表示するImGuiのタイトルバーの選択
     * 終了時の状態を保存
@@ -55,4 +57,4 @@ jsonデータへの保存や読み込み、ImGuiでの調整ができるよう�
     * 音量設定やクリア状況といったプレイデータの保存
     * Modelデータの格納場所から自動でComboNameを作成し、Comboで表示したいModelデータの選択と保存
 
-
+![GlobalVariableの設定](https://github.com/MizukamiKotaro/KyokoEngine/blob/master/githubResources/kyokoGlobal.png)
