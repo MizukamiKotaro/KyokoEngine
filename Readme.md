@@ -1,11 +1,12 @@
 # KyokoEngine
+
 ## エンジン
-- 自分で書いていないコード
+- **自分で書いていないコード**
     * assimp(obj,gltfの読み込み)
     * DirectXTex(textureの読み込み、生成)
     * imgui(エディター)
     * nlohmann(jsonデータの読み込み、書き出し)
-- 使用可能なデータと用途
+- **使用可能なデータと用途**
     * Model (obj)
     * RigidAnimationModel (gltf)
     * SkinningAnimationModel (gltf)
@@ -13,9 +14,40 @@
     * Audio (mp3,wav)
     * GlobalVariable (json)
     * CameraAnimation (vmd)
-- エンジンの特徴
-    * Audio
+- **特徴**
     * GlobalVariable
+    * Audio
+
+### GlobalVariable
+jsonデータへの保存や読み込み、ImGuiでの調整ができるようになっています。
+- **設定できる型**
+    * int (ImGui::DragInt)
+    * float (ImGui::DragFloat)
+    * Vector2 (ImGui::DragFloat2)
+    * Vector3 (ImGui::DragFloat3)
+    * Vector4 (ImGui::DragFloat4)
+    * bool (ImGui::Checkbox)
+    * std::string (ImGui::Text)
+- **設定できる項目**
+    * 上記の型のデフォルト設定
+    * Color (ImGui::ColorEdit4)
+    * Combo (ImGui::Combo)
+    * ComboName (ImGui::Text)
+
+![GlobalVariableの設定](https://github.com/MizukamiKotaro/KyokoEngine/blob/master/githubResources/kyokoGlobal.png)
+
+- **特徴**
+    * ImGuiをtreeで表示されるようにしたため、クラスや用途によってまとめることが可能
+    * treeが開いているかの情報の取得
+    * 調整を必要としないデータの保存や上書きが可能
+    * 表示するImGuiのタイトルバーの選択
+    * 終了時の状態を保存
+- **使用例**
+    * ステージエディターに拡張
+    * 音量設定やクリア状況といったプレイデータの保存
+    * Modelデータの格納場所から自動でComboNameを作成し、Comboで表示したいModelデータの選択と保存
+
+
 ### Audio
 音声データの読み込み、再生、停止、ループ、一時停止の基本的な機能の他以下のような機能があります。
 * 全体のボリュームと、SE全体のボリューム、Music全体のボリュームをImGuiでの調整、保存
@@ -30,31 +62,9 @@
 
 ![AudioのImGui](https://github.com/MizukamiKotaro/KyokoEngine/blob/master/githubResources/audio.gif)
 
-### GlobalVariable
-jsonデータへの保存や読み込み、ImGuiでの調整ができるようになっています。
-- 設定できる型
-    * int (ImGui::DragInt)
-    * float (ImGui::DragFloat)
-    * Vector2 (ImGui::DragFloat2)
-    * Vector3 (ImGui::DragFloat3)
-    * Vector4 (ImGui::DragFloat4)
-    * bool (ImGui::Checkbox)
-    * std::string (ImGui::Text)
-- 設定できる項目
-    * 上記の型のデフォルト設定
-    * Color (ImGui::ColorEdit4)
-    * Combo (ImGui::Combo)
-    * ComboName (ImGui::Text)
-- 特徴
-    * ImGuiをtreeで表示されるようにしたため、クラスや用途によってまとめることが可能
-    * treeが開いているかの情報の取得
-    * 調整を必要としないデータの保存や上書きが可能
-    * 表示するImGuiのタイトルバーの選択
-    * 終了時の状態を保存
-- 使用例
-    * 上記のAudioの保存
-    * ステージエディターに拡張
-    * 音量設定やクリア状況といったプレイデータの保存
-    * Modelデータの格納場所から自動でComboNameを作成し、Comboで表示したいModelデータの選択と保存
-
-![GlobalVariableの設定](https://github.com/MizukamiKotaro/KyokoEngine/blob/master/githubResources/kyokoGlobal.png)
+**この2つの特徴はチーム制作でとても好評でした。**
+## アプリケーション
+- **現在できること**
+    * カメラ
+    * エディター
+    * デバッグ機能
