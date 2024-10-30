@@ -64,7 +64,7 @@ jsonデータへの保存や読み込み、ImGuiでの調整ができるよう�
 
 **この2つの特徴はチーム制作でとても好評でした。**
 ## アプリケーション
-- **現在できること**
-    * カメラ
-    * エディター
-    * デバッグ機能
+![editor](https://github.com/MizukamiKotaro/KyokoEngine/blob/master/githubResources/editor.gif)
+- **デバッグでできること**
+    * 再生と停止、時間の変更
+    * オブジェクトの配置、調整
