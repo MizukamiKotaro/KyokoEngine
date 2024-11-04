@@ -475,6 +475,9 @@
     <Filter Include="Engine\MMD\CameraVMD">
       <UniqueIdentifier>{4de68ada-3a19-4978-a901-b17edf8809e1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\GameElement\LiveEditor\PenLightEditor">
+      <UniqueIdentifier>{bbe8eef3-4400-4dc1-86bd-6ab3edbd278f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -989,6 +992,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Drawers\InstancingModel\InstancingModels\InstancingResourceManager.cpp">
       <Filter>Engine\Drawers\InstancingModel</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameElement\LiveEditor\PenLightEditor\PenLightEditor.cpp">
+      <Filter>Game\GameElement\LiveEditor\PenLightEditor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1588,6 +1594,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Drawers\InstancingModel\InstancingModels\InstancingResourceManager.h">
       <Filter>Engine\Drawers\InstancingModel</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameElement\LiveEditor\PenLightEditor\PenLightEditor.h">
+      <Filter>Game\GameElement\LiveEditor\PenLightEditor</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

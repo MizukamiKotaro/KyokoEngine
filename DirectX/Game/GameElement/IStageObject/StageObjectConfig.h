@@ -9,4 +9,5 @@ enum class StageObjectType {
 	DOME,
 	FIRE_PARTICLE,
 	OBJECT,
+	PEN_LIGHT,
 };

@@ -18,7 +18,8 @@ public:
 
 	void PreDrawScene();
 	void PostDrawScene();
-	void SetGPUHandle(D3D12_GPU_DESCRIPTOR_HANDLE srvGPUDescriptorHandle);
+	void SetGPUHandle(const D3D12_GPU_DESCRIPTOR_HANDLE& srvGPUDescriptorHandle);
+	const D3D12_GPU_DESCRIPTOR_HANDLE GetGPUHandle();
 	void Reset();
 
 	const Camera& GetCamera() const { return *camera_.get(); }

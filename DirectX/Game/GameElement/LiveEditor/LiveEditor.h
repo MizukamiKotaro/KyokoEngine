@@ -43,8 +43,6 @@ private:
 	std::array<std::unique_ptr<IStageObjectManager>, ManagerNames::kManagerEnd> objectManagers_;
 
 	std::unique_ptr<MultipleScreenEditor> screenManager_;
-	std::unique_ptr<IStageObject> floor_;
-	std::unique_ptr<IStageObject> dome_;
 
 	std::map<uint32_t, std::unique_ptr<ScreenEditor>>* screenMap_ = nullptr;
 	std::map<uint32_t, std::unique_ptr<SpotLightAndOutline>>* lightAndOutlineMap_ = nullptr;

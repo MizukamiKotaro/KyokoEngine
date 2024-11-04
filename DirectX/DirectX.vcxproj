@@ -236,6 +236,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\GameElement\LiveEditor\LiveEditor.cpp" />
     <ClCompile Include="Game\GameElement\LiveEditor\MultipleScreenEditor\MultipleScreenEditor.cpp" />
     <ClCompile Include="Game\GameElement\LiveEditor\ObjectEditor\ObjectEditor.cpp" />
+    <ClCompile Include="Game\GameElement\LiveEditor\PenLightEditor\PenLightEditor.cpp" />
     <ClCompile Include="Game\GameElement\LiveEditor\ScreenEditor\ScreenEditor.cpp" />
     <ClCompile Include="Game\GameElement\LiveEditor\SpotLightBoxAnimationEditor\SpotLightBoxAnimationEditor.cpp" />
     <ClCompile Include="Game\GameElement\LiveEditor\SpotLightBoxAnimationEditor\TwinSpotLightBoxAnimationEditor.cpp" />
@@ -454,6 +455,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\GameElement\LiveEditor\LiveEditor.h" />
     <ClInclude Include="Game\GameElement\LiveEditor\MultipleScreenEditor\MultipleScreenEditor.h" />
     <ClInclude Include="Game\GameElement\LiveEditor\ObjectEditor\ObjectEditor.h" />
+    <ClInclude Include="Game\GameElement\LiveEditor\PenLightEditor\PenLightEditor.h" />
     <ClInclude Include="Game\GameElement\LiveEditor\ScreenEditor\ScreenEditor.h" />
     <ClInclude Include="Game\GameElement\LiveEditor\SpotLightBoxAnimationEditor\SpotLightBoxAnimationEditor.h" />
     <ClInclude Include="Game\GameElement\LiveEditor\SpotLightBoxAnimationEditor\TwinSpotLightBoxAnimationEditor.h" />

@@ -15,6 +15,7 @@ private:
 	void SetGlobalVariable() override;
 	void ApplyGlobalVariable() override;
 	void AddInstancing();
+	void AddInstancing(const Matrix4x4& matrix);
 	const InstancingMeshTexData* GetInstancingData(const std::string& tag);
 private:
 	const ModelData* modelData_;
@@ -23,6 +24,8 @@ private:
 	Vector3 rotate_;
 	Vector3 scale_;
 	Vector4 color_;
+	float allScale_;
+	bool isTwin_;
 	bool isOutLine_;
 	bool isBloom_;
 };

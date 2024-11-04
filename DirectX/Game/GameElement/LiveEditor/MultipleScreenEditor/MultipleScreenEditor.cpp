@@ -61,7 +61,12 @@ void MultipleScreenEditor::CreateScreen()
 	for (uint32_t i = 0; i < screenNum_; i++) {
 		if (screenMap_.find(i) == screenMap_.end()) {
 			screenMap_[i] = std::make_unique<ScreenEditor>(treeName->main, treeName->name, treeName->tree, i);
-			lightAndOutlineMap_[i] = std::make_unique<SpotLightAndOutline>();
+			if (i == 0) {
+				lightAndOutlineMap_[i] = std::make_unique<SpotLightAndOutline>();
+			}
+			else {
+				screenMap_[i]->SetGPUHandle(screenMap_[0]->GetGPUHandle());
+			}
 		}
 	}
 }

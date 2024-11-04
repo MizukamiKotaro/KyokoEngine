@@ -53,9 +53,14 @@ void ScreenEditor::PostDrawScene()
 	postEffect_->PostDrawScene();
 }
 
-void ScreenEditor::SetGPUHandle(D3D12_GPU_DESCRIPTOR_HANDLE srvGPUDescriptorHandle)
+void ScreenEditor::SetGPUHandle(const D3D12_GPU_DESCRIPTOR_HANDLE& srvGPUDescriptorHandle)
 {
 	screen_->SetSRVGPUDescriptorHandle_(srvGPUDescriptorHandle);
+}
+
+const D3D12_GPU_DESCRIPTOR_HANDLE ScreenEditor::GetGPUHandle()
+{
+	return postEffect_->GetSRVGPUDescriptorHandle();
 }
 
 void ScreenEditor::Reset()

@@ -18,7 +18,7 @@ public:
 	void Draw(const Camera& camera) override;
 	D3D12_GPU_DESCRIPTOR_HANDLE GetSRVGPUDescriptorHandle() const { return postEffect_->GetSRVGPUDescriptorHandle(); }
 
-	uint32_t& GetScreenNum() { return screenNum_; }
+	uint32_t GetScreenNum() { return 1; }
 	std::map<uint32_t, std::unique_ptr<ScreenEditor>>* GetScreenMap() { return &screenMap_; }
 	std::map<uint32_t, std::unique_ptr<SpotLightAndOutline>>* GetOutlineMap() { return &lightAndOutlineMap_; }
 

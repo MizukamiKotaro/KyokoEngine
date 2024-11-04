@@ -28,12 +28,11 @@ LiveEditor::LiveEditor(Camera* camera)
 
 	objectManagers_[ManagerNames::kLight]->AddType(StageObjectType::SPOTLIGHT, "ライト", "スポットライト");
 	objectManagers_[ManagerNames::kLight]->AddType(StageObjectType::TWIN_SPOTLIGHT, "ライト", "ツインスポットライト");
-	floor_.reset(StageObjectFactory::CreateStageObject(StageObjectType::FLOOR, "ステージ床", "ステージ床", 0));
-	dome_.reset(StageObjectFactory::CreateStageObject(StageObjectType::DOME, "ドーム", "ドーム", 0));
 
 	objectManagers_[ManagerNames::kFire]->AddType(StageObjectType::FIRE_PARTICLE, "パーティクル", "炎");
 
 	objectManagers_[ManagerNames::kObject]->AddType(StageObjectType::OBJECT, "オブジェクト", "オブジェクト");
+	objectManagers_[ManagerNames::kObject]->AddType(StageObjectType::PEN_LIGHT, "ペンライト", "ペンライト");
 
 	screenMap_ = screenManager_->GetScreenMap();
 	lightAndOutlineMap_ = screenManager_->GetOutlineMap();
@@ -70,8 +69,6 @@ void LiveEditor::Initialize()
 	for (std::unique_ptr<IStageObjectManager>& manager : objectManagers_) {
 		manager->Initialize();
 	}
-	floor_->Initialize();
-	dome_->Initialize();
 
 	debugTime_ = 0.0f;
 }
@@ -129,8 +126,6 @@ void LiveEditor::Update(const float& time)
 	camera_->Update();
 
 	screenManager_->Update(time);
-	floor_->Update(time);
-	dome_->Update(time);
 
 	WriteScreen();
 	WriteOutline();
@@ -170,13 +165,10 @@ void LiveEditor::Draw(std::unique_ptr<SpotLightAndOutline>& lightAndOutline, con
 
 	lightAndOutline->PreDrawObject();
 	screenManager_->Draw(camera);
-	objectManagers_[ManagerNames::kObject]->Draw(camera);
 	instancingManager_->Draw(camera);
 	lightAndOutline->PostDrawObject();
 
 	lightAndOutline->PreDrawBloom();
-	dome_->Draw(camera);
-	floor_->Draw(camera);
 	instancingManager_->Draw(camera, "bloom");
 	lightAndOutline->PostDrawBloom();
 
