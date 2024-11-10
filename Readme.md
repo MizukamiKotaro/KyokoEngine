@@ -3,14 +3,15 @@
 ## アプリケーション
 ### 概要
 * ジャンル : リズムゲーム
-* プレイ人数 : 1人
 * 制作人数 : 1人
 * 制作環境 : DirectX12
-・・ここｐんｇ
+
+![game](https://github.com/MizukamiKotaro/KyokoEngine/blob/master/githubResources/game1-89.jpeg)
+
 ### こだわり
-* アウトラインやブルーム、ライトのシェーダ
-* オブジェクトの設置
-* カメラのアニメーション
+* [アウトラインやブルーム、ライトのシェーダ](#アウトラインやブルーム、ライトのシェーダ)
+* [オブジェクトの設置](#オブジェクトの設置)
+* [カメラのアニメーション](#カメラのアニメーション)
 
 ### アウトラインやブルーム、ライトのシェーダ
 - 描画までの流れ
@@ -32,6 +33,8 @@
 ### オブジェクトの設置
 - 大まかな設計
 
+![liveclass](https://github.com/MizukamiKotaro/KyokoEngine/blob/master/githubResources/liveclass.png)
+
 - 特徴
     * パラメータの設定が容易
     * 描画のタイプの切り替え
@@ -40,14 +43,18 @@
     * [GlobalVariable](#GlobalVariable)を用いて設定
     * 基底クラスの関数で設定の共通部分をまとめているので楽
 - 描画のタイプの切り替え
-    * [ObjectModelファイル]()にある.objを切り替えることができる
+    * [ObjectModelファイル](https://github.com/MizukamiKotaro/KyokoEngine/tree/master/DirectX/Resources/Object/ObjectModel)にある.objを切り替えることができる
     * [タイプ](#アウトラインやブルーム、ライトのシェーダ)を切り替えられる
+
+![editor0](https://github.com/MizukamiKotaro/KyokoEngine/blob/master/githubResources/editor0.gif)
+
 - インスタンシング描画
     * オブジェクトとタイプが一致しているものをまとめて描画するようにしている
 
 
 ### カメラのアニメーション
-・・ここぎｆ
+
+![camera0](https://github.com/MizukamiKotaro/KyokoEngine/blob/master/githubResources/camera0.gif)
 
 カメラに動きを付けたいけど、1曲分の動きを作るのは大変なので、vmdのカメラのアニメーションデータを読み込み、再生できるようにしました
 
