@@ -1,11 +1,58 @@
 # KyokoEngine
 
+## アプリケーション
+### 概要
+* ジャンル : リズムゲーム
+* プレイ人数 : 1人
+* 制作人数 : 1人
+* 制作環境 : DirectX12
+・・ここｐんｇ
+### こだわり
+* アウトラインやブルーム、ライトのシェーダ
+* オブジェクトの設置
+* カメラのアニメーション
+
+### アウトラインやブルーム、ライトのシェーダ
+- 描画までの流れ
+    * それぞれをレンダーターゲットに書き込む
+        * アウトライン
+        * ブルーム
+        * ライト
+        * そのまま
+    * 書き込まれた色と深度のデータを１つのシェーダにまとめて送り深度比較をして書き込む
+- アウトライン
+    * 深度ベースでアウトラインを描画
+    * 深度によってアウトラインの太さが変わる
+- ブルーム
+    * 横のガウシアンブラーをしたものを縦のガウシアンブラーをして、処理を軽くしている
+    * レンダーターゲットのサイズを変更することができ、粗くして処理を軽くしている
+- ライト
+    * スポットライトの反射とビルボードを用いて表現している
+
+### オブジェクトの設置
+- 大まかな設計
+
+- 特徴
+    * パラメータの設定が容易
+    * 描画のタイプの切り替え
+    * インスタンシング描画
+- パラメータの設定が容易
+    * [GlobalVariable](#GlobalVariable)を用いて設定
+    * 基底クラスの関数で設定の共通部分をまとめているので楽
+- 描画のタイプの切り替え
+    * [ObjectModelファイル]()にある.objを切り替えることができる
+    * [タイプ](#アウトラインやブルーム、ライトのシェーダ)を切り替えられる
+- インスタンシング描画
+    * オブジェクトとタイプが一致しているものをまとめて描画するようにしている
+
+
+### カメラのアニメーション
+・・ここぎｆ
+
+カメラに動きを付けたいけど、1曲分の動きを作るのは大変なので、vmdのカメラのアニメーションデータを読み込み、再生できるようにしました
+
+
 ## エンジン
-- **自分で書いていないコード**
-    * assimp(obj,gltfの読み込み)
-    * DirectXTex(textureの読み込み、生成)
-    * imgui(エディター)
-    * nlohmann(jsonデータの読み込み、書き出し)
 - **使用可能なデータと用途**
     * Model (obj)
     * RigidAnimationModel (gltf)
@@ -15,8 +62,8 @@
     * GlobalVariable (json)
     * CameraAnimation (vmd)
 - **特徴**
-    * GlobalVariable
-    * Audio
+    * [GlobalVariable](#GlobalVariable)
+    * [Audio](#Audio)
 
 ### GlobalVariable
 jsonデータへの保存や読み込み、ImGuiでの調整ができるようになっています。
@@ -63,8 +110,9 @@ jsonデータへの保存や読み込み、ImGuiでの調整ができるよう�
 ![AudioのImGui](https://github.com/MizukamiKotaro/KyokoEngine/blob/master/githubResources/audio.gif)
 
 **この2つの特徴はチーム制作でとても好評でした。**
-## アプリケーション
-![editor](https://github.com/MizukamiKotaro/KyokoEngine/blob/master/githubResources/editor.gif)
-- **デバッグでできること**
-    * 再生と停止、時間の変更
-    * オブジェクトの配置、調整
+
+## 外部ライブラリ
+* [Assimp](https://github.com/assimp/assimp)
+* [DirectXTex](https://github.com/microsoft/DirectXTex)
+* [ImGui](https://github.com/ocornut/imgui)
+* [nlohmann](https://github.com/nlohmann/json)

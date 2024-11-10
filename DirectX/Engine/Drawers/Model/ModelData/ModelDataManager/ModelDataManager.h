@@ -79,7 +79,7 @@ private:
 	std::map<std::string, std::unique_ptr<Animation>> animationMap_;
 
 	const std::string directoryPath_ = "Resources/Object";
-	const std::string kObjDirectoryPath_ = "Resources/Object/OBJ";
+	const std::string kObjDirectoryPath_ = "Resources/Object/ObjectModel";
 	const std::string kRigidAnimDirectoryPath_ = "Resources/Object/RigidAnimationModel";
 	const std::string kSkinningAnimDirectoryPath_ = "Resources/Object/SkinningModel";
 };
