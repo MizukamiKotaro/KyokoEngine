@@ -44,7 +44,7 @@
     * 基底クラスの関数で設定の共通部分をまとめているので楽
 - 描画のタイプの切り替え
     * [ObjectModelファイル](https://github.com/MizukamiKotaro/KyokoEngine/tree/master/DirectX/Resources/Object/ObjectModel)にある.objを切り替えることができる
-    * [タイプ](#アウトラインやブルーム、ライトのシェーダ)を切り替えられる
+    * [タイプ](#アウトラインやブルームライトのシェーダ)を切り替えられる
 
 ![editor0](https://github.com/MizukamiKotaro/KyokoEngine/blob/master/githubResources/editor0.gif)
 
