@@ -7,6 +7,7 @@
 void IStageObjectManager::AddType(const StageObjectType& type, const std::string& mainName, const std::string& subName)
 {
 	bool is = false;
+	// 同じ設定があるか
 	for (const std::unique_ptr<IStageObjectManager::Type>& aType : types_) {
 		if (aType->type == type && aType->mainName == mainName && aType->subName == subName) {
 			is = true;
@@ -14,6 +15,7 @@ void IStageObjectManager::AddType(const StageObjectType& type, const std::string
 		}
 	}
 	if (!is) {
+		// 設定の追加
 		types_.push_back(std::make_unique<IStageObjectManager::Type>(0, 0, type, mainName, subName));
 		if (!stageEditor_) {
 			stageEditor_ = std::make_unique<StageEditor>();

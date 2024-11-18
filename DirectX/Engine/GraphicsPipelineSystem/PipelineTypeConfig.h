@@ -27,4 +27,5 @@ enum class PipelineType {
 	GPU_PARTICLE,
 	LIGHT_DEPTH,
 	SPOT_LIGHT_DEPTH,
+	MMD,
 };

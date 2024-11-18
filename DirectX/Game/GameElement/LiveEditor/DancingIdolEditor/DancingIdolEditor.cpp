@@ -6,11 +6,9 @@ DancingIdolEditor::DancingIdolEditor(const std::string& mainName, const std::str
 {
 	CreateStageEditor(mainName, name, no);
 	firstPosition_ = {};
-	idol_ = std::make_unique<SkinningModel>("lovemiku", true);
+	idol_ = std::make_unique<PMDModel>("lovemiku");
 	idol_->transform_.rotate_.y = 3.14f;
 	idol_->transform_.scale_ *= 5;
-	BaseModel::Material* material = idol_->GetMaterialData();
-	material->enableLighting = 3;
 	SetGlobalVariable();
 }
 

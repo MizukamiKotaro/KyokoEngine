@@ -9,6 +9,9 @@
 #include "RigidAnimationModel/RigidAnimationModel.h"
 #include "Texture/Texture.h"
 #include "TextureManager.h"
+#include "MMD/PMDModel/PMDModel.h"
+#include "Base/DescriptorHeapManager/DescriptorHeapManager.h"
+#include "Base/DescriptorHeapManager/DescriptorHeap/DescriptorHeap.h"
 
 const Texture* texCube = nullptr;
 
@@ -75,6 +78,30 @@ void DrawModelManager::Draw(const SkinningModel& model, const Camera& camera, co
 		Matrix4x4::MakeRotateXYZMatrix(model.transform_.rotate_) * Matrix4x4::MakeTranslateMatrix(model.transform_.translate_);
 
 	Draw(model, camera, blendMode, model.GetSkinCluter().vertexBufferView);
+}
+
+void DrawModelManager::Draw(const PMDModel& model, const Camera& camera, const BlendMode& blendMode)
+{
+	if (transformation_.size() == drawNum_) {
+		transformation_.push_back(std::make_unique<Transformation>());
+	}
+
+	transformation_[drawNum_]->transformationData->World = model.transform_.worldMat_;
+	transformation_[drawNum_]->transformationData->WVP = model.transform_.worldMat_ * camera.GetViewProjection();
+	transformation_[drawNum_]->transformationData->WorldInverse = Matrix4x4::Inverse(Matrix4x4::MakeScaleMatrix(model.transform_.scale_)) *
+		Matrix4x4::MakeRotateXYZMatrix(model.transform_.rotate_) * Matrix4x4::MakeTranslateMatrix(model.transform_.translate_);
+
+	psoManager_->PreDraw(PipelineType::MMD);
+	psoManager_->SetBlendMode(PipelineType::MMD, blendMode);
+	const ModelDataPMD& modelData = model.GetModelData();
+
+	commandList_->IASetVertexBuffers(0, 1, &model.GetSkinCluter().vertexBufferView);
+	commandList_->IASetIndexBuffer(&modelData.mesh.indexBufferView_);
+	commandList_->SetGraphicsRootConstantBufferView(0, transformation_[drawNum_]->transformationResource->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootDescriptorTable(1, DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->GetTextureHandle());
+	commandList_->SetGraphicsRootConstantBufferView(2, camera.GetGPUVirtualAddress());
+	commandList_->DrawIndexedInstanced(UINT(modelData.mesh.indices.size()), 1, 0, 0, 0);
+	drawNum_++;
 }
 
 void DrawModelManager::Draw(const BaseModel& model, const Camera& camera, const BlendMode& blendMode, const D3D12_VERTEX_BUFFER_VIEW& vertexBufferView)

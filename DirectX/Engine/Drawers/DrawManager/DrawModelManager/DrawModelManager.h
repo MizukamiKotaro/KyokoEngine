@@ -12,6 +12,7 @@ class Model;
 class RigidAnimationModel;
 class SkinningModel;
 class BaseModel;
+class PMDModel;
 
 class DrawModelManager : public IDrawManager
 {
@@ -20,6 +21,7 @@ public:
 	void Draw(const Model& model,const Camera& camera, const BlendMode& blendMode);
 	void Draw(const RigidAnimationModel& model, const Camera& camera, const BlendMode& blendMode);
 	void Draw(const SkinningModel& model, const Camera& camera, const BlendMode& blendMode);
+	void Draw(const PMDModel& model, const Camera& camera, const BlendMode& blendMode);
 
 private:
 	void Draw(const BaseModel& model, const Camera& camera, const BlendMode& blendMode, const D3D12_VERTEX_BUFFER_VIEW& vertexBufferView);

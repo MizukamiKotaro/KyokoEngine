@@ -9,6 +9,7 @@ class SkinningModel;
 class PointLight;
 class SpotLight;
 class GPUParticle;
+class PMDModel;
 class DrawModelManager;
 class DrawLightManager;
 class DrawParticleManager;
@@ -24,6 +25,7 @@ public:
 	void Draw(const Model& model,const Camera& camera, const BlendMode& blendMode);
 	void Draw(const RigidAnimationModel& model, const Camera& camera, const BlendMode& blendMode);
 	void Draw(const SkinningModel& model, const Camera& camera, const BlendMode& blendMode);
+	void Draw(const PMDModel& model, const Camera& camera, const BlendMode& blendMode);
 	void Draw(const PointLight& light, const Camera& camera, const BlendMode& blendMode);
 	void Draw(const SpotLight& light, const Camera& camera, const BlendMode& blendMode);
 	void Draw(const GPUParticle& particle, const Camera& camera, const BlendMode& blendMode);

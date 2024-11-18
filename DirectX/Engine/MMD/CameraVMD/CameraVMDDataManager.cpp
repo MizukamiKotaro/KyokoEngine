@@ -89,9 +89,11 @@ const CameraVMDData* CameraVMDDataManager::LoadVMDData(const std::string& filePa
 		frame.position = { pos[0],pos[1],pos[2] };
 		frame.rotation = { -rot[0],-rot[1],rot[2] };
 
+		// 時間に変換
 		frame.time = float(frame.frameNumber) / 15.0f;
 
 		if (i != 0) {
+			// フレームの差が1以下の時の時間の処理
 			if (frame.frameNumber - dataMap_[path]->frames.back().frameNumber <= 1.0f) {
 				dataMap_[path]->frames.back().time = frame.time - 0.00001f;
 			}

@@ -29,8 +29,6 @@ LiveEditor::LiveEditor(Camera* camera)
 	objectManagers_[ManagerNames::kLight]->AddType(StageObjectType::SPOTLIGHT, "ライト", "スポットライト");
 	objectManagers_[ManagerNames::kLight]->AddType(StageObjectType::TWIN_SPOTLIGHT, "ライト", "ツインスポットライト");
 
-	objectManagers_[ManagerNames::kFire]->AddType(StageObjectType::FIRE_PARTICLE, "パーティクル", "炎");
-
 	objectManagers_[ManagerNames::kObject]->AddType(StageObjectType::OBJECT, "オブジェクト", "オブジェクト");
 	objectManagers_[ManagerNames::kObject]->AddType(StageObjectType::PEN_LIGHT, "ペンライト", "ペンライト");
 

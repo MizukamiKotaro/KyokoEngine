@@ -7,11 +7,13 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include "Externals/nlohmann/json.hpp"
+#include "Vector3.h"
+#include "Vector4.h"
 
 class ModelData;
 class NodeData;
 class Animation;
-class Vector4;
+class ModelDataPMD;
 
 class ModelDataManager 
 {
@@ -48,11 +50,24 @@ public:
 
 	const ModelData* LoadSkinAnimationModel(const std::string& fileName, const bool& ispmx = false);
 
+	const ModelDataPMD* LoadPMDModelGltf(const std::string& fileName);
+
 private:
 	ModelDataManager() = default;
 	~ModelDataManager() = default;
 	ModelDataManager(const ModelDataManager&) = delete;
 	ModelDataManager& operator=(const ModelDataManager&) = delete;
+
+	struct Fa
+	{
+		Vector4 diffuseColor;
+		int32_t textureNum;
+		Vector3 ambientColor;
+		Vector3 specularColor;
+		float shinines;
+		int32_t sphereTextureNum;
+		int32_t toonTextureNum;
+	};
 
 	void LoadObjFile(const std::string& fileName);
 
@@ -62,13 +77,19 @@ private:
 
 	void LoadSkinAnimationFile(const std::string& fileName, const bool& ispmx = false);
 
+	void LoadPMDGltf(const std::string& fileName);
+
 	void LoadPMD(const std::string& fileName);
 
 	void LoadMMDMaterials(const std::string& filePath, std::vector<std::pair<int32_t, Vector4>>& colors);
 
+	void LoadPMDGltfMaterials(const std::string& filePath, std::vector<Fa>& colors);
+
 	NodeData ReadNodePMD(uint16_t parentBoneIndex);
 
 	void CreateResources();
+
+	void CreatePMDResources();
 
 	std::string FindPath(const std::string& fileName, const std::string& extension);
 
@@ -76,6 +97,7 @@ private:
 
 private:
 	std::vector<std::unique_ptr<ModelData>> modelDatas_;
+	std::vector<std::unique_ptr<ModelDataPMD>> pmdDatas_;
 	std::map<std::string, std::unique_ptr<Animation>> animationMap_;
 
 	const std::string directoryPath_ = "Resources/Object";

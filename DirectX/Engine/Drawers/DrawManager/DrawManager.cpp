@@ -3,6 +3,7 @@
 #include "Model.h"
 #include "SkinningModel/SkinningModel.h"
 #include "RigidAnimationModel/RigidAnimationModel.h"
+#include "MMD/PMDModel/PMDModel.h"
 #include "Drawers/GPUParticle/GPUParticle.h"
 #include "DrawModelManager/DrawModelManager.h"
 #include "DrawLightManager/DrawLightManager.h"
@@ -39,6 +40,11 @@ void DrawManager::Draw(const RigidAnimationModel& model, const Camera& camera, c
 }
 
 void DrawManager::Draw(const SkinningModel& model, const Camera& camera, const BlendMode& blendMode)
+{
+	drawModelManager_->Draw(model, camera, blendMode);
+}
+
+void DrawManager::Draw(const PMDModel& model, const Camera& camera, const BlendMode& blendMode)
 {
 	drawModelManager_->Draw(model, camera, blendMode);
 }

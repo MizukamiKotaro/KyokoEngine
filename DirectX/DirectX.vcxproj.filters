@@ -478,6 +478,18 @@
     <Filter Include="Game\GameElement\LiveEditor\PenLightEditor">
       <UniqueIdentifier>{bbe8eef3-4400-4dc1-86bd-6ab3edbd278f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\MMD\MMDData">
+      <UniqueIdentifier>{95b38c1c-86de-4478-a870-01e86f4f66ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\MMD\PMDModel">
+      <UniqueIdentifier>{58808aa5-8a38-458e-b902-a284a7a72bb2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\MMDGraphicsPipline">
+      <UniqueIdentifier>{48cd867e-4b68-4647-a180-b4f3c22e6968}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\PipelineSystems\ComputePipelineSystem\ComputePipelines\MMDMotionComputePipeline">
+      <UniqueIdentifier>{48d54507-153f-4e8a-ac8f-4285e8b397f3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -995,6 +1007,15 @@
     </ClCompile>
     <ClCompile Include="Game\GameElement\LiveEditor\PenLightEditor\PenLightEditor.cpp">
       <Filter>Game\GameElement\LiveEditor\PenLightEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\MMD\PMDModel\PMDModel.cpp">
+      <Filter>Engine\MMD\PMDModel</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\MMDGraphicsPipline\MMDGraphicsPipline.cpp">
+      <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\MMDGraphicsPipline</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\ComputePipelineSystem\ComputePipelines\MMDMotionComputePipeline\MMDMotionComputePipeline.cpp">
+      <Filter>Engine\PipelineSystems\ComputePipelineSystem\ComputePipelines\MMDMotionComputePipeline</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1597,6 +1618,24 @@
     </ClInclude>
     <ClInclude Include="Game\GameElement\LiveEditor\PenLightEditor\PenLightEditor.h">
       <Filter>Game\GameElement\LiveEditor\PenLightEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\MMD\MMDModelData\MeshDataPMD.h">
+      <Filter>Engine\MMD\MMDData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\MMD\MMDModelData\ModelDataPMD.h">
+      <Filter>Engine\MMD\MMDData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\MMD\MMDModelData\VertexDataPMD.h">
+      <Filter>Engine\MMD\MMDData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\MMD\PMDModel\PMDModel.h">
+      <Filter>Engine\MMD\PMDModel</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\MMDGraphicsPipline\MMDGraphicsPipline.h">
+      <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipelines\MMDGraphicsPipline</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\ComputePipelineSystem\ComputePipelines\MMDMotionComputePipeline\MMDMotionComputePipeline.h">
+      <Filter>Engine\PipelineSystems\ComputePipelineSystem\ComputePipelines\MMDMotionComputePipeline</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

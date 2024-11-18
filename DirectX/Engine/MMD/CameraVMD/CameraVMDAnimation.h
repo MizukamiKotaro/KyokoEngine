@@ -14,7 +14,7 @@ public:
 
 private:
 	float Interpolation(const std::vector<uint8_t>& bezier, const float& t);
-	void SetBezier(std::vector<uint8_t> bezier, const uint8_t& start, const size_t& num);
+	void SetBezier(std::vector<uint8_t>& bezier, const uint8_t& start, const size_t& num);
 
 	CameraVMDFrame state_;
 	size_t num_;

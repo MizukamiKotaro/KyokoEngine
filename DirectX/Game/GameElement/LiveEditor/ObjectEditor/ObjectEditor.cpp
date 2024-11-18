@@ -41,6 +41,7 @@ void ObjectEditor::Draw(const Camera& camera)
 
 void ObjectEditor::SetGlobalVariable()
 {
+
 	stageEditor_->AddItem("位置", position_);
 	stageEditor_->AddItem("スケール", scale_);
 	stageEditor_->AddItem("回転", rotate_);
@@ -50,6 +51,8 @@ void ObjectEditor::SetGlobalVariable()
 	stageEditor_->AddItem("左右対象に作るか", isTwin_);
 	stageEditor_->AddItemColor("色", Vector4{ 1.0f,1.0f,1.0f,1.0f });
 	stageEditor_->AddItemCombo("モデル", ComboNameType::kOBJ);
+
+
 	ApplyGlobalVariable();
 }
 

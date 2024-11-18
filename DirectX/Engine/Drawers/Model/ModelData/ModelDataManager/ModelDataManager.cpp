@@ -10,6 +10,7 @@
 #include "ModelData/ModelData.h"
 #include "Base/DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
 #include "GlobalVariables/GlobalVariableComboNames.h"
+#include "MMD/MMDModelData/ModelDataPMD.h"
 
 ModelDataManager* ModelDataManager::GetInstance()
 {
@@ -29,6 +30,11 @@ void ModelDataManager::Finalize()
 	for (uint32_t modelNum = 0; modelNum < static_cast<uint32_t>(modelDatas_.size()); modelNum++) {
 		modelDatas_[modelNum]->mesh.vertexResource_->Release();
 		modelDatas_[modelNum]->mesh.indexResource_->Release();
+	}
+
+	for (uint32_t modelNum = 0; modelNum < static_cast<uint32_t>(pmdDatas_.size()); modelNum++) {
+		pmdDatas_[modelNum]->mesh.vertexResource_->Release();
+		pmdDatas_[modelNum]->mesh.indexResource_->Release();
 	}
 }
 
@@ -125,6 +131,20 @@ const ModelData* ModelDataManager::LoadSkinAnimationModel(const std::string& fil
 	LoadSkinAnimationFile(fileName, ispmx);
 
 	return modelDatas_.back().get();
+}
+
+const ModelDataPMD* ModelDataManager::LoadPMDModelGltf(const std::string& fileName)
+{
+	for (uint32_t modelNum = 0; modelNum < static_cast<uint32_t>(pmdDatas_.size()); modelNum++) {
+		if (pmdDatas_[modelNum]->fileName == fileName) {
+			return pmdDatas_[modelNum].get();
+		}
+	}
+
+
+	LoadPMDGltf(fileName);
+
+	return pmdDatas_.back().get();
 }
 
 void ModelDataManager::LoadObjFile(const std::string& fileName)
@@ -472,6 +492,89 @@ void ModelDataManager::LoadSkinAnimationFile(const std::string& fileName, const 
 	CreateResources();
 }
 
+void ModelDataManager::LoadPMDGltf(const std::string& fileName)
+{
+	/*GlobalVariableComboNames* combo = GlobalVariableComboNames::GetInstance();
+	combo->AddComboName(ComboNameType::kPMD, fileName);*/
+	// 1. 中で必要となる変数の宣言
+	pmdDatas_.push_back(std::make_unique<ModelDataPMD>());; // 構築するModelData
+
+	pmdDatas_.back()->fileName = fileName;
+
+	Assimp::Importer importer;
+	std::string filePath = FindPath(fileName, ".gltf");
+	const aiScene* scene_ = importer.ReadFile(filePath.c_str(), aiProcess_FlipWindingOrder | aiProcess_FlipUVs);
+	std::vector<Fa> colors;
+	LoadPMDGltfMaterials(filePath, colors);
+
+	assert(scene_->HasMeshes());
+
+	uint32_t vertexNum = 0;
+	// meshを解析する
+	for (uint32_t meshIndex = 0; meshIndex < scene_->mNumMeshes; meshIndex++) {
+		aiMesh* mesh = scene_->mMeshes[meshIndex];
+		assert(mesh->HasNormals()); // 法線がないmeshは非対応
+
+		// vertexを解析
+		for (uint32_t vertexIndex = 0; vertexIndex < mesh->mNumVertices; vertexIndex++) {
+			aiVector3D& position = mesh->mVertices[vertexIndex];
+			aiVector3D& normal = mesh->mNormals[vertexIndex];
+			aiVector3D texcoord = {};
+			if (mesh->HasTextureCoords(0)) {
+				texcoord = mesh->mTextureCoords[0][vertexIndex];
+			}
+
+			VertexDataPMD vData;
+			vData.vertexPos = { -position.x,position.y,position.z,1.0f };
+			vData.texcoord = { texcoord.x,texcoord.y };
+			vData.normal = { -normal.x,normal.y,normal.z };
+			vData.diffuseColor = colors[meshIndex].diffuseColor;
+			vData.ambientColor = colors[meshIndex].ambientColor;
+			vData.specularColor = colors[meshIndex].specularColor;
+			vData.textureNum = colors[meshIndex].textureNum;
+
+			vData.shinines = colors[meshIndex].shinines;
+			vData.sphereTextureNum = colors[meshIndex].sphereTextureNum;
+			vData.toonTextureNum = colors[meshIndex].toonTextureNum;
+
+			pmdDatas_.back()->mesh.verteces.push_back(vData);
+		}
+
+		// indexを解析
+		for (uint32_t faceIndex = 0; faceIndex < mesh->mNumFaces; faceIndex++) {
+			aiFace& face = mesh->mFaces[faceIndex];
+			assert(face.mNumIndices == 3);
+			for (uint32_t element = 0; element < face.mNumIndices; element++) {
+				pmdDatas_.back()->mesh.indices.push_back(face.mIndices[element] + vertexNum);
+			}
+		}
+
+		// boneの解析
+		for (uint32_t boneIndex = 0; boneIndex < mesh->mNumBones; boneIndex++) {
+			aiBone* bone = mesh->mBones[boneIndex];
+			std::string jointName = bone->mName.C_Str();
+			JointWeightData& jointWeightData = pmdDatas_.back()->skinClusterData[jointName];
+
+			aiMatrix4x4 bindPoseMatrixAssimp = bone->mOffsetMatrix.Inverse();
+			aiVector3D scale, translate;
+			aiQuaternion rotate;
+			bindPoseMatrixAssimp.Decompose(scale, rotate, translate);
+			Matrix4x4 bindPoseMatrix = Matrix4x4::MakeAffinMatrix(Vector3{ scale.x,scale.y,scale.z },
+				Quaternion{ rotate.x,-rotate.y,-rotate.z,rotate.w }, Vector3{ -translate.x,translate.y,translate.z });
+			jointWeightData.inverseBindPoseMatrix = Matrix4x4::Inverse(bindPoseMatrix);
+
+			for (uint32_t weightIndex = 0; weightIndex < bone->mNumWeights; weightIndex++) {
+				jointWeightData.vertexWeights.push_back({ bone->mWeights[weightIndex].mWeight, bone->mWeights[weightIndex].mVertexId + vertexNum });
+			}
+		}
+		vertexNum += mesh->mNumVertices;
+	}
+	// rootNodeの解析
+	pmdDatas_.back()->rootNode = ReadNode(scene_->mRootNode);
+
+	CreatePMDResources();
+}
+
 void ModelDataManager::LoadPMD(const std::string& fileName)
 {// 1. 中で必要となる変数の宣言
 	modelDatas_.push_back(std::make_unique<ModelData>());; // 構築するModelData
@@ -661,6 +764,77 @@ void ModelDataManager::LoadMMDMaterials(const std::string& filePath, std::vector
 	}
 }
 
+void ModelDataManager::LoadPMDGltfMaterials(const std::string& filePath, std::vector<Fa>& colors)
+{
+	std::ifstream ifs;
+	ifs.open(filePath);
+
+	if (ifs.fail()) {
+		assert(0);
+		return;
+	}
+
+	nlohmann::json root;
+	ifs >> root;
+	ifs.close();
+	nlohmann::json::iterator itGroup = root.find("materials");
+	assert(itGroup != root.end());
+
+	for (nlohmann::json::iterator itItem = itGroup->begin(); itItem != itGroup->end(); ++itItem) {
+		nlohmann::json::iterator i = itItem->find("extras")->find("mmd_material");
+		nlohmann::json::iterator it = i->find("diffuse_color");
+		Fa result;
+		Vector3 color = { it->at(0), it->at(1), it->at(2) };
+		it = i->find("alpha");
+		result.diffuseColor = { color.x, color.y, color.z, float(it->get<double>())};
+
+		it = i->find("ambient_color");
+		result.ambientColor = { it->at(0), it->at(1), it->at(2) };
+
+		it = i->find("specular_color");
+		result.specularColor = { it->at(0), it->at(1), it->at(2) };
+
+		it = i->find("shininess");
+		result.shinines = float(it->get<double>());
+
+		it = i->find("shared_toon_texture");
+		int32_t n = it->get<int32_t>();
+		if (n == 0) {
+			result.toonTextureNum = -1;
+		}
+		else {
+			if (n < 10) {
+				result.toonTextureNum = int32_t(TextureManager::GetInstance()->LoadTexture("toon0" + std::to_string(n) + ".bmp")->handles_->no);
+			}
+			else {
+				result.toonTextureNum = int32_t(TextureManager::GetInstance()->LoadTexture("toon" + std::to_string(n) + ".bmp")->handles_->no);
+			}
+		}
+		
+		it = i->find("texture");
+		std::string path;
+		if (it == i->end()) {
+			result.textureNum = -1;
+		}
+		else {
+			path = it->get<std::string>();
+			result.textureNum = int32_t(TextureManager::GetInstance()->LoadTexture(path)->handles_->no);
+		}
+
+		it = i->find("sphere");
+		result.sphereTextureNum = -1;
+		/*if (it == i->end()) {
+			result.sphereTextureNum = -1;
+		}
+		else {
+			path = it->get<std::string>();
+			result.sphereTextureNum = int32_t(TextureManager::GetInstance()->LoadTexture(path)->handles_->no);
+		}*/
+
+		colors.push_back(result);
+	}
+}
+
 void ModelDataManager::CreateResources()
 {
 	modelDatas_.back()->mesh.indexResource_ = DirectXBase::CreateBufferResource(sizeof(uint32_t) * modelDatas_.back()->mesh.indices.size());
@@ -688,6 +862,35 @@ void ModelDataManager::CreateResources()
 	//書き込むためのアドレスを取得
 	modelDatas_.back()->mesh.vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&modelDatas_.back()->mesh.vertexData_));
 	std::memcpy(modelDatas_.back()->mesh.vertexData_, modelDatas_.back()->mesh.verteces.data(), sizeof(VertexData) * modelDatas_.back()->mesh.verteces.size());
+}
+
+void ModelDataManager::CreatePMDResources()
+{
+	pmdDatas_.back()->mesh.indexResource_ = DirectXBase::CreateBufferResource(sizeof(uint32_t) * pmdDatas_.back()->mesh.indices.size());
+
+	pmdDatas_.back()->mesh.indexBufferView_.BufferLocation = pmdDatas_.back()->mesh.indexResource_->GetGPUVirtualAddress();
+	pmdDatas_.back()->mesh.indexBufferView_.SizeInBytes = UINT(sizeof(uint32_t) * pmdDatas_.back()->mesh.indices.size());
+	pmdDatas_.back()->mesh.indexBufferView_.Format = DXGI_FORMAT_R32_UINT;
+
+	pmdDatas_.back()->mesh.indexResource_->Map(0, nullptr, reinterpret_cast<void**>(&pmdDatas_.back()->mesh.mappedIndex));
+	std::memcpy(pmdDatas_.back()->mesh.mappedIndex, pmdDatas_.back()->mesh.indices.data(), sizeof(uint32_t) * pmdDatas_.back()->mesh.indices.size());
+
+	pmdDatas_.back()->mesh.vertexResource_ = DirectXBase::CreateBufferResource(sizeof(VertexDataPMD) * pmdDatas_.back()->mesh.verteces.size());
+
+	//VertexBufferViewを作成する
+	//頂点バッファビューを作成する
+	//リソースの先頭のアドレスから使う
+	pmdDatas_.back()->mesh.vertexBufferView_.BufferLocation = pmdDatas_.back()->mesh.vertexResource_->GetGPUVirtualAddress();
+	//使用するリソースのサイズは頂点3つ分のサイズ
+	pmdDatas_.back()->mesh.vertexBufferView_.SizeInBytes = UINT(sizeof(VertexDataPMD) * pmdDatas_.back()->mesh.verteces.size());
+	//頂点当たりのサイズ
+	pmdDatas_.back()->mesh.vertexBufferView_.StrideInBytes = sizeof(VertexDataPMD);
+
+	//Resourceにデータを書き込む
+	//頂点リソースにデータを書き込む
+	//書き込むためのアドレスを取得
+	pmdDatas_.back()->mesh.vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&pmdDatas_.back()->mesh.vertexData_));
+	std::memcpy(pmdDatas_.back()->mesh.vertexData_, pmdDatas_.back()->mesh.verteces.data(), sizeof(VertexDataPMD) * pmdDatas_.back()->mesh.verteces.size());
 }
 
 std::string ModelDataManager::FindPath(const std::string& fileName, const std::string& extension)
@@ -721,6 +924,7 @@ void ModelDataManager::LoadALL(const std::string& path, const std::string& exten
 			else if (path == kSkinningAnimDirectoryPath_) {
 				LoadSkinAnimationModel(fileName, true);
 				LoadAnimation(fileName);
+				LoadPMDGltf(fileName);
 			}
 		}
 	}

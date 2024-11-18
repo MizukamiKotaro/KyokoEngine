@@ -14,6 +14,7 @@
 #include "GraphicsPipelineSystem/GraphicsPipelines/GPUParticleGraphicsPipeline/GPUParticleGraphicsPipeline.h"
 #include "GraphicsPipelineSystem/GraphicsPipelines/LightDepthPipeline/LightDepthPipeline.h"
 #include "GraphicsPipelineSystem/GraphicsPipelines/SpotLightDepthGraphicsPipline/SpotLightDepthGraphicsPipline.h"
+#include "GraphicsPipelineSystem/GraphicsPipelines/MMDGraphicsPipline/MMDGraphicsPipline.h"
 #include "GraphicsPipelineSystem/PipelineTypeConfig.h"
 
 GraphicsPipeline* GraphicsPipelineFactory::CreateGraphicsPipeline(PipelineType pipelineType)
@@ -102,6 +103,9 @@ GraphicsPipeline* GraphicsPipelineFactory::CreateGraphicsPipeline(PipelineType p
 		break;
 	case PipelineType::SPOT_LIGHT_DEPTH:
 		graphicsPipeline = new SpotLightDepthGraphicsPipline();
+		break;
+	case PipelineType::MMD:
+		graphicsPipeline = new MMDGraphicsPipline();
 		break;
 	default:
 		break;

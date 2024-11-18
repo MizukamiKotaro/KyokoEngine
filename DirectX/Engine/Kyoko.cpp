@@ -26,6 +26,7 @@
 #include "ComputePipelineSystem/ComputePipelineManager/ComputePipelineManager.h"
 #include "InstancingModels/InstancingResourceManager.h"
 #include "MMD/CameraVMD/CameraVMDDataManager.h"
+#include "MMD/PMDModel/PMDModel.h"
 
 static ResourceLeackChecker leakCheck;
 
@@ -76,6 +77,7 @@ void Kyoko::Engine::Initialize(const char* windowName, int width, int height)
 	drawManager = DrawManager::GetInstance();
 	drawManager->Initialize();
 	SkinningModel::StaticInitialize();
+	PMDModel::StaticInitialize();
 	LightSingleton::GetInstance()->Initialize();
 	CameraVMDDataManager::GetInstance()->Initialize();
 

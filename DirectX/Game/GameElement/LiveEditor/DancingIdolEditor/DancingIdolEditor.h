@@ -1,5 +1,5 @@
 #pragma once
-#include "SkinningModel/SkinningModel.h"
+#include "MMD/PMDModel/PMDModel.h"
 #include "GameElement/IStageObject/IStageObject.h"
 #include <memory>
 
@@ -16,6 +16,6 @@ private:
 	void SetGlobalVariable() override;
 	void ApplyGlobalVariable() override;
 	
-	std::unique_ptr<SkinningModel> idol_;
+	std::unique_ptr<PMDModel> idol_;
 	Vector3 firstPosition_;
 };

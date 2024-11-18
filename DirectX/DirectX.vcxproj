@@ -128,6 +128,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\CollisionSystem\CollisionProcesses\CollisionCircleCircle\CollisionCircleCircle.cpp" />
     <ClCompile Include="Engine\ComputePipelineSystem\ComputePipelineFactory\ComputePipelineFactory.cpp" />
     <ClCompile Include="Engine\ComputePipelineSystem\ComputePipelineManager\ComputePipelineManager.cpp" />
+    <ClCompile Include="Engine\ComputePipelineSystem\ComputePipelines\MMDMotionComputePipeline\MMDMotionComputePipeline.cpp" />
     <ClCompile Include="Engine\ComputePipelineSystem\ComputePipelines\ParticleInitializeComputePipeline\ParticleInitializeComputePipeline.cpp" />
     <ClCompile Include="Engine\ComputePipelineSystem\ComputePipelines\SkinningComputePipeline\SkinningComputePipeline.cpp" />
     <ClCompile Include="Engine\ComputePipelineSystem\ComputePipeline\ComputePipeline.cpp" />
@@ -196,6 +197,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\GrayscaleGraphicsPipeline\GrayscaleGraphicsPipeline.cpp" />
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\InstancingModelGraphicsPipline\InstancingModelGraphicsPipline.cpp" />
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\LightDepthPipeline\LightDepthPipeline.cpp" />
+    <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\MMDGraphicsPipline\MMDGraphicsPipline.cpp" />
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\OutlineGraphicsPipeline\OutlineGraphicsPipeline.cpp" />
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SkyboxGraphicsPipeline\SkyboxGraphicsPipeline.cpp" />
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SpotLightDepthGraphicsPipline\SpotLightDepthGraphicsPipline.cpp" />
@@ -217,6 +219,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\LevelDataLoader\LevelData\LevelDataManager.cpp" />
     <ClCompile Include="Engine\MMD\CameraVMD\CameraVMDAnimation.cpp" />
     <ClCompile Include="Engine\MMD\CameraVMD\CameraVMDDataManager.cpp" />
+    <ClCompile Include="Engine\MMD\PMDModel\PMDModel.cpp" />
     <ClCompile Include="Engine\SceneObject\SceneObjectManager.cpp" />
     <ClCompile Include="Engine\TextureManager\TextureManager.cpp" />
     <ClCompile Include="Engine\TextureManager\Texture\Texture.cpp" />
@@ -308,6 +311,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\CollisionSystem\CollisionProcesses\CollisionCircleCircle\CollisionCircleCircle.h" />
     <ClInclude Include="Engine\ComputePipelineSystem\ComputePipelineFactory\ComputePipelineFactory.h" />
     <ClInclude Include="Engine\ComputePipelineSystem\ComputePipelineManager\ComputePipelineManager.h" />
+    <ClInclude Include="Engine\ComputePipelineSystem\ComputePipelines\MMDMotionComputePipeline\MMDMotionComputePipeline.h" />
     <ClInclude Include="Engine\ComputePipelineSystem\ComputePipelines\ParticleInitializeComputePipeline\ParticleInitializeComputePipeline.h" />
     <ClInclude Include="Engine\ComputePipelineSystem\ComputePipelines\SkinningComputePipeline\SkinningComputePipeline.h" />
     <ClInclude Include="Engine\ComputePipelineSystem\ComputePipelineTypeConfig.h" />
@@ -392,6 +396,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\GrayscaleGraphicsPipeline\GrayscaleGraphicsPipeline.h" />
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\InstancingModelGraphicsPipline\InstancingModelGraphicsPipline.h" />
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\LightDepthPipeline\LightDepthPipeline.h" />
+    <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\MMDGraphicsPipline\MMDGraphicsPipline.h" />
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\OutlineGraphicsPipeline\OutlineGraphicsPipeline.h" />
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SkyboxGraphicsPipeline\SkyboxGraphicsPipeline.h" />
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\SpotLightDepthGraphicsPipline\SpotLightDepthGraphicsPipline.h" />
@@ -416,6 +421,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\MMD\CameraVMD\CameraVMDAnimation.h" />
     <ClInclude Include="Engine\MMD\CameraVMD\CameraVMDData.h" />
     <ClInclude Include="Engine\MMD\CameraVMD\CameraVMDDataManager.h" />
+    <ClInclude Include="Engine\MMD\MMDModelData\MeshDataPMD.h" />
+    <ClInclude Include="Engine\MMD\MMDModelData\ModelDataPMD.h" />
+    <ClInclude Include="Engine\MMD\MMDModelData\VertexDataPMD.h" />
+    <ClInclude Include="Engine\MMD\PMDModel\PMDModel.h" />
     <ClInclude Include="Engine\SceneObject\SceneObjectManager.h" />
     <ClInclude Include="Engine\TextureManager\TextureManager.h" />
     <ClInclude Include="Engine\TextureManager\Texture\Texture.h" />

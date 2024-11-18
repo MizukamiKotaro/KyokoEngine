@@ -112,8 +112,10 @@ float CameraVMDAnimation::Interpolation(const std::vector<uint8_t>& bezier, cons
     float maxX = 1.0f;
     const int iterations = 10; // 二分探索の回数
 
+    // 近似値を求めていく
     for (int i = 0; i < iterations; ++i) {
         float midX = (minX + maxX) / 2.0f;
+        // 3次ベジェ
         float midBezierX = Calc::Bezier(0.0f, p1x, p2x, 1.0f, midX);
 
         if (midBezierX < t) {
@@ -130,7 +132,7 @@ float CameraVMDAnimation::Interpolation(const std::vector<uint8_t>& bezier, cons
     return Calc::Bezier(0.0f, p1y, p2y, 1.0f, x);
 }
 
-void CameraVMDAnimation::SetBezier(std::vector<uint8_t> bezier, const uint8_t& start, const size_t& num)
+void CameraVMDAnimation::SetBezier(std::vector<uint8_t>& bezier, const uint8_t& start, const size_t& num)
 {
     for (uint8_t i = 0; i < 4; i++) {
         bezier[i] = data_->frames[num].bezier[i + start];

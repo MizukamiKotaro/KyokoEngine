@@ -7,4 +7,5 @@ enum class ComboNameType {
 	kAudio,
 	kEase,
 	kCameraAnimationVMD,
+	kPMD,
 };
