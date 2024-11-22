@@ -1,9 +1,9 @@
 #include "IEditor.h"
-#include "SceneSystem/IScene/IScene.h"
+#include "SceneSystem/SceneBase/SceneBase.h"
 
 void IEditor::Initialize()
 {
-	global_->ResetGroupName("Stage" + std::to_string(IScene::GetStageNo()));
+	global_->ResetGroupName("Stage" + std::to_string(SceneBase::GetStageNo()));
 }
 
 void IEditor::AddComboName(const ComboNameType& type, const std::string& comboName)
@@ -148,8 +148,8 @@ bool IEditor::IsTreeOpen(const int& treeNo)
 
 const bool IEditor::IsChangedStage()
 {
-	if (preStageNo_ != IScene::GetStageNo()) {
-		preStageNo_ = IScene::GetStageNo();
+	if (preStageNo_ != SceneBase::GetStageNo()) {
+		preStageNo_ = SceneBase::GetStageNo();
 		return true;
 	}
 	return false;

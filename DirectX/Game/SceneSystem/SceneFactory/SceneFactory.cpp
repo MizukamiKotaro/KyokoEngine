@@ -6,9 +6,9 @@
 #include "SceneSystem/ClearScene/ClearScene.h"
 #include "SceneSystem/StageEditorScene/StageEditorScene.h"
 
-IScene* SceneFactory::CreateScene(const int32_t& sceneNo)
+SceneBase* SceneFactory::CreateScene(int32_t sceneNo)
 {
-	IScene* newScene = nullptr;
+	SceneBase* newScene = nullptr;
 
 	switch (sceneNo)
 	{

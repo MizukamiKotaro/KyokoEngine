@@ -1,11 +1,18 @@
 #pragma once
 #include <stdint.h>
-class IScene;
+class SceneBase;
 
+/// <summary>
+/// シーン作成の基底クラス
+/// </summary>
 class ISceneFactory
 {
 public:
 	virtual ~ISceneFactory() = default;
-
-	virtual IScene* CreateScene(const int32_t& sceneNo) = 0;
+	/// <summary>
+	/// シーンの作成
+	/// </summary>
+	/// <param name="sceneNo">シーンナンバー</param>
+	/// <returns>シーン</returns>
+	virtual SceneBase* CreateScene(int32_t sceneNo) = 0;
 };

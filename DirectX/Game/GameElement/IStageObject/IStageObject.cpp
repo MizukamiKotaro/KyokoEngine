@@ -1,6 +1,6 @@
 #include "IStageObject.h"
 #include "InstancingModelManager.h"
-#include "SceneSystem/IScene/IScene.h"
+#include "SceneSystem/SceneBase/SceneBase.h"
 
 InstancingModelManager* IStageObject::instancingManager_ = nullptr;
 
@@ -74,7 +74,7 @@ void IStageObject::UpdateGlobalVariable()
 {
 #ifdef _DEBUG
 	if (stageEditor_) {
-		if (IScene::GetSceneNo() == STAGE_EDITOR) {
+		if (SceneBase::GetSceneNo() == STAGE_EDITOR) {
 			if (stageEditor_->IsTreeOpen()) {
 				ApplyGlobalVariable();
 			}

@@ -17,7 +17,7 @@ void Kyoko::ImGuiManager::Initialize()
 #ifdef _DEBUG
 	DescriptorHeap* srvHeap = DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap();
 
-	const DescriptorHandles* handles = srvHeap->GetNewDescriptorHandles();
+	const DescriptorHandles* handles = srvHeap->GetNewDescriptorHandle();
 
 	//ImGuiの初期化
 	IMGUI_CHECKVERSION();

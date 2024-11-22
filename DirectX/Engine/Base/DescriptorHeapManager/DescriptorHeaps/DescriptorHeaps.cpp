@@ -13,7 +13,7 @@ SRVDescriptorHeap::SRVDescriptorHeap()
 	Initialize(kNumSRVDescriptors_);
 }
 
-const UINT& SRVDescriptorHeap::GetTextureMaxNum()
+UINT SRVDescriptorHeap::GetTextureMaxNum()
 {
 	return kNumTextures_;
 }

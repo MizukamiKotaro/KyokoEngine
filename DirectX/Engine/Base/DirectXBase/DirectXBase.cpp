@@ -9,6 +9,7 @@
 #include "DescriptorHeapManager/DescriptorHeapManager.h"
 #include "Engine/Base/WindowsInfo/WindowsInfo.h"
 #include <thread>
+#include "StringConverter/StringConverter.h"
 
 using namespace Microsoft::WRL;
 
@@ -260,7 +261,7 @@ void DirectXBase::InitializeDXGIDevice() {
 		//ソフトウェアアダプタでなければ採用
 		if (!(adapterDesc.Flags & DXGI_ADAPTER_FLAG3_SOFTWARE)) {
 			//採用したアダプタの情報をログに出力。wstringの方なので注意
-			DebugLog::Log(DebugLog::ConvertString(std::format(L"Use Adapter : {}\n", adapterDesc.Description)));
+			DebugLog::Log(std::format(L"Use Adapter : {}\n", adapterDesc.Description));
 			break;
 		}
 		useAdapter_ = nullptr;//ソフトウェアの場合見なかったことにする
@@ -343,7 +344,7 @@ void DirectXBase::CreateFinalRenderTargets() {
 	rtvHandles_.resize(backBuffers_.size());
 
 	for (size_t i = 0; i < backBuffers_.size(); i++) {
-		rtvHandles_[i] = heap->GetNewDescriptorHandles();
+		rtvHandles_[i] = heap->GetNewDescriptorHandle();
 		device_->CreateRenderTargetView(backBuffers_[i].Get(), &rtvDesc, rtvHandles_[i]->cpuHandle);
 	}
 }
@@ -352,7 +353,7 @@ void DirectXBase::CreateDepthBuffer() {
 
 	DescriptorHeap* heap = DescriptorHeapManager::GetInstance()->GetDSVDescriptorHeap();
 
-	dsvHandles_ = heap->GetNewDescriptorHandles();
+	dsvHandles_ = heap->GetNewDescriptorHandle();
 
 	//DepthStencilTextureをウィンドウのサイズで作成
 	Vector2 windowSize = windowInfo_->GetWindowSize();

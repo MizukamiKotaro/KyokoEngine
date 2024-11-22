@@ -29,37 +29,37 @@ void DrawManager::Reset()
 	drawParticleManager_->Reset();
 }
 
-void DrawManager::Draw(const Model& model, const Camera& camera, const BlendMode& blendMode)
+void DrawManager::Draw(const Model& model, const Camera& camera, BlendMode blendMode)
 {
 	drawModelManager_->Draw(model, camera, blendMode);
 }
 
-void DrawManager::Draw(const RigidAnimationModel& model, const Camera& camera, const BlendMode& blendMode)
+void DrawManager::Draw(const RigidAnimationModel& model, const Camera& camera, BlendMode blendMode)
 {
 	drawModelManager_->Draw(model, camera, blendMode);
 }
 
-void DrawManager::Draw(const SkinningModel& model, const Camera& camera, const BlendMode& blendMode)
+void DrawManager::Draw(const SkinningModel& model, const Camera& camera, BlendMode blendMode)
 {
 	drawModelManager_->Draw(model, camera, blendMode);
 }
 
-void DrawManager::Draw(const PMDModel& model, const Camera& camera, const BlendMode& blendMode)
+void DrawManager::Draw(const PMDModel& model, const Camera& camera, BlendMode blendMode)
 {
 	drawModelManager_->Draw(model, camera, blendMode);
 }
 
-void DrawManager::Draw(const PointLight& light, const Camera& camera, const BlendMode& blendMode)
+void DrawManager::Draw(const PointLight& light, const Camera& camera, BlendMode blendMode)
 {
 	drawLightManager_->Draw(light, camera, blendMode);
 }
 
-void DrawManager::Draw(const SpotLight& light, const Camera& camera, const BlendMode& blendMode)
+void DrawManager::Draw(const SpotLight& light, const Camera& camera, BlendMode blendMode)
 {
 	drawLightManager_->Draw(light, camera, blendMode);
 }
 
-void DrawManager::Draw(const GPUParticle& particle, const Camera& camera, const BlendMode& blendMode)
+void DrawManager::Draw(const GPUParticle& particle, const Camera& camera, BlendMode blendMode)
 {
 	drawParticleManager_->Draw(particle, camera, blendMode);
 }

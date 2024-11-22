@@ -1,17 +1,17 @@
-#include "IDrawer.h"
+#include "DrawerBase.h"
 #include "DirectXBase/DirectXBase.h"
 #include "ModelDataManager.h"
 #include "GraphicsPipelineSystem/GraphicsPiplineManager/GraphicsPiplineManager.h"
 #include "TextureManager.h"
 #include "Drawers/DrawManager/DrawManager.h"
 
-ID3D12GraphicsCommandList* IDrawer::commandList_ = nullptr;
-GraphicsPipelineManager* IDrawer::psoManager_ = nullptr;
-ModelDataManager* IDrawer::modelDataManager_ = nullptr;
-TextureManager* IDrawer::textureManager_ = nullptr;
-DrawManager* IDrawer::drawManager_ = nullptr;
+ID3D12GraphicsCommandList* DrawerBase::commandList_ = nullptr;
+GraphicsPipelineManager* DrawerBase::psoManager_ = nullptr;
+ModelDataManager* DrawerBase::modelDataManager_ = nullptr;
+TextureManager* DrawerBase::textureManager_ = nullptr;
+DrawManager* DrawerBase::drawManager_ = nullptr;
 
-void IDrawer::StaticInitialize()
+void DrawerBase::StaticInitialize()
 {
 	commandList_ = DirectXBase::GetInstance()->GetCommandList();
 	psoManager_ = GraphicsPipelineManager::GetInstance();

@@ -67,7 +67,7 @@ void PenLightEditor::ApplyGlobalVariable()
 
 void PenLightEditor::MakeInstancingData()
 {
-	instancingData_ = instancingManager_->GetDrawData(InstancingMeshTexData{ "bloom", &box_->GetModelData(), box_->GetModelData().texture,BlendMode::kBlendModeNormal });
+	instancingData_ = instancingManager_->GetDrawData(InstancingGroupData{ "bloom", &box_->GetModelData(), box_->GetModelData().texture,BlendMode::kBlendModeNormal });
 }
 
 void PenLightEditor::AddInstancing()

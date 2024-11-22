@@ -8,6 +8,7 @@
 #include "DescriptorHeapManager/DescriptorHeap/DescriptorHeap.h"
 #include "Texture.h"
 #include <filesystem>
+#include "StringConverter/StringConverter.h"
 
 TextureManager* TextureManager::GetInstance()
 {
@@ -76,7 +77,7 @@ const Texture* TextureManager::LoadTexture(const std::string& filePath)
 		srvDesc.Texture2D.MipLevels = UINT(metadata.mipLevels);
 	}
 
-	textureMap_[filePath]->handles_ = srvHeap_->GetNewTextureDescriptorHandles();
+	textureMap_[filePath]->handles_ = srvHeap_->GetNewTextureDescriptorHandle();
 
 	device_->CreateShaderResourceView(textureMap_[filePath]->resource_.Get(), &srvDesc, textureMap_[filePath]->handles_->cpuHandle);
 
@@ -87,7 +88,7 @@ DirectX::ScratchImage TextureManager::Load(const std::string& filePath)
 {
 	//デスクトップファイルを読んでプログラムで使えるようにする
 	DirectX::ScratchImage image{};
-	std::wstring filePathW = DebugLog::ConvertString(filePath);
+	std::wstring filePathW = StringConverter::ConvertString(filePath);
 	HRESULT hr;
 	if (filePathW.ends_with(L".dds")) {
 		hr = DirectX::LoadFromDDSFile(filePathW.c_str(), DirectX::DDS_FLAGS_NONE, nullptr, image);

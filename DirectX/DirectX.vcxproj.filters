@@ -64,9 +64,6 @@
     <Filter Include="Game\SceneSystem\ClearScene">
       <UniqueIdentifier>{8d31b5a5-41a2-4b7c-b452-4ff0d30b5537}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\SceneSystem\IScene">
-      <UniqueIdentifier>{a2f81868-3fbd-4273-b582-2b203c85caeb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\SceneSystem\SceneManager">
       <UniqueIdentifier>{2b3c02ef-4091-470a-91f7-45beef467bae}</UniqueIdentifier>
     </Filter>
@@ -243,9 +240,6 @@
     </Filter>
     <Filter Include="Engine\Drawers">
       <UniqueIdentifier>{2308c106-1c7d-4afb-babb-2b22fa712ba0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Drawers\IDrawer">
-      <UniqueIdentifier>{b37d8d77-7ac1-464f-b097-20ccc178eaac}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Drawers\Light">
       <UniqueIdentifier>{3d09982c-b069-46b8-a791-9faf2375607d}</UniqueIdentifier>
@@ -490,6 +484,18 @@
     <Filter Include="Engine\PipelineSystems\ComputePipelineSystem\ComputePipelines\MMDMotionComputePipeline">
       <UniqueIdentifier>{48d54507-153f-4e8a-ac8f-4285e8b397f3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Utils\StringConverter">
+      <UniqueIdentifier>{33d4016e-2f1e-4566-a0a9-f490aa50d13c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Drawers\DrawManager\Transformation">
+      <UniqueIdentifier>{4580373a-0ef4-4d88-ad44-c93a993dcc7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Drawers\DrawerBase">
+      <UniqueIdentifier>{b37d8d77-7ac1-464f-b097-20ccc178eaac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\SceneSystem\SceneBase">
+      <UniqueIdentifier>{a2f81868-3fbd-4273-b582-2b203c85caeb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -579,9 +585,6 @@
     <ClCompile Include="Game\SceneSystem\ClearScene\ClearScene.cpp">
       <Filter>Game\SceneSystem\ClearScene</Filter>
     </ClCompile>
-    <ClCompile Include="Game\SceneSystem\IScene\IScene.cpp">
-      <Filter>Game\SceneSystem\IScene</Filter>
-    </ClCompile>
     <ClCompile Include="Game\SceneSystem\SceneManager\SceneManager.cpp">
       <Filter>Game\SceneSystem\SceneManager</Filter>
     </ClCompile>
@@ -660,9 +663,6 @@
     <ClCompile Include="Engine\Utils\RandomGenerator\RandomGenerator.cpp">
       <Filter>Engine\Utils\RandomGenerator</Filter>
     </ClCompile>
-    <ClCompile Include="Game\SceneSystem\ISceneFactory\ISceneFactory.cpp">
-      <Filter>Game\SceneSystem\ISceneFactory</Filter>
-    </ClCompile>
     <ClCompile Include="Game\SceneSystem\SceneFactory\SceneFactory.cpp">
       <Filter>Game\SceneSystem\SceneFactory</Filter>
     </ClCompile>
@@ -674,9 +674,6 @@
     </ClCompile>
     <ClCompile Include="Engine\TextureManager\Texture\Texture.cpp">
       <Filter>Engine\TextureManager\Texture</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Drawers\IDrawer\IDrawer.cpp">
-      <Filter>Engine\Drawers\IDrawer</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Drawers\Model\Model.cpp">
       <Filter>Engine\Drawers\Model</Filter>
@@ -844,9 +841,6 @@
       <Filter>Engine\Drawers\Model\RigidAnimationModel</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Drawers\DrawManager\DrawManager.cpp">
-      <Filter>Engine\Drawers\DrawManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Drawers\IDrawManager\IDrawManager.cpp">
       <Filter>Engine\Drawers\DrawManager</Filter>
     </ClCompile>
     <ClCompile Include="Engine\LevelDataLoader\LevelData\LevelData.cpp">
@@ -1017,6 +1011,21 @@
     <ClCompile Include="Engine\ComputePipelineSystem\ComputePipelines\MMDMotionComputePipeline\MMDMotionComputePipeline.cpp">
       <Filter>Engine\PipelineSystems\ComputePipelineSystem\ComputePipelines\MMDMotionComputePipeline</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Utils\StringConverter\StringConverter.cpp">
+      <Filter>Engine\Utils\StringConverter</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Drawers\DrawManager\Transformation\Transformation.cpp">
+      <Filter>Engine\Drawers\DrawManager\Transformation</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Drawers\DrawManager\DrawManagerBase\DrawManagerBase.cpp">
+      <Filter>Engine\Drawers\DrawManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Drawers\DrawerBase\DrawerBase.cpp">
+      <Filter>Engine\Drawers\DrawerBase</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\SceneSystem\SceneBase\SceneBase.cpp">
+      <Filter>Game\SceneSystem\SceneBase</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Utils\Math\calc.h">
@@ -1114,9 +1123,6 @@
     </ClInclude>
     <ClInclude Include="Game\SceneSystem\ClearScene\ClearScene.h">
       <Filter>Game\SceneSystem\ClearScene</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\SceneSystem\IScene\IScene.h">
-      <Filter>Game\SceneSystem\IScene</Filter>
     </ClInclude>
     <ClInclude Include="Game\SceneSystem\SceneManager\SceneManager.h">
       <Filter>Game\SceneSystem\SceneManager</Filter>
@@ -1216,9 +1222,6 @@
     </ClInclude>
     <ClInclude Include="Engine\Base\DescriptorHeapManager\Descriptor\Descriptor.h">
       <Filter>Engine\Base\DescriptorHeapManager\Descriptor</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Drawers\IDrawer\IDrawer.h">
-      <Filter>Engine\Drawers\IDrawer</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Drawers\Model\Model.h">
       <Filter>Engine\Drawers\Model</Filter>
@@ -1436,9 +1439,6 @@
     <ClInclude Include="Engine\Drawers\DrawManager\DrawManager.h">
       <Filter>Engine\Drawers\DrawManager</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Drawers\IDrawManager\IDrawManager.h">
-      <Filter>Engine\Drawers\DrawManager</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\LevelDataLoader\LevelData\LevelData.h">
       <Filter>Engine\LevelDataLoader</Filter>
     </ClInclude>
@@ -1636,6 +1636,21 @@
     </ClInclude>
     <ClInclude Include="Engine\ComputePipelineSystem\ComputePipelines\MMDMotionComputePipeline\MMDMotionComputePipeline.h">
       <Filter>Engine\PipelineSystems\ComputePipelineSystem\ComputePipelines\MMDMotionComputePipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Utils\StringConverter\StringConverter.h">
+      <Filter>Engine\Utils\StringConverter</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drawers\DrawManager\Transformation\Transformation.h">
+      <Filter>Engine\Drawers\DrawManager\Transformation</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drawers\DrawManager\DrawManagerBase\DrawManagerBase.h">
+      <Filter>Engine\Drawers\DrawManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drawers\DrawerBase\DrawerBase.h">
+      <Filter>Engine\Drawers\DrawerBase</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\SceneSystem\SceneBase\SceneBase.h">
+      <Filter>Game\SceneSystem\SceneBase</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

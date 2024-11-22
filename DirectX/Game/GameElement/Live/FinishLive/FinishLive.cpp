@@ -1,5 +1,5 @@
 #include "FinishLive.h"
-#include "SceneSystem/IScene/IScene.h"
+#include "SceneSystem/SceneBase/SceneBase.h"
 
 FinishLive::FinishLive()
 {

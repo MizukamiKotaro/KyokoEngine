@@ -17,5 +17,5 @@ void ScoreManager::Initialize()
 
 void ScoreManager::UpdateMemory()
 {
-	memoryScores_[IScene::GetStageNo()]->SetUpdate(*clearScore_.get());
+	memoryScores_[SceneBase::GetStageNo()]->SetUpdate(*clearScore_.get());
 }

@@ -2,14 +2,14 @@
 #include "ParticleData.h"
 #include <list>
 #include <memory>
-#include "Drawers/IDrawer/IDrawer.h"
+#include "Drawers/DrawerBase/DrawerBase.h"
 #include "Editor/StageEditor.h"
 #include <vector>
 
 class Camera;
 class ParticleManager;
 
-class Particle : public IDrawer
+class Particle : public DrawerBase
 {
 public:
 	Particle(const std::string& particleName, const std::string& textureName, bool isStageEditor = false, BlendMode blendMode = BlendMode::kBlendModeNormal);

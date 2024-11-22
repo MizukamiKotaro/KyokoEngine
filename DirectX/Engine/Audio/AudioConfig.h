@@ -1,5 +1,6 @@
 #pragma once
+// Audioのタイプ
 enum class AudioType {
-	SE,
-	MUSIC
+	SE, // SE
+	MUSIC // MUSIC
 };

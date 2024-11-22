@@ -1,5 +1,5 @@
 #include "WindowsInfo.h"
-#include "DebugLog/DebugLog.h"
+#include "StringConverter/StringConverter.h"
 #include <cassert>
 #pragma comment(lib, "winmm.lib")
 
@@ -42,7 +42,7 @@ void WindowsInfo::CreateGameWindow(const std::string& windowName, int width, int
 	//ウィンドウプロシージャ
 	wndClass_.lpfnWndProc = WindowProc;
 
-	const std::wstring&& titleName = DebugLog::ConvertString(windowName);
+	const std::wstring&& titleName = StringConverter::ConvertString(windowName);
 	wndClass_.lpszClassName = titleName.c_str();
 	//インスタンスハンドル
 	wndClass_.hInstance = GetModuleHandle(nullptr);

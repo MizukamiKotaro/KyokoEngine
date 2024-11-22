@@ -8,6 +8,7 @@ class AudioManager;
 class SoundData;
 class VolumeManager;
 
+// 音の読み込みや再生、停止を呼び出すクラス
 class Audio
 {
 public: // gameで使用する関数
@@ -16,11 +17,11 @@ public: // gameで使用する関数
 	Audio(const Audio& audio);
 
 	/// <summary>
-	/// waveデータのロード,タグの設定,ボリュームの設定(ImGuiで後からいじれるようになってる)
+	/// audioデータのロード,タグの設定,音量の設定(ImGuiで後からいじれるようになってる)
 	/// </summary>
 	/// <param name="filename">"hoge.mp3"で読み込める,Resources/Audio/SE or Musicの中にあれば更に格納しててもok</param>
 	/// <param name="itemName">ImGuiに表示する名前,日本語可</param>
-	/// <param name="volume">ボリューム</param>
+	/// <param name="volume">音量</param>
 	void Load(const std::string& filename, const std::string& itemName = "_", float volume = 0.7f);
 	/// <summary>
 	/// 再生
@@ -52,18 +53,36 @@ public: // gameで使用する関数
 
 public: // エンジン内で使用する関数
 	static void StaticInitialize();
+	/// <summary>
+	/// 更新処理
+	/// </summary>
 	void Update();
+	/// <summary>
+	/// 名前の取得
+	/// </summary>
+	/// <returns>名前</returns>
 	const std::string& GetItemName() const { return itemName_; }
+	/// <summary>
+	/// サウンドデータの取得
+	/// </summary>
+	/// <returns>サウンドデータ</returns>
 	const SoundData* GetSoundDataPtr() const;
-private:
-	const SoundData* soundData_;
-	uint32_t voiceHandle_;
-	float volume_;
-	std::string itemName_;
 
-	static AudioManager* audioManager_;
-	static VolumeManager* volumeManager_;
+private:
+	/// <summary>
+	/// 音量のセット
+	/// </summary>
+	void SetVolume();
+
+private:
+	const SoundData* soundData_; // サウンドデータ
+	uint32_t voiceHandle_; // ボイスのハンドル
+	float volume_; // 音量
+	std::string itemName_; // 名前
+
+	static AudioManager* audioManager_; // 読み込みや再生を行う根幹のクラス
+	static VolumeManager* volumeManager_; // 音量を管理するクラス
 	
-	std::unique_ptr<GlobalVariableUser> global_;
+	std::unique_ptr<GlobalVariableUser> global_; // グローバル変数を設定するクラス
 	
 };

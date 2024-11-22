@@ -42,9 +42,9 @@ public:
 	void Clear();
 	void Finalize();
 
-	void AddResource(const InstancingMeshTexData* modelData);
-	Resources* GetResources(const InstancingMeshTexData* modelData);
-	void CreateSRV(const int32_t& num, const InstancingMeshTexData* modelData);
+	void AddResource(const InstancingGroupData* modelData);
+	Resources* GetResources(const InstancingGroupData* modelData);
+	void CreateSRV(const int32_t& num, const InstancingGroupData* modelData);
 
 private:
 	InstancingResourceManager() = default;
@@ -55,5 +55,5 @@ private:
 
 private:
 	
-	std::unordered_map<const InstancingMeshTexData*, std::unique_ptr<Resources>> resources_;
+	std::unordered_map<const InstancingGroupData*, std::unique_ptr<Resources>> resources_;
 };

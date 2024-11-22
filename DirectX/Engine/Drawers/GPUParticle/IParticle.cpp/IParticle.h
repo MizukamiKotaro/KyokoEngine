@@ -1,13 +1,13 @@
 #pragma once
 #include <memory>
-#include "Drawers/IDrawer/IDrawer.h"
+#include "Drawers/DrawerBase/DrawerBase.h"
 #include "Editor/StageEditor.h"
 #include "GraphicsPipelineSystem/BlendModeConfig.h"
 
 class Camera;
 class Texture;
 
-class IParticle : public IDrawer
+class IParticle : public DrawerBase
 {
 public:
 	virtual void Initialize() = 0;

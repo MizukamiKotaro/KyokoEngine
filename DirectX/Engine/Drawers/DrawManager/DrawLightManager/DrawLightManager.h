@@ -1,9 +1,8 @@
 #pragma once
-#include "Matrix4x4.h"
-#include "Drawers/IDrawManager/IDrawManager.h"
-#include <wrl.h>
+#include "Drawers/DrawManager/DrawManagerBase/DrawManagerBase.h"
 #include <vector>
 #include <memory>
+#include "Drawers/DrawManager/Transformation/Transformation.h"
 
 class Camera;
 class ModelData;
@@ -11,31 +10,30 @@ enum class BlendMode;
 class PointLight;
 class SpotLight;
 
-class DrawLightManager : public IDrawManager
+/// <summary>
+/// ライト用の描画マネージャー
+/// </summary>
+class DrawLightManager : public DrawManagerBase
 {
 public:
 	DrawLightManager();
 
-	void Draw(const PointLight& light,const Camera& camera, const BlendMode& blendMode);
-	void Draw(const SpotLight& light, const Camera& camera, const BlendMode& blendMode);
+	/// <summary>
+	/// 描画
+	/// </summary>
+	/// <param name="light">ライト</param>
+	/// <param name="camera">カメラ</param>
+	/// <param name="blendMode">ブレンドモード</param>
+	void Draw(const PointLight& light,const Camera& camera, BlendMode blendMode);
+	/// <summary>
+	/// 描画
+	/// </summary>
+	/// <param name="light">ライト</param>
+	/// <param name="camera">カメラ</param>
+	/// <param name="blendMode">ブレンドモード</param>
+	void Draw(const SpotLight& light, const Camera& camera, BlendMode blendMode);
 
 private:
-	class Transformation
-	{
-	public:
-		Transformation();
-		~Transformation();
-		struct TransformationMatrix {
-			Matrix4x4 WVP;
-			Matrix4x4 World;
-			Matrix4x4 WorldInverse;
-		};
-		Microsoft::WRL::ComPtr<ID3D12Resource> transformationResource;
-		TransformationMatrix* transformationData;
-	};
-	std::vector<std::unique_ptr<Transformation>> transformation_;
-
-	const ModelData* modelData_;
-	Matrix4x4 scaleMat_;
-	Matrix4x4 scaleInverseMat_;
+	std::vector<std::unique_ptr<Transformation>> transformations_; // 変換行列データ配列
+	const ModelData* modelData_; // モデルデータ
 };

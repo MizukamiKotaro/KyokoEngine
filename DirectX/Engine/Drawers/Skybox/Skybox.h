@@ -2,7 +2,7 @@
 
 #include <wrl.h>
 #include <string>
-#include "Drawers/IDrawer/IDrawer.h"
+#include "Drawers/DrawerBase/DrawerBase.h"
 #include "Vector3.h"
 #include "Vector4.h"
 #include "Matrix4x4.h"
@@ -10,7 +10,7 @@
 class Camera;
 class Texture;
 
-class Skybox : public IDrawer
+class Skybox : public DrawerBase
 {
 public:
 

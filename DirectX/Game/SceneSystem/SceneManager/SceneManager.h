@@ -1,10 +1,13 @@
 #pragma once
 #include <memory>
 #include "SceneSystem/ISceneFactory/ISceneFactory.h"
-#include "SceneSystem/IScene/IScene.h"
+#include "SceneSystem/SceneBase/SceneBase.h"
 class Input;
 class FrameInfo;
 
+/// <summary>
+/// シーンマネージャー
+/// </summary>
 class SceneManager
 {
 public:
@@ -18,11 +21,11 @@ public:
 	/// </summary>
 	int Run();
 private:
-	// シーンを保持するメンバ変数
-	std::unique_ptr<IScene> scene_;
+	// シーン
+	std::unique_ptr<SceneBase> scene_;
 
-	int currentSceneNo_; // 現在のシーン
-	int preSceneNo_; // 前のシーン
+	int32_t currentSceneNo_; // 現在のシーン
+	int32_t preSceneNo_; // 前のシーン
 
 	std::unique_ptr<ISceneFactory> sceneFactory_; // シーンファクトリー
 

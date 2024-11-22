@@ -2,7 +2,7 @@
 #include "Editor/StageEditor.h"
 class Camera;
 class InstancingModelManager;
-class InstancingMeshTexData;
+class InstancingGroupData;
 
 class IStageObject
 {
@@ -27,5 +27,5 @@ protected:
 
 	std::unique_ptr<StageEditor> stageEditor_;
 	static InstancingModelManager* instancingManager_;
-	const InstancingMeshTexData* instancingData_;
+	const InstancingGroupData* instancingData_;
 };

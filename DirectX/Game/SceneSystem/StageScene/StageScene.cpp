@@ -3,7 +3,7 @@
 
 StageScene::StageScene()
 {
-	FirstInit();
+	FirstInitialize();
 
 	game_ = std::make_unique<Game>(camera_.get());
 }
@@ -42,7 +42,7 @@ void StageScene::Draw()
 
 	game_->Draw();
 
-	BlackDraw();
+	TransitionDraw();
 
 	// フレームの終了
 	Kyoko::Engine::PostDraw();

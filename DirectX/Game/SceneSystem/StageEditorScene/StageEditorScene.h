@@ -1,9 +1,9 @@
 #pragma once
 #include <memory>
-#include "SceneSystem/IScene/IScene.h"
+#include "SceneSystem/SceneBase/SceneBase.h"
 #include "GameElement/LiveEditor/LiveEditor.h"
 
-class StageEditorScene : public IScene
+class StageEditorScene : public SceneBase
 {
 public:
 

@@ -13,12 +13,12 @@
 #include "GraphicsPipelineSystem/BlendModeConfig.h"
 #include "ModelData/SkinClustr.h"
 
-#include "Drawers/IDrawer/IDrawer.h"
+#include "Drawers/DrawerBase/DrawerBase.h"
 
 class DescriptorHeap;
 class Camera;
 
-class PMDModel : public IDrawer
+class PMDModel : public DrawerBase
 {
 public:
 	PMDModel(const std::string& fileName);

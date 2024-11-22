@@ -1,7 +1,7 @@
 #include "Notes.h"
 #include "Camera.h"
 #include <fstream>
-#include "SceneSystem/IScene/IScene.h"
+#include "SceneSystem/SceneBase/SceneBase.h"
 #include "Ease/Ease.h"
 
 const float Notes::kSpeed_ = 200.0f;
@@ -142,7 +142,7 @@ void NotesList::LoadPopData()
 {// ファイルを開く
 	std::ifstream file;
 
-	switch (IScene::GetStageNo())
+	switch (SceneBase::GetStageNo())
 	{
 	case SHINING_STAR:
 		file.open("Resources/CSV/shiningStar.csv");

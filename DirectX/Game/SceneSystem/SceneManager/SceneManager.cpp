@@ -11,49 +11,48 @@ SceneManager::SceneManager()
 	// スコアの初期化
 	ScoreManager::GetInstance()->Initialize();
 
-	// タイトルシーンから
-	IScene::SetSceneNo(TITLE);
+	// 初期化
+	SceneBase::StaticInitialize();
+	SceneBase::SetSceneNo(SCENE::TITLE);
+	currentSceneNo_ = SCENE::TITLE;
+	preSceneNo_ = SCENE::TITLE;
 
 	// シーンの作成
 	sceneFactory_ = std::make_unique<SceneFactory>();
-	scene_.reset(sceneFactory_->CreateScene(IScene::GetSceneNo()));
+	scene_.reset(sceneFactory_->CreateScene(SCENE::TITLE));
 
-
-	currentSceneNo_ = IScene::GetSceneNo();
-	preSceneNo_ = currentSceneNo_;
-	IScene::SetStageNo(0);
-
+	// ポインタの取得
 	input_ = Input::GetInstance();
 	frameInfo_ = FrameInfo::GetInstance();
 }
 
 int SceneManager::Run()
 {
+	// 一番最初のタイミングで一度初期化
 	scene_->Initialize();
 
 	// ウィンドウの×ボタンが押されるまでループ
 	while (true) {
-		// フレームの開始
-		int32_t sceneNo = IScene::GetSceneNo();
-		if (Kyoko::Engine::ProcessMessage() || (input_->PressedKey(DIK_ESCAPE) && sceneNo == TITLE)) {
+		// ウィンドウが閉じたか、タイトルでescが押されたらループを抜ける
+		if (Kyoko::Engine::ProcessMessage() || (input_->PressedKey(DIK_ESCAPE) && currentSceneNo_ == TITLE)) {
 			break;
 		}
-
+		// エンジンの更新処理
 		Kyoko::Engine::FirstUpdateInLoop();
 
 		// 更新処理
 		preSceneNo_ = currentSceneNo_;
-		currentSceneNo_ = sceneNo;
-
+		currentSceneNo_ = SceneBase::GetSceneNo();
 		if (preSceneNo_ != currentSceneNo_) {
-			scene_.reset(sceneFactory_->CreateScene(sceneNo));
+			// 新しいシーンの初期化
+			scene_.reset(sceneFactory_->CreateScene(currentSceneNo_));
 			scene_->Initialize();
 			scene_->FirstUpdate();
 		}
-
 		scene_->Play();
 
 #ifdef _DEBUG
+		// ImGuiで現在のシーン表示
 		ImGui::Begin("SCENE");
 		switch (currentSceneNo_)
 		{
@@ -76,6 +75,7 @@ int SceneManager::Run()
 			break;
 		}
 		ImGui::End();
+		// フレームの表示
 		ImGui::Begin("フレーム");
 		ImGui::Text("フレーム : %4.1f", frameInfo_->GetFramerate());
 		ImGui::End();
@@ -84,9 +84,11 @@ int SceneManager::Run()
 		// 描画処理
 		scene_->Draw();
 
+		// フレームの最終処理
 		frameInfo_->End();
 	}
 
+	// 解放
 	scene_.reset();
 	sceneFactory_.reset();
 

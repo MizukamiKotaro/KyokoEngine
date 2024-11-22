@@ -1,13 +1,13 @@
 #pragma once
 
-#include "SceneSystem/IScene/IScene.h"
+#include "SceneSystem/SceneBase/SceneBase.h"
 #include "GameElement/Live/Stage/Stage.h"
 #include "GameElement/Live/Dome/Dome.h"
 #include "GameElement/Live/Screen/Screen.h"
 #include "GameElement/ClearUI/ClearUI.h"
 #include "Sprite.h"
 
-class ClearScene : public IScene
+class ClearScene : public SceneBase
 {
 public:
 	ClearScene();

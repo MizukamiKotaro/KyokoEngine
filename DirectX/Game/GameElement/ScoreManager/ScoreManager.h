@@ -1,7 +1,7 @@
 #pragma once
 
 #include "GameElement/Score/Score.h"
-#include "SceneSystem/IScene/IScene.h"
+#include "SceneSystem/SceneBase/SceneBase.h"
 #include <array>
 #include <memory>
 

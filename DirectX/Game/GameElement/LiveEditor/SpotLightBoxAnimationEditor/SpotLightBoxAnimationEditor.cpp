@@ -156,7 +156,7 @@ void SpotLightBoxAnimationEditor::Create()
 
 void SpotLightBoxAnimationEditor::MakeInstancingData()
 {
-	instancingData_ = instancingManager_->GetDrawData(InstancingMeshTexData{ "normal", &box_->GetModelData(), box_->GetModelData().texture,BlendMode::kBlendModeNormal });
+	instancingData_ = instancingManager_->GetDrawData(InstancingGroupData{ "normal", &box_->GetModelData(), box_->GetModelData().texture,BlendMode::kBlendModeNormal });
 }
 
 void SpotLightBoxAnimationEditor::AddInstancing()

@@ -4,12 +4,12 @@
 #include "Matrix4x4.h"
 #include "ILight/ILight.h"
 #include "GraphicsPipelineSystem/BlendModeConfig.h"
-#include "Drawers/IDrawer/IDrawer.h"
+#include "Drawers/DrawerBase/DrawerBase.h"
 
 class Camera;
 class ModelData;
 
-class SpotLight : public ILight, public IDrawer
+class SpotLight : public ILight, public DrawerBase
 {
 public:
 	struct SpotLightData

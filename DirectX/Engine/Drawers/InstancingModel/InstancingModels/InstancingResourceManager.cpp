@@ -4,7 +4,7 @@
 #include "DescriptorHeapManager/DescriptorHeapManager.h"
 #include "DescriptorHeapManager/DescriptorHeap/DescriptorHeap.h"
 
-void InstancingResourceManager::CreateSRV(const int32_t& num, const InstancingMeshTexData* modelData)
+void InstancingResourceManager::CreateSRV(const int32_t& num, const InstancingGroupData* modelData)
 {
 	for (int32_t i = 0; i < num; i++) {
 		resources_[modelData]->instancingResources_.push_back(InstancingResources{});
@@ -22,7 +22,7 @@ void InstancingResourceManager::CreateSRV(const int32_t& num, const InstancingMe
 		srvDesc.Buffer.NumElements = kNumInstance;
 		srvDesc.Buffer.StructureByteStride = sizeof(ParticleForGPU);
 
-		resource.srvHandles_ = DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->GetNewDescriptorHandles();
+		resource.srvHandles_ = DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->GetNewDescriptorHandle();
 
 		DirectXBase::GetInstance()->GetDevice()->CreateShaderResourceView(resource.instancingResource_.Get(), &srvDesc, resource.srvHandles_->cpuHandle);
 	}
@@ -36,14 +36,14 @@ InstancingResourceManager* InstancingResourceManager::GetInstance()
 
 void InstancingResourceManager::Clear()
 {
-	for (std::pair<const InstancingMeshTexData* const, std::unique_ptr<Resources>>& resource : resources_) {
+	for (std::pair<const InstancingGroupData* const, std::unique_ptr<Resources>>& resource : resources_) {
 		resource.second->instancingNum_ = 0;
 	}
 }
 
 void InstancingResourceManager::Finalize()
 {
-	for (std::pair<const InstancingMeshTexData* const, std::unique_ptr<Resources>>& resource : resources_) {
+	for (std::pair<const InstancingGroupData* const, std::unique_ptr<Resources>>& resource : resources_) {
 		for (InstancingResources& res : resource.second->instancingResources_) {
 			res.instancingResource_->Release();
 			DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->DeleteDescriptor(res.srvHandles_);
@@ -52,7 +52,7 @@ void InstancingResourceManager::Finalize()
 	}
 }
 
-void InstancingResourceManager::AddResource(const InstancingMeshTexData* modelData)
+void InstancingResourceManager::AddResource(const InstancingGroupData* modelData)
 {
 	if (resources_.find(modelData) == resources_.end()) {
 		resources_[modelData] = std::make_unique<Resources>();
@@ -67,7 +67,7 @@ void InstancingResourceManager::AddResource(const InstancingMeshTexData* modelDa
 	}
 }
 
-InstancingResourceManager::Resources* InstancingResourceManager::GetResources(const InstancingMeshTexData* modelData)
+InstancingResourceManager::Resources* InstancingResourceManager::GetResources(const InstancingGroupData* modelData)
 {
 	if (resources_.find(modelData) != resources_.end()) {
 		return resources_[modelData].get();

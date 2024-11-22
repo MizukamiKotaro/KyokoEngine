@@ -174,7 +174,7 @@ void BasePostEffect::CreateTexRes()
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D; // 2Dテクスチャ
 	srvDesc.Texture2D.MipLevels = 1;
 
-	srvHandles_ = srvHeap_->GetNewTextureDescriptorHandles();
+	srvHandles_ = srvHeap_->GetNewTextureDescriptorHandle();
 
 	device_->CreateShaderResourceView(texResource_.Get(), &srvDesc, srvHandles_->cpuHandle);
 }
@@ -186,7 +186,7 @@ void BasePostEffect::CreateRTV()
 		rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB; //出力結果をSRGBに変換して書き込む
 		rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D; //2dテクスチャとして書き込む
 
-		rtvHandles_ = rtvHeap_->GetNewDescriptorHandles();
+		rtvHandles_ = rtvHeap_->GetNewDescriptorHandle();
 
 		device_->CreateRenderTargetView(texResource_.Get(), &rtvDesc, rtvHandles_->cpuHandle);
 	}
@@ -216,7 +216,7 @@ void BasePostEffect::CreateDSV()
 		);
 		assert(SUCCEEDED(hr));
 
-		dsvHandles_ = dsvHeap_->GetNewDescriptorHandles();
+		dsvHandles_ = dsvHeap_->GetNewDescriptorHandle();
 
 		//DSVの設定
 		D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc{};

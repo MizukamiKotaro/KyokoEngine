@@ -12,11 +12,11 @@
 #include "ModelDataManager.h"
 #include "GraphicsPipelineSystem/BlendModeConfig.h"
 
-#include "Drawers/IDrawer/IDrawer.h"
+#include "Drawers/DrawerBase/DrawerBase.h"
 
 class Camera;
 
-class BaseModel : public IDrawer
+class BaseModel : public DrawerBase
 {
 public:
 	virtual ~BaseModel();

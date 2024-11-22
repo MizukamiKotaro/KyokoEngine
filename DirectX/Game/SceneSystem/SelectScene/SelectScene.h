@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SceneSystem/IScene/IScene.h"
+#include "SceneSystem/SceneBase/SceneBase.h"
 #include "GameElement/Live/Stage/Stage.h"
 #include "GameElement/Live/Dome/Dome.h"
 #include "GameElement/Live/Screen/Screen.h"
@@ -8,7 +8,7 @@
 #include "Sprite.h"
 #include <array>
 
-class SelectScene : public IScene
+class SelectScene : public SceneBase
 {
 public:
 	SelectScene();

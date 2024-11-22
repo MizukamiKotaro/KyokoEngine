@@ -19,7 +19,7 @@ GPUParticle::GPUParticle(const std::string& particleName, const std::string& tex
 	// uavの作成
 	particleResouce_ = DirectXBase::CreateBufferResource(sizeof(GPUParticleData) * 1024, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
 
-	particleUAVHandle_ = DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->GetNewDescriptorHandles();
+	particleUAVHandle_ = DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->GetNewDescriptorHandle();
 	
 	D3D12_UNORDERED_ACCESS_VIEW_DESC outputVertexUAVDesc{};
 	outputVertexUAVDesc.Format = DXGI_FORMAT_UNKNOWN;
@@ -30,7 +30,7 @@ GPUParticle::GPUParticle(const std::string& particleName, const std::string& tex
 	outputVertexUAVDesc.Buffer.StructureByteStride = sizeof(GPUParticleData);
 	DirectXBase::GetInstance()->GetDevice()->CreateUnorderedAccessView(particleResouce_.Get(), nullptr, &outputVertexUAVDesc, particleUAVHandle_->cpuHandle);
 
-	particleSRVHandle_ = DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->GetNewDescriptorHandles();
+	particleSRVHandle_ = DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->GetNewDescriptorHandle();
 
 	D3D12_SHADER_RESOURCE_VIEW_DESC influenceSRVDesc{};
 	influenceSRVDesc.Format = DXGI_FORMAT_UNKNOWN;

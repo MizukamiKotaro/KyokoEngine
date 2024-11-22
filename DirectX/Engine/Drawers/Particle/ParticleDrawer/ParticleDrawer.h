@@ -3,7 +3,7 @@
 
 #include "GraphicsPipelineSystem/BlendModeConfig.h"
 #include "Light/Light.h"
-#include "Drawers/IDrawer/IDrawer.h"
+#include "Drawers/DrawerBase/DrawerBase.h"
 #include "ModelData/ModelData.h"
 #include "DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
 
@@ -13,7 +13,7 @@ class Camera;
 enum class PipelineType;
 class ILight;
 
-class ParticleDrawer : public IDrawer
+class ParticleDrawer : public DrawerBase
 {
 public:
 	static const uint32_t kNumInstance = 100000;

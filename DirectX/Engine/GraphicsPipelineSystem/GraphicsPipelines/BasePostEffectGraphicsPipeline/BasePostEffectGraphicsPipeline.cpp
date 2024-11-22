@@ -3,6 +3,7 @@
 #include <cassert>
 #include "Engine/Base/DirectXBase/DirectXBase.h"
 #include "GraphicsPipelineSystem/BlendModeConfig.h"
+#include "StringConverter/StringConverter.h"
 
 BasePostEffectGraphicsPipeline::BasePostEffectGraphicsPipeline(const std::string& psFileName)
 {
@@ -83,7 +84,7 @@ void BasePostEffectGraphicsPipeline::InitializePSO(const std::string& psFileName
 	vertexShaderBlob_ = CompileShader(L"Resources/Shaders/GraphicsShaders/BasePostEffectShader/BasePostEffect.VS.hlsl", L"vs_6_0", dxcUtils_.Get(), dxcCompiler_.Get(), includeHandler_.Get());
 	assert(vertexShaderBlob_ != nullptr);
 
-	pixelShaderBlob_ = CompileShader(DebugLog::ConvertString("Resources/Shaders/GraphicsShaders/" + psFileName), L"ps_6_0", dxcUtils_.Get(), dxcCompiler_.Get(), includeHandler_.Get());
+	pixelShaderBlob_ = CompileShader(StringConverter::ConvertString("Resources/Shaders/GraphicsShaders/" + psFileName), L"ps_6_0", dxcUtils_.Get(), dxcCompiler_.Get(), includeHandler_.Get());
 	assert(pixelShaderBlob_ != nullptr);
 
 	// DepthStencilStateの設定

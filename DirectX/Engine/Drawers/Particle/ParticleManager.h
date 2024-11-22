@@ -12,11 +12,11 @@
 
 #include "ParticleData.h"
 #include "ParticleList/ParticleList.h"
-#include "Drawers/IDrawer/IDrawer.h"
+#include "Drawers/DrawerBase/DrawerBase.h"
 
 class Camera;
 
-class ParticleManager : public IDrawer
+class ParticleManager : public DrawerBase
 {
 public:
 

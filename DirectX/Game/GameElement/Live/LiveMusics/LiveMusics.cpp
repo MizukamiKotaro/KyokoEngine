@@ -1,5 +1,5 @@
 #include "LiveMusics.h"
-#include "SceneSystem/IScene/IScene.h"
+#include "SceneSystem/SceneBase/SceneBase.h"
 
 LiveMusics::LiveMusics()
 {
@@ -11,7 +11,7 @@ void LiveMusics::Initialize()
 	if (music_->IsPlaying()) {
 		music_->Stop();
 	}
-	switch (IScene::GetStageNo())
+	switch (SceneBase::GetStageNo())
 	{
 	case STAGE::SHINING_STAR:
 		music_->Load("maou_short_14_shining_star.mp3", "シャイニングスター");

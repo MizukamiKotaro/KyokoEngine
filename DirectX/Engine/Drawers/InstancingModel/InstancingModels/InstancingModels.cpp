@@ -13,7 +13,7 @@
 
 const PipelineType InstancingModels::pipelineType_ = PipelineType::INSTANCING_MODEL;
 
-InstancingModels::InstancingModels(const InstancingMeshTexData* modelData)
+InstancingModels::InstancingModels(const InstancingGroupData* modelData)
 {
 	modelData_ = modelData;
 
@@ -27,7 +27,7 @@ InstancingModels::~InstancingModels()
 {
 }
 
-void InstancingModels::Draw(const Camera& camera, std::list<InstancingModelData>& blocks, const InstancingMeshTexData* modelData)
+void InstancingModels::Draw(const Camera& camera, std::list<InstancingModelData>& blocks, const InstancingGroupData* modelData)
 {
 	if (modelData_ != modelData) {
 		return;
@@ -48,7 +48,7 @@ void InstancingModels::PreDraw()
 	psoManager_->PreDraw(pipelineType_);
 }
 
-void InstancingModels::SetMesh(const InstancingMeshTexData* modelData)
+void InstancingModels::SetMesh(const InstancingGroupData* modelData)
 {
 	modelData_ = modelData;
 }

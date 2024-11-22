@@ -5,7 +5,7 @@
 
 TitleScene::TitleScene()
 {
-	FirstInit();
+	FirstInitialize();
 
 	camera_->transform_.translate_ = { 0.0f,6.0f,-70.0f };
 	camera_->Update();
@@ -111,7 +111,7 @@ void TitleScene::Draw()
 
 	Kyoko::Engine::PreDraw();
 	bloom_->Draw();
-	BlackDraw();
+	TransitionDraw();
 	Kyoko::Engine::PostDraw();
 }
 
@@ -167,7 +167,7 @@ void TitleScene::WrightPostEffect()
 	dome_->Draw(camera_.get());
 	stage_->Draw(camera_.get());
 	space_->Draw();
-	BlackDraw();
+	TransitionDraw();
 	spotlightAndOutline_->PostDrawBloom();
 
 	bloom_->PreDrawScene();

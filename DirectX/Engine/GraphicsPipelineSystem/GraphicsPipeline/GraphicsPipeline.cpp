@@ -4,7 +4,7 @@
 #include "Engine/Base/DebugLog/DebugLog.h"
 #include <format>
 #include "GraphicsPipelineSystem/BlendModeConfig.h"
-
+#include "StringConverter/StringConverter.h"
 
 void GraphicsPipeline::Initialize()
 {
@@ -143,7 +143,7 @@ IDxcBlob* GraphicsPipeline::CompileShader(const std::wstring& filePath, const wc
 {
 	// 1. hlslファイルを読む
 	//これからシェーダーをコンパイルする旨をログに出す
-	DebugLog::Log(DebugLog::ConvertString(std::format(L"Begin CompileShader,path:{},profile:{}\n", filePath, profile)));
+	DebugLog::Log(std::format(L"Begin CompileShader,path:{},profile:{}\n", filePath, profile));
 	//hlslファイルを読む
 	IDxcBlobEncoding* shaderSource = nullptr;
 	HRESULT hr = dxcUtils->LoadFile(filePath.c_str(), nullptr, &shaderSource);
@@ -190,7 +190,7 @@ IDxcBlob* GraphicsPipeline::CompileShader(const std::wstring& filePath, const wc
 	hr = shaderResult->GetOutput(DXC_OUT_OBJECT, IID_PPV_ARGS(&shaderBlob), nullptr);
 	assert(SUCCEEDED(hr));
 	//成功したログを出す
-	DebugLog::Log(DebugLog::ConvertString(std::format(L"Compile Succeeded, path:{}, prefile:{}\n", filePath, profile)));
+	DebugLog::Log(std::format(L"Compile Succeeded, path:{}, prefile:{}\n", filePath, profile));
 	//もう使わないリソースを開放
 	shaderSource->Release();
 	shaderResult->Release();

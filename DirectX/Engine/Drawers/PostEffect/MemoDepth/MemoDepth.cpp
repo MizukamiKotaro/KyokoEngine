@@ -41,7 +41,7 @@ void MemoDepth::CreateDepthRes()
 	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D; // 2Dテクスチャ
 	srvDesc.Texture2D.MipLevels = 1;
-	depthHandles_ = srvHeap_->GetNewDescriptorHandles();
+	depthHandles_ = srvHeap_->GetNewDescriptorHandle();
 
 	device_->CreateShaderResourceView(dsvResource_.Get(), &srvDesc, depthHandles_->cpuHandle);
 }

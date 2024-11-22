@@ -10,16 +10,17 @@ DescriptorHeap::~DescriptorHeap()
 	heap_->Release();
 }
 
-void DescriptorHeap::DeleteDescriptor(const DescriptorHandles* handles) 
+void DescriptorHeap::DeleteDescriptor(const DescriptorHandles* handle) 
 {
 	if (descriptors_.size() != 0) {
-		descriptors_[handles->no]->isUse = false;
+		descriptors_[handle->no]->isUse = false;
 	}
 }
 
-const DescriptorHandles* DescriptorHeap::GetNewDescriptorHandles()
+const DescriptorHandles* DescriptorHeap::GetNewDescriptorHandle()
 {
 	if (heapType_ == D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV) {
+		// SRVの場合、テクスチャ分とばす
 		for (UINT i = SRVDescriptorHeap::GetTextureMaxNum(); i < UINT(descriptors_.size()); i++) {
 			if (!descriptors_[i]->isUse) {
 				descriptors_[i]->isUse = true;
@@ -28,6 +29,7 @@ const DescriptorHandles* DescriptorHeap::GetNewDescriptorHandles()
 		}
 	}
 	else {
+		// RTV、DSVの場合、最初から
 		for (std::unique_ptr<Descriptor>& descriptor : descriptors_) {
 			if (!descriptor->isUse) {
 				descriptor->isUse = true;
@@ -35,11 +37,10 @@ const DescriptorHandles* DescriptorHeap::GetNewDescriptorHandles()
 			}
 		}
 	}
-
 	return nullptr;
 }
 
-const DescriptorHandles* DescriptorHeap::GetNewTextureDescriptorHandles()
+const DescriptorHandles* DescriptorHeap::GetNewTextureDescriptorHandle()
 {
 	for (UINT i = 0; i < SRVDescriptorHeap::GetTextureMaxNum(); i++) {
 		if (!descriptors_[i]->isUse) {
@@ -47,11 +48,10 @@ const DescriptorHandles* DescriptorHeap::GetNewTextureDescriptorHandles()
 			return &descriptors_[i]->handles;
 		}
 	}
-
 	return nullptr;
 }
 
-const D3D12_GPU_DESCRIPTOR_HANDLE& DescriptorHeap::GetTextureHandle()
+const D3D12_GPU_DESCRIPTOR_HANDLE& DescriptorHeap::GetTextureFirstHandle()
 {
 	return descriptors_[0]->handles.gpuHandle;
 }
@@ -73,6 +73,7 @@ ID3D12DescriptorHeap* DescriptorHeap::CreateDescriptorHeap(ID3D12Device* device,
 void DescriptorHeap::Initialize(UINT numDescriptors)
 {
 	ID3D12Device* device = DirectXBase::GetInstance()->GetDevice();
+	// ディスクリプターの作成
 	descriptors_.clear();
 	descriptors_.resize(numDescriptors);
 	Descriptor descriptor;
@@ -91,7 +92,7 @@ void DescriptorHeap::Initialize(UINT numDescriptors)
 	}
 }
 
-uint32_t DescriptorHeap::GetTextureNum(const DescriptorHandles* handle)
+uint32_t DescriptorHeap::GetTextureNo(const DescriptorHandles* handle)
 {
 	for (uint32_t i = 0; i < SRVDescriptorHeap::GetTextureMaxNum(); i++) {
 		if (descriptors_[i]->isUse && &descriptors_[i]->handles == handle) {

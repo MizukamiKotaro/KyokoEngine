@@ -165,7 +165,7 @@ void SkinningModel::CreateSkinCluster()
 	WellForGPU* mappedPalette = nullptr;
 	skinCluster.paletteResouce->Map(0, nullptr, reinterpret_cast<void**>(&mappedPalette));
 	skinCluster.mappedPalette = { mappedPalette,skeleton_->joints.size() };
-	skinCluster.paletteSrvHandle = srvHeap_->GetNewDescriptorHandles();
+	skinCluster.paletteSrvHandle = srvHeap_->GetNewDescriptorHandle();
 
 	// palette用のsrvの作成。StructuredBufferでアクセスできるようにする
 	D3D12_SHADER_RESOURCE_VIEW_DESC paletteSRVDesc{};
@@ -184,7 +184,7 @@ void SkinningModel::CreateSkinCluster()
 	skinCluster.influenceResouce->Map(0, nullptr, reinterpret_cast<void**>(&mappedInfluence));
 	std::memset(mappedInfluence, 0, sizeof(VertexInfluence) * modelData_->mesh.verteces.size());
 	skinCluster.mappedInfluence = { mappedInfluence,modelData_->mesh.verteces.size() };
-	skinCluster.influenceSrvHandle = srvHeap_->GetNewDescriptorHandles();
+	skinCluster.influenceSrvHandle = srvHeap_->GetNewDescriptorHandle();
 
 	// influence用のsrvの作成。StructuredBufferでアクセスできるようにする
 	D3D12_SHADER_RESOURCE_VIEW_DESC influenceSRVDesc{};
@@ -222,7 +222,7 @@ void SkinningModel::CreateSkinCluster()
 	}
 
 	// inputVertex用のsrvの作成。StructuredBufferでアクセスできるようにする
-	skinCluster.inputVertexSrvHandle = srvHeap_->GetNewDescriptorHandles();
+	skinCluster.inputVertexSrvHandle = srvHeap_->GetNewDescriptorHandle();
 	D3D12_SHADER_RESOURCE_VIEW_DESC inputVertexSRVDesc{};
 	inputVertexSRVDesc.Format = DXGI_FORMAT_UNKNOWN;
 	inputVertexSRVDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
@@ -236,7 +236,7 @@ void SkinningModel::CreateSkinCluster()
 	// outputVertex用のuavの作成
 	skinCluster.outputVertexResouce = DirectXBase::CreateBufferResource(sizeof(VertexData) * modelData_->mesh.verteces.size(), D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
 	
-	skinCluster.outputVertexSrvHandle = srvHeap_->GetNewDescriptorHandles();
+	skinCluster.outputVertexSrvHandle = srvHeap_->GetNewDescriptorHandle();
 	D3D12_UNORDERED_ACCESS_VIEW_DESC outputVertexUAVDesc{};
 	outputVertexUAVDesc.Format = DXGI_FORMAT_UNKNOWN;
 	outputVertexUAVDesc.ViewDimension = D3D12_UAV_DIMENSION_BUFFER;

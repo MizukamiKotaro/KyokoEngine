@@ -10,50 +10,39 @@
 
 DrawParticleManager::DrawParticleManager()
 {
-	drawNum_ = 0;
+	drawNo_ = 0;
 	modelData_ = ModelDataManager::GetInstance()->LoadObj("plane");
 }
 
-void DrawParticleManager::Draw(const GPUParticle& particle, const Camera& camera, const BlendMode& blendMode)
+void DrawParticleManager::Draw(const GPUParticle& particle, const Camera& camera, BlendMode blendMode)
 {
-	if (!camera_) {
-		camera_ = &camera;
-		if (perViews_.empty()) {
-			perViews_.push_back(std::make_unique<PerView>());
-		}
-		SetPerView();
+	// カメラ視点情報
+	if (perViews_.size() == drawNo_) {
+		perViews_.push_back(std::make_unique<PerView>());
 	}
-	else if (camera_ != &camera) {
-		drawNum_++;
-		camera_ = &camera;
-		if (perViews_.size() == drawNum_) {
-			perViews_.push_back(std::make_unique<PerView>());
-		}
-		SetPerView();
-	}
+	SetPerView(camera);
 
-
+	// コマンド
 	PipelineType piplineType = PipelineType::GPU_PARTICLE;
 	psoManager_->PreDraw(piplineType);
 	psoManager_->SetBlendMode(piplineType, blendMode);
 	commandList_->IASetVertexBuffers(0, 1, &modelData_->mesh.vertexBufferView_);
 	commandList_->IASetIndexBuffer(&modelData_->mesh.indexBufferView_);
-	commandList_->SetGraphicsRootConstantBufferView(0, perViews_[drawNum_]->perViewResource->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(0, perViews_[drawNo_]->perViewResource->GetGPUVirtualAddress());
 	commandList_->SetGraphicsRootDescriptorTable(1, particle.GetParticleGPUDescriptorHandle());
 	commandList_->SetGraphicsRootDescriptorTable(2, particle.GetTexture()->handles_->gpuHandle);
-
 	commandList_->DrawIndexedInstanced(UINT(modelData_->mesh.indices.size()), 1024, 0, 0, 0);
 
-	drawNum_++;
+	drawNo_++;
 }
 
-void DrawParticleManager::SetPerView()
+void DrawParticleManager::SetPerView(const Camera& camera)
 {
-	perViews_[drawNum_]->perViewData->billboardMatrix = camera_->transform_.worldMat_;
-	perViews_[drawNum_]->perViewData->billboardMatrix.m[3][0] = 0.0f;
-	perViews_[drawNum_]->perViewData->billboardMatrix.m[3][1] = 0.0f;
-	perViews_[drawNum_]->perViewData->billboardMatrix.m[3][2] = 0.0f;
-	perViews_[drawNum_]->perViewData->viewProjection = camera_->GetViewProjection();
+	perViews_[drawNo_]->perViewData->billboardMatrix = camera.transform_.worldMat_;
+	perViews_[drawNo_]->perViewData->billboardMatrix.m[3][0] = 0.0f;
+	perViews_[drawNo_]->perViewData->billboardMatrix.m[3][1] = 0.0f;
+	perViews_[drawNo_]->perViewData->billboardMatrix.m[3][2] = 0.0f;
+	perViews_[drawNo_]->perViewData->viewProjection = camera.GetViewProjection();
 }
 
 DrawParticleManager::PerView::PerView()

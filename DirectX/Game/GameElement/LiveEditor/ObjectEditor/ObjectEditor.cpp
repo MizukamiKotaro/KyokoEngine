@@ -100,7 +100,7 @@ void ObjectEditor::AddInstancing(const Matrix4x4& matrix)
 	}
 }
 
-const InstancingMeshTexData* ObjectEditor::GetInstancingData(const std::string& tag)
+const InstancingGroupData* ObjectEditor::GetInstancingData(const std::string& tag)
 {
-	return instancingManager_->GetDrawData(InstancingMeshTexData{ tag, modelData_, modelData_->texture,BlendMode::kBlendModeNormal });
+	return instancingManager_->GetDrawData(InstancingGroupData{ tag, modelData_, modelData_->texture,BlendMode::kBlendModeNormal });
 }

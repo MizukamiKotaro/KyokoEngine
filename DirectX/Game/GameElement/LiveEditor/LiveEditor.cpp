@@ -6,7 +6,7 @@
 #include "ParticleManager.h"
 #include "InstancingModelManager.h"
 #include "ImGuiManager/ImGuiManager.h"
-#include "SceneSystem/IScene/IScene.h"
+#include "SceneSystem/SceneBase/SceneBase.h"
 
 LiveEditor::LiveEditor(Camera* camera)
 {
@@ -51,7 +51,7 @@ void LiveEditor::Initialize()
 	camera_->Initialize();
 	camera_->transform_.translate_ = { 0.0f,25.0f,-100.0f };
 	camera_->transform_.rotate_.x = 0.1f;
-	if (IScene::GetSceneNo() == SCENE::STAGE) {
+	if (SceneBase::GetSceneNo() == SCENE::STAGE) {
 		camera_->transform_.translate_ = cameraAnim_->GetState().position;
 		camera_->transform_.rotate_ = cameraAnim_->GetState().rotation;
 		isDebug_ = false;
@@ -76,7 +76,7 @@ void LiveEditor::Update(const float& time)
 
 	instancingManager_->Clear();
 #ifdef _DEBUG
-	if (IScene::GetSceneNo() == SCENE::STAGE_EDITOR) {
+	if (SceneBase::GetSceneNo() == SCENE::STAGE_EDITOR) {
 		ImGui::Begin("debug");
 		ImGui::DragFloat("タイム", &debugTime_, 0.01f, 0.0f);
 		if (ImGui::Button("Start")) {

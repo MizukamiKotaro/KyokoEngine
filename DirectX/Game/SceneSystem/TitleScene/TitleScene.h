@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SceneSystem/IScene/IScene.h"
+#include "SceneSystem/SceneBase/SceneBase.h"
 #include "GameElement/Live/Stage/Stage.h"
 #include "GameElement/Live/Dome/Dome.h"
 #include "GameElement/Live/Screen/Screen.h"
@@ -25,7 +25,7 @@
 #include "Drawers/GPUParticle/GPUParticle.h"
 #include "SpotLightAndOutline/SpotLightAndOutline.h"
 
-class TitleScene : public IScene
+class TitleScene : public SceneBase
 {
 public:
 	TitleScene();

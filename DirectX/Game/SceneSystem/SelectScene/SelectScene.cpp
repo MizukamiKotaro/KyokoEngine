@@ -3,7 +3,7 @@
 
 SelectScene::SelectScene()
 {
-	FirstInit();
+	FirstInitialize();
 
 	dome_ = std::make_unique<Dome>();
 	stage_ = std::make_unique<Stage>();
@@ -63,7 +63,7 @@ void SelectScene::Update()
 void SelectScene::Draw()
 {
 	screen_->PreDrawScene();
-	musicSprites_[IScene::stageNo_]->Draw();
+	musicSprites_[SceneBase::stageNo_]->Draw();
 	screen_->PostDrawScene();
 
 	Kyoko::Engine::PreDraw();
@@ -74,7 +74,7 @@ void SelectScene::Draw()
 
 	space_->Draw();
 
-	BlackDraw();
+	TransitionDraw();
 
 	Kyoko::Engine::PostDraw();
 }

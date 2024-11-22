@@ -101,7 +101,7 @@ void ParticleDrawer::CreateSRV()
 	srvDesc.Buffer.NumElements = kNumInstance;
 	srvDesc.Buffer.StructureByteStride = sizeof(ParticleForGPU);
 
-	srvHandles_ = DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->GetNewDescriptorHandles();
+	srvHandles_ = DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->GetNewDescriptorHandle();
 
 	DirectXBase::GetInstance()->GetDevice()->CreateShaderResourceView(instancingResource_.Get(), &srvDesc, srvHandles_->cpuHandle);
 }

@@ -2,7 +2,7 @@
 #include <list>
 
 #include "Light/Light.h"
-#include "Drawers/IDrawer/IDrawer.h"
+#include "Drawers/DrawerBase/DrawerBase.h"
 #include "ModelData/ModelData.h"
 #include "DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
 
@@ -13,20 +13,20 @@ enum class PipelineType;
 class ILight;
 class InstancingResourceManager;
 
-class InstancingModels : public IDrawer
+class InstancingModels : public DrawerBase
 {
 public:
 	static const uint32_t kNumInstance = 10000;
 
-	InstancingModels(const InstancingMeshTexData* modelData);
+	InstancingModels(const InstancingGroupData* modelData);
 	~InstancingModels();
 
-	void Draw(const Camera& camera, std::list<InstancingModelData>& blocks, const InstancingMeshTexData* modelData);
+	void Draw(const Camera& camera, std::list<InstancingModelData>& blocks, const InstancingGroupData* modelData);
 	void Draw(const Camera& camera, std::list<InstancingModelData>& blocks, const std::string& tag);
 
 	static void PreDraw();
 
-	void SetMesh(const InstancingMeshTexData* modelData);
+	void SetMesh(const InstancingGroupData* modelData);
 
 	void SetLight(const ILight* light);
 
@@ -41,5 +41,5 @@ private:
 private:
 
 	static const PipelineType pipelineType_;
-	const InstancingMeshTexData* modelData_;
+	const InstancingGroupData* modelData_;
 };

@@ -3,6 +3,9 @@
 #include <dxgi1_6.h>
 #include <dxgidebug.h>
 #include <wrl.h>
+/// <summary>
+/// リリースチェック
+/// </summary>
 struct ResourceLeackChecker {
 	~ResourceLeackChecker() {
 		Microsoft::WRL::ComPtr<IDXGIDebug1> debug;

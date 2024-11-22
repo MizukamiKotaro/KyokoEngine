@@ -11,9 +11,9 @@ class Camera;
 class InstancingModelList {
 public:
 
-	InstancingModelList(const InstancingMeshTexData* modelData);
+	InstancingModelList(const InstancingGroupData* modelData);
 
-	void Draw(const Camera& camera, const InstancingMeshTexData* modelData);
+	void Draw(const Camera& camera, const InstancingGroupData* modelData);
 	void Draw(const Camera& camera, const std::string& tag);
 
 public:
@@ -24,7 +24,7 @@ public:
 
 	uint32_t GetSize() const;
 
-	void SetModel(const InstancingMeshTexData* modelData);
+	void SetModel(const InstancingGroupData* modelData);
 
 	void SetLight(const ILight* light);
 

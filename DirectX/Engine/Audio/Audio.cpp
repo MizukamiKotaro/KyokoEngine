@@ -11,17 +11,19 @@ VolumeManager* Audio::volumeManager_ = nullptr;
 
 void Audio::StaticInitialize()
 {
+	// インスタンスの取得
 	audioManager_ = AudioManager::GetInstance();
 	volumeManager_ = VolumeManager::GetInstance();
 }
 
 Audio::Audio(const Audio& audio)
 {
+	// 初期化
 	soundData_ = audio.soundData_;
 	volume_ = audio.volume_;
-
 	itemName_ = audio.itemName_;
 
+	// グローバル変数の名前の設定
 	if (soundData_->type == AudioType::SE) {
 		global_ = std::make_unique<GlobalVariableUser>("Audio", "Volume", "SE");
 	}
@@ -29,15 +31,18 @@ Audio::Audio(const Audio& audio)
 		global_ = std::make_unique<GlobalVariableUser>("Audio", "Volume", "Music");
 	}
 
+	// グローバル変数の設定と取得
 	global_->AddItem(itemName_ + "のボリューム", volume_);
-	volume_ = global_->GetFloatValue(itemName_ + "のボリューム");
+	SetVolume();
 }
 
 void Audio::Load(const std::string& filename, const std::string& itemName, float volume)
 {
+	// 初期化
 	soundData_ = audioManager_->Load(filename);
 	volume_ = volume;
 
+	// 名前の設定
 	if (itemName == "_") {
 		itemName_ = filename;
 	}
@@ -45,6 +50,7 @@ void Audio::Load(const std::string& filename, const std::string& itemName, float
 		itemName_ = itemName;
 	}
 
+	// グローバル変数の名前の設定
 	if (soundData_->type == AudioType::SE) {
 		global_ = std::make_unique<GlobalVariableUser>("Audio", "Volume", "SE");
 	}
@@ -52,9 +58,11 @@ void Audio::Load(const std::string& filename, const std::string& itemName, float
 		global_ = std::make_unique<GlobalVariableUser>("Audio", "Volume", "Music");
 	}
 
+	// グローバル変数の設定と取得
 	global_->AddItem(itemName_ + "のボリューム", volume_);
-	volume_ = global_->GetFloatValue(itemName_ + "のボリューム");
+	SetVolume();
 #ifdef _DEBUG
+	// 音量を調整できるようにするため
 	volumeManager_->SetAudio(this);
 #endif // _DEBUG
 }
@@ -62,11 +70,10 @@ void Audio::Load(const std::string& filename, const std::string& itemName, float
 void Audio::Play(bool isLoop)
 {
 #ifdef _DEBUG
-	volume_ = global_->GetFloatValue(itemName_ + "のボリューム");
-
-	volume_ = std::clamp(volume_, 0.0f, 1.0f);
+	SetVolume();
 #endif // _DEBUG
 
+	// 全体の音量と乗算
 	float volume = volume_;
 	if (soundData_->type == AudioType::SE) {
 		volume *= volumeManager_->GetSEVolume();
@@ -74,6 +81,7 @@ void Audio::Play(bool isLoop)
 	else if (soundData_->type == AudioType::MUSIC) {
 		volume *= volumeManager_->GetMusicVolume();
 	}
+	// 再生
 	voiceHandle_ = audioManager_->Play(soundData_, isLoop, volume);
 }
 
@@ -105,15 +113,9 @@ void Audio::AllStop()
 void Audio::Update()
 {
 #ifdef _DEBUG
-	if (soundData_->type == AudioType::SE) {
-		volume_ = global_->GetFloatValue(itemName_ + "のボリューム");
-	}
-	else if (soundData_->type == AudioType::MUSIC) {
-		volume_ = global_->GetFloatValue(itemName_ + "のボリューム");
-	}
+	SetVolume();
 
-	volume_ = std::clamp(volume_, 0.0f, 1.0f);
-
+	// 音の再生ボタンと停止ボタンの設定
 	if (!ImGui::Begin("Audio", nullptr, ImGuiWindowFlags_MenuBar)) {
 		ImGui::End();
 	}
@@ -122,11 +124,13 @@ void Audio::Update()
 			if (ImGui::BeginMenu("音量再生")) {
 				std::string playButtonName = itemName_ + "の再生";
 				if (ImGui::Button(playButtonName.c_str())) {
+					// 再生
 					audioManager_->StopSameSounds(soundData_);
 					Play();
 				}
 				std::string stopButtonName = itemName_ + "の停止";
 				if (ImGui::Button(stopButtonName.c_str())) {
+					// 停止
 					audioManager_->StopSameSounds(soundData_);
 				}
 				ImGui::EndMenu();
@@ -138,6 +142,7 @@ void Audio::Update()
 
 #endif // _DEBUG
 	if (IsPlaying()) {
+		// 再生中の音量の設定
 		float volume = volume_;
 		if (soundData_->type == AudioType::SE) {
 			volume *= volumeManager_->GetSEVolume();
@@ -145,7 +150,6 @@ void Audio::Update()
 		else if (soundData_->type == AudioType::MUSIC) {
 			volume *= volumeManager_->GetMusicVolume();
 		}
-
 		audioManager_->SetVolume(voiceHandle_, soundData_, volume);
 	}
 }
@@ -153,4 +157,10 @@ void Audio::Update()
 const SoundData* Audio::GetSoundDataPtr() const
 {
 	return soundData_;
+}
+
+void Audio::SetVolume()
+{
+	volume_ = global_->GetFloatValue(itemName_ + "のボリューム");
+	volume_ = std::clamp(volume_, 0.0f, 1.0f);
 }

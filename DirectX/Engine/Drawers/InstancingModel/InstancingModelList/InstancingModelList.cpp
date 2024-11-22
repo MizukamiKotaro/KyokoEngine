@@ -11,7 +11,7 @@
 #include "Light/Light.h"
 #include "ModelDataManager.h"
 
-InstancingModelList::InstancingModelList(const InstancingMeshTexData* modelData)
+InstancingModelList::InstancingModelList(const InstancingGroupData* modelData)
 {
 	modelsResource_ = std::make_unique<InstancingModels>(modelData);
 }
@@ -20,7 +20,7 @@ void InstancingModelList::SetLight(const ILight* light) {
 	modelsResource_->SetLight(light);
 }
 
-void InstancingModelList::Draw(const Camera& camera, const InstancingMeshTexData* modelData)
+void InstancingModelList::Draw(const Camera& camera, const InstancingGroupData* modelData)
 {
 	modelsResource_->Draw(camera, modelList_, modelData);
 }
@@ -46,7 +46,7 @@ uint32_t InstancingModelList::GetSize() const
 	return static_cast<uint32_t>(modelList_.size());
 }
 
-void InstancingModelList::SetModel(const InstancingMeshTexData* modelData)
+void InstancingModelList::SetModel(const InstancingGroupData* modelData)
 {
 	modelsResource_->SetMesh(modelData);
 }

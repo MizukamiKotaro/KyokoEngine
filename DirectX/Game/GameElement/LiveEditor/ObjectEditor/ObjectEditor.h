@@ -16,7 +16,7 @@ private:
 	void ApplyGlobalVariable() override;
 	void AddInstancing();
 	void AddInstancing(const Matrix4x4& matrix);
-	const InstancingMeshTexData* GetInstancingData(const std::string& tag);
+	const InstancingGroupData* GetInstancingData(const std::string& tag);
 private:
 	const ModelData* modelData_;
 	std::string modelName_;

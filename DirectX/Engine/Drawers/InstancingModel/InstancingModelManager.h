@@ -3,7 +3,7 @@
 #include <unordered_map>
 #include <memory>
 #include "DescriptorHeapManager/DescriptorHeap/DescriptorHeap.h"
-#include "Drawers/IDrawer/IDrawer.h"
+#include "Drawers/DrawerBase/DrawerBase.h"
 
 #include "ModelData/ModelData.h"
 #include "DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
@@ -14,7 +14,7 @@
 
 class Camera;
 
-class InstancingModelManager : public IDrawer
+class InstancingModelManager : public DrawerBase
 {
 public:
 
@@ -22,18 +22,18 @@ public:
 
 	void FirstInitialize();
 
-	void Draw(const Camera& camera, const InstancingMeshTexData* modelData);
+	void Draw(const Camera& camera, const InstancingGroupData* modelData);
 	void Draw(const Camera& camera, const std::string& tag = "normal");
 
-	const InstancingMeshTexData* GetDrawData(const InstancingMeshTexData& data);
+	const InstancingGroupData* GetDrawData(const InstancingGroupData& data);
 	// 板ポリの場合
-	const InstancingMeshTexData* GetDrawData(const std::string& texturePath, const std::string& tag = "normal", const BlendMode& blendMode = BlendMode::kBlendModeNormal);
+	const InstancingGroupData* GetDrawData(const std::string& texturePath, const std::string& tag = "normal", const BlendMode& blendMode = BlendMode::kBlendModeNormal);
 
-	InstancingModelData* const AddBox(const InstancingMeshTexData* modelData, InstancingModelData&& model);
+	InstancingModelData* const AddBox(const InstancingGroupData* modelData, InstancingModelData&& model);
 
 	void Clear();
 
-	void SetLight(const InstancingMeshTexData* modelData, const ILight* light);
+	void SetLight(const InstancingGroupData* modelData, const ILight* light);
 
 private:
 	InstancingModelManager() = default;
@@ -42,7 +42,7 @@ private:
 	const InstancingModelManager& operator=(const InstancingModelManager&) = delete;
 
 private:
-	std::unordered_map<const InstancingMeshTexData*, std::unique_ptr<InstancingModelList>> instancingModelMap_;
-	std::list<std::unique_ptr<InstancingMeshTexData>> drawDatas_;
+	std::unordered_map<const InstancingGroupData*, std::unique_ptr<InstancingModelList>> instancingModelMap_;
+	std::list<std::unique_ptr<InstancingGroupData>> drawDatas_;
 	const ModelData* plane_;
 };

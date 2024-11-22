@@ -3,7 +3,7 @@
 
 ClearScene::ClearScene()
 {
-	FirstInit();
+	FirstInitialize();
 
 	dome_ = std::make_unique<Dome>();
 	stage_ = std::make_unique<Stage>();
@@ -65,7 +65,7 @@ void ClearScene::Draw()
 		space_->Draw();
 	}
 
-	BlackDraw();
+	TransitionDraw();
 
 	Kyoko::Engine::PostDraw();
 }

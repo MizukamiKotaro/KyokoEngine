@@ -4,7 +4,7 @@
 #include <d3d12.h>
 #include <stdint.h>
 #include <string>
-#include "Drawers/IDrawer/IDrawer.h"
+#include "Drawers/DrawerBase/DrawerBase.h"
 #include "Utils/Math/Vector2.h"
 #include "Utils/Math/Vector4.h"
 #include "Utils/Math/Matrix4x4.h"
@@ -16,7 +16,7 @@ enum class PipelineType;
 class GraphicsPipelineManager;
 
 // スプライト
-class Sprite : public IDrawer
+class Sprite : public DrawerBase
 {
 public:
 

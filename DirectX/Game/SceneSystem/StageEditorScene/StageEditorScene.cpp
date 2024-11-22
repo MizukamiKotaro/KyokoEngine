@@ -4,7 +4,7 @@
 
 StageEditorScene::StageEditorScene()
 {
-	FirstInit();
+	FirstInitialize();
 
 	liveEditor_ = std::make_unique<LiveEditor>(camera_.get());
 }
@@ -36,7 +36,7 @@ void StageEditorScene::Draw()
 
 	liveEditor_->Draw();
 
-	BlackDraw();
+	TransitionDraw();
 
 	// フレームの終了
 	Kyoko::Engine::PostDraw();
