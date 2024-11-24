@@ -21,7 +21,6 @@ SceneManager::SceneManager()
 	sceneFactory_ = std::make_unique<SceneFactory>();
 	scene_.reset(sceneFactory_->CreateScene(SCENE::TITLE));
 
-	// ポインタの取得
 	input_ = Input::GetInstance();
 	frameInfo_ = FrameInfo::GetInstance();
 }

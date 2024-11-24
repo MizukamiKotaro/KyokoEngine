@@ -31,7 +31,6 @@ public:
 	//   Cube.mtl
 	//   hoge.png
 	// の状態
-
 	/// <summary>
 	/// objファイルの読み込み
 	/// </summary>
@@ -58,7 +57,7 @@ private:
 	ModelDataManager(const ModelDataManager&) = delete;
 	ModelDataManager& operator=(const ModelDataManager&) = delete;
 
-	struct Fa
+	struct MMDMaterialGLTF
 	{
 		Vector4 diffuseColor;
 		int32_t textureNum;
@@ -83,7 +82,7 @@ private:
 
 	void LoadMMDMaterials(const std::string& filePath, std::vector<std::pair<int32_t, Vector4>>& colors);
 
-	void LoadPMDGltfMaterials(const std::string& filePath, std::vector<Fa>& colors);
+	void LoadPMDGltfMaterials(const std::string& filePath, std::vector<MMDMaterialGLTF>& colors);
 
 	NodeData ReadNodePMD(uint16_t parentBoneIndex);
 

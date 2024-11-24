@@ -504,7 +504,7 @@ void ModelDataManager::LoadPMDGltf(const std::string& fileName)
 	Assimp::Importer importer;
 	std::string filePath = FindPath(fileName, ".gltf");
 	const aiScene* scene_ = importer.ReadFile(filePath.c_str(), aiProcess_FlipWindingOrder | aiProcess_FlipUVs);
-	std::vector<Fa> colors;
+	std::vector<MMDMaterialGLTF> colors;
 	LoadPMDGltfMaterials(filePath, colors);
 
 	assert(scene_->HasMeshes());
@@ -764,7 +764,7 @@ void ModelDataManager::LoadMMDMaterials(const std::string& filePath, std::vector
 	}
 }
 
-void ModelDataManager::LoadPMDGltfMaterials(const std::string& filePath, std::vector<Fa>& colors)
+void ModelDataManager::LoadPMDGltfMaterials(const std::string& filePath, std::vector<MMDMaterialGLTF>& colors)
 {
 	std::ifstream ifs;
 	ifs.open(filePath);
@@ -783,7 +783,7 @@ void ModelDataManager::LoadPMDGltfMaterials(const std::string& filePath, std::ve
 	for (nlohmann::json::iterator itItem = itGroup->begin(); itItem != itGroup->end(); ++itItem) {
 		nlohmann::json::iterator i = itItem->find("extras")->find("mmd_material");
 		nlohmann::json::iterator it = i->find("diffuse_color");
-		Fa result;
+		MMDMaterialGLTF result;
 		Vector3 color = { it->at(0), it->at(1), it->at(2) };
 		it = i->find("alpha");
 		result.diffuseColor = { color.x, color.y, color.z, float(it->get<double>())};

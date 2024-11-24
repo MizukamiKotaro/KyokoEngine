@@ -11,7 +11,6 @@ void ScoreManager::Initialize()
 	for (int i = 0; i < STAGE::COUNT_STAGE; i++) {
 		memoryScores_[i] = std::make_unique<Score>();
 	}
-
 	clearScore_ = std::make_unique<Score>();
 }
 

@@ -13,40 +13,56 @@
 #include "Utils/Math/Vector2.h"
 #include "WindowsInfo/WindowsInfo.h"
 
+/// <summary>
+/// 入力処理
+/// </summary>
 class Input
 {
 public:
-
+	
+	/// <summary>
+	/// ゲームパッドのボタン
+	/// </summary>
 	enum class GamePadButton {
-		A,
-		B,
-		X,
-		Y,
-		UP,
-		DOWN,
-		LEFT,
-		RIGHT,
-		START,
-		BACK,
-		LEFT_THUMB,
-		RIGHT_THUMB,
-		LEFT_SHOULDER,
-		RIGHT_SHOULDER,
+		A, // A
+		B, // B
+		X, // X
+		Y, // Y
+		UP, // 十字キー上
+		DOWN, // 十字キー下
+		LEFT, // 十字キー左
+		RIGHT, // 十字キー右
+		START, // 中央右
+		BACK, // 中央左
+		LEFT_THUMB, // 左スティック押し込み
+		RIGHT_THUMB, // 右スティック押し込み 
+		LEFT_SHOULDER, // LB
+		RIGHT_SHOULDER, // RB
 	};
 
 	enum class MouseButton {
-		LEFT,
-		RIGHT,
-		CENTER,
+		LEFT, // 左
+		RIGHT, // 右
+		CENTER, // ホイール
 	};
 
 	// namespace省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 
+	/// <summary>
+	/// インスタンスの取得
+	/// </summary>
+	/// <returns>インスタンス</returns>
 	static Input* GetInstance();
 
+	/// <summary>
+	/// 初期化
+	/// </summary>
 	void Initialize();
 
+	/// <summary>
+	/// 更新
+	/// </summary>
 	void Update();
 
 	/// <summary>
@@ -129,13 +145,13 @@ public:
 	/// マウスホイールのスクロール量を取得する
 	/// </summary>
 	/// <returns>ホイールのスクロール量</returns>
-	const int32_t GetWheel() const;
+	int32_t GetWheel() const;
 
 	/// <summary>
 	/// マウスの動量を取得する
 	/// </summary>
 	/// <returns>マウスの移動量</returns>
-	const Vector2 GetMouseMove() const;
+	Vector2 GetMouseMove() const;
 
 	/// <summary>
 	/// マウスの座標を取得
@@ -149,31 +165,48 @@ private:
 	Input(const Input&) = delete;
 	const Input& operator=(const Input&) = delete;
 
-	const bool GetGamePadButton(GamePadButton button) const;
-
-	const bool GetPreGamePadButton(GamePadButton button) const;
-
-	const bool GetMouseButton(MouseButton button) const;
-
-	const bool GetPreMouseButton(MouseButton button) const;
+	/// <summary>
+	/// 現在のゲームパッドのボタンの状態の取得
+	/// </summary>
+	/// <param name="button">ボタン</param>
+	/// <returns>押されているか</returns>
+	bool GetGamePadButton(GamePadButton button) const;
+	/// <summary>
+	/// 以前のゲームパッドのボタンの状態の取得
+	/// </summary>
+	/// <param name="button">ボタン</param>
+	/// <returns>押されているか</returns>
+	bool GetPreGamePadButton(GamePadButton button) const;
+	/// <summary>
+	/// 現在のマウスのボタンの状態の取得
+	/// </summary>
+	/// <param name="button">ボタン</param>
+	/// <returns>押されているか</returns>
+	bool GetMouseButton(MouseButton button) const;
+	/// <summary>
+	/// 以前のマウスのボタンの状態の取得
+	/// </summary>
+	/// <param name="button">ボタン</param>
+	/// <returns>押されているか</returns>
+	bool GetPreMouseButton(MouseButton button) const;
 
 private:
-	WindowsInfo* windowInfo_ = nullptr;
+	WindowsInfo* windowInfo_ = nullptr; // ウィンドウ情報
 
-	ComPtr<IDirectInput8> dInput_;
-	ComPtr<IDirectInputDevice8> devKeyboard_;
-	ComPtr<IDirectInputDevice8> devMouse_;
+	ComPtr<IDirectInput8> dInput_; // IDirectInput8
+	ComPtr<IDirectInputDevice8> devKeyboard_; // キーボード
+	ComPtr<IDirectInputDevice8> devMouse_; // マウス
 
-	XINPUT_STATE xInputState_ = {};
-	XINPUT_STATE preXInputState_ = {};
+	XINPUT_STATE xInputState_ = {}; // 現在の状態
+	XINPUT_STATE preXInputState_ = {}; // 以前の状態
 
 
-	BYTE key_[256] = {};
-	BYTE keyPre_[256] = {};
+	BYTE key_[256] = {}; // 現在のキー
+	BYTE keyPre_[256] = {}; // 以前のキー
 
-	DIMOUSESTATE2 mouse_;
-	DIMOUSESTATE2 mousePre_;
-	POINT mousePos_;
+	DIMOUSESTATE2 mouse_; // 現在のマウス
+	DIMOUSESTATE2 mousePre_; // 以前のマウス
+	POINT mousePos_; // マウスの座標
 
 };
 

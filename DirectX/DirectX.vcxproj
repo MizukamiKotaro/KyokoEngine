@@ -230,7 +230,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\GameElement\Charactor\Charactor.cpp" />
     <ClCompile Include="Game\GameElement\ClearUI\ClearUI.cpp" />
     <ClCompile Include="Game\GameElement\Game.cpp" />
-    <ClCompile Include="Game\GameElement\HitSystem\HitSystem.cpp" />
     <ClCompile Include="Game\GameElement\IStageObject\IStageObject.cpp" />
     <ClCompile Include="Game\GameElement\IStageObject\IStageObjectManager.cpp" />
     <ClCompile Include="Game\GameElement\IStageObject\StageObjectFactory\StageObjectFactory.cpp" />
@@ -259,6 +258,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\GameElement\Live\SpotLightBox\TwinSpotLightBox.cpp" />
     <ClCompile Include="Game\GameElement\Live\StageLights\StageLights.cpp" />
     <ClCompile Include="Game\GameElement\Live\Stage\Stage.cpp" />
+    <ClCompile Include="Game\GameElement\NotesHit\NotesHit.cpp" />
     <ClCompile Include="Game\GameElement\Notes\Notes.cpp" />
     <ClCompile Include="Game\GameElement\Pause\Pause.cpp" />
     <ClCompile Include="Game\GameElement\ScoreManager\ScoreManager.cpp" />
@@ -455,7 +455,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\GameElement\Charactor\Charactor.h" />
     <ClInclude Include="Game\GameElement\ClearUI\ClearUI.h" />
     <ClInclude Include="Game\GameElement\Game.h" />
-    <ClInclude Include="Game\GameElement\HitSystem\HitSystem.h" />
     <ClInclude Include="Game\GameElement\IStageObject\IStageObject.h" />
     <ClInclude Include="Game\GameElement\IStageObject\IStageObjectManager.h" />
     <ClInclude Include="Game\GameElement\IStageObject\StageObjectConfig.h" />
@@ -485,6 +484,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\GameElement\Live\SpotLightBox\TwinSpotLightBox.h" />
     <ClInclude Include="Game\GameElement\Live\StageLights\StageLights.h" />
     <ClInclude Include="Game\GameElement\Live\Stage\Stage.h" />
+    <ClInclude Include="Game\GameElement\NotesHit\NotesHit.h" />
     <ClInclude Include="Game\GameElement\Notes\Notes.h" />
     <ClInclude Include="Game\GameElement\Pause\Pause.h" />
     <ClInclude Include="Game\GameElement\ScoreManager\ScoreManager.h" />

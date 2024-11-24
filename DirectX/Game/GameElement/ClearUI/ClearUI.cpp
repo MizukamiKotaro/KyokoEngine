@@ -46,11 +46,11 @@ void ClearUI::Initialize()
 {
 	score_ = ScoreManager::GetInstance()->GetClearScore();
 	int nums[6];
-	nums[0] = score_->GetPer();
-	nums[1] = score_->GetGre();
+	nums[0] = score_->GetPerfect();
+	nums[1] = score_->GetGreat();
 	nums[2] = score_->GetGood();
 	nums[3] = score_->GetMiss();
-	nums[4] = score_->GetHiCombo();
+	nums[4] = score_->GetHighCombo();
 	nums[5] = score_->GetScore();
 
 	for (int i = 0; i < 6; i++) {

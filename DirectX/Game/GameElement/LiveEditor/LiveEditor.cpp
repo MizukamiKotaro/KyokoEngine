@@ -41,6 +41,7 @@ LiveEditor::LiveEditor(Camera* camera)
 	cameraAnim_->Initialize();
 
 	debugTime_ = 0.0f;
+	preDebugTime_ = 0.0f;
 
 	isDebug_ = false;
 }
@@ -69,14 +70,15 @@ void LiveEditor::Initialize()
 	}
 
 	debugTime_ = 0.0f;
+	preDebugTime_ = 0.0f;
 }
 
-void LiveEditor::Update(const float& time)
+void LiveEditor::Update(float time)
 {
-
 	instancingManager_->Clear();
 #ifdef _DEBUG
 	if (SceneBase::GetSceneNo() == SCENE::STAGE_EDITOR) {
+		preDebugTime_ = debugTime_;
 		ImGui::Begin("debug");
 		ImGui::DragFloat("タイム", &debugTime_, 0.01f, 0.0f);
 		if (ImGui::Button("Start")) {

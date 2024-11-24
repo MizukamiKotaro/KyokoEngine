@@ -11,6 +11,7 @@ void LiveMusics::Initialize()
 	if (music_->IsPlaying()) {
 		music_->Stop();
 	}
+	// 読み込み
 	switch (SceneBase::GetStageNo())
 	{
 	case STAGE::SHINING_STAR:
@@ -26,6 +27,7 @@ void LiveMusics::Initialize()
 void LiveMusics::Update() 
 {
 	if (!isMusicStart_) {
+		// プレイ
 		isMusicStart_ = true;
 		music_->Play();
 	}

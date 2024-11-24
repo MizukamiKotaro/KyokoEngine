@@ -1,5 +1,5 @@
 #include "FinishLive.h"
-#include "SceneSystem/SceneBase/SceneBase.h"
+#include "Audio.h"
 
 FinishLive::FinishLive()
 {
@@ -14,10 +14,11 @@ void FinishLive::Initialize()
 	isFinish_ = false;
 }
 
-void FinishLive::Update(const float& deltaTime)
+void FinishLive::Update(float deltaTime)
 {
 	finishCount_ += deltaTime;
 	if (!isFinish_) {
+		// 一度SEを鳴らす
 		isFinish_ = true;
 		se_->Play();
 	}

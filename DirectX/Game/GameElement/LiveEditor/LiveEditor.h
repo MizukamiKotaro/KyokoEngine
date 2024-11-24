@@ -8,18 +8,33 @@
 
 class InstancingModelManager;
 
+/// <summary>
+/// ライブエディター
+/// </summary>
 class LiveEditor {
 public: 
-
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
+	/// <param name="camera">カメラ</param>
 	LiveEditor(Camera* camera);
-
+	/// <summary>
+	/// 初期化
+	/// </summary>
 	void Initialize();
-
-	void Update(const float& time);
-
+	/// <summary>
+	/// 更新
+	/// </summary>
+	/// <param name="time">デルタタイム</param>
+	void Update(float time);
+	/// <summary>
+	/// 描画
+	/// </summary>
 	void Draw();
 
-	// スクリーンに書き出す
+	/// <summary>
+	/// スクリーンに書き込む
+	/// </summary>
 	void WriteScreen();
 
 private:
@@ -52,5 +67,6 @@ private:
 	std::unique_ptr<Camera> screenCamera_;
 	std::unique_ptr<CameraVMDAnimation> cameraAnim_;
 	float debugTime_;
+	float preDebugTime_;
 	bool isDebug_;
 };

@@ -4,7 +4,6 @@
 StageScene::StageScene()
 {
 	FirstInitialize();
-
 	game_ = std::make_unique<Game>(camera_.get());
 }
 
@@ -20,10 +19,9 @@ void StageScene::Update()
 		ChangeScene(CLEAR);
 		Audio::AllStop();
 	}
-
 #ifdef _DEBUG
+	// シーン切り替え
 	if (input_->PressedKey(DIK_SPACE)) {
-		// シーン切り替え
 		ChangeScene(CLEAR);
 		Audio::AllStop();
 	}
@@ -32,19 +30,14 @@ void StageScene::Update()
 		Audio::AllStop();
 	}
 #endif // _DEBUG
-
 	game_->Update();
 }
 
 void StageScene::Draw()
 {
 	Kyoko::Engine::PreDraw();
-
 	game_->Draw();
-
 	TransitionDraw();
-
-	// フレームの終了
 	Kyoko::Engine::PostDraw();
 }
 

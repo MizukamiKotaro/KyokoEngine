@@ -7,8 +7,6 @@
 #include "Sprite.h"
 #include "HighLumi/HighLumi.h"
 
-#include "ScanNoise/ScanNoise.h"
-#include "NegaPosiInverse/NegaPosiInverse.h"
 #include "Mosaic/Mosaic.h"
 #include "RGBShift/RGBShift.h"
 
@@ -19,12 +17,11 @@
 #include "Noise/Noise.h"
 #include "Bloom/Bloom.h"
 #include "RadialBlur/RadialBlur.h"
-#include "HSVFilter/HSVFilter.h"
-#include "Drawers/Skybox/Skybox.h"
-#include "SkinningModel/SkinningModel.h"
-#include "Drawers/GPUParticle/GPUParticle.h"
 #include "SpotLightAndOutline/SpotLightAndOutline.h"
 
+/// <summary>
+/// タイトルシーン
+/// </summary>
 class TitleScene : public SceneBase
 {
 public:
@@ -34,6 +31,7 @@ public:
 	void Update() override;
 	void Draw() override;
 
+private:
 	void WrightPostEffect();
 
 private:
@@ -51,8 +49,6 @@ private:
 	std::unique_ptr<Sprite> title_;
 	std::unique_ptr<Sprite> space_;
 
-	std::unique_ptr<ScanNoise> scanNoise_;
-	std::unique_ptr<NegaPosiInverse> negaposi_;
 	std::unique_ptr<Mosaic> mosaic_;
 	std::unique_ptr<RGBShift> rgbShift_;
 
@@ -64,10 +60,8 @@ private:
 	
 	std::unique_ptr<Bloom> bloom_;
 	std::unique_ptr<RadialBlur> radial_;
-	std::unique_ptr<HSVFilter> hsvFilter_;
 
 	Audio se_;
-	std::unique_ptr<GPUParticle> gp_;
 	std::unique_ptr<SpotLightAndOutline> spotlightAndOutline_;
 };
 

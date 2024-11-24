@@ -5,7 +5,6 @@
 #include "Ease/Ease.h"
 
 const float Notes::kSpeed_ = 200.0f;
-
 float Notes::speed_ = 200.0f;
 
 Notes::Notes(float frame, int type)
@@ -51,17 +50,6 @@ void Notes::Draw(Camera* camera)
 	if (!isDead_) {
 		sprite_->Draw(*camera);
 	}
-}
-
-//void Notes::SetSpeed(float index)
-//{
-//
-//}
-
-NotesList* NotesList::GetInstance()
-{
-	static NotesList instance;
-	return &instance;
 }
 
 void NotesList::Initialize()

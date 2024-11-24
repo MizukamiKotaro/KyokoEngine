@@ -5,6 +5,7 @@
 #endif // _DEBUG
 
 namespace Kyoko {
+	// ImGuiのマネージャー
 	namespace ImGuiManager {
 		// 初期化
 		void Initialize();

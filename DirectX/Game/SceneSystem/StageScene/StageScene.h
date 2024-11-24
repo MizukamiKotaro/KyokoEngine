@@ -6,15 +6,12 @@
 class StageScene : public SceneBase
 {
 public:
-
 	StageScene();
-
 	void Initialize() override;
 	void Update() override;
 	void Draw() override;
 	void FirstUpdate() override;
 
 private:
-
-	std::unique_ptr<Game> game_;
+	std::unique_ptr<Game> game_; // ゲーム
 };

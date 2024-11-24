@@ -28,8 +28,6 @@ TitleScene::TitleScene()
 	post_ = std::make_unique<PostEffect>();
 	texcoodY_ = 0.0f;
 
-	scanNoise_ = std::make_unique<ScanNoise>();
-	negaposi_ = std::make_unique<NegaPosiInverse>();
 	mosaic_ = std::make_unique<Mosaic>();
 	rgbShift_ = std::make_unique<RGBShift>();
 	rgbShift_->rgbShiftData_->shift = 0.016f;
@@ -45,19 +43,13 @@ TitleScene::TitleScene()
 	radial_->radialBlurData_->width = 0.03f;
 	radial_->radialBlurData_->numSamples = 8;
 
-	hsvFilter_ = std::make_unique<HSVFilter>();
-
 	se_.Load("SE/select.mp3","決定音");
-
-	gp_ = std::make_unique<GPUParticle>("hoge", "circle.png");
-	gp_->Update(0.0f);
 
 	spotlightAndOutline_ = std::make_unique<SpotLightAndOutline>();
 }
 
 void TitleScene::Initialize()
 {
-
 }
 
 void TitleScene::Update()
@@ -88,21 +80,12 @@ void TitleScene::Update()
 		ChangeScene(STAGE_EDITOR);
 		se_.Play();
 	}
-
-	ImGui::Begin("hsv");
-	ImGui::SliderFloat("hue", &hsvFilter_->hsvData_->hue, -1.0f, 1.0f);
-	ImGui::SliderFloat("saturate", &hsvFilter_->hsvData_->saturate, -1.0f, 1.0f);
-	ImGui::SliderFloat("value", &hsvFilter_->hsvData_->value, -1.0f, 1.0f);
-	ImGui::End();
-
-	camera_->Update();
 #endif // _DEBUG
 	screen_->Update();
 	spotLightBox_->Update(0.01f);
 	spotLightBox2_->Update(-0.01f);
 	noise_->Update(0.01f);
 	bloom_->Update();
-	gp_->Update(0.0f);
 }
 
 void TitleScene::Draw()

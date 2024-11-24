@@ -6,6 +6,9 @@
 
 class Camera;
 
+/// <summary>
+/// ノーツタイプ
+/// </summary>
 enum NotesType {
 	LEFT_ARROW,
 	RIGHT_ARROW,
@@ -13,75 +16,97 @@ enum NotesType {
 	DOWN_ARROW
 };
 
+/// <summary>
+/// ノーツ
+/// </summary>
 class Notes {
 public:
-	
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
+	/// <param name="frame">時間</param>
+	/// <param name="type">タイプ</param>
 	Notes(float frame, int type);
-
+	/// <summary>
+	/// 更新
+	/// </summary>
+	/// <param name="time">デルタタイム</param>
 	void Update(float time);
-
+	/// <summary>
+	/// 描画
+	/// </summary>
+	/// <param name="camera">カメラ</param>
 	void Draw(Camera* camera);
 
-	float GetTime() { return time_; }
+	/// <summary>
+	/// ノーツの時間の取得
+	/// </summary>
+	/// <returns>ノーツの時間</returns>
+	float GetTime() const { return time_; }
 
-	int GetType() { return type_; }
+	/// <summary>
+	/// タイプの取得
+	/// </summary>
+	/// <returns>タイプ</returns>
+	int GetType() const { return type_; }
 
+	/// <summary>
+	/// 死んだフラグを立てる
+	/// </summary>
 	void Dead() { isDead_ = true; }
 
-	bool IsDead() { return isDead_; }
-
-	static void SetSpeed(float index);
-
-private:
-
-	static const float kSpeed_;
-
-	static float speed_;
+	/// <summary>
+	/// 死んでいるかの取得
+	/// </summary>
+	/// <returns>死んでいるか</returns>
+	bool IsDead() const { return isDead_; }
 
 private:
+	static const float kSpeed_; // デフォルトのスピード
+	static float speed_; // スピード
 
-	// モデル
-	std::unique_ptr<Sprite> sprite_;
-
-	Vector2 firstPos_;
-
-	float time_ = 0;
-
-	int type_ = 0;
-
-	bool isDead_ = false;
+	std::unique_ptr<Sprite> sprite_; // スプライト
+	Vector2 firstPos_; // 初期座標
+	float time_ = 0; // 時間
+	int type_ = 0; // タイプ
+	bool isDead_ = false; // 死亡フラグ
 
 };
 
+/// <summary>
+/// ノーツリスト
+/// </summary>
 class NotesList {
 public:
-
-	static NotesList* GetInstance();
-
+	/// <summary>
+	/// 初期化
+	/// </summary>
 	void Initialize();
-
+	/// <summary>
+	/// 描画
+	/// </summary>
+	/// <param name="camera">カメラ</param>
 	void Draw(Camera* camera);
-
+	/// <summary>
+	/// ノーツデータの読み込み
+	/// </summary>
 	void PopCommands();
-
+	/// <summary>
+	/// ノーツリストの取得
+	/// </summary>
+	/// <returns>ノーツリスト</returns>
 	std::list<std::unique_ptr<Notes>>& GetNotesList() { return notesList_; }
 
 private:
-
-	NotesList() = default;
-	~NotesList() = default;
-	NotesList(const NotesList&) = delete;
-	NotesList& operator=(const NotesList&) = delete;
-
+	/// <summary>
+	/// ファイルの読み込み
+	/// </summary>
 	void LoadPopData();
 
 private:
-
-	std::list<std::unique_ptr<Notes>> notesList_;
-
-	std::stringstream notesPopCommands_;
-
-	std::unique_ptr<Sprite> lane_;
-	std::unique_ptr<Sprite> indication_;
+	std::list<std::unique_ptr<Notes>> notesList_; // ノーツリスト
+	std::stringstream notesPopCommands_; // 配置コマンド
+	std::unique_ptr<Sprite> lane_; // レーン用スプライト
+	std::unique_ptr<Sprite> indication_; // 目印用スプライト
 
 };

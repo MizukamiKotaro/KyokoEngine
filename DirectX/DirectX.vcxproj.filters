@@ -124,9 +124,6 @@
     <Filter Include="Engine\GlobalVariables">
       <UniqueIdentifier>{0a592cc4-062e-46c2-9959-23f4ade47001}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\GameElement\HitSystem">
-      <UniqueIdentifier>{d16ca458-babf-46cd-b895-58db3de3f10d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\GameElement\StageUI">
       <UniqueIdentifier>{7bac8e11-8f42-4480-b59b-fae6f1114358}</UniqueIdentifier>
     </Filter>
@@ -496,6 +493,9 @@
     <Filter Include="Game\SceneSystem\SceneBase">
       <UniqueIdentifier>{a2f81868-3fbd-4273-b582-2b203c85caeb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\GameElement\NotesHit">
+      <UniqueIdentifier>{d16ca458-babf-46cd-b895-58db3de3f10d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -644,9 +644,6 @@
     </ClCompile>
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipeline\GraphicsPipeline.cpp">
       <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipeline</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\GameElement\HitSystem\HitSystem.cpp">
-      <Filter>Game\GameElement\HitSystem</Filter>
     </ClCompile>
     <ClCompile Include="Game\GameElement\StageUI\StageUI.cpp">
       <Filter>Game\GameElement\StageUI</Filter>
@@ -1026,6 +1023,9 @@
     <ClCompile Include="Game\SceneSystem\SceneBase\SceneBase.cpp">
       <Filter>Game\SceneSystem\SceneBase</Filter>
     </ClCompile>
+    <ClCompile Include="Game\GameElement\NotesHit\NotesHit.cpp">
+      <Filter>Game\GameElement\NotesHit</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Utils\Math\calc.h">
@@ -1186,9 +1186,6 @@
     </ClInclude>
     <ClInclude Include="Engine\GraphicsPipelineSystem\GraphicsPipeline\GraphicsPipeline.h">
       <Filter>Engine\PipelineSystems\GraphicsPipelineSystem\GraphicsPipeline</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\GameElement\HitSystem\HitSystem.h">
-      <Filter>Game\GameElement\HitSystem</Filter>
     </ClInclude>
     <ClInclude Include="Game\GameElement\StageUI\StageUI.h">
       <Filter>Game\GameElement\StageUI</Filter>
@@ -1651,6 +1648,9 @@
     </ClInclude>
     <ClInclude Include="Game\SceneSystem\SceneBase\SceneBase.h">
       <Filter>Game\SceneSystem\SceneBase</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameElement\NotesHit\NotesHit.h">
+      <Filter>Game\GameElement\NotesHit</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
