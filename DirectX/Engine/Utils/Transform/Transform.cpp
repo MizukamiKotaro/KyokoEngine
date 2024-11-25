@@ -3,7 +3,6 @@
 
 EulerTransform::EulerTransform()
 {
-
 	scale_ = { 1.0f,1.0f,1.0f };
 	rotate_ = { 0.0f,0.0f,0.0f };
 	translate_ = { 0.0f,0.0f,0.0f };
@@ -20,18 +19,20 @@ EulerTransform::EulerTransform()
 
 void EulerTransform::Initialize()
 {
-	
 }
 
 void EulerTransform::UpdateMatrix()
 {
+	// アフィン行列の作成
 	if (isQua_) {
+		// クォータニオンを使う場合
 		worldMat_ = Matrix4x4::MakeScaleMatrix(scale_) * Matrix4x4::MakeRotateMatrix(rot_) * Matrix4x4::MakeTranslateMatrix(translate_);
 	}
 	else {
 		worldMat_ = Matrix4x4::MakeAffinMatrix(*this);
 	}
 
+	// 親がいる場合
 	if (parent_) {
 		worldMat_ = Matrix4x4::Multiply(worldMat_, parent_->worldMat_);
 	}
@@ -41,6 +42,7 @@ void EulerTransform::UpdateMatrix()
 		worldMat_.m[3][2] += worldTranslateParent_->worldMat_.m[3][2];
 	}
 
+	// ワールド座標の更新
 	worldPos_.x = worldMat_.m[3][0];
 	worldPos_.y = worldMat_.m[3][1];
 	worldPos_.z = worldMat_.m[3][2];
@@ -53,7 +55,6 @@ const Vector3& EulerTransform::GetWorldPosition() const
 
 bool EulerTransform::IsCollisionXZ(const EulerTransform& transform)
 {
-
 	Vector2 min0 = { worldPos_.x - scale_.x,worldPos_.z - scale_.z };
 	Vector2 max0 = { worldPos_.x + scale_.x,worldPos_.z + scale_.z };
 

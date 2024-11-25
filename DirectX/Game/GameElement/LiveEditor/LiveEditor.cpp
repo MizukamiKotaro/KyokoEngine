@@ -20,15 +20,13 @@ LiveEditor::LiveEditor(Camera* camera)
 
 	screenManager_ = std::make_unique<MultipleScreenEditor>("スクリーン", "マルチスクリーン", 0);
 
+	// マネージャーの設定
 	for (std::unique_ptr<IStageObjectManager>& manager : objectManagers_) {
 		manager = std::make_unique<IStageObjectManager>();
 	}
-	
 	objectManagers_[ManagerNames::kIdol]->AddType(StageObjectType::IDOL, "アイドル", "メインアイドル");
-
 	objectManagers_[ManagerNames::kLight]->AddType(StageObjectType::SPOTLIGHT, "ライト", "スポットライト");
 	objectManagers_[ManagerNames::kLight]->AddType(StageObjectType::TWIN_SPOTLIGHT, "ライト", "ツインスポットライト");
-
 	objectManagers_[ManagerNames::kObject]->AddType(StageObjectType::OBJECT, "オブジェクト", "オブジェクト");
 	objectManagers_[ManagerNames::kObject]->AddType(StageObjectType::PEN_LIGHT, "ペンライト", "ペンライト");
 
@@ -53,6 +51,7 @@ void LiveEditor::Initialize()
 	camera_->transform_.translate_ = { 0.0f,25.0f,-100.0f };
 	camera_->transform_.rotate_.x = 0.1f;
 	if (SceneBase::GetSceneNo() == SCENE::STAGE) {
+		// ステージジーンの場合
 		camera_->transform_.translate_ = cameraAnim_->GetState().position;
 		camera_->transform_.rotate_ = cameraAnim_->GetState().rotation;
 		isDebug_ = false;
@@ -75,8 +74,8 @@ void LiveEditor::Initialize()
 
 void LiveEditor::Update(float time)
 {
-	instancingManager_->Clear();
 #ifdef _DEBUG
+	// デバッグ
 	if (SceneBase::GetSceneNo() == SCENE::STAGE_EDITOR) {
 		preDebugTime_ = debugTime_;
 		ImGui::Begin("debug");
@@ -92,6 +91,7 @@ void LiveEditor::Update(float time)
 	}
 
 	if (isDebug_) {
+		// デバッグタイムのセット
 		cameraAnim_->SetTime(debugTime_);
 		cameraAnim_->Update(0.0f);
 		camera_->DebugUpdate();
@@ -101,6 +101,7 @@ void LiveEditor::Update(float time)
 		}
 	}
 	else {
+		// 更新
 		cameraAnim_->Update(time);
 		debugTime_ += time;
 		for (std::unique_ptr<IStageObjectManager>& manager : objectManagers_) {
@@ -122,7 +123,6 @@ void LiveEditor::Update(float time)
 		manager->Update(time);
 	}
 #endif 
-	
 	camera_->Update();
 
 	screenManager_->Update(time);
@@ -135,7 +135,6 @@ void LiveEditor::Draw()
 {
 	ParticleManager::GetInstance()->Clear();
 	lightAndOutline_->Draw(*camera_);
-	objectManagers_[ManagerNames::kFire]->Draw(*camera_);
 	ParticleManager::GetInstance()->Draw(*camera_);
 }
 
@@ -144,7 +143,7 @@ void LiveEditor::WriteScreen()
 	for (uint32_t i = 0; i < screenManager_->GetScreenNum(); i++) {
 		const Camera& camera = (*screenMap_)[i]->GetCamera();
 		Draw((*lightAndOutlineMap_)[i], camera);
-
+		// スクリーンに書き込む
 		(*screenMap_)[i]->PreDrawScene();
 		(*lightAndOutlineMap_)[i]->Draw(camera);
 		(*screenMap_)[i]->PostDrawScene();
@@ -158,20 +157,24 @@ void LiveEditor::WriteOutline()
 
 void LiveEditor::Draw(std::unique_ptr<SpotLightAndOutline>& lightAndOutline, const Camera& camera)
 {
+	// アウトライン用
 	lightAndOutline->PreDrawOutline();
 	objectManagers_[ManagerNames::kIdol]->Draw(camera);
 	instancingManager_->Draw(camera, "outline");
 	lightAndOutline->PostDrawOutline();
 
+	// そのまま用
 	lightAndOutline->PreDrawObject();
 	screenManager_->Draw(camera);
 	instancingManager_->Draw(camera);
 	lightAndOutline->PostDrawObject();
 
+	// ブルーム用
 	lightAndOutline->PreDrawBloom();
 	instancingManager_->Draw(camera, "bloom");
 	lightAndOutline->PostDrawBloom();
 
+	// ライト用
 	lightAndOutline->PreDrawLight();
 	objectManagers_[ManagerNames::kLight]->DrawLight(camera);
 	lightAndOutline->PostDrawLight();

@@ -40,7 +40,7 @@ Matrix4x4 Matrix4x4::Multiply(const Matrix4x4& m1, const Matrix4x4& m2) {
 	return result;
 }
 
-Matrix4x4 Matrix4x4::Multiply(const float& num, const Matrix4x4& m) {
+Matrix4x4 Matrix4x4::Multiply(float num, const Matrix4x4& m) {
 	Matrix4x4 result = {};
 	for (int row = 0; row < 4; row++) {
 		for (int column = 0; column < 4; column++) {
@@ -52,12 +52,9 @@ Matrix4x4 Matrix4x4::Multiply(const float& num, const Matrix4x4& m) {
 
 Vector3 Matrix4x4::Multiply(const Vector3& vector, const Matrix4x4& m) {
 	Vector3 result = {};
-	result.x =
-		vector.x * m.m[0][0] + vector.y * m.m[1][0] + vector.z * m.m[2][0] + 1.0f * m.m[3][0];
-	result.y =
-		vector.x * m.m[0][1] + vector.y * m.m[1][1] + vector.z * m.m[2][1] + 1.0f * m.m[3][1];
-	result.z =
-		vector.x * m.m[0][2] + vector.y * m.m[1][2] + vector.z * m.m[2][2] + 1.0f * m.m[3][2];
+	result.x = vector.x * m.m[0][0] + vector.y * m.m[1][0] + vector.z * m.m[2][0] + 1.0f * m.m[3][0];
+	result.y = vector.x * m.m[0][1] + vector.y * m.m[1][1] + vector.z * m.m[2][1] + 1.0f * m.m[3][1];
+	result.z = vector.x * m.m[0][2] + vector.y * m.m[1][2] + vector.z * m.m[2][2] + 1.0f * m.m[3][2];
 	float w = vector.x * m.m[0][3] + vector.y * m.m[1][3] + vector.z * m.m[2][3] + 1.0f * m.m[3][3];
 	assert(w != 0.0f);
 	result.x /= w;
@@ -69,7 +66,6 @@ Vector3 Matrix4x4::Multiply(const Vector3& vector, const Matrix4x4& m) {
 
 Matrix4x4 Matrix4x4::Inverse(const Matrix4x4& m) {
 	Matrix4x4 result = {};
-
 	float A[4] = {};
 
 	// 小行列
@@ -103,7 +99,6 @@ Matrix4x4 Matrix4x4::Inverse(const Matrix4x4& m) {
 	}
 
 	float num = 0;
-
 	Matrix4x4 c = {};
 	for (int row = 0; row < 4; row++) {
 		if (row == 0 || row == 2) {
@@ -163,76 +158,46 @@ Matrix4x4 Matrix4x4::MakeIdentity4x4() {
 }
 
 Matrix4x4 Matrix4x4::MakeTranslateMatrix(const Vector3& translate) {
-	Matrix4x4 result = { 1, 0, 0, 0, 0,           1,           0,           0,
-						  0, 0, 1, 0, translate.x, translate.y, translate.z, 1 };
+	Matrix4x4 result = { 1, 0, 0, 0,
+						0, 1, 0, 0,
+						0, 0, 1, 0,
+						translate.x, translate.y, translate.z, 1 };
 
 	return result;
 }
 
 Matrix4x4 Matrix4x4::MakeScaleMatrix(const Vector3& scale) {
 	Matrix4x4 result = { scale.x, 0, 0, 0, 0, scale.y, 0, 0, 0, 0, scale.z, 0, 0, 0, 0, 1 };
-
 	return result;
 }
 
-//Vector3 Matrix4x4::Transform(const Vector3& vector, const Matrix4x4& m) {
-//	Vector3 result = Matrix4x4::Multiply(vector, m);
-//
-//	return result;
-//}
-
 Matrix4x4 Matrix4x4::MakeRotateXMatrix(float radian) {
-	Matrix4x4 result = { 1,
-						  0,
-						  0,
-						  0,
-						  0,
-						  std::cos(radian),
-						  std::sin(radian),
-						  0,
-						  0,
-						  -std::sin(radian),
-						  std::cos(radian),
-						  0,
-						  0,
-						  0,
-						  0,
-						  1 };
+	Matrix4x4 result = { 1, 0, 0, 0,
+						0, std::cos(radian), std::sin(radian), 0,
+						0, -std::sin(radian), std::cos(radian), 0,
+						0, 0, 0, 1 };
 	return result;
 }
 
 Matrix4x4 Matrix4x4::MakeRotateYMatrix(float radian) {
-	Matrix4x4 result = { std::cos(radian), 0, -std::sin(radian), 0, 0, 1, 0, 0,
-						  std::sin(radian), 0, std::cos(radian),  0, 0, 0, 0, 1 };
+	Matrix4x4 result = { std::cos(radian), 0, -std::sin(radian),
+						0, 0, 1, 0, 0,
+						std::sin(radian), 0, std::cos(radian),
+						0, 0, 0, 0, 1 };
 	return result;
 }
 
 Matrix4x4 Matrix4x4::MakeRotateZMatrix(float radian) {
-	Matrix4x4 result = {
-		std::cos(radian),
-		std::sin(radian),
-		0,
-		0,
-		-std::sin(radian),
-		std::cos(radian),
-		0,
-		0,
-		0,
-		0,
-		1,
-		0,
-		0,
-		0,
-		0,
-		1 };
+	Matrix4x4 result = { std::cos(radian), std::sin(radian), 0, 0,
+						-std::sin(radian), std::cos(radian), 0, 0,
+						0, 0, 1, 0,
+						0, 0, 0, 1 };
 	return result;
 }
 
 Matrix4x4 Matrix4x4::MakeRotateXYZMatrix(const Vector3& rotate) {
-	Matrix4x4 result = Matrix4x4::Multiply(
-		Matrix4x4::MakeRotateXMatrix(rotate.x),
-		Matrix4x4::Multiply(
-			Matrix4x4::MakeRotateYMatrix(rotate.y), Matrix4x4::MakeRotateZMatrix(rotate.z)));
+	Matrix4x4 result = Matrix4x4::Multiply(Matrix4x4::MakeRotateXMatrix(rotate.x),
+		Matrix4x4::Multiply(Matrix4x4::MakeRotateYMatrix(rotate.y), Matrix4x4::MakeRotateZMatrix(rotate.z)));
 	return result;
 }
 
@@ -303,9 +268,6 @@ Matrix4x4 Matrix4x4::MakeAffinMatrix(
 }
 
 Matrix4x4 Matrix4x4::MakeAffinMatrix(const Vector3& scale, const Vector3& rotate, const Vector3& translate, RotateType rotateOrder) {
-	/*Matrix4x4 result = Matrix4x4::Multiply(Matrix4x4::MakeScaleMatrix(scale),
-		Matrix4x4::Multiply(Matrix4x4::MakeRotateXYZMatrix(rotate), Matrix4x4::MakeTranslateMatrix(translate)));*/
-
 	Matrix4x4 rotateMatrix = Matrix4x4::MakeRotateMatrix(rotate, rotateOrder);
 
 	Matrix4x4 result = {
@@ -373,9 +335,7 @@ Matrix4x4 Matrix4x4::MakeViewportMatrix(float left, float top, float width, floa
 
 Matrix4x4 Matrix4x4::MakeRotateAxisAngle(const Vector3& axis, float angle)
 {
-
 	Vector3 n = axis;
-
 	n = n.Normalize();
 
 	Matrix4x4 result = {
@@ -432,7 +392,6 @@ Matrix4x4 Matrix4x4::DirectionToDirection(const Vector3& from, const Vector3& to
 
 Matrix4x4 Matrix4x4::MakeRotateMatrix(const Quaternion& quaternion)
 {
-
 	Matrix4x4 result = {
 		std::powf(quaternion.w,2) + std::powf(quaternion.x,2) - std::powf(quaternion.y,2) - std::powf(quaternion.z,2),
 		2.0f * (quaternion.x * quaternion.y + quaternion.w * quaternion.z),2.0f * (quaternion.x * quaternion.z - quaternion.w * quaternion.y),0.0f,

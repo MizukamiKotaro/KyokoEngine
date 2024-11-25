@@ -24,7 +24,7 @@ Vector3 Vector3::Normalize() {
 	return result;
 }
 
-Vector3 Vector3::Clamp(const float& min, const float& max)
+Vector3 Vector3::Clamp(float min, float max)
 {
 	return Vector3(std::clamp(x,min,max), std::clamp(y, min, max), std::clamp(z, min, max));
 }
@@ -38,8 +38,6 @@ Vector3 operator+(const Vector3& obj1, const Vector3& obj2) {
 	return tmp;
 }
 
-
-//減算
 Vector3 operator-(const Vector3& obj1, const Vector3& obj2) {
 	Vector3 tmp = {};
 	tmp.x = obj1.x - obj2.x;
@@ -48,9 +46,6 @@ Vector3 operator-(const Vector3& obj1, const Vector3& obj2) {
 	return tmp;
 }
 
-//スカラー
-
-//乗算
 Vector3 operator*(float a, const Vector3& obj) {
 	Vector3 tmp = {};
 
@@ -69,7 +64,6 @@ Vector3 operator*(const Vector3& obj, float a) {
 	return tmp;
 }
 
-//除算
 Vector3 operator/(const Vector3& obj, float a) {
 
 	if (a == 0) {

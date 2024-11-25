@@ -71,7 +71,6 @@ Quaternion Quaternion::Slerp(const Quaternion& q0, const Quaternion& q1, float t
 	}
 
 	float theta = std::acosf(dot);
-
 	float scale0 = std::sinf((1.0f - t) * theta) / std::sinf(theta);
 	float scale1 = std::sinf(t * theta) / std::sinf(theta);
 
@@ -84,7 +83,6 @@ float Quaternion::Dot(const Quaternion& q0, const Quaternion& q1)
 	a = a.Normalize();
 	Quaternion b = q1;
 	b = b.Normalize();
-
 	return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
 }
 
@@ -93,7 +91,6 @@ Quaternion Quaternion::MakeRotateAxisAngle(const Vector3& axis, float angle)
 	Quaternion result = { 0.0f,0.0f,0.0f,0.0f };
 
 	Vector3 n = axis;
-
 	n = n.Normalize();
 
 	result.w = std::cosf(angle * 0.5f);
@@ -122,7 +119,6 @@ Quaternion Quaternion::DirectionToDirection(const Vector3& from, const Vector3& 
 		else if (u.x != 0 || u.z != 0) {
 			n = Vector3{ u.z,0.0f,-u.x }.Normalize();
 		}
-
 		cosfTheta = -1;
 	}
 

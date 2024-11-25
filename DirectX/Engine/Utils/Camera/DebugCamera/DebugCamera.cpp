@@ -23,6 +23,7 @@ void DebugCamera::Update(EulerTransform& transform)
 {
 	transform;
 #ifdef _DEBUG
+	// デバッグ切り替え
 	isPreDebug_ = isDebug_;
 	if (!ImGui::Begin("Camera", nullptr, ImGuiWindowFlags_MenuBar)) {
 		ImGui::End();
@@ -39,6 +40,7 @@ void DebugCamera::Update(EulerTransform& transform)
 		ImGui::End();
 	}
 
+	// Lシフトで切り替え
 	if (input_->PressedKey(DIK_LSHIFT)) {
 		if (isDebug_) {
 			isDebug_ = false;
@@ -82,6 +84,7 @@ void DebugCamera::DebugUpdate(EulerTransform& transform)
 			ImGui::End();
 		}
 		else {
+			// ImGuiでの調整
 			if (ImGui::BeginMenuBar()) {
 				if (ImGui::BeginMenu("デバッグカメラ")) {
 					ImGui::Checkbox("2Dカメラのデバッグか(マウスでの調整)", &is2D_);
@@ -101,12 +104,14 @@ void DebugCamera::DebugUpdate(EulerTransform& transform)
 			ImGui::End();
 		}
 
+		// マウス操作
 		if (input_->PressedKey(DIK_LCONTROL)) {
 			isMouseMove_ = !isMouseMove_;
 		}
-
 		if (isMouseMove_) {
 			if (is2D_) {
+				// 2Dのカメラ操作
+				// 平行移動
 				if (input_->PressedMouse(Input::MouseButton::CENTER) && !isRotate_ && !isRotateTranslate_) {
 					mousePos_ = input_->GetMousePosition();
 					isTranslate_ = true;
@@ -114,16 +119,14 @@ void DebugCamera::DebugUpdate(EulerTransform& transform)
 				}
 				else if (input_->PressingMouse(Input::MouseButton::CENTER) && isTranslate_) {
 					Vector2 vector = input_->GetMousePosition();
-
 					Vector3 move = { -(vector.x - mousePos_.x) / 80,(vector.y - mousePos_.y) / 45,0.0f };
 					move = Matrix4x4::Multiply(move, Matrix4x4::MakeRotateXYZMatrix(transform.rotate_));
-
 					transform.translate_ = subTranslate_ + move;
 				}
 				else {
 					isTranslate_ = false;
 				}
-
+				// 奥行きの移動
 				if (input_->GetWheel() && !isRotate_ && !isRotateTranslate_ && !isTranslate_) {
 					float moveLength = float(input_->GetWheel()) / 120;
 					Vector3 move = { 0.0f,0.0f,1.0f };
@@ -133,6 +136,8 @@ void DebugCamera::DebugUpdate(EulerTransform& transform)
 				}
 			}
 			else {
+				// 3Dのカメラ操作
+				// 回転移動
 				if (input_->PressedMouse(Input::MouseButton::LEFT) && !isTranslate_ && !isRotate_) {
 					mousePos_ = input_->GetMousePosition();
 					isRotateTranslate_ = true;
@@ -155,6 +160,7 @@ void DebugCamera::DebugUpdate(EulerTransform& transform)
 					isRotateTranslate_ = false;
 				}
 
+				// 回転
 				if (input_->PressedMouse(Input::MouseButton::RIGHT) && !isTranslate_ && !isRotateTranslate_) {
 					mousePos_ = input_->GetMousePosition();
 					isRotate_ = true;
@@ -171,6 +177,7 @@ void DebugCamera::DebugUpdate(EulerTransform& transform)
 					isRotate_ = false;
 				}
 
+				// 平行移動
 				if (input_->PressedMouse(Input::MouseButton::CENTER) && !isRotate_ && !isRotateTranslate_) {
 					mousePos_ = input_->GetMousePosition();
 					isTranslate_ = true;
@@ -188,6 +195,7 @@ void DebugCamera::DebugUpdate(EulerTransform& transform)
 					isTranslate_ = false;
 				}
 
+				// 奥行きの移動
 				if (input_->GetWheel() && !isRotate_ && !isRotateTranslate_ && !isTranslate_) {
 					float moveLength = float(input_->GetWheel()) / 120;
 					Vector3 move = { 0.0f,0.0f,1.0f };

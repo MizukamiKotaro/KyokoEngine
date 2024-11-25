@@ -17,7 +17,6 @@ Vector2 operator-(const Vector2& obj1, const Vector2& obj2) {
 
 Vector2 operator*(const Vector2& obj, float a) {
 	Vector2 tmp = {};
-
 	tmp.x = obj.x * a;
 	tmp.y = obj.y * a;
 	return tmp;
@@ -45,12 +44,10 @@ float Vector2::Length()
 Vector2 Vector2::Normalize()
 {
 	float len = Length();
-
 	Vector2 result = {};
 
 	if (len != 0) {
 		result = { this->x / len, this->y / len };
 	}
-
 	return result;
 }

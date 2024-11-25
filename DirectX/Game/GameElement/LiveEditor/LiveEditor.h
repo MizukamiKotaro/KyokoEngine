@@ -38,35 +38,42 @@ public:
 	void WriteScreen();
 
 private:
-	LiveEditor() = default;
-
+	/// <summary>
+	/// アウトラインとかの為に書き込む
+	/// </summary>
 	void WriteOutline();
+	/// <summary>
+	/// 描画
+	/// </summary>
+	/// <param name="lightAndOutline">書き込み用</param>
+	/// <param name="camera">カメラ</param>
 	void Draw(std::unique_ptr<SpotLightAndOutline>& lightAndOutline, const Camera& camera);
 
 private:
+	/// <summary>
+	/// マネージャーの名前
+	/// </summary>
 	enum ManagerNames
 	{
-		kLight,
-		kIdol,
-		kFire,
-		kObject,
-		kManagerEnd,
+		kLight, // ライト
+		kIdol, // アイドル
+		kObject, // オブジェクト
+		kManagerEnd, // 名前の数
 	};
 
-	InstancingModelManager* instancingManager_;
+	InstancingModelManager* instancingManager_; // インスタンシングマネージャー
 
-	std::array<std::unique_ptr<IStageObjectManager>, ManagerNames::kManagerEnd> objectManagers_;
+	std::array<std::unique_ptr<IStageObjectManager>, ManagerNames::kManagerEnd> objectManagers_; // マネージャー
+	std::unique_ptr<MultipleScreenEditor> screenManager_; // スクリーンマネージャー
 
-	std::unique_ptr<MultipleScreenEditor> screenManager_;
+	std::map<uint32_t, std::unique_ptr<ScreenEditor>>* screenMap_ = nullptr; // スクリーンマップ
+	std::map<uint32_t, std::unique_ptr<SpotLightAndOutline>>* lightAndOutlineMap_ = nullptr; // 専用ポストエフェクトマップ
 
-	std::map<uint32_t, std::unique_ptr<ScreenEditor>>* screenMap_ = nullptr;
-	std::map<uint32_t, std::unique_ptr<SpotLightAndOutline>>* lightAndOutlineMap_ = nullptr;
-
-	std::unique_ptr<SpotLightAndOutline> lightAndOutline_;
-	Camera* camera_ = nullptr;
-	std::unique_ptr<Camera> screenCamera_;
-	std::unique_ptr<CameraVMDAnimation> cameraAnim_;
-	float debugTime_;
-	float preDebugTime_;
-	bool isDebug_;
+	std::unique_ptr<SpotLightAndOutline> lightAndOutline_; // 専用ポストエフェクト
+	Camera* camera_ = nullptr; // カメラ
+	std::unique_ptr<Camera> screenCamera_; // スクリーン用カメラ
+	std::unique_ptr<CameraVMDAnimation> cameraAnim_; // カメラアニメーション
+	float debugTime_; // デバッグタイム
+	float preDebugTime_; // 以前のデバッグタイム
+	bool isDebug_; // デバッグか
 };

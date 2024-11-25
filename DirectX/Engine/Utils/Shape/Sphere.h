@@ -2,30 +2,38 @@
 #include "Utils/Math/Vector3.h"
 #include "Utils/Math/Matrix4x4.h"
 #include <cstdint>
-
+/// <summary>
+/// 球
+/// </summary>
 class Sphere
 {
 public:
-	/*Sphere(const Vector3& center, const float& radius);
-
-	Sphere(const Vector3& center, const Vector3& rotate, const float& radius);
-
-	Sphere(const Vector3& center, const Vector3& scale, const Vector3& rotate, const float& radius);*/
-
-	void Initialize(const Vector3& center, const float& radius);
-	void Initialize(const Vector3& center, const Vector3& rotate, const float& radius);
-	void Initialize(const Vector3& center, const Vector3& scale, const Vector3& rotate, const float& radius);
-
-	void Draw(const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix, uint32_t color);
-
-private:
-	
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	/// <param name="center">センター</param>
+	/// <param name="radius">半径</param>
+	void Initialize(const Vector3& center, float radius);
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	/// <param name="center">センター</param>
+	/// <param name="rotate">回転</param>
+	/// <param name="radius">半径</param>
+	void Initialize(const Vector3& center, const Vector3& rotate, float radius);
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	/// <param name="center">センター</param>
+	/// <param name="scale">スケール</param>
+	/// <param name="rotate">回転</param>
+	/// <param name="radius">半径</param>
+	void Initialize(const Vector3& center, const Vector3& scale, const Vector3& rotate, float radius);
 
 public:
-	
-	Vector3 center_;
-	Vector3 scale_;
-	Vector3 rotate_;
-	float radius_;
+	Vector3 center_; // センター
+	Vector3 scale_; // スケール
+	Vector3 rotate_; // 回転
+	float radius_; // 半径
 };
 

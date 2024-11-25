@@ -27,6 +27,7 @@
 #include "InstancingModels/InstancingResourceManager.h"
 #include "MMD/CameraVMD/CameraVMDDataManager.h"
 #include "MMD/PMDModel/PMDModel.h"
+#include "InstancingModelManager.h"
 
 namespace Kyoko {
 	namespace Engine {
@@ -41,6 +42,7 @@ namespace Kyoko {
 		GlobalVariables* globalVariables;
 		VolumeManager* volumeManager;
 		DrawManager* drawManager;
+		InstancingModelManager* instancingManager;
 
 		void Initialize(const char* windowName, int width, int height)
 		{
@@ -83,6 +85,7 @@ namespace Kyoko {
 			PMDModel::StaticInitialize();
 			LightSingleton::GetInstance()->Initialize();
 			CameraVMDDataManager::GetInstance()->Initialize();
+			instancingManager = InstancingModelManager::GetInstance();
 
 			// レベルデータのロード
 			LevelDataLoader::GetInstance()->LoadFiles();
@@ -154,6 +157,7 @@ namespace Kyoko {
 			audioManager->Update();
 			// 描画マネージャのリセット
 			drawManager->Reset();
+			instancingManager->Clear();
 		}
 
 		void PreDraw()

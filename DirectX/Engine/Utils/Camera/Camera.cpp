@@ -61,12 +61,12 @@ void Camera::Update()
 	cameraForGPUData_->worldPosition = transform_.GetWorldPosition();
 }
 
-const bool& Camera::GetIsDebug() const
+bool Camera::GetIsDebug() const
 {
 	return debugCamera_->IsDebug();
 }
 
-const bool Camera::InScreenCheck2D(const Vector3& position, const float& radius) const 
+ bool Camera::InScreenCheck2D(const Vector3& position, float radius) const 
 {
 	Vector2 win = WindowsInfo::GetInstance()->GetWindowSize();
 	float ratio = win.y / (std::tanf(0.225f) * (position.z - transform_.translate_.z) * 2);
