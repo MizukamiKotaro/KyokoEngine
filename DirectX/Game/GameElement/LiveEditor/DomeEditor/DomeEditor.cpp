@@ -2,11 +2,10 @@
 #include "Camera.h"
 #include "TextureManager.h"
 
-DomeEditor::DomeEditor(const std::string& mainName, const std::string& name, const uint32_t& no)
+DomeEditor::DomeEditor(const std::string& mainName, const std::string& name, uint32_t no)
 {
 	CreateStageEditor(mainName, name, no);
 	model_ = std::make_unique<Model>("skydome");
-	//model_->SetTexture(TextureManager::GetInstance()->LoadTexture("skydome1.png"));
 	model_->Update();
 	model_->UnUsedLight();
 	model_->SetColor(Vector4{ 0.02f,0.02f,0.02f,1.0f });
@@ -17,7 +16,7 @@ void DomeEditor::Initialize()
 {
 }
 
-void DomeEditor::Update(const float& time)
+void DomeEditor::Update(float time)
 {
 #ifdef _DEBUG
 	UpdateGlobalVariable();

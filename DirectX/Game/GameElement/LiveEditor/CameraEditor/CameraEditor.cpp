@@ -2,7 +2,7 @@
 #include "Camera.h"
 #include "TextureManager.h"
 
-CameraEditor::CameraEditor(const std::string& mainName, const std::string& name, const uint32_t& no)
+CameraEditor::CameraEditor(const std::string& mainName, const std::string& name, uint32_t no)
 {
 	CreateStageEditor(mainName, name, no);
 	SetGlobalVariable();
@@ -12,7 +12,7 @@ void CameraEditor::Initialize()
 {
 }
 
-void CameraEditor::Update(const float& time)
+void CameraEditor::Update(float time)
 {
 #ifdef _DEBUG
 	UpdateGlobalVariable();

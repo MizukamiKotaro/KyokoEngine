@@ -4,7 +4,7 @@
 
 const int kSpotNum = 2;
 
-PenLightEditor::PenLightEditor(const std::string& mainName, const std::string& name, const uint32_t& no)
+PenLightEditor::PenLightEditor(const std::string& mainName, const std::string& name, uint32_t no)
 {
 	box_ = std::make_unique<RigidAnimationModel>("penLight");
 	isTwin_ = true;
@@ -22,12 +22,12 @@ PenLightEditor::PenLightEditor(const std::string& mainName, const std::string& n
 	MakeInstancingData();
 }
 
-void PenLightEditor::SetTime(const float& time)
+void PenLightEditor::SetTime(float time)
 {
 	box_->SetTime(time);
 }
 
-void PenLightEditor::Update(const float& time)
+void PenLightEditor::Update(float time)
 {
 #ifdef _DEBUG
 	UpdateGlobalVariable();

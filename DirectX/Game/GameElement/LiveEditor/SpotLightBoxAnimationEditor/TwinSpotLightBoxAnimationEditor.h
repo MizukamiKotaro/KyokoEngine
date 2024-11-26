@@ -1,16 +1,16 @@
 #pragma once
 #include <array>
 #include <memory>
-#include "GameElement/IStageObject/IStageObject.h"
+#include "GameElement/BaseStageObject/BaseStageObject.h"
 
 class SpotLightBoxAnimationEditor;
 
-class TwinSpotLightBoxAnimationEditor : public IStageObject
+class TwinSpotLightBoxAnimationEditor : public BaseStageObject
 {
 public:
-	TwinSpotLightBoxAnimationEditor(const std::string& mainName, const std::string& name, const uint32_t& no);
-	void SetTime(const float& time) override;
-	void Update(const float& time) override;
+	TwinSpotLightBoxAnimationEditor(const std::string& mainName, const std::string& name, uint32_t no);
+	void SetTime(float time) override;
+	void Update(float time) override;
 	void Draw(const Camera& camera) override;
 	void DrawLight(const Camera& camera) override;
 

@@ -2,7 +2,7 @@
 #include "Camera.h"
 #include "TextureManager.h"
 
-StageFloorEditor::StageFloorEditor(const std::string& mainName, const std::string& name, const uint32_t& no)
+StageFloorEditor::StageFloorEditor(const std::string& mainName, const std::string& name, uint32_t no)
 {
 	model_ = std::make_unique<Model>("ground");
 	model_->SetTexture(TextureManager::GetInstance()->LoadTexture("Resources/Texture/white.png"));
@@ -23,7 +23,7 @@ void StageFloorEditor::Initialize()
 {
 }
 
-void StageFloorEditor::Update(const float& time)
+void StageFloorEditor::Update(float time)
 {
 #ifdef _DEBUG
 	UpdateGlobalVariable();

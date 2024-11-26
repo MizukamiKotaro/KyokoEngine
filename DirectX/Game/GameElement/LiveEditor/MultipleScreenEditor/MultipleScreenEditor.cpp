@@ -3,7 +3,7 @@
 #include "TextureManager.h"
 #include "GameElement/LiveEditor/ScreenEditor/ScreenEditor.h"
 
-MultipleScreenEditor::MultipleScreenEditor(const std::string& mainName, const std::string& name, const uint32_t& no)
+MultipleScreenEditor::MultipleScreenEditor(const std::string& mainName, const std::string& name, uint32_t no)
 {
 	screenSprite_ = std::make_unique<Sprite>("screen.png");
 	screenSprite_->pos_ = { 640.0f,360.0f };
@@ -20,7 +20,7 @@ MultipleScreenEditor::MultipleScreenEditor(const std::string& mainName, const st
 	SetGlobalVariable();
 }
 
-void MultipleScreenEditor::Update(const float& time)
+void MultipleScreenEditor::Update(float time)
 {
 #ifdef _DEBUG
 	UpdateGlobalVariable();

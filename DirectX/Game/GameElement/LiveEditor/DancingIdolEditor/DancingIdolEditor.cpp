@@ -2,7 +2,7 @@
 #include "Camera.h"
 #include "TextureManager.h"
 
-DancingIdolEditor::DancingIdolEditor(const std::string& mainName, const std::string& name, const uint32_t& no)
+DancingIdolEditor::DancingIdolEditor(const std::string& mainName, const std::string& name, uint32_t no)
 {
 	CreateStageEditor(mainName, name, no);
 	firstPosition_ = {};
@@ -12,12 +12,12 @@ DancingIdolEditor::DancingIdolEditor(const std::string& mainName, const std::str
 	SetGlobalVariable();
 }
 
-void DancingIdolEditor::SetTime(const float& time)
+void DancingIdolEditor::SetTime(float time)
 {
 	idol_->SetTime(time);
 }
 
-void DancingIdolEditor::Update(const float& time) 
+void DancingIdolEditor::Update(float time) 
 {
 #ifdef _DEBUG
 	UpdateGlobalVariable();

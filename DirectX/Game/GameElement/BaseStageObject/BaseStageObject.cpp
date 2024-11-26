@@ -1,39 +1,39 @@
-#include "IStageObject.h"
+#include "BaseStageObject.h"
 #include "InstancingModelManager.h"
 #include "SceneSystem/SceneBase/SceneBase.h"
 
-InstancingModelManager* IStageObject::instancingManager_ = nullptr;
+InstancingModelManager* BaseStageObject::instancingManager_ = nullptr;
 
-void IStageObject::StaticInitialize()
+void BaseStageObject::StaticInitialize()
 {
 	instancingManager_ = InstancingModelManager::GetInstance();
 }
 
-void IStageObject::Initialize()
+void BaseStageObject::Initialize()
 {
 }
 
-void IStageObject::SetTime(const float& time)
+void BaseStageObject::SetTime(float time)
 {
 	time;
 }
 
-void IStageObject::DrawLight(const Camera& camera)
+void BaseStageObject::DrawLight(const Camera& camera)
 {
 	camera;
 }
 
-void IStageObject::DrawOutline(const Camera& camera)
+void BaseStageObject::DrawOutline(const Camera& camera)
 {
 	camera;
 }
 
-void IStageObject::DrawBloom(const Camera& camera)
+void BaseStageObject::DrawBloom(const Camera& camera)
 {
 	camera;
 }
 
-void IStageObject::CreateStageEditor(const std::string& mainName, const std::string& name, const uint32_t& no, const bool& isMany)
+void BaseStageObject::CreateStageEditor(const std::string& mainName, const std::string& name, uint32_t no, bool isMany)
 {
 	if (isMany) {
 		std::string tree = mainName + std::to_string(no);
@@ -48,7 +48,7 @@ void IStageObject::CreateStageEditor(const std::string& mainName, const std::str
 	}
 }
 
-void IStageObject::CreateStageEditor(const std::string& mainName, const std::string& name, const std::string& treeName, const uint32_t& no, const bool& isMany)
+void BaseStageObject::CreateStageEditor(const std::string& mainName, const std::string& name, const std::string& treeName, uint32_t no, bool isMany)
 {
 	if (isMany) {
 		std::string tree = mainName + std::to_string(no);
@@ -63,14 +63,14 @@ void IStageObject::CreateStageEditor(const std::string& mainName, const std::str
 	}
 }
 
-void IStageObject::InitializeEditor()
+void BaseStageObject::InitializeEditor()
 {
 	if (stageEditor_) {
 		stageEditor_->Initialize();
 	}
 }
 
-void IStageObject::UpdateGlobalVariable()
+void BaseStageObject::UpdateGlobalVariable()
 {
 #ifdef _DEBUG
 	if (stageEditor_) {

@@ -3,7 +3,7 @@
 #include "TextureManager.h"
 #include "RandomGenerator/RandomGenerator.h"
 
-FireParticleEditor::FireParticleEditor(const std::string& mainName, const std::string& name, const uint32_t& no)
+FireParticleEditor::FireParticleEditor(const std::string& mainName, const std::string& name, uint32_t no)
 {
 	CreateStageEditor(mainName, name, no);
 	
@@ -12,7 +12,7 @@ FireParticleEditor::FireParticleEditor(const std::string& mainName, const std::s
 	SetGlobalVariable();
 }
 
-void FireParticleEditor::Update(const float& time)
+void FireParticleEditor::Update(float time)
 {
 #ifdef _DEBUG
 	UpdateGlobalVariable();

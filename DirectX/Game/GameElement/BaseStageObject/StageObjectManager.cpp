@@ -1,14 +1,14 @@
-#include "IStageObjectManager.h"
+#include "StageObjectManager.h"
 #include "Editor/StageEditor.h"
 #include "StageObjectConfig.h"
 #include "StageObjectFactory/StageObjectFactory.h"
-#include "IStageObject.h"
+#include "BaseStageObject.h"
 
-void IStageObjectManager::AddType(const StageObjectType& type, const std::string& mainName, const std::string& subName)
+void StageObjectManager::AddType(StageObjectType type, const std::string& mainName, const std::string& subName)
 {
 	bool is = false;
 	// 同じ設定があるか
-	for (const std::unique_ptr<IStageObjectManager::Type>& aType : types_) {
+	for (const std::unique_ptr<StageObjectManager::Type>& aType : types_) {
 		if (aType->type == type && aType->mainName == mainName && aType->subName == subName) {
 			is = true;
 			break;
@@ -16,7 +16,7 @@ void IStageObjectManager::AddType(const StageObjectType& type, const std::string
 	}
 	if (!is) {
 		// 設定の追加
-		types_.push_back(std::make_unique<IStageObjectManager::Type>(0, 0, type, mainName, subName));
+		types_.push_back(std::make_unique<StageObjectManager::Type>(0, 0, type, mainName, subName));
 		if (!stageEditor_) {
 			stageEditor_ = std::make_unique<StageEditor>();
 		}
@@ -26,7 +26,7 @@ void IStageObjectManager::AddType(const StageObjectType& type, const std::string
 	}
 }
 
-void IStageObjectManager::Initialize()
+void StageObjectManager::Initialize()
 {
 	if (!stageEditor_) {
 		stageEditor_ = std::make_unique<StageEditor>();
@@ -35,7 +35,7 @@ void IStageObjectManager::Initialize()
 	ApplyGlobalVariable();
 }
 
-void IStageObjectManager::Update(const float& deltaTime)
+void StageObjectManager::Update(float deltaTime)
 {
 #ifdef _DEBUG
 	if (stageEditor_->IsChangedStage()) {
@@ -43,51 +43,50 @@ void IStageObjectManager::Update(const float& deltaTime)
 	}
 	ApplyGlobalVariable();
 #endif // _DEBUG
-
-	for (std::unique_ptr<IStageObject>& object : objects_) {
+	for (std::unique_ptr<BaseStageObject>& object : objects_) {
 		object->Update(deltaTime);
 	}
 }
 
-void IStageObjectManager::SetTime(const float& time)
+void StageObjectManager::SetTime(float time)
 {
-	for (std::unique_ptr<IStageObject>& object : objects_) {
+	for (std::unique_ptr<BaseStageObject>& object : objects_) {
 		object->SetTime(time);
 	}
 }
 
-void IStageObjectManager::Draw(const Camera& camera) const
+void StageObjectManager::Draw(const Camera& camera) const
 {
-	for (const std::unique_ptr<IStageObject>& object : objects_) {
+	for (const std::unique_ptr<BaseStageObject>& object : objects_) {
 		object->Draw(camera);
 	}
 }
 
-void IStageObjectManager::DrawLight(const Camera& camera) const
+void StageObjectManager::DrawLight(const Camera& camera) const
 {
-	for (const std::unique_ptr<IStageObject>& object : objects_) {
+	for (const std::unique_ptr<BaseStageObject>& object : objects_) {
 		object->DrawLight(camera);
 	}
 }
 
-void IStageObjectManager::DrawOutline(const Camera& camera)
+void StageObjectManager::DrawOutline(const Camera& camera)
 {
-	for (const std::unique_ptr<IStageObject>& object : objects_) {
+	for (const std::unique_ptr<BaseStageObject>& object : objects_) {
 		object->DrawOutline(camera);
 	}
 }
 
-void IStageObjectManager::DrawBloom(const Camera& camera)
+void StageObjectManager::DrawBloom(const Camera& camera)
 {
-	for (const std::unique_ptr<IStageObject>& object : objects_) {
+	for (const std::unique_ptr<BaseStageObject>& object : objects_) {
 		object->DrawBloom(camera);
 	}
 }
 
-void IStageObjectManager::ApplyGlobalVariable()
+void StageObjectManager::ApplyGlobalVariable()
 {
 	bool change = false;
-	for (std::unique_ptr<IStageObjectManager::Type>& type : types_) {
+	for (std::unique_ptr<StageObjectManager::Type>& type : types_) {
 		type->num = stageEditor_->GetIntValue(type->mainName + "の数", type->mainName + "の設置", type->subName);
 		if (type->num != type->preNum) {
 			change = true;
@@ -98,7 +97,6 @@ void IStageObjectManager::ApplyGlobalVariable()
 			else {
 				type->preNum = type->num;
 			}
-
 		}
 	}
 
@@ -107,11 +105,11 @@ void IStageObjectManager::ApplyGlobalVariable()
 	}
 }
 
-void IStageObjectManager::CreateObjects()
+void StageObjectManager::CreateObjects()
 {
 	objects_.clear();
 	uint32_t no = 0;
-	for (const std::unique_ptr<IStageObjectManager::Type>& type : types_) {
+	for (const std::unique_ptr<StageObjectManager::Type>& type : types_) {
 		for (uint32_t i = 0; i < type->num; i++) {
 			objects_.push_back(nullptr);
 			objects_.back().reset(StageObjectFactory::CreateStageObject(type->type, type->mainName, type->subName, no));

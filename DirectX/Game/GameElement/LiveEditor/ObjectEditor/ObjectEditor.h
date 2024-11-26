@@ -1,15 +1,15 @@
 #pragma once
 #include <memory>
-#include "GameElement/IStageObject/IStageObject.h"
+#include "GameElement/BaseStageObject/BaseStageObject.h"
 #include "ModelData/ModelData.h"
 
-class ObjectEditor : public IStageObject
+class ObjectEditor : public BaseStageObject
 {
 public: 
-	ObjectEditor(const std::string& mainName, const std::string& name, const uint32_t& no);
+	ObjectEditor(const std::string& mainName, const std::string& name, uint32_t no);
 
 	void Initialize() override;
-	void Update(const float& time) override;
+	void Update(float time) override;
 	void Draw(const Camera& camera) override;
 private:
 	void SetGlobalVariable() override;

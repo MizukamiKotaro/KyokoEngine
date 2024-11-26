@@ -4,22 +4,22 @@
 #include "Sprite.h"
 #include "PostEffect/PostEffect.h"
 #include "Bloom/Bloom.h"
-#include "GameElement/IStageObject/IStageObject.h"
+#include "GameElement/BaseStageObject/BaseStageObject.h"
 
 class Camera;
 
-class ScreenEditor : public IStageObject
+class ScreenEditor : public BaseStageObject
 {
 public:
-	ScreenEditor(const std::string& mainName, const std::string& name, const uint32_t& no);
-	ScreenEditor(const std::string& mainName, const std::string& name, const std::string& treeName, const uint32_t& no);
-	void Update(const float& time) override;
+	ScreenEditor(const std::string& mainName, const std::string& name, uint32_t no);
+	ScreenEditor(const std::string& mainName, const std::string& name, const std::string& treeName, uint32_t no);
+	void Update(float time) override;
 	void Draw(const Camera& camera) override;
 
 	void PreDrawScene();
 	void PostDrawScene();
-	void SetGPUHandle(const D3D12_GPU_DESCRIPTOR_HANDLE& srvGPUDescriptorHandle);
-	const D3D12_GPU_DESCRIPTOR_HANDLE GetGPUHandle();
+	void SetGPUHandle(D3D12_GPU_DESCRIPTOR_HANDLE srvGPUDescriptorHandle);
+	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUHandle();
 	void Reset();
 
 	const Camera& GetCamera() const { return *camera_.get(); }

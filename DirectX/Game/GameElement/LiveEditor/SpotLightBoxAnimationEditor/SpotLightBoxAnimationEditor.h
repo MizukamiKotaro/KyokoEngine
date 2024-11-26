@@ -2,18 +2,18 @@
 #include "RigidAnimationModel/RigidAnimationModel.h"
 #include "SpotLight/SpotLight.h"
 #include "PointLight/PointLight.h"
-#include "GameElement/IStageObject/IStageObject.h"
+#include "GameElement/BaseStageObject/BaseStageObject.h"
 
 class Camera;
 
-class SpotLightBoxAnimationEditor : public IStageObject
+class SpotLightBoxAnimationEditor : public BaseStageObject
 {
 public:
-	SpotLightBoxAnimationEditor(const std::string& mainName, const std::string& name, const uint32_t& no);
-	SpotLightBoxAnimationEditor(const std::string& mainName, const std::string& name, const std::string& treeName, const uint32_t& no);
+	SpotLightBoxAnimationEditor(const std::string& mainName, const std::string& name, uint32_t no);
+	SpotLightBoxAnimationEditor(const std::string& mainName, const std::string& name, const std::string& treeName, uint32_t no);
 	SpotLightBoxAnimationEditor();
-	void SetTime(const float& time) override;
-	void Update(const float& time) override;
+	void SetTime(float time) override;
+	void Update(float time) override;
 	void Draw(const Camera& camera) override;
 	void DrawLight(const Camera& camera) override;
 

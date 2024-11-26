@@ -4,17 +4,17 @@
 #include "PostEffect/PostEffect.h"
 #include "Bloom/Bloom.h"
 #include <map>
-#include "GameElement/IStageObject/IStageObject.h"
+#include "GameElement/BaseStageObject/BaseStageObject.h"
 #include "SpotLightAndOutline/SpotLightAndOutline.h"
 
 class ScreenEditor;
 
-class MultipleScreenEditor : public IStageObject
+class MultipleScreenEditor : public BaseStageObject
 {
 public: 
-	MultipleScreenEditor(const std::string& mainName, const std::string& name, const uint32_t& no);
+	MultipleScreenEditor(const std::string& mainName, const std::string& name, uint32_t no);
 
-	void Update(const float& time) override;
+	void Update(float time) override;
 	void Draw(const Camera& camera) override;
 	D3D12_GPU_DESCRIPTOR_HANDLE GetSRVGPUDescriptorHandle() const { return postEffect_->GetSRVGPUDescriptorHandle(); }
 

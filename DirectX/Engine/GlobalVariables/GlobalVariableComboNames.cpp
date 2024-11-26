@@ -20,12 +20,12 @@ void GlobalVariableComboNames::Initialize()
 	names_[ComboNameType::kCameraAnimationVMD] = "CameraVMDAnim";
 }
 
-void GlobalVariableComboNames::AddComboName(const ComboNameType& type, const std::string& comboName)
+void GlobalVariableComboNames::AddComboName(ComboNameType type, const std::string& comboName)
 {
 	global_->AddComboName(names_[type], comboName);
 }
 
-std::pair<std::string, std::string> GlobalVariableComboNames::GetName(const ComboNameType& type)
+std::pair<std::string, std::string> GlobalVariableComboNames::GetName(ComboNameType type)
 {
 	std::pair<std::string, std::string> name;
 	name.first = names_[type];

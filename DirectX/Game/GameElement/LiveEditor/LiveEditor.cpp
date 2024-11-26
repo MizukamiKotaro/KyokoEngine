@@ -1,7 +1,7 @@
 #include "LiveEditor.h"
 #include "Camera.h"
-#include "GameElement/IStageObject/StageObjectConfig.h"
-#include "GameElement/IStageObject/StageObjectFactory/StageObjectFactory.h"
+#include "GameElement/BaseStageObject/StageObjectConfig.h"
+#include "GameElement/BaseStageObject/StageObjectFactory/StageObjectFactory.h"
 #include "ScreenEditor/ScreenEditor.h"
 #include "ParticleManager.h"
 #include "InstancingModelManager.h"
@@ -10,7 +10,7 @@
 
 LiveEditor::LiveEditor(Camera* camera)
 {
-	IStageObject::StaticInitialize();
+	BaseStageObject::StaticInitialize();
 
 	camera_ = camera;
 	camera_->Initialize();
@@ -21,8 +21,8 @@ LiveEditor::LiveEditor(Camera* camera)
 	screenManager_ = std::make_unique<MultipleScreenEditor>("スクリーン", "マルチスクリーン", 0);
 
 	// マネージャーの設定
-	for (std::unique_ptr<IStageObjectManager>& manager : objectManagers_) {
-		manager = std::make_unique<IStageObjectManager>();
+	for (std::unique_ptr<StageObjectManager>& manager : objectManagers_) {
+		manager = std::make_unique<StageObjectManager>();
 	}
 	objectManagers_[ManagerNames::kIdol]->AddType(StageObjectType::IDOL, "アイドル", "メインアイドル");
 	objectManagers_[ManagerNames::kLight]->AddType(StageObjectType::SPOTLIGHT, "ライト", "スポットライト");
@@ -64,7 +64,7 @@ void LiveEditor::Initialize()
 	screenCamera_->transform_.translate_ = { 0.0f,15.0f,-80.0f };
 	screenCamera_->Update();
 
-	for (std::unique_ptr<IStageObjectManager>& manager : objectManagers_) {
+	for (std::unique_ptr<StageObjectManager>& manager : objectManagers_) {
 		manager->Initialize();
 	}
 
@@ -95,7 +95,7 @@ void LiveEditor::Update(float time)
 		cameraAnim_->SetTime(debugTime_);
 		cameraAnim_->Update(0.0f);
 		camera_->DebugUpdate();
-		for (std::unique_ptr<IStageObjectManager>& manager : objectManagers_) {
+		for (std::unique_ptr<StageObjectManager>& manager : objectManagers_) {
 			manager->SetTime(debugTime_);
 			manager->Update(0.0f);
 		}
@@ -104,7 +104,7 @@ void LiveEditor::Update(float time)
 		// 更新
 		cameraAnim_->Update(time);
 		debugTime_ += time;
-		for (std::unique_ptr<IStageObjectManager>& manager : objectManagers_) {
+		for (std::unique_ptr<StageObjectManager>& manager : objectManagers_) {
 			manager->Update(time);
 		}
 	}
@@ -119,7 +119,7 @@ void LiveEditor::Update(float time)
 	cameraAnim_->Update(time);
 	camera_->transform_.translate_ = cameraAnim_->GetState().position;
 	camera_->transform_.rotate_ = cameraAnim_->GetState().rotation;
-	for (std::unique_ptr<IStageObjectManager>& manager : objectManagers_) {
+	for (std::unique_ptr<StageObjectManager>& manager : objectManagers_) {
 		manager->Update(time);
 	}
 #endif 

@@ -1,15 +1,15 @@
 #pragma once
 #include "RigidAnimationModel/RigidAnimationModel.h"
-#include "GameElement/IStageObject/IStageObject.h"
+#include "GameElement/BaseStageObject/BaseStageObject.h"
 
 class Camera;
 
-class PenLightEditor : public IStageObject
+class PenLightEditor : public BaseStageObject
 {
 public:
-	PenLightEditor(const std::string& mainName, const std::string& name, const uint32_t& no);
-	void SetTime(const float& time) override;
-	void Update(const float& time) override;
+	PenLightEditor(const std::string& mainName, const std::string& name, uint32_t no);
+	void SetTime(float time) override;
+	void Update(float time) override;
 	void Draw(const Camera& camera) override;
 
 private:

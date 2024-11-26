@@ -1,11 +1,14 @@
 #pragma once
+/// <summary>
+/// コンボのタイプ
+/// </summary>
 enum class ComboNameType {
-	kTexture,
-	kOBJ,
-	kRigidAnimationModel,
-	kSkinningModel,
-	kAudio,
-	kEase,
-	kCameraAnimationVMD,
-	kPMD,
+	kTexture, // テクスチャ
+	kOBJ, // オブジェクト
+	kRigidAnimationModel, // リジッドアニメーションモデル
+	kSkinningModel, // スキニングモデル
+	kAudio, // オーディオ
+	kEase, // イージング
+	kCameraAnimationVMD, // カメラアニメーション
+	kPMD, // pmd
 };

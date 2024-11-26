@@ -1,15 +1,15 @@
 #pragma once
 #include "Model.h"
 #include <memory>
-#include "GameElement/IStageObject/IStageObject.h"
+#include "GameElement/BaseStageObject/BaseStageObject.h"
 
-class DomeEditor : public IStageObject
+class DomeEditor : public BaseStageObject
 {
 public: 
-	DomeEditor(const std::string& mainName, const std::string& name, const uint32_t& no);
+	DomeEditor(const std::string& mainName, const std::string& name, uint32_t no);
 
 	void Initialize() override;
-	void Update(const float& time) override;
+	void Update(float time) override;
 	void Draw(const Camera& camera) override;
 
 private:

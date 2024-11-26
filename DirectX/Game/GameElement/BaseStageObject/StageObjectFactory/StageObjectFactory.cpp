@@ -1,5 +1,5 @@
 #include "StageObjectFactory.h"
-#include "GameElement/IStageObject/StageObjectConfig.h"
+#include "GameElement/BaseStageObject/StageObjectConfig.h"
 #include "GameElement/LiveEditor/DancingIdolEditor/DancingIdolEditor.h"
 #include "GameElement/LiveEditor/MultipleScreenEditor/MultipleScreenEditor.h"
 #include "GameElement/LiveEditor/ScreenEditor/ScreenEditor.h"
@@ -11,9 +11,9 @@
 #include "GameElement/LiveEditor/ObjectEditor/ObjectEditor.h"
 #include "GameElement/LiveEditor/PenLightEditor/PenLightEditor.h"
 
-IStageObject* StageObjectFactory::CreateStageObject(const StageObjectType& type, const std::string& mainName, const std::string& name, const uint32_t& no)
+BaseStageObject* StageObjectFactory::CreateStageObject(const StageObjectType& type, const std::string& mainName, const std::string& name, const uint32_t& no)
 {
-    IStageObject* object = nullptr;
+    BaseStageObject* object = nullptr;
 	switch (type)
 	{
 	case StageObjectType::SPOTLIGHT:

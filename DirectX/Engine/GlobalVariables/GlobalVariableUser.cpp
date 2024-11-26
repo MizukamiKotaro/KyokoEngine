@@ -34,18 +34,18 @@ void GlobalVariableUser::CreateGroup()
 	global_->CreateGroup(chunkName_, groupName_);
 }
 
-void GlobalVariableUser::AddComboName(const ComboNameType& type, const std::string& comboName)
+void GlobalVariableUser::AddComboName(ComboNameType type, const std::string& comboName)
 {
 	globalCombo_->AddComboName(type, comboName);
 }
 
-void GlobalVariableUser::AddItem(const std::string& key, const int32_t& value, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
+void GlobalVariableUser::AddItem(const std::string& key, int32_t value, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
 {
 	std::vector<std::string> tree = CreateTree(tree1, tree2, tree3, tree4, tree5, tree6);
 	global_->AddItem<int32_t>(chunkName_, groupName_, key, value, tree);
 }
 
-void GlobalVariableUser::AddItem(const std::string& key, const float& value, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
+void GlobalVariableUser::AddItem(const std::string& key, float value, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
 {
 	std::vector<std::string> tree = CreateTree(tree1, tree2, tree3, tree4, tree5, tree6);
 	global_->AddItem<float>(chunkName_, groupName_, key, value, tree);
@@ -69,7 +69,7 @@ void GlobalVariableUser::AddItem(const std::string& key, const Vector4& value, c
 	global_->AddItem<Vector4>(chunkName_, groupName_, key, value, tree);
 }
 
-void GlobalVariableUser::AddItem(const std::string& key, const bool& value, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
+void GlobalVariableUser::AddItem(const std::string& key, bool value, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
 {
 	std::vector<std::string> tree = CreateTree(tree1, tree2, tree3, tree4, tree5, tree6);
 	global_->AddItem<bool>(chunkName_, groupName_, key, value, tree);
@@ -87,20 +87,20 @@ void GlobalVariableUser::AddItemColor(const std::string& key, const Vector4& val
 	global_->AddItemColor(chunkName_, groupName_, key, value, tree);
 }
 
-void GlobalVariableUser::AddItemCombo(const std::string& key, const ComboNameType& type, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
+void GlobalVariableUser::AddItemCombo(const std::string& key, ComboNameType type, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
 {
 	std::vector<std::string> tree = CreateTree(tree1, tree2, tree3, tree4, tree5, tree6);
 	std::pair<std::string, std::string> combo = globalCombo_->GetName(type);
 	global_->AddItemCombo(chunkName_, groupName_, key, combo.first, combo.second, tree);
 }
 
-const int32_t& GlobalVariableUser::GetIntValue(const std::string& key, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6) const
+int32_t GlobalVariableUser::GetIntValue(const std::string& key, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6) const
 {
 	std::vector<std::string> tree = CreateTree(tree1, tree2, tree3, tree4, tree5, tree6);
 	return global_->GetIntValue(chunkName_, groupName_, key, tree);
 }
 
-const float& GlobalVariableUser::GetFloatValue(const std::string& key, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6) const
+float GlobalVariableUser::GetFloatValue(const std::string& key, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6) const
 {
 	std::vector<std::string> tree = CreateTree(tree1, tree2, tree3, tree4, tree5, tree6);
 	return global_->GetFloatValue(chunkName_, groupName_, key, tree);
@@ -124,7 +124,7 @@ const Vector4& GlobalVariableUser::GetVector4Value(const std::string& key, const
 	return global_->GetVector4Value(chunkName_, groupName_, key, tree);
 }
 
-const bool& GlobalVariableUser::GetBoolValue(const std::string& key, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6) const
+bool GlobalVariableUser::GetBoolValue(const std::string& key, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6) const
 {
 	std::vector<std::string> tree = CreateTree(tree1, tree2, tree3, tree4, tree5, tree6);
 	return global_->GetBoolValue(chunkName_, groupName_, key, tree);
@@ -142,19 +142,19 @@ const Vector4& GlobalVariableUser::GetColor(const std::string& key, const std::s
 	return global_->GetColor(chunkName_, groupName_, key, tree);
 }
 
-const std::string& GlobalVariableUser::GetCombo(const std::string& key, const ComboNameType& type, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6) const
+const std::string& GlobalVariableUser::GetCombo(const std::string& key, ComboNameType type, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6) const
 {
 	std::vector<std::string> tree = CreateTree(tree1, tree2, tree3, tree4, tree5, tree6);
 	return global_->GetCombo(chunkName_, groupName_, key, globalCombo_->GetName(type).first, tree);
 }
 
-void GlobalVariableUser::SetVariable(const std::string& key, const int32_t& value, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
+void GlobalVariableUser::SetVariable(const std::string& key, int32_t value, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
 {
 	std::vector<std::string> tree = CreateTree(tree1, tree2, tree3, tree4, tree5, tree6);
 	global_->SetVariable<int32_t>(chunkName_, groupName_, key, value, tree);
 }
 
-void GlobalVariableUser::SetVariable(const std::string& key, const float& value, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
+void GlobalVariableUser::SetVariable(const std::string& key, float value, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
 {
 	std::vector<std::string> tree = CreateTree(tree1, tree2, tree3, tree4, tree5, tree6);
 	global_->SetVariable<float>(chunkName_, groupName_, key, value, tree);
@@ -178,7 +178,7 @@ void GlobalVariableUser::SetVariable(const std::string& key, const Vector4& valu
 	global_->SetVariable<Vector4>(chunkName_, groupName_, key, value, tree);
 }
 
-void GlobalVariableUser::SetVariable(const std::string& key, const bool& value, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
+void GlobalVariableUser::SetVariable(const std::string& key, bool value, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
 {
 	std::vector<std::string> tree = CreateTree(tree1, tree2, tree3, tree4, tree5, tree6);
 	global_->SetVariable<bool>(chunkName_, groupName_, key, value, tree);
@@ -190,12 +190,12 @@ void GlobalVariableUser::SetVariable(const std::string& key, const std::string& 
 	global_->SetVariable<std::string>(chunkName_, groupName_, key, value, tree);
 }
 
-void GlobalVariableUser::AddItemDontTouchImGui(const std::string& key, const int32_t& value)
+void GlobalVariableUser::AddItemDontTouchImGui(const std::string& key, int32_t value)
 {
 	global_->AddItemDontTouchImGui<int32_t>(key, value);
 }
 
-void GlobalVariableUser::AddItemDontTouchImGui(const std::string& key, const float& value)
+void GlobalVariableUser::AddItemDontTouchImGui(const std::string& key, float value)
 {
 	global_->AddItemDontTouchImGui<float>(key, value);
 }
@@ -215,7 +215,7 @@ void GlobalVariableUser::AddItemDontTouchImGui(const std::string& key, const Vec
 	global_->AddItemDontTouchImGui<Vector4>(key, value);
 }
 
-void GlobalVariableUser::AddItemDontTouchImGui(const std::string& key, const bool& value)
+void GlobalVariableUser::AddItemDontTouchImGui(const std::string& key, bool value)
 {
 	global_->AddItemDontTouchImGui<bool>(key, value);
 }
@@ -225,12 +225,12 @@ void GlobalVariableUser::AddItemDontTouchImGui(const std::string& key, const std
 	global_->AddItemDontTouchImGui<std::string>(key, value);
 }
 
-const int32_t& GlobalVariableUser::GetIntValueDontTouchImGui(const std::string& key) const
+int32_t GlobalVariableUser::GetIntValueDontTouchImGui(const std::string& key) const
 {
 	return global_->GetIntValueDontTouchImGui(key);
 }
 
-const float& GlobalVariableUser::GetFloatValueDontTouchImGui(const std::string& key) const
+float GlobalVariableUser::GetFloatValueDontTouchImGui(const std::string& key) const
 {
 	return global_->GetFloatValueDontTouchImGui(key);
 }
@@ -250,7 +250,7 @@ const Vector4& GlobalVariableUser::GetVector4ValueDontTouchImGui(const std::stri
 	return global_->GetVector4ValueDontTouchImGui(key);
 }
 
-const bool& GlobalVariableUser::GetBoolValueDontTouchImGui(const std::string& key) const
+bool GlobalVariableUser::GetBoolValueDontTouchImGui(const std::string& key) const
 {
 	return global_->GetBoolValueDontTouchImGui(key);
 }
@@ -260,12 +260,12 @@ const std::string& GlobalVariableUser::GetStringValueDontTouchImGui(const std::s
 	return global_->GetStringValueDontTouchImGui(key);
 }
 
-void GlobalVariableUser::SaveDontTouchImGui(const std::string& key, const int32_t& value)
+void GlobalVariableUser::SaveDontTouchImGui(const std::string& key, int32_t value)
 {
 	global_->SaveAndSetVariableDontTouchImGui<int32_t>(key, value);
 }
 
-void GlobalVariableUser::SaveDontTouchImGui(const std::string& key, const float& value)
+void GlobalVariableUser::SaveDontTouchImGui(const std::string& key, float value)
 {
 	global_->SaveAndSetVariableDontTouchImGui<float>(key, value);
 }
@@ -285,7 +285,7 @@ void GlobalVariableUser::SaveDontTouchImGui(const std::string& key, const Vector
 	global_->SaveAndSetVariableDontTouchImGui<Vector4>(key, value);
 }
 
-void GlobalVariableUser::SaveDontTouchImGui(const std::string& key, const bool& value)
+void GlobalVariableUser::SaveDontTouchImGui(const std::string& key, bool value)
 {
 	global_->SaveAndSetVariableDontTouchImGui<bool>(key, value);
 }
@@ -301,7 +301,7 @@ bool GlobalVariableUser::IsTreeOpen(const std::string& tree1, const std::string&
 	return global_->IsTreeOpen(chunkName_, groupName_, tree);
 }
 
-bool GlobalVariableUser::IsTreeOpen(const int32_t& treeNo)
+bool GlobalVariableUser::IsTreeOpen(int32_t treeNo)
 {
 	int32_t no = treeNo + 1;
 	std::vector<std::string> tree;

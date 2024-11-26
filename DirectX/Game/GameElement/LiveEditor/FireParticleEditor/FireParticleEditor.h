@@ -1,14 +1,14 @@
 #pragma once
-#include "GameElement/IStageObject/IStageObject.h"
+#include "GameElement/BaseStageObject/BaseStageObject.h"
 #include "ParticleManager.h"
 #include <memory>
 
-class FireParticleEditor : public IStageObject
+class FireParticleEditor : public BaseStageObject
 {
 public: 
 
-	FireParticleEditor(const std::string& mainName, const std::string& name, const uint32_t& no);
-	void Update(const float& time) override;
+	FireParticleEditor(const std::string& mainName, const std::string& name, uint32_t no);
+	void Update(float time) override;
 	void Draw(const Camera& camera) override;
 
 private:

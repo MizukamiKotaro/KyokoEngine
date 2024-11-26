@@ -4,7 +4,7 @@
 #include "InstancingModelManager.h"
 #include "ModelDataManager.h"
 
-ObjectEditor::ObjectEditor(const std::string& mainName, const std::string& name, const uint32_t& no)
+ObjectEditor::ObjectEditor(const std::string& mainName, const std::string& name, uint32_t no)
 {
 	CreateStageEditor(mainName, name, no, true);
 	modelName_ = "boxShine";
@@ -25,7 +25,7 @@ void ObjectEditor::Initialize()
 {
 }
 
-void ObjectEditor::Update(const float& time)
+void ObjectEditor::Update(float time)
 {
 #ifdef _DEBUG
 	UpdateGlobalVariable();

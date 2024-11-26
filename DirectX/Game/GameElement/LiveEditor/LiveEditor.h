@@ -1,7 +1,7 @@
 #pragma once
 #include <memory>
 #include <array>
-#include "GameElement/IStageObject/IStageObjectManager.h"
+#include "GameElement/BaseStageObject/StageObjectManager.h"
 #include "MultipleScreenEditor/MultipleScreenEditor.h"
 #include "SpotLightAndOutline/SpotLightAndOutline.h"
 #include "MMD/CameraVMD/CameraVMDAnimation.h"
@@ -63,7 +63,7 @@ private:
 
 	InstancingModelManager* instancingManager_; // インスタンシングマネージャー
 
-	std::array<std::unique_ptr<IStageObjectManager>, ManagerNames::kManagerEnd> objectManagers_; // マネージャー
+	std::array<std::unique_ptr<StageObjectManager>, ManagerNames::kManagerEnd> objectManagers_; // マネージャー
 	std::unique_ptr<MultipleScreenEditor> screenManager_; // スクリーンマネージャー
 
 	std::map<uint32_t, std::unique_ptr<ScreenEditor>>* screenMap_ = nullptr; // スクリーンマップ

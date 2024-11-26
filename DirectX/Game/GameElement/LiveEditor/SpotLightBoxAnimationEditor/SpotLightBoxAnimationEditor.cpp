@@ -4,7 +4,7 @@
 
 const int kSpotNum = 2;
 
-SpotLightBoxAnimationEditor::SpotLightBoxAnimationEditor(const std::string& mainName, const std::string& name, const uint32_t& no)
+SpotLightBoxAnimationEditor::SpotLightBoxAnimationEditor(const std::string& mainName, const std::string& name, uint32_t no)
 {
 	Create();
 	CreateStageEditor(mainName, name, no, true);
@@ -12,7 +12,7 @@ SpotLightBoxAnimationEditor::SpotLightBoxAnimationEditor(const std::string& main
 	MakeInstancingData();
 }
 
-SpotLightBoxAnimationEditor::SpotLightBoxAnimationEditor(const std::string& mainName, const std::string& name, const std::string& treeName, const uint32_t& no)
+SpotLightBoxAnimationEditor::SpotLightBoxAnimationEditor(const std::string& mainName, const std::string& name, const std::string& treeName, uint32_t no)
 {
 	Create();
 	CreateStageEditor(mainName, name, treeName, no);
@@ -26,12 +26,12 @@ SpotLightBoxAnimationEditor::SpotLightBoxAnimationEditor()
 	MakeInstancingData();
 }
 
-void SpotLightBoxAnimationEditor::SetTime(const float& time)
+void SpotLightBoxAnimationEditor::SetTime(float time)
 {
 	box_->SetTime(time);
 }
 
-void SpotLightBoxAnimationEditor::Update(const float& time)
+void SpotLightBoxAnimationEditor::Update(float time)
 {
 #ifdef _DEBUG
 	UpdateGlobalVariable();

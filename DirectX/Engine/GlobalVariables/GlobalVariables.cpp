@@ -149,12 +149,12 @@ void GlobalVariables::AddItemCombo(const std::string& chunkName, const std::stri
 	SetValue(chunkName, groupName, kComboName + key + kComboTypeName + type, value, tree);
 }
 
-const int32_t& GlobalVariables::GetIntValue(const std::string& chunkName, const std::string& groupName, const std::string& key, const std::vector<std::string>& tree) const
+int32_t GlobalVariables::GetIntValue(const std::string& chunkName, const std::string& groupName, const std::string& key, const std::vector<std::string>& tree) const
 {
 	return GetValue<int32_t>(chunkName, groupName, key, tree);
 }
 
-const float& GlobalVariables::GetFloatValue(const std::string& chunkName, const std::string& groupName, const std::string& key, const std::vector<std::string>& tree) const
+float GlobalVariables::GetFloatValue(const std::string& chunkName, const std::string& groupName, const std::string& key, const std::vector<std::string>& tree) const
 {
 	return GetValue<float>(chunkName, groupName, key, tree);
 }
@@ -174,7 +174,7 @@ const Vector4& GlobalVariables::GetVector4Value(const std::string& chunkName, co
 	return GetValue<Vector4>(chunkName, groupName, key, tree);
 }
 
-const bool& GlobalVariables::GetBoolValue(const std::string& chunkName, const std::string& groupName, const std::string& key, const std::vector<std::string>& tree) const
+bool GlobalVariables::GetBoolValue(const std::string& chunkName, const std::string& groupName, const std::string& key, const std::vector<std::string>& tree) const
 {
 	return GetValue<bool>(chunkName, groupName, key, tree);
 }
@@ -194,12 +194,12 @@ const std::string& GlobalVariables::GetCombo(const std::string& chunkName, const
 	return GetValue<std::string>(chunkName, groupName, kComboName + key + kComboTypeName + type, tree);
 }
 
-const int32_t& GlobalVariables::GetIntValueDontTouchImGui(const std::string& key) const
+int32_t GlobalVariables::GetIntValueDontTouchImGui(const std::string& key) const
 {
 	return GetValueDontTouchImGui<int32_t>(key);
 }
 
-const float& GlobalVariables::GetFloatValueDontTouchImGui(const std::string& key) const
+float GlobalVariables::GetFloatValueDontTouchImGui(const std::string& key) const
 {
 	return GetValueDontTouchImGui<float>(key);
 }
@@ -219,7 +219,7 @@ const Vector4& GlobalVariables::GetVector4ValueDontTouchImGui(const std::string&
 	return GetValueDontTouchImGui<Vector4>(key);
 }
 
-const bool& GlobalVariables::GetBoolValueDontTouchImGui(const std::string& key) const
+bool GlobalVariables::GetBoolValueDontTouchImGui(const std::string& key) const
 {
 	return GetValueDontTouchImGui<bool>(key);
 }
@@ -230,7 +230,7 @@ const std::string& GlobalVariables::GetStringValueDontTouchImGui(const std::stri
 }
 
 template<typename T>
-void GlobalVariables::SetValue(const std::string& chunkName, const std::string& groupName, const std::string& key, const T& value, const std::vector<std::string>& tree, const bool& isAddItem)
+void GlobalVariables::SetValue(const std::string& chunkName, const std::string& groupName, const std::string& key, const T& value, const std::vector<std::string>& tree, bool isAddItem)
 {
 	Group& group = datas_[chunkName][groupName];
 
@@ -270,13 +270,13 @@ void GlobalVariables::SetValue(const std::string& chunkName, const std::string& 
 		}
 	}
 }
-template void GlobalVariables::SetValue<int32_t>(const std::string&, const std::string&, const std::string&, const int32_t&, const std::vector<std::string>&, const bool&);
-template void GlobalVariables::SetValue<float>(const std::string&, const std::string&, const std::string&, const float&, const std::vector<std::string>&, const bool&);
-template void GlobalVariables::SetValue<Vector2>(const std::string&, const std::string&, const std::string&, const Vector2&, const std::vector<std::string>&, const bool&);
-template void GlobalVariables::SetValue<Vector3>(const std::string&, const std::string&, const std::string&, const Vector3&, const std::vector<std::string>&, const bool&);
-template void GlobalVariables::SetValue<Vector4>(const std::string&, const std::string&, const std::string&, const Vector4&, const std::vector<std::string>&, const bool&);
-template void GlobalVariables::SetValue<bool>(const std::string&, const std::string&, const std::string&, const bool&, const std::vector<std::string>&, const bool&);
-template void GlobalVariables::SetValue<std::string>(const std::string&, const std::string&, const std::string&, const std::string&, const std::vector<std::string>&, const bool&);
+template void GlobalVariables::SetValue<int32_t>(const std::string&, const std::string&, const std::string&, const int32_t&, const std::vector<std::string>&, bool);
+template void GlobalVariables::SetValue<float>(const std::string&, const std::string&, const std::string&, const float&, const std::vector<std::string>&, bool);
+template void GlobalVariables::SetValue<Vector2>(const std::string&, const std::string&, const std::string&, const Vector2&, const std::vector<std::string>&, bool);
+template void GlobalVariables::SetValue<Vector3>(const std::string&, const std::string&, const std::string&, const Vector3&, const std::vector<std::string>&, bool);
+template void GlobalVariables::SetValue<Vector4>(const std::string&, const std::string&, const std::string&, const Vector4&, const std::vector<std::string>&, bool);
+template void GlobalVariables::SetValue<bool>(const std::string&, const std::string&, const std::string&, const bool&, const std::vector<std::string>&, bool);
+template void GlobalVariables::SetValue<std::string>(const std::string&, const std::string&, const std::string&, const std::string&, const std::vector<std::string>&, bool);
 
 template<typename T>
 void GlobalVariables::AddItem(const std::string& chunkName, const std::string& groupName, const std::string& key, const T& value, const std::vector<std::string>& tree)
@@ -411,7 +411,7 @@ bool GlobalVariables::IsTreeOpen(const std::string& chunkName, const std::string
 	return std::get<bool>(group.find(name)->second);
 }
 
-void GlobalVariables::SaveFile(const std::string& chunkName, const std::string& groupName, const bool& isFin)
+void GlobalVariables::SaveFile(const std::string& chunkName, const std::string& groupName, bool isFin)
 {
 	std::map<std::string, Chunk>::iterator itChunk = datas_.find(chunkName);
 

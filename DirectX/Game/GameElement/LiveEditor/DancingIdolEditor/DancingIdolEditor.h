@@ -1,15 +1,15 @@
 #pragma once
 #include "MMD/PMDModel/PMDModel.h"
-#include "GameElement/IStageObject/IStageObject.h"
+#include "GameElement/BaseStageObject/BaseStageObject.h"
 #include <memory>
 
-class DancingIdolEditor : public IStageObject
+class DancingIdolEditor : public BaseStageObject
 {
 public: 
 
-	DancingIdolEditor(const std::string& mainName, const std::string& name, const uint32_t& no);
-	void SetTime(const float& time) override;
-	void Update(const float& time) override;
+	DancingIdolEditor(const std::string& mainName, const std::string& name, uint32_t no);
+	void SetTime(float time) override;
+	void Update(float time) override;
 	void Draw(const Camera& camera) override;
 
 private:

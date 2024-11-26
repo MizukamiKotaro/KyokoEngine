@@ -2,7 +2,7 @@
 #include "Camera.h"
 #include "SpotLightBoxAnimationEditor.h"
 
-TwinSpotLightBoxAnimationEditor::TwinSpotLightBoxAnimationEditor(const std::string& mainName, const std::string& name, const uint32_t& no)
+TwinSpotLightBoxAnimationEditor::TwinSpotLightBoxAnimationEditor(const std::string& mainName, const std::string& name, uint32_t no)
 {
 	lights_[0] = std::make_unique<SpotLightBoxAnimationEditor>();
 	lights_[1] = std::make_unique<SpotLightBoxAnimationEditor>();
@@ -10,13 +10,13 @@ TwinSpotLightBoxAnimationEditor::TwinSpotLightBoxAnimationEditor(const std::stri
 	SetGlobalVariable();
 }
 
-void TwinSpotLightBoxAnimationEditor::SetTime(const float& time)
+void TwinSpotLightBoxAnimationEditor::SetTime(float time)
 {
 	lights_[0]->SetTime(time);
 	lights_[1]->SetTime(-time);
 }
 
-void TwinSpotLightBoxAnimationEditor::Update(const float& time)
+void TwinSpotLightBoxAnimationEditor::Update(float time)
 {
 #ifdef _DEBUG
 	UpdateGlobalVariable();

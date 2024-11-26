@@ -5,7 +5,7 @@
 
 const Vector3 ScreenEditor::kScale = { 3.2f * 1.4f,1.8f * 1.4f,1.0f };
 
-ScreenEditor::ScreenEditor(const std::string& mainName, const std::string& name, const uint32_t& no)
+ScreenEditor::ScreenEditor(const std::string& mainName, const std::string& name, uint32_t no)
 {
 	CreateScreen();
 	CreateStageEditor(mainName, name, no);
@@ -13,7 +13,7 @@ ScreenEditor::ScreenEditor(const std::string& mainName, const std::string& name,
 	SetGlobalVariable();
 }
 
-ScreenEditor::ScreenEditor(const std::string& mainName, const std::string& name, const std::string& treeName, const uint32_t& no)
+ScreenEditor::ScreenEditor(const std::string& mainName, const std::string& name, const std::string& treeName, uint32_t no)
 {
 	CreateScreen();
 	CreateStageEditor(mainName, name, treeName, no);
@@ -21,7 +21,7 @@ ScreenEditor::ScreenEditor(const std::string& mainName, const std::string& name,
 	SetGlobalVariable();
 }
 
-void ScreenEditor::Update(const float& time) {
+void ScreenEditor::Update(float time) {
 #ifdef _DEBUG
 	UpdateGlobalVariable();
 #endif // _DEBUG
@@ -53,12 +53,12 @@ void ScreenEditor::PostDrawScene()
 	postEffect_->PostDrawScene();
 }
 
-void ScreenEditor::SetGPUHandle(const D3D12_GPU_DESCRIPTOR_HANDLE& srvGPUDescriptorHandle)
+void ScreenEditor::SetGPUHandle(D3D12_GPU_DESCRIPTOR_HANDLE srvGPUDescriptorHandle)
 {
 	screen_->SetSRVGPUDescriptorHandle_(srvGPUDescriptorHandle);
 }
 
-const D3D12_GPU_DESCRIPTOR_HANDLE ScreenEditor::GetGPUHandle()
+D3D12_GPU_DESCRIPTOR_HANDLE ScreenEditor::GetGPUHandle()
 {
 	return postEffect_->GetSRVGPUDescriptorHandle();
 }
