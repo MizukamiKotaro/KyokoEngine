@@ -98,7 +98,7 @@ void StageFloorEditor::WaterInitialize()
 	uneune_ = 20;
 }
 
-void StageFloorEditor::WaterUpdate(const float& time)
+void StageFloorEditor::WaterUpdate(float time)
 {
 	if (isWater_) {
 		noise_->Update(time / uneune_);

@@ -9,7 +9,7 @@
 class Camera;
 class ModelData;
 
-class SpotLight : public ILight, public DrawerBase
+class SpotLight : public BaseLight, public DrawerBase
 {
 public:
 	struct SpotLightData

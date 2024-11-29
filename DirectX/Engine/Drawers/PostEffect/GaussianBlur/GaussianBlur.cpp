@@ -60,7 +60,7 @@ void Gaussian::CreateResources()
 	CreateGaussianBlurRes();
 }
 
-GaussianBlur::GaussianBlur(const bool& isRender, const bool& isDepth, const Vector2& size)
+GaussianBlur::GaussianBlur(bool isRender, bool isDepth, const Vector2& size)
 {
 	if (size.x == 0.0f || size.y == 0.0f) {
 		gaussian0_ = std::make_unique<Gaussian>(isRender, isDepth);
@@ -95,13 +95,13 @@ void GaussianBlur::PostDrawScene()
 	gaussian1_->PostDrawScene();
 }
 
-void GaussianBlur::SetSize(const int32_t& size)
+void GaussianBlur::SetSize(int32_t size)
 {
 	gaussian0_->gaussianBlurData_->width = size;
 	gaussian1_->gaussianBlurData_->width = size;
 }
 
-void GaussianBlur::SetSigma(const float& sigma)
+void GaussianBlur::SetSigma(float sigma)
 {
 	gaussian0_->gaussianBlurData_->sigma = sigma;
 	gaussian1_->gaussianBlurData_->sigma = sigma;

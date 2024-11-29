@@ -36,20 +36,20 @@ SkinningModel::~SkinningModel()
 	srvHeap_->DeleteDescriptor(skinCluter_->paletteSrvHandle);
 }
 
-void SkinningModel::SetTime(const float& time)
+void SkinningModel::SetTime(float time)
 {
 	isSetTime_ = true;
 	animationTime_ = time;
 }
 
-void SkinningModel::Update(const float& time)
+void SkinningModel::Update(float time)
 {
 	TransformUpdate();
 	AnimationUpdate(time);
 	UpdateCompute();
 }
 
-void SkinningModel::Draw(const Camera& camera, const BlendMode& blendMode) const
+void SkinningModel::Draw(const Camera& camera, BlendMode blendMode) const
 {
 	drawManager_->Draw(*this, camera, blendMode);
 }
@@ -83,7 +83,7 @@ void SkinningModel::StaticInitialize()
 	srvHeap_ = DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap();
 }
 
-void SkinningModel::LoadGLTF(const std::string& fileName, const bool& ispmx)
+void SkinningModel::LoadGLTF(const std::string& fileName, bool ispmx)
 {
 	modelData_ = modelDataManager_->LoadSkinAnimationModel(fileName, ispmx);
 
@@ -109,7 +109,7 @@ const Matrix4x4 SkinningModel::GetRotateMatrix()
 	return Matrix4x4::MakeRotateXYZMatrix(transform_.rotate_) * Matrix4x4::MakeRotateMatrix(rotate);
 }
 
-Vector3 SkinningModel::CalculateValue(AnimationCurve<Vector3>& keyframes, const float& time)
+Vector3 SkinningModel::CalculateValue(AnimationCurve<Vector3>& keyframes, float time)
 {
 	assert(!keyframes.keyframes.empty());
 	if (keyframes.keyframes.size() == 1 || time <= keyframes.keyframes[0].time) {
@@ -127,7 +127,7 @@ Vector3 SkinningModel::CalculateValue(AnimationCurve<Vector3>& keyframes, const 
 	return (*keyframes.keyframes.rbegin()).value;
 }
 
-Quaternion SkinningModel::CalculateValue(AnimationCurve<Quaternion>& keyframes, const float& time) {
+Quaternion SkinningModel::CalculateValue(AnimationCurve<Quaternion>& keyframes, float time) {
 	assert(!keyframes.keyframes.empty());
 	if (keyframes.keyframes.size() == 1 || time <= keyframes.keyframes[0].time) {
 		return keyframes.keyframes[0].value;

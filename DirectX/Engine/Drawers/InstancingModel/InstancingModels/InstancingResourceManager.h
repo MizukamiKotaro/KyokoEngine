@@ -5,19 +5,27 @@
 #include "InstancingModelData.h"
 #include <unordered_map>
 
+/// <summary>
+/// インスタンシング用のリソースマネージャー
+/// </summary>
 class InstancingResourceManager
 {
 public:
-	static const uint32_t kNumInstance = 10000;
-
+	static const uint32_t kNumInstance = 10000; // インスタンスの数
+	/// <summary>
+	/// インスタンスの取得
+	/// </summary>
+	/// <returns>インスタンス</returns>
 	static InstancingResourceManager* GetInstance();
-
+	/// <summary>
+	/// マテリアル
+	/// </summary>
 	struct Material
 	{
-		Vector4 color;
-		int32_t enableLighting;
+		Vector4 color; // 色
+		int32_t enableLighting; // ライトのタイプ
 	};
-
+	
 	struct ParticleForGPU {
 		Matrix4x4 WVP;
 		Matrix4x4 World;

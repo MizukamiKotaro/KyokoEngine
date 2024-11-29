@@ -1,30 +1,34 @@
 #pragma once
 #include "BasePostEffect/BasePostEffect.h"
-
+/// <summary>
+/// ノイズ
+/// </summary>
 class Noise : public BasePostEffect
 {
 public:
 	Noise();
 	~Noise() override;
-
+	/// <summary>
+	/// ノイズのタイプ
+	/// </summary>
 	enum NoiseType {
-		RAND_NOISE,
-		MOSAIC_NOISE,
-		MOSAIC_LERP_NOISE,
-		MOSAIC_VALUE_NOISE,
-		MOSAIC_PERLIN_NOISE,
-		MOSAIC_FRACTAL_SUM_PERLIN_NOISE,
-		SANDSTORM,
-		LIGHTNING,
-		WATER_SURFACE,
-		WATER,
+		RAND_NOISE, // ランダム
+		MOSAIC_NOISE, // モザイク
+		MOSAIC_LERP_NOISE, // モザイクラープ
+		MOSAIC_VALUE_NOISE, // モザイクバリュー
+		MOSAIC_PERLIN_NOISE, // パーリンノイズ
+		MOSAIC_FRACTAL_SUM_PERLIN_NOISE, // フラクタルパーリンノイズ
+		SANDSTORM, // 砂嵐
+		LIGHTNING, // ライトニング
+		WATER_SURFACE, // 水の揺れ
+		WATER, // 水
 	};
 
 	void SetCameraPos(const Vector3& pos);
 
 	void Initialize();
 
-	void Update(const float& time);
+	void Update(float time);
 
 	/// <summary>
 	/// 描画処理
@@ -36,10 +40,10 @@ public:
 		Vector2 screenSize; // スクリーンのサイズ
 		Vector4 waterColor; // 水の靄の色
 		Vector4 lightningColor; // 水の白のうねうねの色
-		Vector2 cameraPos;
+		Vector2 cameraPos; // カメラの座標
 		float moveScale; // 大きいほどカメラの影響を受けない
-		int type;
-		int isNormal; // NormalBlendかどうか
+		int32_t type; // タイプ
+		int32_t isNormal; // NormalBlendかどうか
 	};
 private:
 	void CreateNoiseRes();

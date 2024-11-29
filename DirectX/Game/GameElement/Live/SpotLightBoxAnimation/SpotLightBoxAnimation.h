@@ -5,12 +5,14 @@
 #include "GlobalVariables/GlobalVariableUser.h"
 
 class Camera;
-
+/// <summary>
+/// スポットライトのアニメーション
+/// </summary>
 class SpotLightBoxAnimation {
 public:
 	SpotLightBoxAnimation(const std::string& name);
 	void Initialize();
-	void Update(const float& time);
+	void Update(float time);
 	void Draw(Camera* camera);
 	void DrawLight(const Camera& camera);
 private:

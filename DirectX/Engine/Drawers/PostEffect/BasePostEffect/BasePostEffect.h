@@ -13,7 +13,9 @@ class DescriptorHandles;
 enum class PipelineType;
 class GraphicsPipelineManager;
 class DescriptorHeap;
-
+/// <summary>
+/// ポストエフェクトの基盤
+/// </summary>
 class BasePostEffect : public DrawerBase
 {
 public:

@@ -97,13 +97,6 @@ void Screen::Reset()
 	screen_->SetSRVGPUDescriptorHandle_(postEffect_->GetSRVGPUDescriptorHandle());
 }
 
-void Screen::CreateGroup()
-{
-	globalVariable_->CreateGroup();
-
-	SetGlobalVariable();
-}
-
 void Screen::SetGlobalVariable()
 {
 	if (globalVariable_) {

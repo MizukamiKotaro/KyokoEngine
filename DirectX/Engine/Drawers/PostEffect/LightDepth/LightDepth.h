@@ -2,7 +2,9 @@
 #include "BasePostEffect/BasePostEffect.h"
 
 class Camera;
-
+/// <summary>
+/// ライトの深度書き込み用
+/// </summary>
 class LightDepth : public BasePostEffect
 {
 public:

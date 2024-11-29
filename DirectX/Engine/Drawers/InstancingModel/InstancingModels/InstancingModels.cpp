@@ -11,23 +11,21 @@
 #include "ILight/ILight.h"
 #include "InstancingResourceManager.h"
 
-const PipelineType InstancingModels::pipelineType_ = PipelineType::INSTANCING_MODEL;
+const PipelineType Instance::pipelineType_ = PipelineType::INSTANCING_MODEL;
 
-InstancingModels::InstancingModels(const InstancingGroupData* modelData)
+Instance::Instance(const InstancingGroupData* modelData)
 {
 	modelData_ = modelData;
-
 	resourceManager_ = InstancingResourceManager::GetInstance();
 	resourceManager_->AddResource(modelData_);
-
 	light_.Initialize();
 }
 
-InstancingModels::~InstancingModels()
+Instance::~Instance()
 {
 }
 
-void InstancingModels::Draw(const Camera& camera, std::list<InstancingModelData>& blocks, const InstancingGroupData* modelData)
+void Instance::Draw(const Camera& camera, std::list<InstancingModelData>& blocks, const InstancingGroupData* modelData)
 {
 	if (modelData_ != modelData) {
 		return;
@@ -35,7 +33,7 @@ void InstancingModels::Draw(const Camera& camera, std::list<InstancingModelData>
 	Draw(camera, blocks);
 }
 
-void InstancingModels::Draw(const Camera& camera, std::list<InstancingModelData>& blocks, const std::string& tag)
+void Instance::Draw(const Camera& camera, std::list<InstancingModelData>& blocks, const std::string& tag)
 {
 	if (modelData_->tag_ != tag) {
 		return;
@@ -43,22 +41,22 @@ void InstancingModels::Draw(const Camera& camera, std::list<InstancingModelData>
 	Draw(camera, blocks);
 }
 
-void InstancingModels::PreDraw()
+void Instance::PreDraw()
 {
 	psoManager_->PreDraw(pipelineType_);
 }
 
-void InstancingModels::SetMesh(const InstancingGroupData* modelData)
+void Instance::SetMesh(const InstancingGroupData* modelData)
 {
 	modelData_ = modelData;
 }
 
-void InstancingModels::SetLight(const ILight* light)
+void Instance::SetLight(const BaseLight* light)
 {
 	light_.SetLight(light);
 }
 
-void InstancingModels::Draw(const Camera& camera, std::list<InstancingModelData>& blocks)
+void Instance::Draw(const Camera& camera, std::list<InstancingModelData>& blocks)
 {
 	PreDraw();
 
@@ -86,18 +84,12 @@ void InstancingModels::Draw(const Camera& camera, std::list<InstancingModelData>
 	}
 	psoManager_->SetBlendMode(pipelineType_, modelData_->blendMode_);
 	//Spriteの描画。変更に必要なものだけ変更する
-	commandList_->IASetVertexBuffers(0, 1, &modelData_->modelData_->mesh.vertexBufferView_); // VBVを設定
+	commandList_->IASetVertexBuffers(0, 1, &modelData_->modelData_->mesh.vertexBufferView_);
 	commandList_->IASetIndexBuffer(&modelData_->modelData_->mesh.indexBufferView_);
-	//マテリアルCBufferの場所を設定
 	commandList_->SetGraphicsRootConstantBufferView(0, resource->materialResource_->GetGPUVirtualAddress());
-	//TransformationMatrixCBufferの場所を設定
-	//commandList->SetGraphicsRootConstantBufferView(1, instancingResource_->GetGPUVirtualAddress());
 	commandList_->SetGraphicsRootDescriptorTable(1, resource->instancingResources_[resource->instancingNum_].srvHandles_->gpuHandle);
-	//平行光源CBufferの場所を設定
 	commandList_->SetGraphicsRootConstantBufferView(3, light_.GetDirectionalLightGPUVirtualAddress());
 	commandList_->SetGraphicsRootDescriptorTable(2, modelData_->texture_->handles_->gpuHandle);
-	//描画!!!!（DrawCall/ドローコール）
-	//commandList_->DrawInstanced(UINT(modelData_->modelData_->mesh.verteces.size()), instaceNum, 0, 0);
 	commandList_->DrawIndexedInstanced(UINT(modelData_->modelData_->mesh.indices.size()), instaceNum, 0, 0, 0);
 
 	resource->instancingNum_++;

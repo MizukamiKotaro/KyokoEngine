@@ -13,7 +13,7 @@
 //
 //}
 //
-//void TimerStageEditor::AddItem(const std::string& key, const float& value, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
+//void TimerStageEditor::AddItem(const std::string& key, float value, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
 //{
 //}
 //
@@ -42,7 +42,7 @@
 //	// TODO: return ステートメントをここに挿入します
 //}
 //
-//const float& TimerStageEditor::GetFloatValue(const std::string& key, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6) const
+//float TimerStageEditor::GetFloatValue(const std::string& key, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6) const
 //{
 //	// TODO: return ステートメントをここに挿入します
 //}
@@ -76,7 +76,7 @@
 //{
 //}
 //
-//void TimerStageEditor::SetVariable(const std::string& key, const float& value, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
+//void TimerStageEditor::SetVariable(const std::string& key, float value, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
 //{
 //}
 //
@@ -96,6 +96,6 @@
 //{
 //}
 //
-//void TimerStageEditor::Update(const float& time)
+//void TimerStageEditor::Update(float time)
 //{
 //}

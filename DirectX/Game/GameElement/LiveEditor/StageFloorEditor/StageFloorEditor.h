@@ -19,7 +19,7 @@ private:
 	void ApplyGlobalVariable() override;
 
 	void WaterInitialize();
-	void WaterUpdate(const float& time);
+	void WaterUpdate(float time);
 
 	std::unique_ptr<Model> model_;
 	std::unique_ptr<PostEffect> post_;

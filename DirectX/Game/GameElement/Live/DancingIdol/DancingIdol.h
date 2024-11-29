@@ -11,7 +11,7 @@ public:
 
 	void Initialize();
 
-	void Update(const float& time);
+	void Update(float time);
 
 	void Draw(Camera* camera);
 

@@ -14,6 +14,9 @@ TitleScene::TitleScene()
 	stage_ = std::make_unique<Stage>();
 	screen_ = std::make_unique<Screen>("TitleScreen", "Screen");
 
+	spotLightBox_ = std::make_unique<SpotLightBoxAnimation>("TitleSpotLight1");
+	spotLightBox2_ = std::make_unique<SpotLightBoxAnimation>("TitleSpotLight2");
+
 	title_ = std::make_unique<Sprite>("title.png");
 	title_->pos_ = { 630.0f,360.0f };
 	title_->size_ *= 2;
@@ -24,16 +27,14 @@ TitleScene::TitleScene()
 	space_->Update();
 
 	rainbow_ = std::make_unique<Sprite>("rainbow.png");
-	highLumi_ = std::make_unique<HighLumi>();
-	post_ = std::make_unique<PostEffect>();
 	texcoodY_ = 0.0f;
+
+	post_ = std::make_unique<PostEffect>();
+	highLumi_ = std::make_unique<HighLumi>();
 
 	mosaic_ = std::make_unique<Mosaic>();
 	rgbShift_ = std::make_unique<RGBShift>();
 	rgbShift_->rgbShiftData_->shift = 0.016f;
-
-	spotLightBox_ = std::make_unique<SpotLightBoxAnimation>("TitleSpotLight1");
-	spotLightBox2_ = std::make_unique<SpotLightBoxAnimation>("TitleSpotLight2");
 
 	vignette_ = std::make_unique<Vignette>();
 	vignette_->color_ = { 0.0f,1.0f,0.2f,1.0f };
@@ -43,9 +44,9 @@ TitleScene::TitleScene()
 	radial_->radialBlurData_->width = 0.03f;
 	radial_->radialBlurData_->numSamples = 8;
 
-	se_.Load("SE/select.mp3","決定音");
-
 	spotlightAndOutline_ = std::make_unique<SpotLightAndOutline>();
+
+	se_.Load("SE/select.mp3","決定音");
 }
 
 void TitleScene::Initialize()
@@ -68,6 +69,7 @@ void TitleScene::Update()
 
 #ifdef _DEBUG
 	ImGuiCommon::DopeSheet();
+	// シーン切り替え
 	if (input_->PressedKey(DIK_Q)) {
 		ChangeScene(STAGE);
 		se_.Play();
@@ -100,51 +102,53 @@ void TitleScene::Draw()
 
 void TitleScene::WrightPostEffect()
 {
+	// ハイルミ書き込み
 	highLumi_->PreDrawScene();
 	title_->Draw();
 	highLumi_->PostDrawScene();
-
+	// 書き込み
 	post_->PreDrawScene();
 	rainbow_->Draw();
 	highLumi_->Draw(BlendMode::kBlendModeMultiply);
 	post_->PostDrawScene();
-
+	// モザイク書き込み
 	mosaic_->PreDrawScene();
 	title_->Draw();
 	post_->Draw();
 	mosaic_->PostDrawScene();
-
+	// RGBシフト書き込み
 	rgbShift_->PreDrawScene();
 	mosaic_->Draw();
 	rgbShift_->PostDrawScene();
-
+	// ヴィネット書き込み
 	vignette_->PreDrawScene();
 	noise_->Draw();
 	vignette_->PostDrawScene();
-
+	// ラディアルブラー書き込み
 	radial_->PreDrawScene();
 	rgbShift_->Draw();
 	vignette_->Draw();
 	radial_->PostDrawScene();
-
+	// スクリーンに書き込み
 	screen_->PreDrawScene();
 	radial_->Draw();
 	screen_->PostDrawScene();
 
+	// ステージ用
+	// アウトライン書き込み
 	spotlightAndOutline_->PreDrawOutline();
 	spotlightAndOutline_->PostDrawOutline();
-
+	// 書き込み
 	spotlightAndOutline_->PreDrawObject();
-
 	spotLightBox_->Draw(camera_.get());
 	spotLightBox2_->Draw(camera_.get());
 	spotlightAndOutline_->PostDrawObject();
-
+	// ライト書き込み
 	spotlightAndOutline_->PreDrawLight();
 	spotLightBox_->DrawLight(*camera_.get());
 	spotLightBox2_->DrawLight(*camera_.get());
 	spotlightAndOutline_->PostDrawLight();
-
+	// ブルーム書き込み
 	spotlightAndOutline_->PreDrawBloom();
 	screen_->Draw(camera_.get());
 	dome_->Draw(camera_.get());
@@ -153,6 +157,7 @@ void TitleScene::WrightPostEffect()
 	TransitionDraw();
 	spotlightAndOutline_->PostDrawBloom();
 
+	// ブルーム書き込み
 	bloom_->PreDrawScene();
 	spotlightAndOutline_->Draw(*camera_.get());
 	bloom_->PostDrawScene();

@@ -18,14 +18,17 @@
 class DescriptorHeap;
 class Camera;
 
+/// <summary>
+/// mmdMaterialを使用したモデル
+/// </summary>
 class PMDModel : public DrawerBase
 {
 public:
 	PMDModel(const std::string& fileName);
 	~PMDModel();
-	void SetTime(const float& time);
-	void Update(const float& time = 0.0f);
-	void Draw(const Camera& camera, const BlendMode& blendMode = BlendMode::kBlendModeNormal) const;
+	void SetTime(float time);
+	void Update(float time = 0.0f);
+	void Draw(const Camera& camera, BlendMode blendMode = BlendMode::kBlendModeNormal) const;
 
 public:
 	static void StaticInitialize();
@@ -60,8 +63,8 @@ private:
 	void AnimationUpdate(float time);
 	void LoadAnimation(const std::string& fileName);
 
-	Vector3 CalculateValue(AnimationCurve<Vector3>& keyframes, const float& time);
-	Quaternion CalculateValue(AnimationCurve<Quaternion>& keyframes, const float& time);
+	Vector3 CalculateValue(AnimationCurve<Vector3>& keyframes, float time);
+	Quaternion CalculateValue(AnimationCurve<Quaternion>& keyframes, float time);
 
 	void CreateSkeleton();
 	void CreateSkinCluster();

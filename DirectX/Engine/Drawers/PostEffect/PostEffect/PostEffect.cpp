@@ -4,6 +4,5 @@
 PostEffect::PostEffect()
 {
 	piplineType_ = PipelineType::COPY;
-
 	CreatePostEffect();
 }

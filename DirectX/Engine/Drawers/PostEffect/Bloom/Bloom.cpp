@@ -57,16 +57,12 @@ void Bloom::PreDrawScene()
 void Bloom::PostDrawScene()
 {
 	postEffect_->PostDrawScene();
-
+	// 高輝度抽出用
 	highLumi_->PreDrawScene();
-
 	postEffect_->Draw();
-
 	highLumi_->PostDrawScene();
-
+	// ガウシアンブラー用
 	gaussianBlur_->PreDrawScene();
-
 	highLumi_->Draw();
-
 	gaussianBlur_->PostDrawScene();
 }

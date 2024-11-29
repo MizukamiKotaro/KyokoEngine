@@ -11,7 +11,7 @@
 
 class Camera;
 enum class PipelineType;
-class ILight;
+class BaseLight;
 
 class ParticleDrawer : public DrawerBase
 {
@@ -39,7 +39,7 @@ public:
 
 	static void PreDraw();
 
-	void SetLight(const ILight* light);
+	void SetLight(const BaseLight* light);
 
 private:
 	void CreateSRV();

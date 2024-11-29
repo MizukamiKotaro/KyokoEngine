@@ -30,7 +30,7 @@ RigidAnimationModel::RigidAnimationModel(const ModelData* modelData, const std::
 	AnimationUpdate(0.0f);
 }
 
-void RigidAnimationModel::SetTime(const float& time)
+void RigidAnimationModel::SetTime(float time)
 {
 	if (time < 0.0f) {
 		animationTime_ = std::fmod(-time, animation_->duration);
@@ -41,18 +41,18 @@ void RigidAnimationModel::SetTime(const float& time)
 	}
 }
 
-void RigidAnimationModel::Update(const float& time)
+void RigidAnimationModel::Update(float time)
 {
 	TransformUpdate();
 	AnimationUpdate(time);
 }
 
-void RigidAnimationModel::Draw(const Camera& camera, const BlendMode& blendMode) const
+void RigidAnimationModel::Draw(const Camera& camera, BlendMode blendMode) const
 {
 	drawManager_->Draw(*this, camera, blendMode);
 }
 
-void RigidAnimationModel::AnimationUpdate(const float& time)
+void RigidAnimationModel::AnimationUpdate(float time)
 {
 	if (animation_) {
 		if (time < 0) {
@@ -98,7 +98,7 @@ const Matrix4x4 RigidAnimationModel::GetRotateMatrix()
 	return  Matrix4x4::MakeRotateMatrix(rotate) * Matrix4x4::MakeRotateXYZMatrix(transform_.rotate_);
 }
 
-Vector3 RigidAnimationModel::CalculateValue(const AnimationCurve<Vector3>& keyframes, const float& time)
+Vector3 RigidAnimationModel::CalculateValue(const AnimationCurve<Vector3>& keyframes, float time)
 {
 	assert(!keyframes.keyframes.empty());
 	if (keyframes.keyframes.size() == 1 || time <= keyframes.keyframes[0].time) {
@@ -115,7 +115,7 @@ Vector3 RigidAnimationModel::CalculateValue(const AnimationCurve<Vector3>& keyfr
 	return (*keyframes.keyframes.rbegin()).value;
 }
 
-Quaternion RigidAnimationModel::CalculateValue(const AnimationCurve<Quaternion>& keyframes, const float& time) {
+Quaternion RigidAnimationModel::CalculateValue(const AnimationCurve<Quaternion>& keyframes, float time) {
 	assert(!keyframes.keyframes.empty());
 	if (keyframes.keyframes.size() == 1 || time <= keyframes.keyframes[0].time) {
 		return keyframes.keyframes[0].value;

@@ -15,7 +15,7 @@ void DancingIdol::Initialize() {
 	
 }
 
-void DancingIdol::Update(const float& time) {
+void DancingIdol::Update(float time) {
 	idol_->Update(time);
 }
 

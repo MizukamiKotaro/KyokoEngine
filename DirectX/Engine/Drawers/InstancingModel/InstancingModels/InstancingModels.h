@@ -10,16 +10,21 @@
 
 class Camera;
 enum class PipelineType;
-class ILight;
+class BaseLight;
 class InstancingResourceManager;
-
-class InstancingModels : public DrawerBase
+/// <summary>
+/// インスタンシング用のインスタンス
+/// </summary>
+class Instance : public DrawerBase
 {
 public:
-	static const uint32_t kNumInstance = 10000;
-
-	InstancingModels(const InstancingGroupData* modelData);
-	~InstancingModels();
+	static const uint32_t kNumInstance = 10000; // インスタンスの数
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
+	/// <param name="modelData">グループデータ</param>
+	Instance(const InstancingGroupData* modelData);
+	~Instance();
 
 	void Draw(const Camera& camera, std::list<InstancingModelData>& blocks, const InstancingGroupData* modelData);
 	void Draw(const Camera& camera, std::list<InstancingModelData>& blocks, const std::string& tag);
@@ -28,7 +33,7 @@ public:
 
 	void SetMesh(const InstancingGroupData* modelData);
 
-	void SetLight(const ILight* light);
+	void SetLight(const BaseLight* light);
 
 private:
 	void Draw(const Camera& camera, std::list<InstancingModelData>& blocks);

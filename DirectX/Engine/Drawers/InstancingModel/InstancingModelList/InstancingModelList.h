@@ -8,6 +8,9 @@
 
 class Camera;
 
+/// <summary>
+/// 
+/// </summary>
 class InstancingModelList {
 public:
 
@@ -20,16 +23,16 @@ public:
 
 	void Clear();
 
-	InstancingModelData* const AddModel(InstancingModelData&& instancingModel);
+	void AddInstanceTransform(InstancingModelData&& instancingModel);
 
 	uint32_t GetSize() const;
 
 	void SetModel(const InstancingGroupData* modelData);
 
-	void SetLight(const ILight* light);
+	void SetLight(const BaseLight* light);
 
 private:
 
-	std::unique_ptr<InstancingModels> modelsResource_;
+	std::unique_ptr<Instance> modelsResource_;
 	std::list<InstancingModelData> modelList_;
 };

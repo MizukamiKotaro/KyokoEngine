@@ -32,7 +32,7 @@ void BaseModel::SetModelData(const ModelData* modelData)
 	srvGPUDescriptorHandle_ = texture_->handles_->gpuHandle;
 }
 
-void BaseModel::SetLight(const ILight* light)
+void BaseModel::SetLight(const BaseLight* light)
 {
 	light_.SetLight(light);
 }

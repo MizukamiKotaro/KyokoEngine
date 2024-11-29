@@ -18,7 +18,7 @@ void Light::Initialize()
 	spotLight_ = light_->GetSpotLight();
 }
 
-void Light::SetLight(const ILight* light)
+void Light::SetLight(const BaseLight* light)
 {
 	switch (light->GetLightType())
 	{

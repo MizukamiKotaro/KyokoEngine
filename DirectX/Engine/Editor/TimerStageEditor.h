@@ -8,7 +8,7 @@
 //	TimerStageEditor(const std::string& tree1, const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_");
 //
 //	void AddItem(const std::string& key, const int32_t& value, const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_" )override;
-//	void AddItem(const std::string& key, const float& value, const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_") override;
+//	void AddItem(const std::string& key, float value, const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_") override;
 //	void AddItem(const std::string& key, const Vector2& value, const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_") override;
 //	void AddItem(const std::string& key, const Vector3& value, const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_") override;
 //	void AddItem(const std::string& key, const Vector4& value, const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_") override;
@@ -17,7 +17,7 @@
 //	void AddItemColor(const std::string& key, const Vector4& value, const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_") override;
 //
 //	const int32_t& GetIntValue(const std::string& key, const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_") const override;
-//	const float& GetFloatValue(const std::string& key, const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_") const override;
+//	float GetFloatValue(const std::string& key, const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_") const override;
 //	const Vector2& GetVector2Value(const std::string& key, const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_") const override;
 //	const Vector3& GetVector3Value(const std::string& key, const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_") const override;
 //	const Vector4& GetVector4Value(const std::string& key, const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_") const override;
@@ -26,13 +26,13 @@
 //	const Vector4& GetColor(const std::string& key, const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_") const override;
 //
 //	void SetVariable(const std::string& key, const int32_t& value, const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_") override;
-//	void SetVariable(const std::string& key, const float& value, const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_") override;
+//	void SetVariable(const std::string& key, float value, const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_") override;
 //	void SetVariable(const std::string& key, const Vector2& value, const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_") override;
 //	void SetVariable(const std::string& key, const Vector3& value, const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_") override;
 //	void SetVariable(const std::string& key, const Vector4& value, const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_") override;
 //	void SetVariable(const std::string& key, const bool& value, const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_") override;
 //
-//	void Update(const float& time);
+//	void Update(float time);
 //
 //private:
 //	TimerStageEditor() = default;

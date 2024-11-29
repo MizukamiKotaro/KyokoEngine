@@ -124,7 +124,6 @@ void LiveEditor::Update(float time)
 	}
 #endif 
 	camera_->Update();
-
 	screenManager_->Update(time);
 
 	WriteScreen();
@@ -133,9 +132,7 @@ void LiveEditor::Update(float time)
 
 void LiveEditor::Draw()
 {
-	ParticleManager::GetInstance()->Clear();
 	lightAndOutline_->Draw(*camera_);
-	ParticleManager::GetInstance()->Draw(*camera_);
 }
 
 void LiveEditor::WriteScreen()

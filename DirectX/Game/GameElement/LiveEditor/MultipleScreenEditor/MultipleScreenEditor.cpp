@@ -5,14 +5,6 @@
 
 MultipleScreenEditor::MultipleScreenEditor(const std::string& mainName, const std::string& name, uint32_t no)
 {
-	screenSprite_ = std::make_unique<Sprite>("screen.png");
-	screenSprite_->pos_ = { 640.0f,360.0f };
-	screenSprite_->Update();
-
-	postEffect_ = std::make_unique<PostEffect>();
-	postEffect1_ = std::make_unique<PostEffect>();
-	bloom_ = std::make_unique<Bloom>();
-
 	CreateStageEditor(mainName, name, no);
 	treeName = std::make_unique<TreeNames>(mainName, name, mainName + std::to_string(no));
 	screenNum_ = 1;
@@ -28,7 +20,7 @@ void MultipleScreenEditor::Update(float time)
 		screenMap_[i]->Update(time);
 	}
 #endif // _DEBUG
-	if(time){}
+	time;
 }
 
 void MultipleScreenEditor::Draw(const Camera& camera)
@@ -60,11 +52,14 @@ void MultipleScreenEditor::CreateScreen()
 {
 	for (uint32_t i = 0; i < screenNum_; i++) {
 		if (screenMap_.find(i) == screenMap_.end()) {
+			// なかったら作る
 			screenMap_[i] = std::make_unique<ScreenEditor>(treeName->main, treeName->name, treeName->tree, i);
 			if (i == 0) {
+				// 1つ目なら作成
 				lightAndOutlineMap_[i] = std::make_unique<SpotLightAndOutline>();
 			}
 			else {
+				// 同じのを描画するようにハンドルを渡す
 				screenMap_[i]->SetGPUHandle(screenMap_[0]->GetGPUHandle());
 			}
 		}

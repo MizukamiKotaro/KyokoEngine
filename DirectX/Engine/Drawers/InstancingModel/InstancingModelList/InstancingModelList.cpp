@@ -13,10 +13,10 @@
 
 InstancingModelList::InstancingModelList(const InstancingGroupData* modelData)
 {
-	modelsResource_ = std::make_unique<InstancingModels>(modelData);
+	modelsResource_ = std::make_unique<Instance>(modelData);
 }
 
-void InstancingModelList::SetLight(const ILight* light) {
+void InstancingModelList::SetLight(const BaseLight* light) {
 	modelsResource_->SetLight(light);
 }
 
@@ -35,10 +35,9 @@ void InstancingModelList::Clear()
 	modelList_.clear();
 }
 
-InstancingModelData* const InstancingModelList::AddModel(InstancingModelData&& instancingModel)
+void InstancingModelList::AddInstanceTransform(InstancingModelData&& instancingModel)
 {
 	modelList_.push_back(std::move(instancingModel));
-	return &modelList_.back();
 }
 
 uint32_t InstancingModelList::GetSize() const

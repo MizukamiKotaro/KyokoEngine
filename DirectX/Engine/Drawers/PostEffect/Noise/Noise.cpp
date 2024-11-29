@@ -35,7 +35,7 @@ void Noise::Initialize()
 	}
 }
 
-void Noise::Update(const float& time)
+void Noise::Update(float time)
 {
 	noiseData_->time += time;
 	if (camera) {

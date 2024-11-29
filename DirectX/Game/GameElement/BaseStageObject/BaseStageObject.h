@@ -4,6 +4,9 @@ class Camera;
 class InstancingModelManager;
 class InstancingGroupData;
 
+/// <summary>
+/// ステージオブジェクトの基盤
+/// </summary>
 class BaseStageObject
 {
 public:

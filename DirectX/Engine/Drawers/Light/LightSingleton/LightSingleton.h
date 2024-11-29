@@ -1,7 +1,7 @@
 #pragma once
 #include <memory>
 
-class ILight;
+class BaseLight;
 
 // モデルなどを生成したときに最初に入れる用
 class LightSingleton
@@ -11,9 +11,9 @@ public:
 
 	void Initialize();
 
-	const ILight* GetDirectionaLight() const { return directionalLight_.get(); }
-	const ILight* GetPointLight() const { return pointLight_.get(); }
-	const ILight* GetSpotLight() const { return spotLight_.get(); }
+	const BaseLight* GetDirectionaLight() const { return directionalLight_.get(); }
+	const BaseLight* GetPointLight() const { return pointLight_.get(); }
+	const BaseLight* GetSpotLight() const { return spotLight_.get(); }
 
 private:
 	LightSingleton() = default;
@@ -22,7 +22,7 @@ private:
 	LightSingleton& operator=(const LightSingleton&) = delete;
 
 private:
-	std::unique_ptr<ILight> directionalLight_;
-	std::unique_ptr<ILight> pointLight_;
-	std::unique_ptr<ILight> spotLight_;
+	std::unique_ptr<BaseLight> directionalLight_;
+	std::unique_ptr<BaseLight> pointLight_;
+	std::unique_ptr<BaseLight> spotLight_;
 };

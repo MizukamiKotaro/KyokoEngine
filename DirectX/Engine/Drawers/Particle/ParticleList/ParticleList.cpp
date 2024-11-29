@@ -16,7 +16,7 @@ ParticleList::ParticleList(const ParticleMeshTexData& data)
 	drawer_ = std::make_unique<ParticleDrawer>(data);
 }
 
-void ParticleList::SetLight(const ILight* light) {
+void ParticleList::SetLight(const BaseLight* light) {
 	drawer_->SetLight(light);
 }
 

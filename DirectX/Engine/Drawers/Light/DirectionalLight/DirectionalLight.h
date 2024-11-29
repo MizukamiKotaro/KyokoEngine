@@ -4,7 +4,7 @@
 #include "Vector4.h"
 #include "ILight/ILight.h"
 
-class DirectionalLight : public ILight
+class DirectionalLight : public BaseLight
 {
 public:
 	struct DirectionalLightData

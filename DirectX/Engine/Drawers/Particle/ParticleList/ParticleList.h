@@ -22,7 +22,7 @@ public:
 
 	uint32_t GetSize() const;
 
-	void SetLight(const ILight* light);
+	void SetLight(const BaseLight* light);
 
 private:
 

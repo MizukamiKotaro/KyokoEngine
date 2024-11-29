@@ -39,20 +39,20 @@ PMDModel::~PMDModel()
 	srvHeap_->DeleteDescriptor(skinCluter_->paletteSrvHandle);
 }
 
-void PMDModel::SetTime(const float& time)
+void PMDModel::SetTime(float time)
 {
 	isSetTime_ = true;
 	animationTime_ = time;
 }
 
-void PMDModel::Update(const float& time)
+void PMDModel::Update(float time)
 {
 	TransformUpdate();
 	AnimationUpdate(time);
 	UpdateCompute();
 }
 
-void PMDModel::Draw(const Camera& camera, const BlendMode& blendMode) const
+void PMDModel::Draw(const Camera& camera, BlendMode blendMode) const
 {
 	drawManager_->Draw(*this, camera, blendMode);
 }
@@ -92,7 +92,7 @@ void PMDModel::LoadAnimation(const std::string& fileName)
 	animation_ = std::make_unique<Animation>(modelDataManager_->LoadAnimation(fileName));
 }
 
-Vector3 PMDModel::CalculateValue(AnimationCurve<Vector3>& keyframes, const float& time)
+Vector3 PMDModel::CalculateValue(AnimationCurve<Vector3>& keyframes, float time)
 {
 	assert(!keyframes.keyframes.empty());
 	if (keyframes.keyframes.size() == 1 || time <= keyframes.keyframes[0].time) {
@@ -110,7 +110,7 @@ Vector3 PMDModel::CalculateValue(AnimationCurve<Vector3>& keyframes, const float
 	return (*keyframes.keyframes.rbegin()).value;
 }
 
-Quaternion PMDModel::CalculateValue(AnimationCurve<Quaternion>& keyframes, const float& time) {
+Quaternion PMDModel::CalculateValue(AnimationCurve<Quaternion>& keyframes, float time) {
 	assert(!keyframes.keyframes.empty());
 	if (keyframes.keyframes.size() == 1 || time <= keyframes.keyframes[0].time) {
 		return keyframes.keyframes[0].value;

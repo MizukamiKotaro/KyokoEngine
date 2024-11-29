@@ -41,7 +41,6 @@ void ObjectEditor::Draw(const Camera& camera)
 
 void ObjectEditor::SetGlobalVariable()
 {
-
 	stageEditor_->AddItem("位置", position_);
 	stageEditor_->AddItem("スケール", scale_);
 	stageEditor_->AddItem("回転", rotate_);
@@ -51,7 +50,6 @@ void ObjectEditor::SetGlobalVariable()
 	stageEditor_->AddItem("左右対象に作るか", isTwin_);
 	stageEditor_->AddItemColor("色", Vector4{ 1.0f,1.0f,1.0f,1.0f });
 	stageEditor_->AddItemCombo("モデル", ComboNameType::kOBJ);
-
 
 	ApplyGlobalVariable();
 }
@@ -79,6 +77,7 @@ void ObjectEditor::AddInstancing()
 	Matrix4x4 matrix = Matrix4x4::MakeAffinMatrix(scale, rotate_, position_);
 	AddInstancing(matrix);
 	if (isTwin_) {
+		// 左右対称のもう一方の追加
 		matrix = Matrix4x4::MakeAffinMatrix(scale, Vector3{ rotate_.x,-rotate_.y,-rotate_.z }, Vector3{ -position_.x,position_.y,position_.z });
 		AddInstancing(matrix);
 	}
@@ -88,15 +87,15 @@ void ObjectEditor::AddInstancing(const Matrix4x4& matrix)
 {
 	if (!isBloom_ && !isOutLine_) {
 		instancingData_ = GetInstancingData("normal");
-		instancingManager_->AddBox(instancingData_, InstancingModelData{ matrix, Matrix4x4::MakeIdentity4x4() , color_ });
+		instancingManager_->AddInstanceTransform(instancingData_, InstancingModelData{ matrix, Matrix4x4::MakeIdentity4x4() , color_ });
 	}
 	if (isOutLine_) {
 		instancingData_ = GetInstancingData("outline");
-		instancingManager_->AddBox(instancingData_, InstancingModelData{ matrix, Matrix4x4::MakeIdentity4x4() , color_ });
+		instancingManager_->AddInstanceTransform(instancingData_, InstancingModelData{ matrix, Matrix4x4::MakeIdentity4x4() , color_ });
 	}
 	if (isBloom_) {
 		instancingData_ = GetInstancingData("bloom");
-		instancingManager_->AddBox(instancingData_, InstancingModelData{ matrix, Matrix4x4::MakeIdentity4x4() , color_ });
+		instancingManager_->AddInstanceTransform(instancingData_, InstancingModelData{ matrix, Matrix4x4::MakeIdentity4x4() , color_ });
 	}
 }
 

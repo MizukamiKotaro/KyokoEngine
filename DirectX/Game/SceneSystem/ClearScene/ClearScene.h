@@ -6,7 +6,9 @@
 #include "GameElement/Live/Screen/Screen.h"
 #include "GameElement/ClearUI/ClearUI.h"
 #include "Sprite.h"
-
+/// <summary>
+/// クリアシーン
+/// </summary>
 class ClearScene : public SceneBase
 {
 public:

@@ -41,15 +41,11 @@ void ScreenEditor::PreDrawScene()
 
 void ScreenEditor::PostDrawScene()
 {
-	//bloom_->PostDrawScene();
 	postEffect1_->PostDrawScene();
 
 	postEffect_->PreDrawScene();
-
-	//bloom_->Draw();
 	postEffect1_->Draw();
 	screenSprite_->Draw(BlendMode::kBlendModeMultiply);
-
 	postEffect_->PostDrawScene();
 }
 
@@ -110,7 +106,6 @@ void ScreenEditor::CreateScreen()
 
 	postEffect_ = std::make_unique<PostEffect>();
 	postEffect1_ = std::make_unique<PostEffect>();
-	bloom_ = std::make_unique<Bloom>();
 
 	screen_->SetSRVGPUDescriptorHandle_(postEffect_->GetSRVGPUDescriptorHandle());
 }

@@ -85,7 +85,7 @@ void ParticleDrawer::PreDraw()
 	psoManager_->PreDraw(pipelineType_);
 }
 
-void ParticleDrawer::SetLight(const ILight* light)
+void ParticleDrawer::SetLight(const BaseLight* light)
 {
 	light_.SetLight(light);
 }

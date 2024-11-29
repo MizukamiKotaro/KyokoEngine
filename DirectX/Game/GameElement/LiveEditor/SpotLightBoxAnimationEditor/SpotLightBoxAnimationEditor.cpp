@@ -12,14 +12,6 @@ SpotLightBoxAnimationEditor::SpotLightBoxAnimationEditor(const std::string& main
 	MakeInstancingData();
 }
 
-SpotLightBoxAnimationEditor::SpotLightBoxAnimationEditor(const std::string& mainName, const std::string& name, const std::string& treeName, uint32_t no)
-{
-	Create();
-	CreateStageEditor(mainName, name, treeName, no);
-	SetGlobalVariable();
-	MakeInstancingData();
-}
-
 SpotLightBoxAnimationEditor::SpotLightBoxAnimationEditor()
 {
 	Create();
@@ -73,7 +65,7 @@ void SpotLightBoxAnimationEditor::SetGlobalVariable()
 
 void SpotLightBoxAnimationEditor::ApplyGlobalVariable()
 {
-
+	// 適用
 	box_->transform_.translate_ = stageEditor_->GetVector3Value("位置");
 	box_->transform_.rotate_ = stageEditor_->GetVector3Value("回転");
 
@@ -100,6 +92,7 @@ void SpotLightBoxAnimationEditor::ApplyGlobalVariable()
 		}
 	}
 
+	// 修正したのをセット
 	stageEditor_->SetVariable("外のライトの開く角度", spotLights_[0]->light_->cosAngle, "ライトの調整");
 	stageEditor_->SetVariable("外のライトの減衰し始める角度", spotLights_[0]->light_->cosFalloffStart, "ライトの調整");
 	stageEditor_->SetVariable("外のライトの距離", spotLights_[0]->light_->distance, "ライトの調整");
@@ -162,5 +155,5 @@ void SpotLightBoxAnimationEditor::MakeInstancingData()
 void SpotLightBoxAnimationEditor::AddInstancing()
 {
 	Matrix4x4 matrix = box_->GetAnimTransform().matrix_ * box_->transform_.worldMat_;
-	instancingManager_->AddBox(instancingData_, InstancingModelData{ matrix, Matrix4x4::MakeIdentity4x4() , box_->color_});
+	instancingManager_->AddInstanceTransform(instancingData_, InstancingModelData{ matrix, Matrix4x4::MakeIdentity4x4() , box_->color_});
 }

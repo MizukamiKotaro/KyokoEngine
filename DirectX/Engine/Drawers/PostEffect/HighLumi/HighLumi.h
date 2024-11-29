@@ -1,6 +1,8 @@
 #pragma once
 #include "BasePostEffect/BasePostEffect.h"
-
+/// <summary>
+/// ハイルミ
+/// </summary>
 class HighLumi : public BasePostEffect
 {
 public:

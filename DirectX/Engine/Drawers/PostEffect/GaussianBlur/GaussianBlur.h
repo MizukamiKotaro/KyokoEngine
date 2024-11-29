@@ -1,7 +1,9 @@
 #pragma once
 #include "BasePostEffect/BasePostEffect.h"
 #include "memory"
-
+/// <summary>
+/// ガウシアン
+/// </summary>
 class Gaussian : public BasePostEffect
 {
 public:
@@ -24,11 +26,13 @@ private:
 public:
 	GaussianBlurData* gaussianBlurData_;
 };
-
+/// <summary>
+/// ガウシアンブラー
+/// </summary>
 class GaussianBlur
 {
 public:
-	GaussianBlur(const bool& isRender = true, const bool& isDepth = true, const Vector2& size = {});
+	GaussianBlur(bool isRender = true, bool isDepth = true, const Vector2& size = {});
 	void Initialize();
 	/// <summary>
 	/// 描画処理
@@ -43,10 +47,10 @@ public:
 	/// </summary>
 	void PostDrawScene();
 
-	void SetSize(const int32_t& size);
-	const int32_t& GetSize() const { return gaussian0_->gaussianBlurData_->width; }
-	void SetSigma(const float& sigma);
-	const float& GetSigma() const { return gaussian0_->gaussianBlurData_->sigma; }
+	void SetSize(int32_t size);
+	int32_t GetSize() const { return gaussian0_->gaussianBlurData_->width; }
+	void SetSigma(float sigma);
+	float GetSigma() const { return gaussian0_->gaussianBlurData_->sigma; }
 
 private:
 	std::unique_ptr<Gaussian> gaussian0_;

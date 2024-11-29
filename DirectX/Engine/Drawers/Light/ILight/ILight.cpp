@@ -1,6 +1,6 @@
 #include "ILight.h"
 
-ILight::~ILight()
+BaseLight::~BaseLight()
 {
 	resource_->Release();
 }

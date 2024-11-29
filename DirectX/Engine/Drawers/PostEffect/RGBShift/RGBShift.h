@@ -1,6 +1,9 @@
 #pragma once
 #include "BasePostEffect/BasePostEffect.h"
 
+/// <summary>
+/// RGBシフト
+/// </summary>
 class RGBShift : public BasePostEffect
 {
 public:

@@ -22,8 +22,7 @@ void InstancingModelManager::FirstInitialize()
 
 void InstancingModelManager::Draw(const Camera& camera, const InstancingGroupData* modelData)
 {
-	InstancingModels::PreDraw();
-
+	Instance::PreDraw();
 	for (const auto& [model, particleList] : instancingModelMap_) {
 		if (particleList->GetSize() == 0) { continue; }
 		particleList->Draw(camera, modelData);
@@ -32,8 +31,7 @@ void InstancingModelManager::Draw(const Camera& camera, const InstancingGroupDat
 
 void InstancingModelManager::Draw(const Camera& camera, const std::string& tag)
 {
-	InstancingModels::PreDraw();
-
+	Instance::PreDraw();
 	for (const auto& [model, particleList] : instancingModelMap_) {
 		if (particleList->GetSize() == 0) { continue; }
 		particleList->Draw(camera, tag);
@@ -54,23 +52,24 @@ const InstancingGroupData* InstancingModelManager::GetDrawData(const InstancingG
 const InstancingGroupData* InstancingModelManager::GetDrawData(const std::string& texturePath, const std::string& tag, const BlendMode& blendMode)
 {
 	const Texture* texture = textureManager_->LoadTexture(texturePath);
-
 	for (const std::unique_ptr<InstancingGroupData>& dataPtr : drawDatas_) {
 		if (dataPtr->modelData_ == plane_ && dataPtr->texture_ == texture && dataPtr->blendMode_ == blendMode && dataPtr->tag_ == tag) {
 			return dataPtr.get();
 		}
 	}
+	// ないから新しく作成
 	drawDatas_.push_back(std::make_unique<InstancingGroupData>(InstancingGroupData{ tag,plane_,texture,blendMode }));
 	return drawDatas_.back().get();
 }
 
-InstancingModelData* const InstancingModelManager::AddBox(const InstancingGroupData* modelData, InstancingModelData&& model)
+void InstancingModelManager::AddInstanceTransform(const InstancingGroupData* modelData, InstancingModelData&& model)
 {
 	if (instancingModelMap_.find(modelData) == instancingModelMap_.end()) {
+		// リストがない時に作成
 		instancingModelMap_[modelData] = std::make_unique<InstancingModelList>(modelData);
 		instancingModelMap_[modelData]->SetModel(modelData);
 	}
-	return instancingModelMap_[modelData]->AddModel(std::move(model));
+	instancingModelMap_[modelData]->AddInstanceTransform(std::move(model));
 }
 
 void InstancingModelManager::Clear()
@@ -81,7 +80,7 @@ void InstancingModelManager::Clear()
 	InstancingResourceManager::GetInstance()->Clear();
 }
 
-void InstancingModelManager::SetLight(const InstancingGroupData* modelData, const ILight* light)
+void InstancingModelManager::SetLight(const InstancingGroupData* modelData, const BaseLight* light)
 {
 	instancingModelMap_[modelData]->SetLight(light);
 }

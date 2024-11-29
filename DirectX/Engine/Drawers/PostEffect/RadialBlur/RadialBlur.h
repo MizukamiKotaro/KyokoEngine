@@ -1,6 +1,9 @@
 #pragma once
 #include "BasePostEffect/BasePostEffect.h"
 
+/// <summary>
+/// ラディアルブラー
+/// </summary>
 class RadialBlur : public BasePostEffect
 {
 public:

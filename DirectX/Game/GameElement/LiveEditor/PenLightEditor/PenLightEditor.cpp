@@ -84,7 +84,7 @@ void PenLightEditor::AddInstancing()
 			pos.z = -length * std::cosf(angle.y);
 			Matrix4x4 mat = Matrix4x4::MakeAffinMatrix(scale_, angle, pos);
 			Matrix4x4 matrix = box_->GetAnimTransform().matrix_ * mat;
-			instancingManager_->AddBox(instancingData_, InstancingModelData{ matrix, Matrix4x4::MakeIdentity4x4() , color_ });
+			instancingManager_->AddInstanceTransform(instancingData_, InstancingModelData{ matrix, Matrix4x4::MakeIdentity4x4() , color_ });
 			length += distance_;
 		}
 	}

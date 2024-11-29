@@ -1,6 +1,9 @@
 #pragma once
 #include "BasePostEffect/BasePostEffect.h"
 
+/// <summary>
+/// モザイク
+/// </summary>
 class Mosaic : public BasePostEffect
 {
 public:

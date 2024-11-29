@@ -2,7 +2,9 @@
 #include <memory>
 #include "SceneSystem/SceneBase/SceneBase.h"
 #include "GameElement/Game.h"
-
+/// <summary>
+/// ステージシーン
+/// </summary>
 class StageScene : public SceneBase
 {
 public:

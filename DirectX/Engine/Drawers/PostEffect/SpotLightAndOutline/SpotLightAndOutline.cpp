@@ -9,6 +9,7 @@ SpotLightAndOutline::SpotLightAndOutline()
 	bloom_ = std::make_unique<Bloom>();
 	bloomTexture_ = std::make_unique<PostEffect>();
 
+	// GPUに送るためのアドレスのセット
 	light_->SetOutlineTex(outline_->GetSRVGPUDescriptorHandle());
 	light_->SetOutlineDepth(outline_->GetDepthHandle());
 	light_->SetObjectsTex(object_->GetSRVGPUDescriptorHandle());
@@ -31,10 +32,13 @@ void SpotLightAndOutline::Update()
 
 void SpotLightAndOutline::Draw(const Camera& camera)
 {
+	// バリアの設定
 	outline_->ToReadBarrier();
 	object_->ToReadBarrier();
 	bloomMemo_->ToReadBarrier();
+	// 描画
 	light_->Draw(camera);
+	// バリアの再設定
 	outline_->ToWriteBarrier();
 	object_->ToWriteBarrier();
 	bloomMemo_->ToWriteBarrier();
@@ -79,10 +83,12 @@ void SpotLightAndOutline::PostDrawBloom()
 {
 	bloomMemo_->PostDrawScene();
 
+	// ブルームをかけるために書き込み
 	bloom_->PreDrawScene();
 	bloomMemo_->Draw();
 	bloom_->PostDrawScene();
 
+	// ブルームの結果を書き込み
 	bloomTexture_->PreDrawScene();
 	bloom_->Draw();
 	bloomTexture_->PostDrawScene();
