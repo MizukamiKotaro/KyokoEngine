@@ -17,7 +17,7 @@ MemoDepth::MemoDepth()
 
 MemoDepth::~MemoDepth()
 {
-	srvHeap_->DeleteDescriptor(depthHandles_);
+	srvHeap_->AddDeleteDescriptor(depthHandles_);
 }
 
 void MemoDepth::ToReadBarrier()

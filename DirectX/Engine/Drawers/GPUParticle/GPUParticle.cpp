@@ -47,8 +47,8 @@ GPUParticle::GPUParticle(const std::string& particleName, const std::string& tex
 
 GPUParticle::~GPUParticle()
 {
-	DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->DeleteDescriptor(particleUAVHandle_);
-	DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->DeleteDescriptor(particleSRVHandle_);
+	DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->AddDeleteDescriptor(particleUAVHandle_);
+	DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->AddDeleteDescriptor(particleSRVHandle_);
 	particleResouce_->Release();
 }
 

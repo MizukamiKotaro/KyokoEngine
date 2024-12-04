@@ -6,6 +6,8 @@
 #include "GraphicsPipelineSystem/BlendModeConfig.h"
 #include "StringConverter/StringConverter.h"
 
+ID3D12GraphicsCommandList* GraphicsPipeline::commandList_ = nullptr;
+
 void GraphicsPipeline::Initialize()
 {
 	device_ = DirectXBase::GetInstance()->GetDevice();
@@ -19,6 +21,11 @@ void GraphicsPipeline::Initialize()
 	CreatePSO(blendMode_);
 }
 
+void GraphicsPipeline::BeginFrame()
+{
+	commandList_ = DirectXBase::GetInstance()->GetCommandList();
+}
+
 void GraphicsPipeline::PreDraw()
 {
 	blendMode_ = BlendMode::kBlendModeNormal;
@@ -28,7 +35,6 @@ void GraphicsPipeline::PreDraw()
 	commandList_->SetPipelineState(graphicsPipelineStates_[blendMode_].Get()); // PSOを設定
 	//形状を設定。PSOに設定しているものとは別。同じものを設定すると考えておけばいい
 	commandList_->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
 }
 
 void GraphicsPipeline::SetBlendMode(BlendMode blendMode)

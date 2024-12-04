@@ -20,7 +20,7 @@ public:
 	/// <summary>
 	/// 毎フレーム行う最後の処理
 	/// </summary>
-	void End();
+	void BeginUpdate();
 
 	/// <summary>
 	/// デルタタイムの取得

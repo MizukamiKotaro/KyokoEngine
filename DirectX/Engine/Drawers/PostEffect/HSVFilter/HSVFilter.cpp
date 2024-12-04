@@ -6,6 +6,7 @@
 #include "GraphicsPipelineSystem/PipelineTypeConfig.h"
 #include "DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
 #include "GraphicsPipelineSystem/GraphicsPiplineManager/GraphicsPiplineManager.h"
+#include "ResourceManager/ResourceManager.h"
 
 HSVFilter::HSVFilter()
 {
@@ -18,7 +19,7 @@ HSVFilter::HSVFilter()
 
 HSVFilter::~HSVFilter()
 {
-	hsvResource_->Release();
+	ResourceManager::GetInstance()->AddResource(std::move(hsvResource_));
 }
 
 void HSVFilter::Draw(BlendMode blendMode)
@@ -28,18 +29,12 @@ void HSVFilter::Draw(BlendMode blendMode)
 
 	psoManager_->SetBlendMode(piplineType_, blendMode);
 
-	ID3D12GraphicsCommandList* commandList = DirectXBase::GetInstance()->GetCommandList();
-
-	//Spriteの描画。変更に必要なものだけ変更する
-	//マテリアルCBufferの場所を設定
-	commandList->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
-
-	commandList->SetGraphicsRootDescriptorTable(1, srvHandles_->gpuHandle);
-
-	commandList->SetGraphicsRootConstantBufferView(2, hsvResource_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootDescriptorTable(1, srvHandles_->gpuHandle);
+	commandList_->SetGraphicsRootConstantBufferView(2, hsvResource_->GetGPUVirtualAddress());
 
 	//描画!!!!（DrawCall/ドローコール）
-	commandList->DrawInstanced(3, 1, 0, 0);
+	commandList_->DrawInstanced(3, 1, 0, 0);
 
 }
 

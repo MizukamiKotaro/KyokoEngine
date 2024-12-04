@@ -6,6 +6,7 @@
 #include "GraphicsPipelineSystem/PipelineTypeConfig.h"
 #include "DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
 #include "GraphicsPipelineSystem/GraphicsPiplineManager/GraphicsPiplineManager.h"
+#include "ResourceManager/ResourceManager.h"
 
 ScanNoise::ScanNoise()
 {
@@ -18,7 +19,7 @@ ScanNoise::ScanNoise()
 
 ScanNoise::~ScanNoise()
 {
-	scanNoiseResource_->Release();
+	ResourceManager::GetInstance()->AddResource(std::move(scanNoiseResource_));
 }
 
 void ScanNoise::Draw(BlendMode blendMode)

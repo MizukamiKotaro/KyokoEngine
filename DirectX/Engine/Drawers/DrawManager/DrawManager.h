@@ -30,6 +30,10 @@ public:
 	/// リセット
 	/// </summary>
 	void Reset();
+	/// <summary>
+	/// 終了処理
+	/// </summary>
+	void Finalize();
 
 	/// <summary>
 	/// 描画

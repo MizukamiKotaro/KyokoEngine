@@ -6,19 +6,18 @@
 #include "GraphicsPipelineSystem/PipelineTypeConfig.h"
 #include "DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
 #include "GraphicsPipelineSystem/GraphicsPiplineManager/GraphicsPiplineManager.h"
+#include "ResourceManager/ResourceManager.h"
 
 RGBShift::RGBShift()
 {
 	piplineType_ = PipelineType::RGB_SHIFT;
-
 	rgbShiftData_ = nullptr;
-
 	CreatePostEffect();
 }
 
 RGBShift::~RGBShift()
 {
-	rgbShiftResource_->Release();
+	ResourceManager::GetInstance()->AddResource(std::move(rgbShiftResource_));
 }
 
 void RGBShift::Draw(BlendMode blendMode)

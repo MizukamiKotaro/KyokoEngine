@@ -11,6 +11,7 @@
 #include "GraphicsPipelineSystem/PipelineTypeConfig.h"
 #include "DescriptorHeapManager/DescriptorHeap/DescriptorHeap.h"
 #include "GraphicsPipelineSystem/GraphicsPiplineManager/GraphicsPiplineManager.h"
+#include "Base/ResourceManager/ResourceManager.h"
 
 const float BasePostEffect::clearColor[4] = { 0.0f,0.0f,0.0f,0.0f };
 
@@ -22,13 +23,16 @@ Vector2 BasePostEffect::windowSize_ = {};
 
 BasePostEffect::~BasePostEffect()
 {
-	materialResource_->Release();
-	srvHeap_->DeleteDescriptor(srvHandles_);
+	ResourceManager::GetInstance()->AddResource(std::move(materialResource_));
+	ResourceManager::GetInstance()->AddResource(std::move(texResource_));
+	ResourceManager::GetInstance()->AddResource(std::move(rtvResource_));
+	ResourceManager::GetInstance()->AddResource(std::move(dsvResource_));
+	srvHeap_->AddDeleteDescriptor(srvHandles_);
 	if (isRender_) {
-		rtvHeap_->DeleteDescriptor(rtvHandles_);
+		rtvHeap_->AddDeleteDescriptor(rtvHandles_);
 	}
 	if (isDepth_) {
-		dsvHeap_->DeleteDescriptor(dsvHandles_);
+		dsvHeap_->AddDeleteDescriptor(dsvHandles_);
 	}
 }
 

@@ -9,11 +9,12 @@
 #include "calc.h"
 #include "DescriptorHeapManager/DescriptorHeapManager.h"
 #include "DescriptorHeapManager/DescriptorHeap/DescriptorHeap.h"
+#include "ResourceManager/ResourceManager.h"
 
 BaseModel::~BaseModel()
 {
-	transformationResource_->Release();
-	materialResource_->Release();
+	ResourceManager::GetInstance()->AddResource(std::move(transformationResource_));
+	ResourceManager::GetInstance()->AddResource(std::move(materialResource_));
 }
 
 void BaseModel::SetTexture(const Texture* texture)

@@ -1,6 +1,6 @@
 #include "Transformation.h"
 #include "DirectXBase/DirectXBase.h"
-
+#include "ResourceManager/ResourceManager.h"
 Transformation::Transformation()
 {
 	transformationResource = DirectXBase::CreateBufferResource(sizeof(TransformationMatrix));
@@ -11,5 +11,5 @@ Transformation::Transformation()
 
 Transformation::~Transformation()
 {
-	transformationResource->Release();
+	ResourceManager::GetInstance()->AddResource(std::move(transformationResource));
 }

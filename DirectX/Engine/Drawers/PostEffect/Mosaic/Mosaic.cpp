@@ -7,6 +7,7 @@
 #include "DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
 #include "GraphicsPipelineSystem/GraphicsPiplineManager/GraphicsPiplineManager.h"
 #include "WindowsInfo/WindowsInfo.h"
+#include "ResourceManager/ResourceManager.h"
 
 Mosaic::Mosaic()
 {
@@ -19,7 +20,7 @@ Mosaic::Mosaic()
 
 Mosaic::~Mosaic()
 {
-	mosaicResource_->Release();
+	ResourceManager::GetInstance()->AddResource(std::move(mosaicResource_));
 }
 
 void Mosaic::Draw(BlendMode blendMode)

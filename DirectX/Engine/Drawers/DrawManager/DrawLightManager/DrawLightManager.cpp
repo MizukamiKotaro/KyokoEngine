@@ -101,3 +101,8 @@ void DrawLightManager::Draw(const SpotLight& light, const Camera& camera, BlendM
 
 	drawNo_++;
 }
+
+void DrawLightManager::Finalize()
+{
+	transformations_.clear();
+}

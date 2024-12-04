@@ -90,6 +90,11 @@ void DrawModelManager::Draw(const PMDModel& model, const Camera& camera, BlendMo
 	drawNo_++;
 }
 
+void DrawModelManager::Finalize()
+{
+	transformations_.clear();
+}
+
 void DrawModelManager::Draw(const BaseModel& model, const Camera& camera, BlendMode blendMode, D3D12_VERTEX_BUFFER_VIEW vertexBufferView)
 {
 	psoManager_->PreDraw(PipelineType::MODEL);

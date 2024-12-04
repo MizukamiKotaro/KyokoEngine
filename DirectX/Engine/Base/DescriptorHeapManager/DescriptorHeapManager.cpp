@@ -14,6 +14,13 @@ void DescriptorHeapManager::Initialize()
 	dsvHeap_ = std::make_unique<DSVDescriptorHeap>();
 }
 
+void DescriptorHeapManager::BeginFrame()
+{
+	srvHeap_->DeleteDescriptors();
+	rtvHeap_->DeleteDescriptors();
+	dsvHeap_->DeleteDescriptors();
+}
+
 void DescriptorHeapManager::Finalize()
 {
 	srvHeap_.reset();

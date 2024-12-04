@@ -11,6 +11,7 @@
 #include "Texture.h"
 #include "GraphicsPipelineSystem/PipelineTypeConfig.h"
 #include "GraphicsPipelineSystem/GraphicsPiplineManager/GraphicsPiplineManager.h"
+#include "ResourceManager/ResourceManager.h"
 
 const PipelineType Sprite::pipelineType_ = PipelineType::SPRITE;
 
@@ -123,9 +124,9 @@ Sprite::Sprite(const Texture* texture, const Vector2& pos, const Vector2& texLef
 
 Sprite::~Sprite()
 {
-	vertexResource_->Release();
-	transformResource_->Release();
-	materialResource_->Release();
+	ResourceManager::GetInstance()->AddResource(std::move(vertexResource_));
+	ResourceManager::GetInstance()->AddResource(std::move(transformResource_));
+	ResourceManager::GetInstance()->AddResource(std::move(materialResource_));
 }
 
 void Sprite::Initialize()

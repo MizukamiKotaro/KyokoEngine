@@ -20,3 +20,8 @@ void DrawerBase::StaticInitialize()
 	drawManager_ = DrawManager::GetInstance();
 	drawManager_->Initialize();
 }
+
+void DrawerBase::BeginFrame()
+{
+	commandList_ = DirectXBase::GetInstance()->GetCommandList();
+}

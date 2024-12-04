@@ -2,6 +2,8 @@
 #include "Engine/Base/WindowsInfo/WindowsInfo.h"
 #include "DirectXBase/DirectXBase.h"
 #include "DebugCamera/DebugCamera.h"
+#include "ResourceManager/ResourceManager.h"
+#include <cmath>
 
 Matrix4x4 Camera::orthographicMat_ = Matrix4x4::MakeOrthographicMatrix(0.0f, 0.0f, 1280.0f, 720.0f, 0.0f, 1.0f);
 
@@ -28,7 +30,7 @@ Camera::Camera()
 
 Camera::~Camera()
 {
-	cameraForGPUResource_->Release();
+	ResourceManager::GetInstance()->AddResource(std::move(cameraForGPUResource_));
 }
 
 

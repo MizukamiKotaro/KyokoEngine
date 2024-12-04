@@ -28,6 +28,9 @@
 #include "MMD/CameraVMD/CameraVMDDataManager.h"
 #include "MMD/PMDModel/PMDModel.h"
 #include "InstancingModelManager.h"
+#include "ComputePipelineSystem/ComputePipeline/ComputePipeline.h"
+#include "GraphicsPipelineSystem/GraphicsPipeline/GraphicsPipeline.h"
+#include "Base/ResourceManager/ResourceManager.h"
 
 namespace Kyoko {
 	namespace Engine {
@@ -141,8 +144,20 @@ namespace Kyoko {
 			return winInfo->ProcessMessage();
 		}
 
+		void CloseCommandlist()
+		{
+			dxBase->CloseCommandlist();
+		}
+
 		void FirstUpdateInLoop()
 		{
+			dxBase->BeginFrame();
+			ResourceManager::GetInstance()->BeginFrame();
+			DrawerBase::BeginFrame();
+			DrawManagerBase::BeginFrame();
+			ComputePipeline::BeginFrame();
+			GraphicsPipeline::BeginFrame();
+			TextureManager::GetInstance()->BeginFrame();
 #ifdef _DEBUG
 			// ImGuiの毎フレームの初期化
 			ImGuiManager::Begin();
@@ -185,14 +200,17 @@ namespace Kyoko {
 			globalVariables->Finalize();
 #endif // _DEBUG
 			// 解放、終了処理
+			dxBase->Finalize();
 			ImGuiManager::Finalize();
 			CoUninitialize();
 			audioManager->Finalize();
+			drawManager->Finalize();
+			LightSingleton::GetInstance()->Finalize();
 			InstancingResourceManager::GetInstance()->Finalize();
 			TextureManager::GetInstance()->Finalize();
 			ModelDataManager::GetInstance()->Finalize();
+			ResourceManager::GetInstance()->Finalize();
 			DescriptorHeapManager::GetInstance()->Finalize();
-			dxBase->Finalize();
 			winInfo->Finalize();
 
 #pragma endregion 基盤システムの終了

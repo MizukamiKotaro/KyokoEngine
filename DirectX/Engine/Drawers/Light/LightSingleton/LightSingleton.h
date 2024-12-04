@@ -10,6 +10,7 @@ public:
 	static LightSingleton* GetInstance();
 
 	void Initialize();
+	void Finalize();
 
 	const BaseLight* GetDirectionaLight() const { return directionalLight_.get(); }
 	const BaseLight* GetPointLight() const { return pointLight_.get(); }

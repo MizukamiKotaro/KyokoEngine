@@ -8,6 +8,7 @@
 #include "DescriptorHeapManager/DescriptorHeap/DescriptorHeap.h"
 #include "GraphicsPipelineSystem/GraphicsPiplineManager/GraphicsPiplineManager.h"
 #include "Externals/DirectXTex/d3dx12.h"
+#include "ResourceManager/ResourceManager.h"
 
 Outline::Outline()
 {
@@ -18,8 +19,8 @@ Outline::Outline()
 
 Outline::~Outline()
 {
-	outlineResource_->Release();
-	srvHeap_->DeleteDescriptor(depthHandles_);
+	ResourceManager::GetInstance()->AddResource(std::move(outlineResource_));
+	srvHeap_->AddDeleteDescriptor(depthHandles_);
 }
 
 void Outline::Draw(BlendMode blendMode)
@@ -30,15 +31,13 @@ void Outline::Draw(BlendMode blendMode)
 
 	psoManager_->SetBlendMode(piplineType_, blendMode);
 
-	ID3D12GraphicsCommandList* commandList = DirectXBase::GetInstance()->GetCommandList();
-
 	ToReadBarrier();
 
-	commandList->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
-	commandList->SetGraphicsRootDescriptorTable(1, srvHandles_->gpuHandle);
-	commandList->SetGraphicsRootConstantBufferView(2, outlineResource_->GetGPUVirtualAddress());
-	commandList->SetGraphicsRootDescriptorTable(3, depthHandles_->gpuHandle);
-	commandList->DrawInstanced(3, 1, 0, 0);
+	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootDescriptorTable(1, srvHandles_->gpuHandle);
+	commandList_->SetGraphicsRootConstantBufferView(2, outlineResource_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootDescriptorTable(3, depthHandles_->gpuHandle);
+	commandList_->DrawInstanced(3, 1, 0, 0);
 
 	ToWriteBarrier();
 }
@@ -52,15 +51,13 @@ void Outline::Draw(const Camera& camera, BlendMode blendMode)
 
 	psoManager_->SetBlendMode(piplineType_, blendMode);
 
-	ID3D12GraphicsCommandList* commandList = DirectXBase::GetInstance()->GetCommandList();
-
 	ToReadBarrier();
 
-	commandList->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
-	commandList->SetGraphicsRootDescriptorTable(1, srvHandles_->gpuHandle);
-	commandList->SetGraphicsRootConstantBufferView(2, outlineResource_->GetGPUVirtualAddress());
-	commandList->SetGraphicsRootDescriptorTable(3, depthHandles_->gpuHandle);
-	commandList->DrawInstanced(3, 1, 0, 0);
+	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootDescriptorTable(1, srvHandles_->gpuHandle);
+	commandList_->SetGraphicsRootConstantBufferView(2, outlineResource_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootDescriptorTable(3, depthHandles_->gpuHandle);
+	commandList_->DrawInstanced(3, 1, 0, 0);
 
 	ToWriteBarrier();
 }

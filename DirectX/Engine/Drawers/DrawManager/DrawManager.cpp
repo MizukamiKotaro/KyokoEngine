@@ -29,6 +29,12 @@ void DrawManager::Reset()
 	drawParticleManager_->Reset();
 }
 
+void DrawManager::Finalize()
+{
+	drawModelManager_->Finalize();
+	drawLightManager_->Finalize();
+}
+
 void DrawManager::Draw(const Model& model, const Camera& camera, BlendMode blendMode)
 {
 	drawModelManager_->Draw(model, camera, blendMode);

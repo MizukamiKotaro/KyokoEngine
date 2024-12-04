@@ -23,6 +23,11 @@ public:
 	void Initialize();
 
 	/// <summary>
+	/// コマンドリストの取得
+	/// </summary>
+	void BeginFrame();
+
+	/// <summary>
 	/// 終了処理
 	/// </summary>
 	void Finalize();

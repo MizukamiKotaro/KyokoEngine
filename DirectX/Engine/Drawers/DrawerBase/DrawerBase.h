@@ -13,6 +13,10 @@ public:
 	/// 初期化
 	/// </summary>
 	static void StaticInitialize();
+	/// <summary>
+	/// コマンドリストの取得
+	/// </summary>
+	static void BeginFrame();
 protected:
 	static ID3D12GraphicsCommandList* commandList_; // コマンドリスト
 	static GraphicsPipelineManager* psoManager_; // グラフィックスパイプラインマネージャー

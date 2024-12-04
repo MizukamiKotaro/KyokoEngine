@@ -48,7 +48,10 @@ public:
 	/// <param name="camera">カメラ</param>
 	/// <param name="blendMode">ブレンドモード</param>
 	void Draw(const PMDModel& model, const Camera& camera, BlendMode blendMode);
-
+	/// <summary>
+	/// 終了処理
+	/// </summary>
+	void Finalize();
 private:
 	/// <summary>
 	/// 描画共通部分

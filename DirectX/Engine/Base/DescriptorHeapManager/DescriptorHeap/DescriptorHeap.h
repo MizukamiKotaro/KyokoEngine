@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <list>
 #include "DescriptorHeapManager/Descriptor/Descriptor.h"
 
 /// <summary>
@@ -15,10 +16,14 @@ public:
 	~DescriptorHeap();
 public:
 	/// <summary>
-	/// ディスクリプターの削除
+	/// 削除するディスクリプターの追加
 	/// </summary>
 	/// <param name="handle">ハンドル</param>
-	void DeleteDescriptor(const DescriptorHandles* handle);
+	void AddDeleteDescriptor(const DescriptorHandles* handle);
+	/// <summary>
+	/// ディスクリプターの削除
+	/// </summary>
+	void DeleteDescriptors();
 	/// <summary>
 	/// ディスクリプターヒープの取得
 	/// </summary>
@@ -65,4 +70,5 @@ protected:
 	ComPtr<ID3D12DescriptorHeap> heap_; // ディスクリプターヒープ
 	D3D12_DESCRIPTOR_HEAP_TYPE heapType_; // ヒープタイプ
 	std::vector<std::unique_ptr<Descriptor>> descriptors_; // ディスクリプターズ
+	std::list<const DescriptorHandles*> deleteList_; // 削除するハンドルのリスト
 };

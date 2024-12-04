@@ -11,6 +11,11 @@ void DrawManagerBase::StaticInitialize()
 	psoManager_ = GraphicsPipelineManager::GetInstance();
 }
 
+void DrawManagerBase::BeginFrame()
+{
+	commandList_ = DirectXBase::GetInstance()->GetCommandList();
+}
+
 void DrawManagerBase::Reset()
 {
 	drawNo_ = 0;

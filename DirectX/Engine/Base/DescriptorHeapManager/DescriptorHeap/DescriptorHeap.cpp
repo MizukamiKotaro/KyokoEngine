@@ -10,11 +10,19 @@ DescriptorHeap::~DescriptorHeap()
 	heap_->Release();
 }
 
-void DescriptorHeap::DeleteDescriptor(const DescriptorHandles* handle) 
+void DescriptorHeap::AddDeleteDescriptor(const DescriptorHandles* handle) 
+{
+	deleteList_.push_back(handle);
+}
+
+void DescriptorHeap::DeleteDescriptors()
 {
 	if (descriptors_.size() != 0) {
-		descriptors_[handle->no]->isUse = false;
+		for (const DescriptorHandles* handle : deleteList_) {
+			descriptors_[handle->no]->isUse = false;
+		}
 	}
+	deleteList_.clear();
 }
 
 const DescriptorHandles* DescriptorHeap::GetNewDescriptorHandle()

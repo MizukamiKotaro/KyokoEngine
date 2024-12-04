@@ -12,6 +12,12 @@ public:
 	/// 初期化
 	/// </summary>
 	static void StaticInitialize();
+
+	/// <summary>
+	/// コマンドリストの取得
+	/// </summary>
+	static void BeginFrame();
+
 	/// <summary>
 	/// 描画数のリセット
 	/// </summary>

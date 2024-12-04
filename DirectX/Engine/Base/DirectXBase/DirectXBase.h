@@ -3,8 +3,7 @@
 #include <d3d12.h>
 #include <dxgi1_6.h>
 #include <wrl.h>
-#include <vector>
-#include <chrono>
+#include <array>
 
 class WindowsInfo;
 class DescriptorHandles;
@@ -44,6 +43,16 @@ public: // メンバ関数
 	void PostDraw();
 
 	/// <summary>
+	/// フレーム開始処理
+	/// </summary>
+	void BeginFrame();
+
+	/// <summary>
+	/// コマンドリストを閉じる
+	/// </summary>
+	void CloseCommandlist();
+
+	/// <summary>
 	/// デバイスの取得
 	/// </summary>
 	/// <returns>デバイス</returns>
@@ -53,7 +62,7 @@ public: // メンバ関数
 	/// コマンドリストの取得
 	/// </summary>
 	/// <returns>コマンドリスト</returns>
-	ID3D12GraphicsCommandList* GetCommandList() const { return commandList_.Get(); }
+	ID3D12GraphicsCommandList* GetCommandList() const { return commandList_[swapChain_->GetCurrentBackBufferIndex()].Get(); }
 
 	/// <summary>
 	/// バッファリソースの生成
@@ -84,19 +93,17 @@ private: // メンバ変数
 	ComPtr<ID3D12Device> device_;
 	ComPtr<IDXGIAdapter4> useAdapter_;
 	ComPtr<ID3D12CommandQueue> commandQueue_;
-	ComPtr<ID3D12CommandAllocator> commandAllocator_; 
-	ComPtr<ID3D12GraphicsCommandList> commandList_;
 	ComPtr<IDXGISwapChain4> swapChain_;
-	std::vector<ComPtr<ID3D12Resource>> backBuffers_;
+	std::array<ComPtr<ID3D12Resource>, 2> backBuffers_;
 	ComPtr<ID3D12Resource> depthStencilResource_;
 	ComPtr<ID3D12Fence> fence_;
 	uint64_t fenceValue_ = 0;
 
-	std::vector<const DescriptorHandles*> rtvHandles_;
-	const DescriptorHandles* dsvHandles_ = nullptr;
+	std::array<ComPtr<ID3D12CommandAllocator>, 2> commandAllocator_; 
+	std::array<ComPtr<ID3D12GraphicsCommandList>, 2> commandList_;
 
-	// 記録時間(FPS固定)
-	std::chrono::steady_clock::time_point reference_;
+	std::array<const DescriptorHandles*, 2> rtvHandles_;
+	const DescriptorHandles* dsvHandles_ = nullptr;
 
 private: // メンバ関数
 	DirectXBase() = default;

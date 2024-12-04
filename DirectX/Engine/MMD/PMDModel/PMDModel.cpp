@@ -12,6 +12,7 @@
 #include "ComputePipelineSystem/ComputePipelineManager/ComputePipelineManager.h"
 #include "ComputePipelineSystem/ComputePipelineTypeConfig.h"
 #include "Drawers/DrawManager/DrawManager.h"
+#include "ResourceManager/ResourceManager.h"
 
 DescriptorHeap* PMDModel::srvHeap_ = nullptr;
 
@@ -27,16 +28,16 @@ PMDModel::PMDModel(const std::string& fileName)
 
 PMDModel::~PMDModel()
 {
-	transformationResource_->Release();
+	ResourceManager::GetInstance()->AddResource(std::move(transformationResource_));
+	ResourceManager::GetInstance()->AddResource(std::move(skinCluter_->influenceResouce));
+	ResourceManager::GetInstance()->AddResource(std::move(skinCluter_->paletteResouce));
+	ResourceManager::GetInstance()->AddResource(std::move(skinCluter_->informationResouce));
+	ResourceManager::GetInstance()->AddResource(std::move(skinCluter_->outputVertexResouce));
 
-	skinCluter_->influenceResouce->Release();
-	skinCluter_->paletteResouce->Release();
-	skinCluter_->informationResouce->Release();
-	skinCluter_->outputVertexResouce->Release();
-	srvHeap_->DeleteDescriptor(skinCluter_->influenceSrvHandle);
-	srvHeap_->DeleteDescriptor(skinCluter_->inputVertexSrvHandle);
-	srvHeap_->DeleteDescriptor(skinCluter_->outputVertexSrvHandle);
-	srvHeap_->DeleteDescriptor(skinCluter_->paletteSrvHandle);
+	srvHeap_->AddDeleteDescriptor(skinCluter_->influenceSrvHandle);
+	srvHeap_->AddDeleteDescriptor(skinCluter_->inputVertexSrvHandle);
+	srvHeap_->AddDeleteDescriptor(skinCluter_->outputVertexSrvHandle);
+	srvHeap_->AddDeleteDescriptor(skinCluter_->paletteSrvHandle);
 }
 
 void PMDModel::SetTime(float time)

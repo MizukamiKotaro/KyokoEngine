@@ -10,6 +10,7 @@
 #include "Engine/Base/WindowsInfo/WindowsInfo.h"
 #include <thread>
 #include "StringConverter/StringConverter.h"
+#include "FrameInfo/FrameInfo.h"
 
 using namespace Microsoft::WRL;
 
@@ -52,6 +53,19 @@ void DirectXBase::Initialize() {
 
 void DirectXBase::Finalize()
 {
+	//GPUがここまでたどり着いたときに、Fenceの値を指定した値に代入するようにSignelを送る
+	commandQueue_->Signal(fence_.Get(), ++fenceValue_);
+
+	//Fenceの値が指定したSignal値にたどりすいているか確認する
+	//GetCompletedValueの初期値はFence作成時に渡した初期値
+	if (fence_->GetCompletedValue() < fenceValue_) {
+		HANDLE event = CreateEvent(nullptr, false, false, nullptr);
+		//指定したSignalにたどり着いていないので、たどり着くまで待つようにイベントする
+		fence_->SetEventOnCompletion(fenceValue_, event);
+		//イベントを待つ
+		WaitForSingleObject(event, INFINITE);
+		CloseHandle(event);
+	}
 	depthStencilResource_->Release();
 }
 
@@ -69,17 +83,17 @@ void DirectXBase::PreDraw() {
 	//遷移後のResourceState
 	barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
 	//TransitionBarrierを張る
-	commandList_->ResourceBarrier(1, &barrier);
+	commandList_[backBufferIndex]->ResourceBarrier(1, &barrier);
 
 	// 描画先の指定
-	commandList_->OMSetRenderTargets(1, &rtvHandles_[backBufferIndex]->cpuHandle, false, &dsvHandles_->cpuHandle);
+	commandList_[backBufferIndex]->OMSetRenderTargets(1, &rtvHandles_[backBufferIndex]->cpuHandle, false, &dsvHandles_->cpuHandle);
 
 	//指定した色で画面全体をクリアする
 	float clearColor[] = { 0.1f,0.25f,0.5f,1.0f }; //青っぽい色。RGBAの順
 	// レンダーターゲットクリア
-	commandList_->ClearRenderTargetView(rtvHandles_[backBufferIndex]->cpuHandle, clearColor, 0, nullptr);
+	commandList_[backBufferIndex]->ClearRenderTargetView(rtvHandles_[backBufferIndex]->cpuHandle, clearColor, 0, nullptr);
 	//指定した深度で画面全体をクリアする
-	commandList_->ClearDepthStencilView(dsvHandles_->cpuHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
+	commandList_[backBufferIndex]->ClearDepthStencilView(dsvHandles_->cpuHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 
 	// ビューポート領域の設定
 	//ビューポート
@@ -92,7 +106,7 @@ void DirectXBase::PreDraw() {
 	viewport.TopLeftY = 0;
 	viewport.MinDepth = 0.0f;
 	viewport.MaxDepth = 1.0f;
-	commandList_->RSSetViewports(1, &viewport); // Viewportを設定
+	commandList_[backBufferIndex]->RSSetViewports(1, &viewport); // Viewportを設定
 
 	// シザー矩形の設定
 	//シザー矩形
@@ -102,11 +116,11 @@ void DirectXBase::PreDraw() {
 	scissorRect.right = (UINT)windowSize.x;
 	scissorRect.top = 0;
 	scissorRect.bottom = (UINT)windowSize.y;
-	commandList_->RSSetScissorRects(1, &scissorRect); //Scissorを設定
+	commandList_[backBufferIndex]->RSSetScissorRects(1, &scissorRect); //Scissorを設定
 
 	//描画用のDescriptorHeapの設定
 	ID3D12DescriptorHeap* descriptorHeaps[] = { DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->GetHeap() };
-	commandList_->SetDescriptorHeaps(1, descriptorHeaps);
+	commandList_[backBufferIndex]->SetDescriptorHeaps(1, descriptorHeaps);
 }
 
 void DirectXBase::PostDraw() {
@@ -122,17 +136,16 @@ void DirectXBase::PostDraw() {
 	barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
 	barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
 	//TransitionBarrierを張る
-	commandList_->ResourceBarrier(1, &barrier);
+	commandList_[backBufferIndex]->ResourceBarrier(1, &barrier);
 
 	// コマンドリストの内容を確定させる
-	hr = commandList_->Close();
+	hr = commandList_[backBufferIndex]->Close();
 	assert(SUCCEEDED(hr));
+}
 
-	//GPUにコマンドリストの実行を行わせる
-	ID3D12CommandList* commandLists[] = { commandList_.Get()};
-	commandQueue_->ExecuteCommandLists(1, commandLists);
-	//GPUとOSに画面の交換を行うように通知する
-	hr = swapChain_->Present(1, 0);
+void DirectXBase::BeginFrame()
+{
+	UINT backBufferIndex = swapChain_->GetCurrentBackBufferIndex();
 
 	//GPUがここまでたどり着いたときに、Fenceの値を指定した値に代入するようにSignelを送る
 	commandQueue_->Signal(fence_.Get(), ++fenceValue_);
@@ -147,15 +160,31 @@ void DirectXBase::PostDraw() {
 		WaitForSingleObject(event, INFINITE);
 		CloseHandle(event);
 	}
+	//GPUにコマンドリストの実行を行わせる
+	ID3D12CommandList* commandLists[] = { commandList_[backBufferIndex].Get()};
+	commandQueue_->ExecuteCommandLists(1, commandLists);
+	//GPUとOSに画面の交換を行うように通知する
+	HRESULT hr = swapChain_->Present(1, 0);
 
-	UpdateFixFPS();
+	DescriptorHeapManager::GetInstance()->BeginFrame();
+
+	backBufferIndex = swapChain_->GetCurrentBackBufferIndex();
 
 	//次のフレーム用のコマンドリストを準備
-	hr = commandAllocator_->Reset();
+	hr = commandAllocator_[backBufferIndex]->Reset();
 	assert(SUCCEEDED(hr));
-	hr = commandList_->Reset(commandAllocator_.Get(), nullptr);
+	hr = commandList_[backBufferIndex]->Reset(commandAllocator_[backBufferIndex].Get(), nullptr);
 	assert(SUCCEEDED(hr));
 
+	UpdateFixFPS();
+}
+
+void DirectXBase::CloseCommandlist()
+{
+	HRESULT hr = commandList_[0]->Close();
+	assert(SUCCEEDED(hr));
+	hr = commandList_[1]->Close();
+	assert(SUCCEEDED(hr));
 }
 
 ID3D12Resource* DirectXBase::CreateBufferResource(size_t sizeInBytes, D3D12_RESOURCE_FLAGS resourceFlags)
@@ -196,38 +225,11 @@ ID3D12Resource* DirectXBase::CreateBufferResource(size_t sizeInBytes, D3D12_RESO
 }
 
 void DirectXBase::InitializeFixFPS() {
-
-	// 現在の時間を記録する
-	reference_ = std::chrono::steady_clock::now();
+	FrameInfo::GetInstance()->Initialize();
 }
 
 void DirectXBase::UpdateFixFPS() {
-
-	// 1/60秒ピッタリの時間
-	const std::chrono::microseconds kMinTime(uint64_t(1000000.0f / 60.0f));
-	// 1/60秒よりわずかに短い時間
-	const std::chrono::microseconds kMinCheckTime(uint64_t(1000000.0f / 65.0f));
-
-	// 現在の時間を取得
-	std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
-	//前回記録からの経過時間を取得
-	std::chrono::microseconds elapsed =
-		std::chrono::duration_cast<std::chrono::microseconds>(now - reference_);
-
-	// 1/60秒(よりわずかに短い時間)経っていない場合
-	if (elapsed < kMinCheckTime) {
-		// 1/60秒経過するまで微小なスリープを繰り返す
-		while (std::chrono::steady_clock::now() - reference_ < kMinTime) {
-
-			// 1マイクロ秒スリープ
-			std::this_thread::sleep_for(std::chrono::microseconds(1));
-
-		}
-	}
-
-	// 現在の時間を記録
-	reference_ = std::chrono::steady_clock::now();
-
+	FrameInfo::GetInstance()->BeginUpdate();
 }
 
 void DirectXBase::InitializeDebugController()
@@ -305,8 +307,6 @@ void DirectXBase::CreateSwapChain() {
 	HRESULT hr = dxgiFactory_->CreateSwapChainForHwnd(commandQueue_.Get(), windowInfo_->GetHwnd(), &swapChainDesc, nullptr, nullptr, reinterpret_cast<IDXGISwapChain1**>(swapChain_.GetAddressOf()));
 	assert(SUCCEEDED(hr));
 
-	backBuffers_.resize(swapChainDesc.BufferCount);
-
 	for (int i = 0; i < backBuffers_.size(); i++) {
 		
 		hr = swapChain_->GetBuffer(i, IID_PPV_ARGS(backBuffers_[i].GetAddressOf()));
@@ -322,15 +322,17 @@ void DirectXBase::InitializeCommand() {
 	//コマンドキューの生成がうまくいかなかったので起動できない
 	assert(SUCCEEDED(hr));
 
-	//コマンドアロケータを生成する
-	hr = device_->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(commandAllocator_.GetAddressOf()));
-	//コマンドアロケータの生成がうまくいかなかったので起動できない
-	assert(SUCCEEDED(hr));
+	for (size_t i = 0; i < commandList_.size(); i++) {
+		//コマンドアロケータを生成する
+		hr = device_->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(commandAllocator_[i].GetAddressOf()));
+		//コマンドアロケータの生成がうまくいかなかったので起動できない
+		assert(SUCCEEDED(hr));
 
-	//コマンドリストを生成する
-	hr = device_->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocator_.Get(), nullptr, IID_PPV_ARGS(commandList_.GetAddressOf()));
-	//コマンドリストの生成がうまくいかなかったので起動できない
-	assert(SUCCEEDED(hr));
+		//コマンドリストを生成する
+		hr = device_->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocator_[i].Get(), nullptr, IID_PPV_ARGS(commandList_[i].GetAddressOf()));
+		//コマンドリストの生成がうまくいかなかったので起動できない
+		assert(SUCCEEDED(hr));
+	}
 }
 
 void DirectXBase::CreateFinalRenderTargets() {
@@ -340,8 +342,6 @@ void DirectXBase::CreateFinalRenderTargets() {
 	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
 	rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB; //出力結果をSRGBに変換して書き込む
 	rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D; //2dテクスチャとして書き込む
-
-	rtvHandles_.resize(backBuffers_.size());
 
 	for (size_t i = 0; i < backBuffers_.size(); i++) {
 		rtvHandles_[i] = heap->GetNewDescriptorHandle();

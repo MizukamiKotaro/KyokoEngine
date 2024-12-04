@@ -19,6 +19,11 @@ public:
 
 	void Initialize();
 
+	/// <summary>
+	/// コマンドリストの取得
+	/// </summary>
+	static void BeginFrame();
+
 	void PreDraw();
 
 	void SetBlendMode(BlendMode blendMode);
@@ -47,7 +52,7 @@ protected:
 protected:
 
 	ID3D12Device* device_ = nullptr;
-	ID3D12GraphicsCommandList* commandList_ = nullptr;
+	static ID3D12GraphicsCommandList* commandList_;
 
 	ComPtr<IDxcUtils> dxcUtils_;
 	ComPtr<IDxcCompiler3> dxcCompiler_;

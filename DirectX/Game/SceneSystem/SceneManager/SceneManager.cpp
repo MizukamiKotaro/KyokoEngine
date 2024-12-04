@@ -30,6 +30,8 @@ int SceneManager::Run()
 	// 一番最初のタイミングで一度初期化
 	scene_->Initialize();
 
+	Kyoko::Engine::CloseCommandlist();
+
 	// ウィンドウの×ボタンが押されるまでループ
 	while (true) {
 		// ウィンドウが閉じたか、タイトルでescが押されたらループを抜ける
@@ -75,16 +77,14 @@ int SceneManager::Run()
 		}
 		ImGui::End();
 		// フレームの表示
-		ImGui::Begin("フレーム");
-		ImGui::Text("フレーム : %4.1f", frameInfo_->GetFramerate());
+		ImGui::Begin("フレームレート");
+		ImGui::Text("フレームレート : %4.1f", frameInfo_->GetFramerate());
+		ImGui::Text("デルタタイム : %.5f", frameInfo_->GetDeltaTime());
 		ImGui::End();
 #endif // _DEBUG
 		
 		// 描画処理
 		scene_->Draw();
-
-		// フレームの最終処理
-		frameInfo_->End();
 	}
 
 	// 解放

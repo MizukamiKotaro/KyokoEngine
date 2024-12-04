@@ -17,6 +17,11 @@ public:
 
 	void Initialize();
 
+	/// <summary>
+	/// コマンドリストの更新
+	/// </summary>
+	static void BeginFrame();
+
 	void PreCompute();
 
 	virtual ~ComputePipeline() = default;
@@ -41,7 +46,7 @@ protected:
 protected:
 
 	ID3D12Device* device_ = nullptr;
-	ID3D12GraphicsCommandList* commandList_ = nullptr;
+	static ID3D12GraphicsCommandList* commandList_;
 
 	ComPtr<IDxcUtils> dxcUtils_;
 	ComPtr<IDxcCompiler3> dxcCompiler_;

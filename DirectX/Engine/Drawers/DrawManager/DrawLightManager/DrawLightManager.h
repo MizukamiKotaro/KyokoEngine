@@ -32,7 +32,10 @@ public:
 	/// <param name="camera">カメラ</param>
 	/// <param name="blendMode">ブレンドモード</param>
 	void Draw(const SpotLight& light, const Camera& camera, BlendMode blendMode);
-
+	/// <summary>
+	/// 終了処理
+	/// </summary>
+	void Finalize();
 private:
 	std::vector<std::unique_ptr<Transformation>> transformations_; // 変換行列データ配列
 	const ModelData* modelData_; // モデルデータ

@@ -23,6 +23,11 @@ void TextureManager::Initialize()
 	srvHeap_ = DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap();
 }
 
+void TextureManager::BeginFrame()
+{
+	commandList_ = DirectXBase::GetInstance()->GetCommandList();
+}
+
 void TextureManager::Finalize()
 {
 	textureMap_.clear();

@@ -30,10 +30,10 @@ SkinningModel::~SkinningModel()
 	skinCluter_->paletteResouce->Release();
 	skinCluter_->informationResouce->Release();
 	skinCluter_->outputVertexResouce->Release();
-	srvHeap_->DeleteDescriptor(skinCluter_->influenceSrvHandle);
-	srvHeap_->DeleteDescriptor(skinCluter_->inputVertexSrvHandle);
-	srvHeap_->DeleteDescriptor(skinCluter_->outputVertexSrvHandle);
-	srvHeap_->DeleteDescriptor(skinCluter_->paletteSrvHandle);
+	srvHeap_->AddDeleteDescriptor(skinCluter_->influenceSrvHandle);
+	srvHeap_->AddDeleteDescriptor(skinCluter_->inputVertexSrvHandle);
+	srvHeap_->AddDeleteDescriptor(skinCluter_->outputVertexSrvHandle);
+	srvHeap_->AddDeleteDescriptor(skinCluter_->paletteSrvHandle);
 }
 
 void SkinningModel::SetTime(float time)

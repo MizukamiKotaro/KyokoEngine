@@ -5,6 +5,7 @@
 #include "GraphicsPipelineSystem/PipelineTypeConfig.h"
 #include "DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
 #include "GraphicsPipelineSystem/GraphicsPiplineManager/GraphicsPiplineManager.h"
+#include "ResourceManager/ResourceManager.h"
 
 Smoothing::Smoothing()
 {
@@ -15,7 +16,7 @@ Smoothing::Smoothing()
 
 Smoothing::~Smoothing()
 {
-	smoothingResource_->Release();
+	ResourceManager::GetInstance()->AddResource(std::move(smoothingResource_));
 }
 
 void Smoothing::Draw(BlendMode blendMode)
@@ -23,11 +24,10 @@ void Smoothing::Draw(BlendMode blendMode)
 	materialData_->color = color_;
 	PreDraw();
 	psoManager_->SetBlendMode(piplineType_, blendMode);
-	ID3D12GraphicsCommandList* commandList = DirectXBase::GetInstance()->GetCommandList();
-	commandList->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
-	commandList->SetGraphicsRootDescriptorTable(1, srvHandles_->gpuHandle);
-	commandList->SetGraphicsRootConstantBufferView(2, smoothingResource_->GetGPUVirtualAddress());
-	commandList->DrawInstanced(3, 1, 0, 0);
+	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootDescriptorTable(1, srvHandles_->gpuHandle);
+	commandList_->SetGraphicsRootConstantBufferView(2, smoothingResource_->GetGPUVirtualAddress());
+	commandList_->DrawInstanced(3, 1, 0, 0);
 }
 
 void Smoothing::CreateSmoothingRes()

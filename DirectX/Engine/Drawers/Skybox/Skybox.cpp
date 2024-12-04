@@ -8,6 +8,7 @@
 #include "Texture.h"
 #include "GraphicsPipelineSystem/PipelineTypeConfig.h"
 #include "GraphicsPipelineSystem/GraphicsPiplineManager/GraphicsPiplineManager.h"
+#include "ResourceManager/ResourceManager.h"
 
 Skybox::Skybox(const std::string& filename, const Vector3& scale, const Vector3& rotate, const Vector3& position, const Vector4& color)
 {
@@ -25,10 +26,10 @@ Skybox::Skybox(const std::string& filename, const Vector3& scale, const Vector3&
 
 Skybox::~Skybox()
 {
-	vertexResource_->Release();
-	transformResource_->Release();
-	materialResource_->Release();
-	indexResource_->Release();
+	ResourceManager::GetInstance()->AddResource(std::move(vertexResource_));
+	ResourceManager::GetInstance()->AddResource(std::move(transformResource_));
+	ResourceManager::GetInstance()->AddResource(std::move(materialResource_));
+	ResourceManager::GetInstance()->AddResource(std::move(indexResource_));
 }
 
 void Skybox::Update()

@@ -18,6 +18,10 @@ public:
 	/// </summary>
 	void Initialize();
 	/// <summary>
+	/// フレームの最初の処理、使用してないディスクリプターの削除
+	/// </summary>
+	void BeginFrame();
+	/// <summary>
 	/// 終了処理
 	/// </summary>
 	void Finalize();

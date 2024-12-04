@@ -8,6 +8,7 @@
 #include "DescriptorHeapManager/DescriptorHeap/DescriptorHeap.h"
 #include "GraphicsPipelineSystem/GraphicsPiplineManager/GraphicsPiplineManager.h"
 #include "Externals/DirectXTex/d3dx12.h"
+#include "ResourceManager/ResourceManager.h"
 
 LightDepth::LightDepth()
 {
@@ -18,8 +19,8 @@ LightDepth::LightDepth()
 
 LightDepth::~LightDepth()
 {
-	outlineResource_->Release();
-	srvHeap_->DeleteDescriptor(depthHandles_);
+	ResourceManager::GetInstance()->AddResource(std::move(outlineResource_));
+	srvHeap_->AddDeleteDescriptor(depthHandles_);
 }
 
 void LightDepth::Draw(BlendMode blendMode)
@@ -30,21 +31,19 @@ void LightDepth::Draw(BlendMode blendMode)
 
 	psoManager_->SetBlendMode(piplineType_, blendMode);
 
-	ID3D12GraphicsCommandList* commandList = DirectXBase::GetInstance()->GetCommandList();
-
 	ToReadBarrier();
 
-	commandList->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
-	commandList->SetGraphicsRootDescriptorTable(1, srvHandles_->gpuHandle);
-	commandList->SetGraphicsRootConstantBufferView(2, outlineResource_->GetGPUVirtualAddress());
-	commandList->SetGraphicsRootDescriptorTable(3, depthHandles_->gpuHandle);
-	commandList->SetGraphicsRootDescriptorTable(4, outlineTex_);
-	commandList->SetGraphicsRootDescriptorTable(5, outlineDepth_->gpuHandle);
-	commandList->SetGraphicsRootDescriptorTable(6, objectTex_);
-	commandList->SetGraphicsRootDescriptorTable(7, objectDepth_->gpuHandle);
-	commandList->SetGraphicsRootDescriptorTable(8, bloomTex_);
-	commandList->SetGraphicsRootDescriptorTable(9, bloomDepth_->gpuHandle);
-	commandList->DrawInstanced(3, 1, 0, 0);
+	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootDescriptorTable(1, srvHandles_->gpuHandle);
+	commandList_->SetGraphicsRootConstantBufferView(2, outlineResource_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootDescriptorTable(3, depthHandles_->gpuHandle);
+	commandList_->SetGraphicsRootDescriptorTable(4, outlineTex_);
+	commandList_->SetGraphicsRootDescriptorTable(5, outlineDepth_->gpuHandle);
+	commandList_->SetGraphicsRootDescriptorTable(6, objectTex_);
+	commandList_->SetGraphicsRootDescriptorTable(7, objectDepth_->gpuHandle);
+	commandList_->SetGraphicsRootDescriptorTable(8, bloomTex_);
+	commandList_->SetGraphicsRootDescriptorTable(9, bloomDepth_->gpuHandle);
+	commandList_->DrawInstanced(3, 1, 0, 0);
 
 	ToWriteBarrier();
 }
@@ -58,21 +57,19 @@ void LightDepth::Draw(const Camera& camera, BlendMode blendMode)
 
 	psoManager_->SetBlendMode(piplineType_, blendMode);
 
-	ID3D12GraphicsCommandList* commandList = DirectXBase::GetInstance()->GetCommandList();
-
 	ToReadBarrier();
 
-	commandList->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
-	commandList->SetGraphicsRootDescriptorTable(1, srvHandles_->gpuHandle);
-	commandList->SetGraphicsRootConstantBufferView(2, outlineResource_->GetGPUVirtualAddress());
-	commandList->SetGraphicsRootDescriptorTable(3, depthHandles_->gpuHandle);
-	commandList->SetGraphicsRootDescriptorTable(4, outlineTex_);
-	commandList->SetGraphicsRootDescriptorTable(5, outlineDepth_->gpuHandle);
-	commandList->SetGraphicsRootDescriptorTable(6, objectTex_);
-	commandList->SetGraphicsRootDescriptorTable(7, objectDepth_->gpuHandle);
-	commandList->SetGraphicsRootDescriptorTable(8, bloomTex_);
-	commandList->SetGraphicsRootDescriptorTable(9, bloomDepth_->gpuHandle);
-	commandList->DrawInstanced(3, 1, 0, 0);
+	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootDescriptorTable(1, srvHandles_->gpuHandle);
+	commandList_->SetGraphicsRootConstantBufferView(2, outlineResource_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootDescriptorTable(3, depthHandles_->gpuHandle);
+	commandList_->SetGraphicsRootDescriptorTable(4, outlineTex_);
+	commandList_->SetGraphicsRootDescriptorTable(5, outlineDepth_->gpuHandle);
+	commandList_->SetGraphicsRootDescriptorTable(6, objectTex_);
+	commandList_->SetGraphicsRootDescriptorTable(7, objectDepth_->gpuHandle);
+	commandList_->SetGraphicsRootDescriptorTable(8, bloomTex_);
+	commandList_->SetGraphicsRootDescriptorTable(9, bloomDepth_->gpuHandle);
+	commandList_->DrawInstanced(3, 1, 0, 0);
 
 	ToWriteBarrier();
 }

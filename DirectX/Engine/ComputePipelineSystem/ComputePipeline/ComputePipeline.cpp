@@ -5,6 +5,7 @@
 #include "StringConverter/StringConverter.h"
 #include <format>
 
+ID3D12GraphicsCommandList* ComputePipeline::commandList_ = nullptr;
 
 void ComputePipeline::Initialize()
 {
@@ -16,6 +17,11 @@ void ComputePipeline::Initialize()
 	InitializePSO();
 
 	CreatePSO();
+}
+
+void ComputePipeline::BeginFrame()
+{
+	commandList_ = DirectXBase::GetInstance()->GetCommandList();
 }
 
 void ComputePipeline::PreCompute()

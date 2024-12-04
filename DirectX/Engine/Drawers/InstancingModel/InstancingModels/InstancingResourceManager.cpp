@@ -46,7 +46,7 @@ void InstancingResourceManager::Finalize()
 	for (std::pair<const InstancingGroupData* const, std::unique_ptr<Resources>>& resource : resources_) {
 		for (InstancingResources& res : resource.second->instancingResources_) {
 			res.instancingResource_->Release();
-			DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->DeleteDescriptor(res.srvHandles_);
+			DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->AddDeleteDescriptor(res.srvHandles_);
 		}
 		resource.second->materialResource_->Release();
 	}

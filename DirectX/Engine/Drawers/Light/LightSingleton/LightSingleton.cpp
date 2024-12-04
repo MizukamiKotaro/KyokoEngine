@@ -19,3 +19,10 @@ void LightSingleton::Initialize()
 	spotLight_ = std::make_unique<SpotLight>();
 
 }
+
+void LightSingleton::Finalize()
+{
+	directionalLight_.reset();
+	pointLight_.reset();
+	spotLight_.reset();
+}

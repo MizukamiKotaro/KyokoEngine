@@ -6,6 +6,7 @@
 #include "GraphicsPipelineSystem/PipelineTypeConfig.h"
 #include "DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
 #include "GraphicsPipelineSystem/GraphicsPiplineManager/GraphicsPiplineManager.h"
+#include "ResourceManager/ResourceManager.h"
 
 NegaPosiInverse::NegaPosiInverse()
 {
@@ -18,7 +19,7 @@ NegaPosiInverse::NegaPosiInverse()
 
 NegaPosiInverse::~NegaPosiInverse()
 {
-	negaPosiInverseResource_->Release();
+	ResourceManager::GetInstance()->AddResource(std::move(negaPosiInverseResource_));
 }
 
 void NegaPosiInverse::Draw(BlendMode blendMode)

@@ -1,6 +1,7 @@
 #include "ILight.h"
+#include "ResourceManager/ResourceManager.h"
 
 BaseLight::~BaseLight()
 {
-	resource_->Release();
+	ResourceManager::GetInstance()->AddResource(std::move(resource_));
 }
