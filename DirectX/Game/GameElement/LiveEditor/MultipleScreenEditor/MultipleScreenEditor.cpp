@@ -2,6 +2,7 @@
 #include "Camera.h"
 #include "TextureManager.h"
 #include "GameElement/LiveEditor/ScreenEditor/ScreenEditor.h"
+#include "WindowsInfo/WindowsInfo.h"
 
 MultipleScreenEditor::MultipleScreenEditor(const std::string& mainName, const std::string& name, uint32_t no)
 {
@@ -50,13 +51,14 @@ void MultipleScreenEditor::ApplyGlobalVariable()
 
 void MultipleScreenEditor::CreateScreen()
 {
+	Vector2 size = WindowsInfo::GetInstance()->GetWindowSize() * 0.5f;
 	for (uint32_t i = 0; i < screenNum_; i++) {
 		if (screenMap_.find(i) == screenMap_.end()) {
 			// なかったら作る
 			screenMap_[i] = std::make_unique<ScreenEditor>(treeName->main, treeName->name, treeName->tree, i);
 			if (i == 0) {
 				// 1つ目なら作成
-				lightAndOutlineMap_[i] = std::make_unique<SpotLightAndOutline>();
+				lightAndOutlineMap_[i] = std::make_unique<SpotLightAndOutline>(size);
 			}
 			else {
 				// 同じのを描画するようにハンドルを渡す

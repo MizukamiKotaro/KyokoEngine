@@ -10,11 +10,11 @@
 #include "Externals/DirectXTex/d3dx12.h"
 #include "ResourceManager/ResourceManager.h"
 
-LightDepth::LightDepth()
+LightDepth::LightDepth(const Vector2& size)
 {
 	piplineType_ = PipelineType::LIGHT_DEPTH;
 	outlineData_ = nullptr;
-	CreatePostEffect();
+	CreatePostEffect(true, true, size);
 }
 
 LightDepth::~LightDepth()

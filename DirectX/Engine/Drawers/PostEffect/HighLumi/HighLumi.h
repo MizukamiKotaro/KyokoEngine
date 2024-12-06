@@ -6,7 +6,7 @@
 class HighLumi : public BasePostEffect
 {
 public:
-	HighLumi();
+	HighLumi(const Vector2& size = windowSize_, bool isRender = true, bool isDepth = false);
 	~HighLumi() override;
 	/// <summary>
 	/// 描画処理

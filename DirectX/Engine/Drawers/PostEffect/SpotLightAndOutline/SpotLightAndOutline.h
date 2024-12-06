@@ -11,6 +11,7 @@ class SpotLightAndOutline
 {
 public:
 	SpotLightAndOutline();
+	SpotLightAndOutline(const Vector2& size);
 	~SpotLightAndOutline();
 
 	/// <summary>

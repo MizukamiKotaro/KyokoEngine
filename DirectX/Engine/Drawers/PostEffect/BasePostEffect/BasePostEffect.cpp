@@ -247,12 +247,12 @@ void BasePostEffect::CreateResources()
 	CreateDSV();
 }
 
-const D3D12_GPU_DESCRIPTOR_HANDLE BasePostEffect::GetSRVGPUDescriptorHandle() const
+D3D12_GPU_DESCRIPTOR_HANDLE BasePostEffect::GetSRVGPUDescriptorHandle() const
 {
 	return srvHandles_->gpuHandle;
 }
 
-void BasePostEffect::CreatePostEffect(const bool& isRender, const bool& isDepth, const Vector2& size)
+void BasePostEffect::CreatePostEffect(bool isRender, bool isDepth, const Vector2& size)
 {
 	size_ = size;
 	isRender_ = isRender;

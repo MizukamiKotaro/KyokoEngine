@@ -18,6 +18,24 @@ SpotLightAndOutline::SpotLightAndOutline()
 	light_->SetBloomDepth(bloomMemo_->GetDepthHandle());
 }
 
+SpotLightAndOutline::SpotLightAndOutline(const Vector2& size)
+{
+	light_ = std::make_unique<LightDepth>(size);
+	outline_ = std::make_unique<MemoDepth>(size);
+	object_ = std::make_unique<MemoDepth>(size);
+	bloomMemo_ = std::make_unique<MemoDepth>(size);
+	bloom_ = std::make_unique<Bloom>(size);
+	bloomTexture_ = std::make_unique<PostEffect>(size);
+
+	// GPUに送るためのアドレスのセット
+	light_->SetOutlineTex(outline_->GetSRVGPUDescriptorHandle());
+	light_->SetOutlineDepth(outline_->GetDepthHandle());
+	light_->SetObjectsTex(object_->GetSRVGPUDescriptorHandle());
+	light_->SetObjectsDepth(object_->GetDepthHandle());
+	light_->SetBloomTex(bloomTexture_->GetSRVGPUDescriptorHandle());
+	light_->SetBloomDepth(bloomMemo_->GetDepthHandle());
+}
+
 SpotLightAndOutline::~SpotLightAndOutline()
 {
 }

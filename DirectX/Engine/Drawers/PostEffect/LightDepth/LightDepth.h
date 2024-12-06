@@ -8,7 +8,7 @@ class Camera;
 class LightDepth : public BasePostEffect
 {
 public:
-	LightDepth();
+	LightDepth(const Vector2& size = windowSize_);
 	~LightDepth() override;
 
 	void Draw(BlendMode blendMode = BlendMode::kBlendModeNormal) override;

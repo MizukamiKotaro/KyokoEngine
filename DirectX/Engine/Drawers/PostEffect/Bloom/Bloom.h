@@ -13,6 +13,7 @@ class Bloom
 public:
 
 	Bloom();
+	Bloom(const Vector2& size);
 	~Bloom();
 	/// <summary>
 	/// 初期化

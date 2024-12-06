@@ -87,7 +87,5 @@ private:
 	std::unique_ptr<Sprite> screenSprite_; // スクリーンの目用
 	std::unique_ptr<PostEffect> postEffect_; // ポストエフェクト
 
-	std::unique_ptr<PostEffect> postEffect1_; // ポストエフェクト2
-
 	std::unique_ptr<Camera> camera_; // カメラ
 };

@@ -8,11 +8,10 @@
 #include "GraphicsPipelineSystem/GraphicsPiplineManager/GraphicsPiplineManager.h"
 #include "ResourceManager/ResourceManager.h"
 
-HighLumi::HighLumi()
+HighLumi::HighLumi(const Vector2& size, bool isRender, bool isDepth)
 {
 	piplineType_ = PipelineType::HIGH_LUMI;
-
-	CreatePostEffect();
+	CreatePostEffect(isRender, isDepth, size);
 }
 
 HighLumi::~HighLumi()

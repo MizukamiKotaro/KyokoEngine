@@ -32,7 +32,7 @@ public:
 class GaussianBlur
 {
 public:
-	GaussianBlur(bool isRender = true, bool isDepth = true, const Vector2& size = {});
+	GaussianBlur(bool isRender = true, bool isDepth = false, const Vector2& size = {});
 	void Initialize();
 	/// <summary>
 	/// 描画処理

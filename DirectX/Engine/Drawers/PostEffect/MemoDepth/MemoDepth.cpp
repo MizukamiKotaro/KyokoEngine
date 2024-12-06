@@ -9,10 +9,10 @@
 #include "GraphicsPipelineSystem/GraphicsPiplineManager/GraphicsPiplineManager.h"
 #include "Externals/DirectXTex/d3dx12.h"
 
-MemoDepth::MemoDepth()
+MemoDepth::MemoDepth(const Vector2& size)
 {
 	piplineType_ = PipelineType::COPY;
-	CreatePostEffect();
+	CreatePostEffect(true, true, size);
 }
 
 MemoDepth::~MemoDepth()

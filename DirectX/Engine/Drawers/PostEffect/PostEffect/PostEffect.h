@@ -6,5 +6,5 @@
 class PostEffect : public BasePostEffect
 {
 public:
-	PostEffect();
+	PostEffect(const Vector2& size = windowSize_, bool isRender = true, bool isDepth = false);
 };

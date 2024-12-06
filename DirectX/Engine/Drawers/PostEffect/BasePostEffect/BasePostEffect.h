@@ -48,14 +48,14 @@ public:
 	/// SRVGPUDescriptorHandleの取得,モデルなどにtextureとして渡す用
 	/// </summary>
 	/// <returns>SRVGPUDescriptorHandle</returns>
-	const D3D12_GPU_DESCRIPTOR_HANDLE GetSRVGPUDescriptorHandle() const;
+	D3D12_GPU_DESCRIPTOR_HANDLE GetSRVGPUDescriptorHandle() const;
 protected:
 	struct Material
 	{
 		Vector4 color;
 	};
 
-	void CreatePostEffect(const bool& isRender = true, const bool& isDepth = true, const Vector2& size = windowSize_);
+	void CreatePostEffect(bool isRender = true, bool isDepth = true, const Vector2& size = windowSize_);
 private:
 	void CreateMaterialRes();
 	void CreateTexRes();

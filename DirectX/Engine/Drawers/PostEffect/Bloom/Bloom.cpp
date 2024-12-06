@@ -1,5 +1,6 @@
 #include "Bloom.h"
 #include "ImGuiManager/ImGuiManager.h"
+#include "WindowsInfo/WindowsInfo.h"
 
 Bloom::Bloom()
 {
@@ -17,14 +18,28 @@ Bloom::Bloom()
 	gaussianBlur_->SetSigma(14.0f);
 }
 
+Bloom::Bloom(const Vector2& size)
+{
+	postEffect_ = std::make_unique<PostEffect>(size);
+	postEffect_->Initialize();
+
+	highLumi_ = std::make_unique<HighLumi>(size);
+	highLumi_->Initialize();
+	highLumi_->highLumiData_->min = 0.2f;
+	highLumi_->highLumiData_->max = 1.0f;
+
+	gaussianBlur_ = std::make_unique<GaussianBlur>(true, false, size);
+	gaussianBlur_->Initialize();
+	gaussianBlur_->SetSize(10);
+	gaussianBlur_->SetSigma(14.0f);
+}
+
 Bloom::~Bloom()
 {
-	
 }
 
 void Bloom::Initialize()
 {
-
 }
 
 void Bloom::Update()

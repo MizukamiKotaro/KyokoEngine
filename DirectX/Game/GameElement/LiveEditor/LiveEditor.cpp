@@ -154,18 +154,6 @@ void LiveEditor::WriteOutline()
 
 void LiveEditor::Draw(std::unique_ptr<SpotLightAndOutline>& lightAndOutline, const Camera& camera)
 {
-	// アウトライン用
-	lightAndOutline->PreDrawOutline();
-	objectManagers_[ManagerNames::kIdol]->Draw(camera);
-	instancingManager_->Draw(camera, "outline");
-	lightAndOutline->PostDrawOutline();
-
-	// そのまま用
-	lightAndOutline->PreDrawObject();
-	screenManager_->Draw(camera);
-	instancingManager_->Draw(camera);
-	lightAndOutline->PostDrawObject();
-
 	// ブルーム用
 	lightAndOutline->PreDrawBloom();
 	instancingManager_->Draw(camera, "bloom");
@@ -175,4 +163,16 @@ void LiveEditor::Draw(std::unique_ptr<SpotLightAndOutline>& lightAndOutline, con
 	lightAndOutline->PreDrawLight();
 	objectManagers_[ManagerNames::kLight]->DrawLight(camera);
 	lightAndOutline->PostDrawLight();
+
+	// そのまま用
+	lightAndOutline->PreDrawObject();
+	screenManager_->Draw(camera);
+	instancingManager_->Draw(camera);
+	lightAndOutline->PostDrawObject();
+
+	// アウトライン用
+	lightAndOutline->PreDrawOutline();
+	objectManagers_[ManagerNames::kIdol]->Draw(camera);
+	instancingManager_->Draw(camera, "outline");
+	lightAndOutline->PostDrawOutline();
 }

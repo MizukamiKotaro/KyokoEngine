@@ -6,7 +6,7 @@ class Camera;
 class MemoDepth : public BasePostEffect
 {
 public:
-	MemoDepth();
+	MemoDepth(const Vector2& size = windowSize_);
 	~MemoDepth() override;
 
 	const DescriptorHandles& GetDepthHandle() { return *depthHandles_; }
