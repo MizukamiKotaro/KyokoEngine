@@ -126,7 +126,7 @@ void LiveEditor::Update(float time)
 	camera_->Update();
 	screenManager_->Update(time);
 
-	WriteScreen();
+	//WriteScreen();
 	WriteOutline();
 }
 
@@ -166,7 +166,7 @@ void LiveEditor::Draw(std::unique_ptr<SpotLightAndOutline>& lightAndOutline, con
 
 	// そのまま用
 	lightAndOutline->PreDrawObject();
-	screenManager_->Draw(camera);
+	//screenManager_->Draw(camera);
 	instancingManager_->Draw(camera);
 	lightAndOutline->PostDrawObject();
 
