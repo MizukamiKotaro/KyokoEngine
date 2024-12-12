@@ -1,4 +1,5 @@
 [![DebugBuild](https://github.com/MizukamiKotaro/KyokoEngine/actions/workflows/DebugBuild.yml/badge.svg)](https://github.com/MizukamiKotaro/KyokoEngine/actions/workflows/DebugBuild.yml)
+[![ReleaseBuild](https://github.com/MizukamiKotaro/KyokoEngine/actions/workflows/ReleaseBuild.yml/badge.svg)](https://github.com/MizukamiKotaro/KyokoEngine/actions/workflows/ReleaseBuild.yml)
 
 # KyokoEngine
 
