@@ -1,6 +1,7 @@
+[![DebugBuild](https://github.com/MizukamiKotaro/KyokoEngine/actions/workflows/DebugBuild.yml/badge.svg)](https://github.com/MizukamiKotaro/KyokoEngine/actions/workflows/DebugBuild.yml)
+
 # KyokoEngine
 
-## アプリケーション
 ### 概要
 * ジャンル : リズムゲーム
 * 制作人数 : 1人
@@ -58,8 +59,6 @@
 
 カメラに動きを付けたいけど、1曲分の動きを作るのは大変なので、vmdのカメラのアニメーションデータを読み込み、再生できるようにしました
 
-
-## エンジン
 - **使用可能なデータと用途**
     * Model (obj)
     * RigidAnimationModel (gltf)
