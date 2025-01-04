@@ -798,17 +798,12 @@ void ModelDataManager::LoadPMDGltfMaterials(const std::string& filePath, std::ve
 		result.shinines = float(it->get<double>());
 
 		it = i->find("shared_toon_texture");
-		int32_t n = it->get<int32_t>();
-		if (n == 0) {
-			result.toonTextureNum = -1;
+		int32_t n = it->get<int32_t>() + 1;
+		if (n < 10) {
+			result.toonTextureNum = int32_t(TextureManager::GetInstance()->LoadTexture("toon0" + std::to_string(n) + ".bmp")->handles_->no);
 		}
 		else {
-			if (n < 10) {
-				result.toonTextureNum = int32_t(TextureManager::GetInstance()->LoadTexture("toon0" + std::to_string(n) + ".bmp")->handles_->no);
-			}
-			else {
-				result.toonTextureNum = int32_t(TextureManager::GetInstance()->LoadTexture("toon" + std::to_string(n) + ".bmp")->handles_->no);
-			}
+			result.toonTextureNum = int32_t(TextureManager::GetInstance()->LoadTexture("toon" + std::to_string(n) + ".bmp")->handles_->no);
 		}
 		
 		it = i->find("texture");
