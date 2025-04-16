@@ -29,7 +29,7 @@ private:
 	void CreateDepthRes();
 	void CreateResources() override;
 private:
-	ComPtr<ID3D12Resource> outlineResource_;
+	Kyoko::ResourceManualRelease outlineResource_;
 	const DescriptorHandles* depthHandles_;
 public:
 	OutlineData* outlineData_;

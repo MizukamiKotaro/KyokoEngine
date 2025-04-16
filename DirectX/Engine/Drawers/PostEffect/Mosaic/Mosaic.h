@@ -23,7 +23,7 @@ private:
 	void CreateMosaicRes();
 	void CreateResources() override;
 private:
-	ComPtr<ID3D12Resource> mosaicResource_;
+	Kyoko::ResourceManualRelease mosaicResource_;
 public:
 	MosaicData* mosaicData_;
 };

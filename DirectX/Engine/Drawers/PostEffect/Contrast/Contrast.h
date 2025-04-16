@@ -18,7 +18,7 @@ private:
 	void CreateContrastRes();
 	void CreateResources() override;
 private:
-	ComPtr<ID3D12Resource> contrastResource_;
+	Kyoko::ResourceManualRelease contrastResource_;
 public:
 	ContrastData* contrastData_;
 };

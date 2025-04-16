@@ -20,7 +20,7 @@ private:
 	void CreateWaterRes();
 	void CreateResources() override;
 private:
-	ComPtr<ID3D12Resource> waterResource_;
+	Kyoko::ResourceManualRelease waterResource_;
 public:
 	WaterOutlineData* waterData_;
 };

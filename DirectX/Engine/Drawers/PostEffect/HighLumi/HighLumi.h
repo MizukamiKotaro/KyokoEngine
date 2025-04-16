@@ -21,7 +21,7 @@ private:
 	void CreateHighLumiRes();
 	void CreateResources() override;
 private:
-	ComPtr<ID3D12Resource> highLumiResource_;
+	Kyoko::ResourceManualRelease highLumiResource_;
 public:
 	HighLumiData* highLumiData_;
 };

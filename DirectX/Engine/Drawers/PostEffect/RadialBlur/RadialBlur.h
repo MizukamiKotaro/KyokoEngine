@@ -22,7 +22,7 @@ private:
 	void CreateRadialBlurRes();
 	void CreateResources() override;
 private:
-	ComPtr<ID3D12Resource> radialBlurResource_;
+	Kyoko::ResourceManualRelease radialBlurResource_;
 public:
 	RadialBlurData* radialBlurData_;
 };

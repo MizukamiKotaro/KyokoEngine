@@ -9,12 +9,9 @@
 #include "calc.h"
 #include "DescriptorHeapManager/DescriptorHeapManager.h"
 #include "DescriptorHeapManager/DescriptorHeap/DescriptorHeap.h"
-#include "ResourceManager/ResourceManager.h"
 
 BaseModel::~BaseModel()
 {
-	ResourceManager::GetInstance()->AddReleaseResource(std::move(transformationResource_));
-	ResourceManager::GetInstance()->AddReleaseResource(std::move(materialResource_));
 }
 
 void BaseModel::SetTexture(const Texture* texture)
@@ -47,6 +44,11 @@ void BaseModel::SetColor(const Vector4& color)
 const Matrix4x4 BaseModel::GetRotateMatrix()
 {
 	return Matrix4x4::MakeRotateXYZMatrix(transform_.rotate_);
+}
+
+ID3D12Resource& BaseModel::GetMaterialData() const
+{
+	return *materialResource_.Get();
 }
 
 void BaseModel::CreateModel(const std::string& fileName)
@@ -84,9 +86,9 @@ void BaseModel::CreateResources()
 
 void BaseModel::CreateMaterialResource()
 {
-	materialResource_ = DirectXBase::CreateBufferResource(sizeof(Material));
+	materialResource_.CreateResource(sizeof(Material));
 
-	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
+	materialResource_.Map(reinterpret_cast<void**>(&materialData_));
 
 	materialData_->color = { 1.0f, 1.0f, 1.0f, 1.0f };
 	color_ = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -100,9 +102,9 @@ void BaseModel::CreateMaterialResource()
 void BaseModel::CreateTransformationResource()
 {
 	//WVP用のリソースを作る。Matrix4x4　1つ分のサイズを用意する
-	transformationResource_ = DirectXBase::CreateBufferResource(sizeof(TransformationMatrix));
+	transformationResource_.CreateResource(sizeof(TransformationMatrix));
 	transformationData_ = nullptr;
-	transformationResource_->Map(0, nullptr, reinterpret_cast<void**>(&transformationData_));
+	transformationResource_.Map(reinterpret_cast<void**>(&transformationData_));
 	*transformationData_ = { Matrix4x4::MakeIdentity4x4() ,Matrix4x4::MakeIdentity4x4(), Matrix4x4::Inverse(Matrix4x4::MakeIdentity4x4()) };
 }
 

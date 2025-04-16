@@ -11,7 +11,6 @@
 #include "Texture.h"
 #include "GraphicsPipelineSystem/PipelineTypeConfig.h"
 #include "GraphicsPipelineSystem/GraphicsPiplineManager/GraphicsPiplineManager.h"
-#include "ResourceManager/ResourceManager.h"
 
 const PipelineType Sprite::pipelineType_ = PipelineType::SPRITE;
 
@@ -124,9 +123,6 @@ Sprite::Sprite(const Texture* texture, const Vector2& pos, const Vector2& texLef
 
 Sprite::~Sprite()
 {
-	ResourceManager::GetInstance()->AddReleaseResource(std::move(vertexResource_));
-	ResourceManager::GetInstance()->AddReleaseResource(std::move(transformResource_));
-	ResourceManager::GetInstance()->AddReleaseResource(std::move(materialResource_));
 }
 
 void Sprite::Initialize()
@@ -157,9 +153,9 @@ void Sprite::Draw(const Camera& camera, BlendMode blendMode)
 	//Spriteの描画。変更に必要なものだけ変更する
 	commandList_->IASetVertexBuffers(0, 1, &vertexBufferView_); // VBVを設定
 	//マテリアルCBufferの場所を設定
-	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_.GetGPUVirtualAddress());
 	//TransformationMatrixCBufferの場所を設定
-	commandList_->SetGraphicsRootConstantBufferView(1, transformResource_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(1, transformResource_.GetGPUVirtualAddress());
 
 	commandList_->SetGraphicsRootDescriptorTable(2, srvGPUDescriptorHandle_);
 	//描画!!!!（DrawCall/ドローコール）
@@ -183,9 +179,9 @@ void Sprite::Draw(BlendMode blendMode)
 	//Spriteの描画。変更に必要なものだけ変更する
 	commandList_->IASetVertexBuffers(0, 1, &vertexBufferView_); // VBVを設定
 	//マテリアルCBufferの場所を設定
-	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_.GetGPUVirtualAddress());
 	//TransformationMatrixCBufferの場所を設定
-	commandList_->SetGraphicsRootConstantBufferView(1, transformResource_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(1, transformResource_.GetGPUVirtualAddress());
 
 	commandList_->SetGraphicsRootDescriptorTable(2, srvGPUDescriptorHandle_);
 	//描画!!!!（DrawCall/ドローコール）
@@ -327,25 +323,25 @@ void Sprite::AdjustTextureSize()
 void Sprite::CreateVertexRes()
 {
 	//Sprite用の頂点リソースを作る
-	vertexResource_ = DirectXBase::CreateBufferResource(sizeof(VertexData) * 6);
+	vertexResource_.CreateResource(sizeof(VertexData) * 6);
 	//頂点バッファーを作成する
 	//リソースの先頭アドレスから使う
-	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
+	vertexBufferView_.BufferLocation = vertexResource_.GetGPUVirtualAddress();
 	//使用するリソースのサイズは頂点6つ分のサイズ
 	vertexBufferView_.SizeInBytes = sizeof(VertexData) * 6;
 	//1頂点あたりのサイズ
 	vertexBufferView_.StrideInBytes = sizeof(VertexData);
 
-	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
+	vertexResource_.Map(reinterpret_cast<void**>(&vertexData_));
 }
 
 void Sprite::CreateMaterialRes()
 {
 	//マテリアル用のリソースを作る。今回はcolor1つ分を用意する
-	materialResource_ = DirectXBase::CreateBufferResource(sizeof(Material));
+	materialResource_.CreateResource(sizeof(Material));
 	//マテリアルデータを書き込む
 	//書き込むためのアドレスを取得\l
-	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
+	materialResource_.Map(reinterpret_cast<void**>(&materialData_));
 	//今回は赤を書き込んでいる
 	materialData_->color = { 1.0f,1.0f,1.0f,1.0f };
 	//*materialData_ = { Vector4(1.0f, 1.0f, 1.0f, 1.0f) , false };
@@ -355,10 +351,10 @@ void Sprite::CreateMaterialRes()
 void Sprite::CreateTranformRes()
 {
 	//Sprite用のTransformationMatrix用のリソースを作る。Matrix4x4　1つ分のサイズを用意する
-	transformResource_ = DirectXBase::CreateBufferResource(sizeof(TransformationMatrix));
+	transformResource_.CreateResource(sizeof(TransformationMatrix));
 	//データを書き込む
 	//書き込むためのアドレスを取得
-	transformResource_->Map(0, nullptr, reinterpret_cast<void**>(&transformData_));
+	transformResource_.Map(reinterpret_cast<void**>(&transformData_));
 	//単位行列を書き込んでいく
 	transformData_->WVP = { Matrix4x4::MakeIdentity4x4() };
 	//*transformationMatrixData_ = { Matrix4x4::MakeIdentity4x4() ,Matrix4x4::MakeIdentity4x4() };

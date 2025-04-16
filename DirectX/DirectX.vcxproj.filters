@@ -496,8 +496,11 @@
     <Filter Include="Game\GameElement\BaseStageObject\StageObjectFactory">
       <UniqueIdentifier>{1eda677c-125f-4bf8-9bfb-bbc18e725cc0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Base\ResourceManager">
-      <UniqueIdentifier>{b71dc41b-a688-4ee8-a75e-c3d0e8f8feb6}</UniqueIdentifier>
+    <Filter Include="Engine\Base\Resource">
+      <UniqueIdentifier>{16705b2f-03a2-40e7-b136-f71a1f8315e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Base\Resource\ResourceReleaser">
+      <UniqueIdentifier>{aefa0bdd-6536-4727-8a72-de601d38a8d0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1029,8 +1032,11 @@
     <ClCompile Include="Engine\Editor\BaseEditor.h.cpp">
       <Filter>Engine\Editor</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Base\ResourceManager\ResourceManager.cpp">
-      <Filter>Engine\Base\ResourceManager</Filter>
+    <ClCompile Include="Engine\Base\Resource\Resource.cpp">
+      <Filter>Engine\Base\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Base\Resource\ResourceReleaser\ResourceReleaser.cpp">
+      <Filter>Engine\Base\Resource\ResourceReleaser</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1658,8 +1664,11 @@
     <ClInclude Include="Engine\Editor\BaseEditor.h">
       <Filter>Engine\Editor</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Base\ResourceManager\ResourceManager.h">
-      <Filter>Engine\Base\ResourceManager</Filter>
+    <ClInclude Include="Engine\Base\Resource\Resource.h">
+      <Filter>Engine\Base\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Base\Resource\ResourceReleaser\ResourceReleaser.h">
+      <Filter>Engine\Base\Resource\ResourceReleaser</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

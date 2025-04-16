@@ -6,7 +6,6 @@
 #include "GraphicsPipelineSystem/PipelineTypeConfig.h"
 #include "DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
 #include "GraphicsPipelineSystem/GraphicsPiplineManager/GraphicsPiplineManager.h"
-#include "ResourceManager/ResourceManager.h"
 
 Gaussian::Gaussian(const bool& isRender, const bool& isDepth, const Vector2& size)
 {
@@ -19,7 +18,6 @@ Gaussian::Gaussian(const bool& isRender, const bool& isDepth, const Vector2& siz
 
 Gaussian::~Gaussian()
 {
-	ResourceManager::GetInstance()->AddReleaseResource(std::move(gaussianBlurResource_));
 }
 
 void Gaussian::Draw(BlendMode blendMode)
@@ -28,9 +26,9 @@ void Gaussian::Draw(BlendMode blendMode)
 
 	psoManager_->SetBlendMode(piplineType_, blendMode);
 
-	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_.GetGPUVirtualAddress());
 	commandList_->SetGraphicsRootDescriptorTable(1, srvHandles_->gpuHandle);
-	commandList_->SetGraphicsRootConstantBufferView(2, gaussianBlurResource_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(2, gaussianBlurResource_.GetGPUVirtualAddress());
 
 	//描画!!!!（DrawCall/ドローコール）
 	commandList_->DrawInstanced(3, 1, 0, 0);
@@ -39,9 +37,9 @@ void Gaussian::Draw(BlendMode blendMode)
 
 void Gaussian::CreateGaussianBlurRes()
 {
-	gaussianBlurResource_ = DirectXBase::CreateBufferResource(sizeof(GaussianBlurData));
+	gaussianBlurResource_.CreateResource(sizeof(GaussianBlurData));
 
-	gaussianBlurResource_->Map(0, nullptr, reinterpret_cast<void**>(&gaussianBlurData_));
+	gaussianBlurResource_.Map(reinterpret_cast<void**>(&gaussianBlurData_));
 
 	gaussianBlurData_->width = 9;
 	gaussianBlurData_->height = 0;

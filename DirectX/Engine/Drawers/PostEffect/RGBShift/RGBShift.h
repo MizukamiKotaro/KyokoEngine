@@ -21,7 +21,7 @@ private:
 	void CreateRGBShiftRes();
 	void CreateResources() override;
 private:
-	ComPtr<ID3D12Resource> rgbShiftResource_;
+	Kyoko::ResourceManualRelease rgbShiftResource_;
 public:
 	RGBShiftData* rgbShiftData_;
 };

@@ -7,9 +7,9 @@ PointLight::PointLight()
 {
 	lightType_ = LightType::kPointLight;
 
-	resource_ = DirectXBase::CreateBufferResource(sizeof(PointLightData));
+	resource_.CreateResource(sizeof(PointLightData));
 	light_ = nullptr;
-	resource_->Map(0, nullptr, reinterpret_cast<void**>(&light_));
+	resource_.Map(reinterpret_cast<void**>(&light_));
 	light_->color = { 1.0f,1.0f,1.0f,1.0f };
 	light_->position = { 0.0f,0.0f,0.0f };
 	light_->intensity = 0.0f;

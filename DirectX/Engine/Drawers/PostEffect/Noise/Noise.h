@@ -49,7 +49,7 @@ private:
 	void CreateNoiseRes();
 	void CreateResources() override;
 private:
-	ComPtr<ID3D12Resource> noiseResource_;
+	Kyoko::ResourceManualRelease noiseResource_;
 public:
 	NoiseData* noiseData_;
 	const Vector3* camera;

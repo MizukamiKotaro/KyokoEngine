@@ -21,7 +21,7 @@ private:
 	void CreateBlurRes();
 	void CreateResources() override;
 private:
-	ComPtr<ID3D12Resource> blurResource_;
+	Kyoko::ResourceManualRelease blurResource_;
 public:
 	BlurData* blurData_;
 };

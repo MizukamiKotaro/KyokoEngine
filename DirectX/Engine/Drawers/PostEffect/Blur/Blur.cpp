@@ -6,7 +6,6 @@
 #include "GraphicsPipelineSystem/PipelineTypeConfig.h"
 #include "DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
 #include "GraphicsPipelineSystem/GraphicsPiplineManager/GraphicsPiplineManager.h"
-#include "ResourceManager/ResourceManager.h"
 
 Blur::Blur()
 {
@@ -17,7 +16,6 @@ Blur::Blur()
 
 Blur::~Blur()
 {
-	ResourceManager::GetInstance()->AddReleaseResource(std::move(blurResource_));
 }
 
 void Blur::Draw(BlendMode blendMode)
@@ -44,11 +42,11 @@ void Blur::Draw(BlendMode blendMode)
 
 	//Spriteの描画。変更に必要なものだけ変更する
 	//マテリアルCBufferの場所を設定
-	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_.GetGPUVirtualAddress());
 
 	commandList_->SetGraphicsRootDescriptorTable(1, srvHandles_->gpuHandle);
 
-	commandList_->SetGraphicsRootConstantBufferView(2, blurResource_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(2, blurResource_.GetGPUVirtualAddress());
 
 	//描画!!!!（DrawCall/ドローコール）
 	commandList_->DrawInstanced(3, 1, 0, 0);
@@ -57,9 +55,9 @@ void Blur::Draw(BlendMode blendMode)
 
 void Blur::CreateBlurRes()
 {
-	blurResource_ = DirectXBase::CreateBufferResource(sizeof(BlurData));
+	blurResource_.CreateResource(sizeof(BlurData));
 
-	blurResource_->Map(0, nullptr, reinterpret_cast<void**>(&blurData_));
+	blurResource_.Map(reinterpret_cast<void**>(&blurData_));
 
 	blurData_->angle = 0.0f;
 

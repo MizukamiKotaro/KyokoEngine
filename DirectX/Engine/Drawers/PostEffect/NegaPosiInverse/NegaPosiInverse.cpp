@@ -6,7 +6,6 @@
 #include "GraphicsPipelineSystem/PipelineTypeConfig.h"
 #include "DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
 #include "GraphicsPipelineSystem/GraphicsPiplineManager/GraphicsPiplineManager.h"
-#include "ResourceManager/ResourceManager.h"
 
 NegaPosiInverse::NegaPosiInverse()
 {
@@ -19,7 +18,6 @@ NegaPosiInverse::NegaPosiInverse()
 
 NegaPosiInverse::~NegaPosiInverse()
 {
-	ResourceManager::GetInstance()->AddReleaseResource(std::move(negaPosiInverseResource_));
 }
 
 void NegaPosiInverse::Draw(BlendMode blendMode)
@@ -37,11 +35,11 @@ void NegaPosiInverse::Draw(BlendMode blendMode)
 
 	//Spriteの描画。変更に必要なものだけ変更する
 	//マテリアルCBufferの場所を設定
-	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_.GetGPUVirtualAddress());
 
 	commandList_->SetGraphicsRootDescriptorTable(1, srvHandles_->gpuHandle);
 
-	commandList_->SetGraphicsRootConstantBufferView(2, negaPosiInverseResource_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(2, negaPosiInverseResource_.GetGPUVirtualAddress());
 
 	//描画!!!!（DrawCall/ドローコール）
 	commandList_->DrawInstanced(3, 1, 0, 0);
@@ -49,8 +47,8 @@ void NegaPosiInverse::Draw(BlendMode blendMode)
 
 void NegaPosiInverse::CreateNegaPosiInverseRes()
 {
-	negaPosiInverseResource_ = DirectXBase::CreateBufferResource(sizeof(NegaPosiInverseData));
-	negaPosiInverseResource_->Map(0, nullptr, reinterpret_cast<void**>(&negaPosiInverseData_));
+	negaPosiInverseResource_.CreateResource(sizeof(NegaPosiInverseData));
+	negaPosiInverseResource_.Map(reinterpret_cast<void**>(&negaPosiInverseData_));
 
 	negaPosiInverseData_->isNormal = 1;
 }

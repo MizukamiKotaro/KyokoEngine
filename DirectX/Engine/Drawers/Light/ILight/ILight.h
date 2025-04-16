@@ -1,6 +1,8 @@
 #pragma once
 #include <wrl.h>
 #include <d3d12.h>
+#include "Resource/Resource.h"
+
 /// <summary>
 /// ライトのタイプ
 /// </summary>
@@ -15,13 +17,13 @@ enum class LightType {
 class BaseLight
 {
 public:
-	virtual ~BaseLight();
+	virtual ~BaseLight() = default;
 	virtual void Update() = 0;
 	/// <summary>
 	/// GPUアドレスの取得
 	/// </summary>
 	/// <returns>GPUアドレス</returns>
-	const D3D12_GPU_VIRTUAL_ADDRESS GetGPUVirtualAddress() const { return resource_->GetGPUVirtualAddress(); }
+	const D3D12_GPU_VIRTUAL_ADDRESS GetGPUVirtualAddress() const { return resource_.GetGPUVirtualAddress(); }
 	/// <summary>
 	/// タイプの取得
 	/// </summary>
@@ -29,5 +31,5 @@ public:
 	const LightType GetLightType() const { return lightType_; }
 protected:
 	LightType lightType_; // タイプ
-	Microsoft::WRL::ComPtr<ID3D12Resource> resource_; // リソース
+	Kyoko::ResourceManualRelease resource_; // リソース
 };

@@ -20,7 +20,7 @@ private:
 	void CreateScanNoiseRes();
 	void CreateResources() override;
 private:
-	ComPtr<ID3D12Resource> scanNoiseResource_;
+	Kyoko::ResourceManualRelease scanNoiseResource_;
 public:
 	ScanNoiseData* scanNoiseData_;
 };

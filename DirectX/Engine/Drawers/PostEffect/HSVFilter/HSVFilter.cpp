@@ -6,7 +6,6 @@
 #include "GraphicsPipelineSystem/PipelineTypeConfig.h"
 #include "DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
 #include "GraphicsPipelineSystem/GraphicsPiplineManager/GraphicsPiplineManager.h"
-#include "ResourceManager/ResourceManager.h"
 
 HSVFilter::HSVFilter()
 {
@@ -19,7 +18,6 @@ HSVFilter::HSVFilter()
 
 HSVFilter::~HSVFilter()
 {
-	ResourceManager::GetInstance()->AddReleaseResource(std::move(hsvResource_));
 }
 
 void HSVFilter::Draw(BlendMode blendMode)
@@ -29,9 +27,9 @@ void HSVFilter::Draw(BlendMode blendMode)
 
 	psoManager_->SetBlendMode(piplineType_, blendMode);
 
-	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_.GetGPUVirtualAddress());
 	commandList_->SetGraphicsRootDescriptorTable(1, srvHandles_->gpuHandle);
-	commandList_->SetGraphicsRootConstantBufferView(2, hsvResource_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(2, hsvResource_.GetGPUVirtualAddress());
 
 	//描画!!!!（DrawCall/ドローコール）
 	commandList_->DrawInstanced(3, 1, 0, 0);
@@ -40,8 +38,8 @@ void HSVFilter::Draw(BlendMode blendMode)
 
 void HSVFilter::CreateHSVRes()
 {
-	hsvResource_ = DirectXBase::CreateBufferResource(sizeof(HSVData));
-	hsvResource_->Map(0, nullptr, reinterpret_cast<void**>(&hsvData_));
+	hsvResource_.CreateResource(sizeof(HSVData));
+	hsvResource_.Map(reinterpret_cast<void**>(&hsvData_));
 	hsvData_->hue = 0.0f;
 	hsvData_->saturate = 0.0f;
 	hsvData_->value = 0.0f;

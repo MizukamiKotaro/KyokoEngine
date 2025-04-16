@@ -6,7 +6,6 @@
 #include "GraphicsPipelineSystem/PipelineTypeConfig.h"
 #include "DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
 #include "GraphicsPipelineSystem/GraphicsPiplineManager/GraphicsPiplineManager.h"
-#include "ResourceManager/ResourceManager.h"
 
 RGBShift::RGBShift()
 {
@@ -17,7 +16,6 @@ RGBShift::RGBShift()
 
 RGBShift::~RGBShift()
 {
-	ResourceManager::GetInstance()->AddReleaseResource(std::move(rgbShiftResource_));
 }
 
 void RGBShift::Draw(BlendMode blendMode)
@@ -37,11 +35,11 @@ void RGBShift::Draw(BlendMode blendMode)
 
 	//Spriteの描画。変更に必要なものだけ変更する
 	//マテリアルCBufferの場所を設定
-	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_.GetGPUVirtualAddress());
 
 	commandList_->SetGraphicsRootDescriptorTable(1, srvHandles_->gpuHandle);
 
-	commandList_->SetGraphicsRootConstantBufferView(2, rgbShiftResource_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(2, rgbShiftResource_.GetGPUVirtualAddress());
 
 	//描画!!!!（DrawCall/ドローコール）
 	commandList_->DrawInstanced(3, 1, 0, 0);
@@ -49,8 +47,8 @@ void RGBShift::Draw(BlendMode blendMode)
 
 void RGBShift::CreateRGBShiftRes()
 {
-	rgbShiftResource_ = DirectXBase::CreateBufferResource(sizeof(RGBShiftData));
-	rgbShiftResource_->Map(0, nullptr, reinterpret_cast<void**>(&rgbShiftData_));
+	rgbShiftResource_.CreateResource(sizeof(RGBShiftData));
+	rgbShiftResource_.Map(reinterpret_cast<void**>(&rgbShiftData_));
 
 	rgbShiftData_->shift = 0.007f;
 	rgbShiftData_->isNormal = 1;

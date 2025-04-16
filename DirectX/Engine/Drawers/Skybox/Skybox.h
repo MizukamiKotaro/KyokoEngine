@@ -6,6 +6,7 @@
 #include "Vector3.h"
 #include "Vector4.h"
 #include "Matrix4x4.h"
+#include "Resource/Resource.h"
 
 class Camera;
 class Texture;
@@ -44,17 +45,15 @@ private:
 	void CreateTranformRes();
 
 private:
-	// namespace省略
-	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-	ComPtr<ID3D12Resource> vertexResource_;
+	Kyoko::ResourceManualRelease vertexResource_;
 	VertexData* vertexData_;
-	Microsoft::WRL::ComPtr<ID3D12Resource> indexResource_;
+	Kyoko::ResourceManualRelease indexResource_;
 	D3D12_INDEX_BUFFER_VIEW indexBufferView_{};
 	uint32_t* mappedIndex;
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_{};
-	ComPtr<ID3D12Resource> materialResource_;
+	Kyoko::ResourceManualRelease materialResource_;
 	Material* materialData_;
-	ComPtr<ID3D12Resource> transformResource_;
+	Kyoko::ResourceManualRelease transformResource_;
 	TransformationMatrix* transformData_;
 
 public:

@@ -7,6 +7,7 @@
 #include "Matrix4x4.h"
 #include "ModelData/VertexData3D.h"
 #include "Base/DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
+#include "Resource/Resource.h"
 
 const uint32_t kNumMaxInfluence = 4;
 struct VertexInfluence
@@ -22,17 +23,17 @@ struct WellForGPU
 struct SkinCluster
 {
 	std::vector<Matrix4x4> inverseBindPoseMatrices;
-	Microsoft::WRL::ComPtr<ID3D12Resource> influenceResouce;
+	Kyoko::ResourceManualRelease influenceResouce;
 	std::span<VertexInfluence> mappedInfluence;
-	Microsoft::WRL::ComPtr<ID3D12Resource> paletteResouce;
+	Kyoko::ResourceManualRelease paletteResouce;
 	std::span<WellForGPU> mappedPalette;
 	const DescriptorHandles* paletteSrvHandle;
 
 	const DescriptorHandles* inputVertexSrvHandle;
-	Microsoft::WRL::ComPtr<ID3D12Resource> outputVertexResouce;
+	Kyoko::ResourceManualRelease outputVertexResouce;
 	const DescriptorHandles* outputVertexSrvHandle;
 	const DescriptorHandles* influenceSrvHandle;
-	Microsoft::WRL::ComPtr<ID3D12Resource> informationResouce;
+	Kyoko::ResourceManualRelease informationResouce;
 	uint32_t* information;
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView{};
 };

@@ -6,7 +6,6 @@
 #include "GraphicsPipelineSystem/PipelineTypeConfig.h"
 #include "DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
 #include "GraphicsPipelineSystem/GraphicsPiplineManager/GraphicsPiplineManager.h"
-#include "ResourceManager/ResourceManager.h"
 
 RadialBlur::RadialBlur()
 {
@@ -17,7 +16,6 @@ RadialBlur::RadialBlur()
 
 RadialBlur::~RadialBlur()
 {
-	ResourceManager::GetInstance()->AddReleaseResource(std::move(radialBlurResource_));
 }
 
 void RadialBlur::Draw(BlendMode blendMode)
@@ -29,9 +27,9 @@ void RadialBlur::Draw(BlendMode blendMode)
 	psoManager_->SetBlendMode(piplineType_, blendMode);
 
 	
-	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_.GetGPUVirtualAddress());
 	commandList_->SetGraphicsRootDescriptorTable(1, srvHandles_->gpuHandle);
-	commandList_->SetGraphicsRootConstantBufferView(2, radialBlurResource_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(2, radialBlurResource_.GetGPUVirtualAddress());
 
 	//描画!!!!（DrawCall/ドローコール）
 	commandList_->DrawInstanced(3, 1, 0, 0);
@@ -40,8 +38,8 @@ void RadialBlur::Draw(BlendMode blendMode)
 
 void RadialBlur::CreateRadialBlurRes()
 {
-	radialBlurResource_ = DirectXBase::CreateBufferResource(sizeof(RadialBlurData));
-	radialBlurResource_->Map(0, nullptr, reinterpret_cast<void**>(&radialBlurData_));
+	radialBlurResource_.CreateResource(sizeof(RadialBlurData));
+	radialBlurResource_.Map(reinterpret_cast<void**>(&radialBlurData_));
 	radialBlurData_->center = { 0.5f,0.5f };
 	radialBlurData_->width = -0.05f;
 	radialBlurData_->numSamples = 10;

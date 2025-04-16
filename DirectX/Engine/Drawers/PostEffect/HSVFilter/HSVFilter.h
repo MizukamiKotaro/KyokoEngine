@@ -19,7 +19,7 @@ private:
 	void CreateHSVRes();
 	void CreateResources() override;
 private:
-	ComPtr<ID3D12Resource> hsvResource_;
+	Kyoko::ResourceManualRelease hsvResource_;
 public:
 	HSVData* hsvData_;
 };

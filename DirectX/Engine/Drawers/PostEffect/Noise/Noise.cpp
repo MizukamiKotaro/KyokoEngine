@@ -7,7 +7,6 @@
 #include "DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
 #include "GraphicsPipelineSystem/GraphicsPiplineManager/GraphicsPiplineManager.h"
 #include "WindowsInfo/WindowsInfo.h"
-#include "ResourceManager/ResourceManager.h"
 
 Noise::Noise()
 {
@@ -19,7 +18,6 @@ Noise::Noise()
 
 Noise::~Noise()
 {
-	ResourceManager::GetInstance()->AddReleaseResource(std::move(noiseResource_));
 }
 
 void Noise::SetCameraPos(const Vector3& pos)
@@ -67,9 +65,9 @@ void Noise::Draw(BlendMode blendMode)
 
 	psoManager_->SetBlendMode(piplineType_, blendMode);
 
-	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_.GetGPUVirtualAddress());
 	commandList_->SetGraphicsRootDescriptorTable(1, srvHandles_->gpuHandle);
-	commandList_->SetGraphicsRootConstantBufferView(2, noiseResource_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(2, noiseResource_.GetGPUVirtualAddress());
 
 	//描画!!!!（DrawCall/ドローコール）
 	commandList_->DrawInstanced(3, 1, 0, 0);
@@ -78,9 +76,9 @@ void Noise::Draw(BlendMode blendMode)
 
 void Noise::CreateNoiseRes()
 {
-	noiseResource_ = DirectXBase::CreateBufferResource(sizeof(NoiseData));
+	noiseResource_.CreateResource(sizeof(NoiseData));
 
-	noiseResource_->Map(0, nullptr, reinterpret_cast<void**>(&noiseData_));
+	noiseResource_.Map(reinterpret_cast<void**>(&noiseData_));
 
 	noiseData_->density = 10.0f;
 	noiseData_->screenSize = WindowsInfo::GetInstance()->GetWindowSize();

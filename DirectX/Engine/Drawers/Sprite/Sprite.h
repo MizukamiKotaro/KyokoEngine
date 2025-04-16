@@ -9,6 +9,7 @@
 #include "Utils/Math/Vector4.h"
 #include "Utils/Math/Matrix4x4.h"
 #include "GraphicsPipelineSystem/BlendModeConfig.h"
+#include "Resource/Resource.h"
 
 class Camera;
 class Texture;
@@ -44,9 +45,6 @@ public:
 	struct TransformationMatrix {
 		Matrix4x4 WVP;
 	};
-
-	// namespace省略
-	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 
 	void Initialize();
 
@@ -86,12 +84,12 @@ private:
 	void CreateTranformRes();
 
 private:
-	ComPtr<ID3D12Resource> vertexResource_;
+	Kyoko::ResourceManualRelease vertexResource_;
 	VertexData* vertexData_;
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_{};
-	ComPtr<ID3D12Resource> materialResource_;
+	Kyoko::ResourceManualRelease materialResource_;
 	Material* materialData_;
-	ComPtr<ID3D12Resource> transformResource_;
+	Kyoko::ResourceManualRelease transformResource_;
 	TransformationMatrix* transformData_;
 
 public:

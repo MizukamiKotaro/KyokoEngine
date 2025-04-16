@@ -26,10 +26,6 @@ SkinningModel::SkinningModel(const std::string& fileName, const bool& ispmx)
 
 SkinningModel::~SkinningModel()
 {
-	skinCluter_->influenceResouce->Release();
-	skinCluter_->paletteResouce->Release();
-	skinCluter_->informationResouce->Release();
-	skinCluter_->outputVertexResouce->Release();
 	srvHeap_->AddDeleteDescriptor(skinCluter_->influenceSrvHandle);
 	srvHeap_->AddDeleteDescriptor(skinCluter_->inputVertexSrvHandle);
 	srvHeap_->AddDeleteDescriptor(skinCluter_->outputVertexSrvHandle);
@@ -161,9 +157,9 @@ void SkinningModel::CreateSkinCluster()
 {
 	SkinCluster skinCluster;
 	// palette用のResourceを確保
-	skinCluster.paletteResouce = DirectXBase::CreateBufferResource(sizeof(WellForGPU) * skeleton_->joints.size());
+	skinCluster.paletteResouce.CreateResource(sizeof(WellForGPU) * skeleton_->joints.size());
 	WellForGPU* mappedPalette = nullptr;
-	skinCluster.paletteResouce->Map(0, nullptr, reinterpret_cast<void**>(&mappedPalette));
+	skinCluster.paletteResouce.Map(reinterpret_cast<void**>(&mappedPalette));
 	skinCluster.mappedPalette = { mappedPalette,skeleton_->joints.size() };
 	skinCluster.paletteSrvHandle = srvHeap_->GetNewDescriptorHandle();
 
@@ -179,9 +175,9 @@ void SkinningModel::CreateSkinCluster()
 	DirectXBase::GetInstance()->GetDevice()->CreateShaderResourceView(skinCluster.paletteResouce.Get(), &paletteSRVDesc, skinCluster.paletteSrvHandle->cpuHandle);
 
 	// influence用のResourceを確保。頂点ごとにinfluence情報を追加できるようにする
-	skinCluster.influenceResouce = DirectXBase::CreateBufferResource(sizeof(VertexInfluence) * modelData_->mesh.verteces.size());
+	skinCluster.influenceResouce.CreateResource(sizeof(VertexInfluence) * modelData_->mesh.verteces.size());
 	VertexInfluence* mappedInfluence = nullptr;
-	skinCluster.influenceResouce->Map(0, nullptr, reinterpret_cast<void**>(&mappedInfluence));
+	skinCluster.influenceResouce.Map(reinterpret_cast<void**>(&mappedInfluence));
 	std::memset(mappedInfluence, 0, sizeof(VertexInfluence) * modelData_->mesh.verteces.size());
 	skinCluster.mappedInfluence = { mappedInfluence,modelData_->mesh.verteces.size() };
 	skinCluster.influenceSrvHandle = srvHeap_->GetNewDescriptorHandle();
@@ -234,7 +230,7 @@ void SkinningModel::CreateSkinCluster()
 	DirectXBase::GetInstance()->GetDevice()->CreateShaderResourceView(modelData_->mesh.vertexResource_.Get(), &inputVertexSRVDesc, skinCluster.inputVertexSrvHandle->cpuHandle);
 
 	// outputVertex用のuavの作成
-	skinCluster.outputVertexResouce = DirectXBase::CreateBufferResource(sizeof(VertexData) * modelData_->mesh.verteces.size(), D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
+	skinCluster.outputVertexResouce.CreateResource(sizeof(VertexData) * modelData_->mesh.verteces.size(), D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
 	
 	skinCluster.outputVertexSrvHandle = srvHeap_->GetNewDescriptorHandle();
 	D3D12_UNORDERED_ACCESS_VIEW_DESC outputVertexUAVDesc{};
@@ -248,12 +244,12 @@ void SkinningModel::CreateSkinCluster()
 
 
 	// informationのConstantBuffer
-	skinCluster.informationResouce = DirectXBase::CreateBufferResource(sizeof(uint32_t));
+	skinCluster.informationResouce.CreateResource(sizeof(uint32_t));
 	skinCluster.information = nullptr;
-	skinCluster.informationResouce->Map(0, nullptr, reinterpret_cast<void**>(&skinCluster.information));
+	skinCluster.informationResouce.Map(reinterpret_cast<void**>(&skinCluster.information));
 	*skinCluster.information = uint32_t(modelData_->mesh.verteces.size());
 
-	skinCluster.vertexBufferView.BufferLocation = skinCluster.outputVertexResouce->GetGPUVirtualAddress();
+	skinCluster.vertexBufferView.BufferLocation = skinCluster.outputVertexResouce.GetGPUVirtualAddress();
 	skinCluster.vertexBufferView.SizeInBytes = UINT(sizeof(VertexData) * modelData_->mesh.verteces.size());
 	skinCluster.vertexBufferView.StrideInBytes = sizeof(VertexData);
 
@@ -311,7 +307,7 @@ void SkinningModel::UpdateCompute()
 	commandList_->SetComputeRootDescriptorTable(1, skinCluter_->inputVertexSrvHandle->gpuHandle);
 	commandList_->SetComputeRootDescriptorTable(2, skinCluter_->influenceSrvHandle->gpuHandle);
 	commandList_->SetComputeRootDescriptorTable(3, skinCluter_->outputVertexSrvHandle->gpuHandle);
-	commandList_->SetComputeRootConstantBufferView(4, skinCluter_->informationResouce->GetGPUVirtualAddress());
+	commandList_->SetComputeRootConstantBufferView(4, skinCluter_->informationResouce.GetGPUVirtualAddress());
 	commandList_->Dispatch(UINT(modelData_->mesh.verteces.size() + 1023) / 1024, 1, 1);
 
 	D3D12_RESOURCE_BARRIER barrierDesc{};

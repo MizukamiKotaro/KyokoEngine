@@ -2,6 +2,7 @@
 #include "Matrix4x4.h"
 #include <wrl.h>
 #include <d3d12.h>
+#include "Resource/Resource.h"
 
 /// <summary>
 /// 変換行列データ
@@ -11,7 +12,6 @@ class Transformation
 {
 public:
 	Transformation();
-	~Transformation();
 	/// <summary>
 	/// 変換行列
 	/// </summary>
@@ -20,6 +20,6 @@ public:
 		Matrix4x4 World; // ワールド行列
 		Matrix4x4 WorldInverse; // ワールド逆行列
 	};
-	Microsoft::WRL::ComPtr<ID3D12Resource> transformationResource; // リソース
+	Kyoko::ResourceManualRelease transformationResource; // リソース
 	TransformationMatrix* transformationData; // データ
 };

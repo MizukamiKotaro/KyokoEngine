@@ -11,7 +11,6 @@
 #include "GraphicsPipelineSystem/PipelineTypeConfig.h"
 #include "DescriptorHeapManager/DescriptorHeap/DescriptorHeap.h"
 #include "GraphicsPipelineSystem/GraphicsPiplineManager/GraphicsPiplineManager.h"
-#include "Base/ResourceManager/ResourceManager.h"
 
 const float BasePostEffect::clearColor[4] = { 0.0f,0.0f,0.0f,0.0f };
 
@@ -23,10 +22,6 @@ Vector2 BasePostEffect::windowSize_ = {};
 
 BasePostEffect::~BasePostEffect()
 {
-	ResourceManager::GetInstance()->AddReleaseResource(std::move(materialResource_));
-	ResourceManager::GetInstance()->AddResource(std::move(texResource_));
-	ResourceManager::GetInstance()->AddReleaseResource(std::move(rtvResource_));
-	ResourceManager::GetInstance()->AddResource(std::move(dsvResource_));
 	srvHeap_->AddDeleteDescriptor(srvHandles_);
 	if (isRender_) {
 		rtvHeap_->AddDeleteDescriptor(rtvHandles_);
@@ -64,7 +59,7 @@ void BasePostEffect::Draw(BlendMode blendMode)
 
 	psoManager_->SetBlendMode(piplineType_, blendMode);
 
-	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_.GetGPUVirtualAddress());
 	
 	commandList_->SetGraphicsRootDescriptorTable(1, srvHandles_->gpuHandle);
 
@@ -121,10 +116,10 @@ void BasePostEffect::PostDrawScene()
 void BasePostEffect::CreateMaterialRes()
 {
 	//マテリアル用のリソースを作る。今回はcolor1つ分を用意する
-	materialResource_ = DirectXBase::CreateBufferResource(sizeof(Material));
+	materialResource_.CreateResource(sizeof(Material));
 	//マテリアルデータを書き込む
-	//書き込むためのアドレスを取得l
-	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
+	//書き込むためのアドレスを取得
+	materialResource_.Map(reinterpret_cast<void**>(&materialData_));
 	//今回は赤を書き込んでいる
 	materialData_->color = { 1.0f,1.0f,1.0f,1.0f };
 	color_ = { 1.0f,1.0f,1.0f,1.0f };
@@ -150,7 +145,7 @@ void BasePostEffect::CreateTexRes()
 		&texDesc,
 		D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE,
 		&value,
-		IID_PPV_ARGS(&texResource_)
+		IID_PPV_ARGS(texResource_.GetAddressOf())
 	);
 	assert(SUCCEEDED(hr));
 
@@ -168,7 +163,7 @@ void BasePostEffect::CreateTexRes()
 	for (UINT i = 0; i < pixelCount; i++) { img[i] = 0x00000000; }
 
 	// データの転送
-	hr = texResource_->WriteToSubresource(0, nullptr, img, rowPitch, depthPitch);
+	hr = texResource_.Get()->WriteToSubresource(0, nullptr, img, rowPitch, depthPitch);
 	assert(SUCCEEDED(hr));
 	delete[] img;
 
@@ -216,7 +211,7 @@ void BasePostEffect::CreateDSV()
 			&resourceDesc,
 			D3D12_RESOURCE_STATE_DEPTH_WRITE,
 			&value,
-			IID_PPV_ARGS(&dsvResource_)
+			IID_PPV_ARGS(dsvResource_.GetAddressOf())
 		);
 		assert(SUCCEEDED(hr));
 

@@ -8,6 +8,7 @@
 #include "Utils/Math/Vector4.h"
 #include "Utils/Math/Matrix4x4.h"
 #include "GraphicsPipelineSystem/BlendModeConfig.h"
+#include "Resource/Resource.h"
 
 class DescriptorHandles;
 enum class PipelineType;
@@ -62,13 +63,13 @@ private:
 	void CreateRTV();
 	void CreateDSV();
 protected:
-	ComPtr<ID3D12Resource> materialResource_;
+	Kyoko::ResourceManualRelease materialResource_;
 	Material* materialData_;
-	ComPtr<ID3D12Resource> texResource_;
+	Kyoko::ResourceAutoRelease texResource_;
 	const DescriptorHandles* srvHandles_;
-	ComPtr<ID3D12Resource> rtvResource_;
+	Kyoko::ResourceManualRelease rtvResource_;
 	const DescriptorHandles* rtvHandles_;
-	ComPtr<ID3D12Resource> dsvResource_;
+	Kyoko::ResourceAutoRelease dsvResource_;
 	const DescriptorHandles* dsvHandles_;
 public:
 	Vector4 color_;

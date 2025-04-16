@@ -18,7 +18,7 @@ private:
 	void CreateSmoothingRes();
 	void CreateResources() override;
 private:
-	ComPtr<ID3D12Resource> smoothingResource_;
+	Kyoko::ResourceManualRelease smoothingResource_;
 public:
 	SmoothingData* smoothingData_;
 };

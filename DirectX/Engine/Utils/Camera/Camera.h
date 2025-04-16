@@ -2,9 +2,8 @@
 #include "Utils/Math/Vector3.h"
 #include "Utils/Math/Matrix4x4.h"
 #include "Utils/Transform/Transform.h"
-#include <wrl.h>
-#include <d3d12.h>
 #include <memory>
+#include "Resource/Resource.h"
 
 class DebugCamera;
 
@@ -59,7 +58,7 @@ public:
 	/// GPUアドレスの取得
 	/// </summary>
 	/// <returns>GPUアドレス</returns>
-	D3D12_GPU_VIRTUAL_ADDRESS GetGPUVirtualAddress() const { return cameraForGPUResource_->GetGPUVirtualAddress(); }
+	D3D12_GPU_VIRTUAL_ADDRESS GetGPUVirtualAddress() const { return cameraForGPUResource_.GetGPUVirtualAddress(); }
 	/// <summary>
 	/// 画面内にあるかの判定
 	/// </summary>
@@ -82,7 +81,7 @@ public:
 	EulerTransform transform_; // トランスフォーム
 
 private:
-	Microsoft::WRL::ComPtr<ID3D12Resource> cameraForGPUResource_; // GPUリソース
+	Kyoko::ResourceManualRelease cameraForGPUResource_; // GPUリソース
 	CameraForGPU* cameraForGPUData_; // GPUデータ
 
 	std::unique_ptr<DebugCamera> debugCamera_; // デバッグカメラ

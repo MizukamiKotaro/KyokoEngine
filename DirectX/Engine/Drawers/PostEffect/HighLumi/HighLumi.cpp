@@ -6,7 +6,6 @@
 #include "GraphicsPipelineSystem/PipelineTypeConfig.h"
 #include "DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
 #include "GraphicsPipelineSystem/GraphicsPiplineManager/GraphicsPiplineManager.h"
-#include "ResourceManager/ResourceManager.h"
 
 HighLumi::HighLumi(const Vector2& size, bool isRender, bool isDepth)
 {
@@ -16,7 +15,6 @@ HighLumi::HighLumi(const Vector2& size, bool isRender, bool isDepth)
 
 HighLumi::~HighLumi()
 {
-	ResourceManager::GetInstance()->AddReleaseResource(std::move(highLumiResource_));
 }
 
 void HighLumi::Draw(BlendMode blendMode)
@@ -25,9 +23,9 @@ void HighLumi::Draw(BlendMode blendMode)
 
 	psoManager_->SetBlendMode(piplineType_, blendMode);
 
-	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_.GetGPUVirtualAddress());
 	commandList_->SetGraphicsRootDescriptorTable(1, srvHandles_->gpuHandle);
-	commandList_->SetGraphicsRootConstantBufferView(2, highLumiResource_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(2, highLumiResource_.GetGPUVirtualAddress());
 
 	//描画!!!!（DrawCall/ドローコール）
 	commandList_->DrawInstanced(3, 1, 0, 0);
@@ -35,9 +33,9 @@ void HighLumi::Draw(BlendMode blendMode)
 
 void HighLumi::CreateHighLumiRes()
 {
-	highLumiResource_ = DirectXBase::CreateBufferResource(sizeof(HighLumiData));
+	highLumiResource_.CreateResource(sizeof(HighLumiData));
 
-	highLumiResource_->Map(0, nullptr, reinterpret_cast<void**>(&highLumiData_));
+	highLumiResource_.Map(reinterpret_cast<void**>(&highLumiData_));
 
 	highLumiData_->min = 0.6f;
 

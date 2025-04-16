@@ -22,7 +22,7 @@ private:
 	void CreateGaussianBlurRes();
 	void CreateResources() override;
 private:
-	ComPtr<ID3D12Resource> gaussianBlurResource_;
+	Kyoko::ResourceManualRelease gaussianBlurResource_;
 public:
 	GaussianBlurData* gaussianBlurData_;
 };

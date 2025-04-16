@@ -121,7 +121,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Base\DescriptorHeapManager\DescriptorHeaps\DescriptorHeaps.cpp" />
     <ClCompile Include="Engine\Base\DescriptorHeapManager\DescriptorHeap\DescriptorHeap.cpp" />
     <ClCompile Include="Engine\Base\DirectXBase\DirectXBase.cpp" />
-    <ClCompile Include="Engine\Base\ResourceManager\ResourceManager.cpp" />
+    <ClCompile Include="Engine\Base\Resource\Resource.cpp" />
+    <ClCompile Include="Engine\Base\Resource\ResourceReleaser\ResourceReleaser.cpp" />
     <ClCompile Include="Engine\Base\WindowsInfo\WindowsInfo.cpp" />
     <ClCompile Include="Engine\CollisionSystem\ColliderShapes\ShapeCircle\ShapeCircle.cpp" />
     <ClCompile Include="Engine\CollisionSystem\Collider\Collider.cpp" />
@@ -305,7 +306,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Base\DescriptorHeapManager\Descriptor\Descriptor.h" />
     <ClInclude Include="Engine\Base\DirectXBase\DirectXBase.h" />
     <ClInclude Include="Engine\Base\ResourceLeakChecker.h" />
-    <ClInclude Include="Engine\Base\ResourceManager\ResourceManager.h" />
+    <ClInclude Include="Engine\Base\Resource\Resource.h" />
+    <ClInclude Include="Engine\Base\Resource\ResourceReleaser\ResourceReleaser.h" />
     <ClInclude Include="Engine\Base\WindowsInfo\WindowsInfo.h" />
     <ClInclude Include="Engine\CollisionSystem\ColliderShapes\ShapeCircle\ShapeCircle.h" />
     <ClInclude Include="Engine\CollisionSystem\Collider\Collider.h" />

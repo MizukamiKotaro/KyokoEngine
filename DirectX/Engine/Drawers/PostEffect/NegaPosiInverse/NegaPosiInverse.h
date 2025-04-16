@@ -17,7 +17,7 @@ private:
 	void CreateNegaPosiInverseRes();
 	void CreateResources() override;
 private:
-	ComPtr<ID3D12Resource> negaPosiInverseResource_;
+	Kyoko::ResourceManualRelease negaPosiInverseResource_;
 public:
 	NegaPosiInverseData* negaPosiInverseData_;
 };

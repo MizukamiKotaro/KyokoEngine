@@ -6,7 +6,6 @@
 #include "GraphicsPipelineSystem/PipelineTypeConfig.h"
 #include "DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
 #include "GraphicsPipelineSystem/GraphicsPiplineManager/GraphicsPiplineManager.h"
-#include "ResourceManager/ResourceManager.h"
 
 ScanNoise::ScanNoise()
 {
@@ -19,7 +18,6 @@ ScanNoise::ScanNoise()
 
 ScanNoise::~ScanNoise()
 {
-	ResourceManager::GetInstance()->AddReleaseResource(std::move(scanNoiseResource_));
 }
 
 void ScanNoise::Draw(BlendMode blendMode)
@@ -43,11 +41,11 @@ void ScanNoise::Draw(BlendMode blendMode)
 
 	//Spriteの描画。変更に必要なものだけ変更する
 	//マテリアルCBufferの場所を設定
-	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_.GetGPUVirtualAddress());
 
 	commandList_->SetGraphicsRootDescriptorTable(1, srvHandles_->gpuHandle);
 
-	commandList_->SetGraphicsRootConstantBufferView(2, scanNoiseResource_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(2, scanNoiseResource_.GetGPUVirtualAddress());
 
 	//描画!!!!（DrawCall/ドローコール）
 	commandList_->DrawInstanced(3, 1, 0, 0);
@@ -55,8 +53,8 @@ void ScanNoise::Draw(BlendMode blendMode)
 
 void ScanNoise::CreateScanNoiseRes()
 {
-	scanNoiseResource_ = DirectXBase::CreateBufferResource(sizeof(ScanNoiseData));
-	scanNoiseResource_->Map(0, nullptr, reinterpret_cast<void**>(&scanNoiseData_));
+	scanNoiseResource_.CreateResource(sizeof(ScanNoiseData));
+	scanNoiseResource_.Map(reinterpret_cast<void**>(&scanNoiseData_));
 
 	scanNoiseData_->minY = 0.2f;
 	scanNoiseData_->width = 0.3f;

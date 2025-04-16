@@ -8,9 +8,9 @@ SpotLight::SpotLight()
 {
 	lightType_ = LightType::kSpotLight;
 
-	resource_ = DirectXBase::CreateBufferResource(sizeof(SpotLightData));
+	resource_.CreateResource(sizeof(SpotLightData));
 	light_ = nullptr;
-	resource_->Map(0, nullptr, reinterpret_cast<void**>(&light_));
+	resource_.Map(reinterpret_cast<void**>(&light_));
 	light_->color = { 1.0f,1.0f,1.0f,1.0f };
 	light_->position = { 0.0f,0.0f,0.0f };
 	light_->intensity = 0.0f;

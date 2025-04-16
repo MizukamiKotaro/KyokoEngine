@@ -7,7 +7,6 @@
 #include "DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
 #include "GraphicsPipelineSystem/GraphicsPiplineManager/GraphicsPiplineManager.h"
 #include "WindowsInfo/WindowsInfo.h"
-#include "ResourceManager/ResourceManager.h"
 
 WaterOutline::WaterOutline()
 {
@@ -18,7 +17,6 @@ WaterOutline::WaterOutline()
 
 WaterOutline::~WaterOutline()
 {
-	ResourceManager::GetInstance()->AddResource(std::move(waterResource_));
 }
 
 void WaterOutline::Draw(BlendMode blendMode)
@@ -37,9 +35,9 @@ void WaterOutline::Draw(BlendMode blendMode)
 
 	psoManager_->SetBlendMode(piplineType_, blendMode);
 
-	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_.GetGPUVirtualAddress());
 	commandList_->SetGraphicsRootDescriptorTable(1, srvHandles_->gpuHandle);
-	commandList_->SetGraphicsRootConstantBufferView(2, waterResource_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(2, waterResource_.GetGPUVirtualAddress());
 
 	//描画!!!!（DrawCall/ドローコール）
 	commandList_->DrawInstanced(3, 1, 0, 0);
@@ -48,9 +46,9 @@ void WaterOutline::Draw(BlendMode blendMode)
 
 void WaterOutline::CreateWaterRes()
 {
-	waterResource_ = DirectXBase::CreateBufferResource(sizeof(WaterOutlineData));
+	waterResource_.CreateResource(sizeof(WaterOutlineData));
 
-	waterResource_->Map(0, nullptr, reinterpret_cast<void**>(&waterData_));
+	waterResource_.Map(reinterpret_cast<void**>(&waterData_));
 
 	waterData_->screenSize = WindowsInfo::GetInstance()->GetWindowSize();
 	waterData_->outlinePix = 2;

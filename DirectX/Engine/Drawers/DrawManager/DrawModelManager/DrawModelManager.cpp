@@ -83,7 +83,7 @@ void DrawModelManager::Draw(const PMDModel& model, const Camera& camera, BlendMo
 
 	commandList_->IASetVertexBuffers(0, 1, &model.GetSkinCluter().vertexBufferView);
 	commandList_->IASetIndexBuffer(&modelData.mesh.indexBufferView_);
-	commandList_->SetGraphicsRootConstantBufferView(0, transformations_[drawNo_]->transformationResource->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(0, transformations_[drawNo_]->transformationResource.GetGPUVirtualAddress());
 	commandList_->SetGraphicsRootDescriptorTable(1, DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->GetTextureFirstHandle());
 	commandList_->SetGraphicsRootConstantBufferView(2, camera.GetGPUVirtualAddress());
 	commandList_->DrawIndexedInstanced(UINT(modelData.mesh.indices.size()), 1, 0, 0, 0);
@@ -104,7 +104,7 @@ void DrawModelManager::Draw(const BaseModel& model, const Camera& camera, BlendM
 	commandList_->IASetVertexBuffers(0, 1, &vertexBufferView);
 	commandList_->IASetIndexBuffer(&modelData.mesh.indexBufferView_);
 	commandList_->SetGraphicsRootConstantBufferView(0, model.GetMaterialData().GetGPUVirtualAddress());
-	commandList_->SetGraphicsRootConstantBufferView(1, transformations_[drawNo_]->transformationResource->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(1, transformations_[drawNo_]->transformationResource.GetGPUVirtualAddress());
 	commandList_->SetGraphicsRootDescriptorTable(2, model.GetTextureData());
 	commandList_->SetGraphicsRootConstantBufferView(3, light.GetDirectionalLightGPUVirtualAddress());
 	commandList_->SetGraphicsRootConstantBufferView(4, camera.GetGPUVirtualAddress());

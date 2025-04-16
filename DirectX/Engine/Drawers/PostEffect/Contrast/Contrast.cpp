@@ -6,7 +6,6 @@
 #include "GraphicsPipelineSystem/PipelineTypeConfig.h"
 #include "DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
 #include "GraphicsPipelineSystem/GraphicsPiplineManager/GraphicsPiplineManager.h"
-#include "ResourceManager/ResourceManager.h"
 
 Contrast::Contrast()
 {
@@ -19,7 +18,6 @@ Contrast::Contrast()
 
 Contrast::~Contrast()
 {
-	ResourceManager::GetInstance()->AddReleaseResource(std::move(contrastResource_));
 }
 
 void Contrast::Draw(BlendMode blendMode)
@@ -31,11 +29,11 @@ void Contrast::Draw(BlendMode blendMode)
 
 	//Spriteの描画。変更に必要なものだけ変更する
 	//マテリアルCBufferの場所を設定
-	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_.GetGPUVirtualAddress());
 
 	commandList_->SetGraphicsRootDescriptorTable(1, srvHandles_->gpuHandle);
 
-	commandList_->SetGraphicsRootConstantBufferView(2, contrastResource_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(2, contrastResource_.GetGPUVirtualAddress());
 
 	//描画!!!!（DrawCall/ドローコール）
 	commandList_->DrawInstanced(3, 1, 0, 0);
@@ -44,9 +42,9 @@ void Contrast::Draw(BlendMode blendMode)
 
 void Contrast::CreateContrastRes()
 {
-	contrastResource_ = DirectXBase::CreateBufferResource(sizeof(ContrastData));
+	contrastResource_.CreateResource(sizeof(ContrastData));
 
-	contrastResource_->Map(0, nullptr, reinterpret_cast<void**>(&contrastData_));
+	contrastResource_.Map(reinterpret_cast<void**>(&contrastData_));
 
 	contrastData_->brightness_ = 0.2f;
 

@@ -2,7 +2,6 @@
 #include "Engine/Base/WindowsInfo/WindowsInfo.h"
 #include "DirectXBase/DirectXBase.h"
 #include "DebugCamera/DebugCamera.h"
-#include "ResourceManager/ResourceManager.h"
 #include <cmath>
 
 Matrix4x4 Camera::orthographicMat_ = Matrix4x4::MakeOrthographicMatrix(0.0f, 0.0f, 1280.0f, 720.0f, 0.0f, 1.0f);
@@ -30,7 +29,6 @@ Camera::Camera()
 
 Camera::~Camera()
 {
-	ResourceManager::GetInstance()->AddReleaseResource(std::move(cameraForGPUResource_));
 }
 
 
@@ -93,8 +91,8 @@ void Camera::StopDebug()
 void Camera::CreateResource()
 {
 	//WVP用のリソースを作る。Matrix4x4　1つ分のサイズを用意する
-	cameraForGPUResource_ = DirectXBase::CreateBufferResource(sizeof(CameraForGPU));
+	cameraForGPUResource_.CreateResource(sizeof(CameraForGPU));
 	cameraForGPUData_ = nullptr;
-	cameraForGPUResource_->Map(0, nullptr, reinterpret_cast<void**>(&cameraForGPUData_));
+	cameraForGPUResource_.Map(reinterpret_cast<void**>(&cameraForGPUData_));
 	cameraForGPUData_->worldPosition = transform_.GetWorldPosition();
 }

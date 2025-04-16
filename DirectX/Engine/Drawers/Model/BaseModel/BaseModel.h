@@ -1,6 +1,4 @@
 #pragma once
-#include <wrl.h>
-#include <d3d12.h>
 #include <stdint.h>
 #include <string>
 #include "Utils/Math/Vector2.h"
@@ -11,7 +9,7 @@
 #include "ModelData/ModelData.h"
 #include "ModelDataManager.h"
 #include "GraphicsPipelineSystem/BlendModeConfig.h"
-
+#include "Resource/Resource.h"
 #include "Drawers/DrawerBase/DrawerBase.h"
 
 class Camera;
@@ -37,7 +35,7 @@ public:
 	const Light& GetLight() const { return light_; }
 	const ModelData& GetModelData() const { return *modelData_; }
 	D3D12_GPU_DESCRIPTOR_HANDLE GetTextureData() const { return srvGPUDescriptorHandle_; }
-	ID3D12Resource& GetMaterialData() const { return *materialResource_.Get(); }
+	ID3D12Resource& GetMaterialData() const;
 	struct Material
 	{
 		Vector4 color;
@@ -58,11 +56,10 @@ protected:
 		Matrix4x4 WorldInverse;
 	};
 
-	// namespace省略
-	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-	ComPtr<ID3D12Resource> materialResource_;
+	
+	Kyoko::ResourceManualRelease materialResource_;
 	Material* materialData_;
-	ComPtr<ID3D12Resource> transformationResource_;
+	Kyoko::ResourceManualRelease transformationResource_;
 	TransformationMatrix* transformationData_;
 
 protected:

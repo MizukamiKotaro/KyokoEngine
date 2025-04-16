@@ -8,7 +8,6 @@
 #include "Texture.h"
 #include "GraphicsPipelineSystem/PipelineTypeConfig.h"
 #include "GraphicsPipelineSystem/GraphicsPiplineManager/GraphicsPiplineManager.h"
-#include "ResourceManager/ResourceManager.h"
 
 Skybox::Skybox(const std::string& filename, const Vector3& scale, const Vector3& rotate, const Vector3& position, const Vector4& color)
 {
@@ -24,14 +23,6 @@ Skybox::Skybox(const std::string& filename, const Vector3& scale, const Vector3&
 	materialData_->color = color;
 }
 
-Skybox::~Skybox()
-{
-	ResourceManager::GetInstance()->AddReleaseResource(std::move(vertexResource_));
-	ResourceManager::GetInstance()->AddReleaseResource(std::move(transformResource_));
-	ResourceManager::GetInstance()->AddReleaseResource(std::move(materialResource_));
-	ResourceManager::GetInstance()->AddReleaseResource(std::move(indexResource_));
-}
-
 void Skybox::Update()
 {
 	worldMat_ = Matrix4x4::MakeAffinMatrix(scale_, rotate_, position_);
@@ -45,8 +36,8 @@ void Skybox::Draw(const Camera& camera)
 	
 	commandList_->IASetVertexBuffers(0, 1, &vertexBufferView_);
 	commandList_->IASetIndexBuffer(&indexBufferView_);
-	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
-	commandList_->SetGraphicsRootConstantBufferView(1, transformResource_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_.GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(1, transformResource_.GetGPUVirtualAddress());
 	commandList_->SetGraphicsRootDescriptorTable(2, texture_->handles_->gpuHandle);
 	commandList_->DrawIndexedInstanced(36, 1, 0, 0, 0);
 }
@@ -68,11 +59,11 @@ void Skybox::SetColor(const Vector4& color)
 
 void Skybox::CreateVertexRes()
 {
-	vertexResource_ = DirectXBase::CreateBufferResource(sizeof(VertexData) * 8);
-	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
+	vertexResource_.CreateResource(sizeof(VertexData) * 8);
+	vertexBufferView_.BufferLocation = vertexResource_.GetGPUVirtualAddress();
 	vertexBufferView_.SizeInBytes = sizeof(VertexData) * 8;
 	vertexBufferView_.StrideInBytes = sizeof(VertexData);
-	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
+	vertexResource_.Map(reinterpret_cast<void**>(&vertexData_));
 
 	vertexData_[0].vertexPos = { 1.0f,1.0f,1.0f,1.0f };
 	vertexData_[1].vertexPos = { 1.0f,1.0f,-1.0f,1.0f };
@@ -83,12 +74,12 @@ void Skybox::CreateVertexRes()
 	vertexData_[6].vertexPos = { -1.0f,-1.0f,-1.0f,1.0f };
 	vertexData_[7].vertexPos = { -1.0f,-1.0f,1.0f,1.0f };
 
-	indexResource_ = DirectXBase::CreateBufferResource(sizeof(uint32_t) * 36);
-	indexBufferView_.BufferLocation = indexResource_->GetGPUVirtualAddress();
+	indexResource_.CreateResource(sizeof(uint32_t) * 36);
+	indexBufferView_.BufferLocation = indexResource_.GetGPUVirtualAddress();
 	indexBufferView_.SizeInBytes = UINT(sizeof(uint32_t) * 36);
 	indexBufferView_.Format = DXGI_FORMAT_R32_UINT;
 	mappedIndex = nullptr;
-	indexResource_->Map(0, nullptr, reinterpret_cast<void**>(&mappedIndex));
+	indexResource_.Map(reinterpret_cast<void**>(&mappedIndex));
 	
 	mappedIndex[0] = 0; mappedIndex[1] = 1; mappedIndex[2] = 2;
 	mappedIndex[3] = 2; mappedIndex[4] = 1; mappedIndex[5] = 3;
@@ -107,10 +98,10 @@ void Skybox::CreateVertexRes()
 void Skybox::CreateMaterialRes()
 {
 	//マテリアル用のリソースを作る。今回はcolor1つ分を用意する
-	materialResource_ = DirectXBase::CreateBufferResource(sizeof(Material));
+	materialResource_.CreateResource(sizeof(Material));
 	//マテリアルデータを書き込む
 	//書き込むためのアドレスを取得\l
-	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
+	materialResource_.Map(reinterpret_cast<void**>(&materialData_));
 	//今回は赤を書き込んでいる
 	materialData_->color = { 1.0f,1.0f,1.0f,1.0f };
 }
@@ -118,10 +109,10 @@ void Skybox::CreateMaterialRes()
 void Skybox::CreateTranformRes()
 {
 	//Sprite用のTransformationMatrix用のリソースを作る。Matrix4x4　1つ分のサイズを用意する
-	transformResource_ = DirectXBase::CreateBufferResource(sizeof(TransformationMatrix));
+	transformResource_.CreateResource(sizeof(TransformationMatrix));
 	//データを書き込む
 	//書き込むためのアドレスを取得
-	transformResource_->Map(0, nullptr, reinterpret_cast<void**>(&transformData_));
+	transformResource_.Map(reinterpret_cast<void**>(&transformData_));
 	//単位行列を書き込んでいく
 	transformData_->WVP = { Matrix4x4::MakeIdentity4x4() };
 }

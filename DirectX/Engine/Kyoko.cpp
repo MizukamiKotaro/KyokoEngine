@@ -30,7 +30,7 @@
 #include "InstancingModelManager.h"
 #include "ComputePipelineSystem/ComputePipeline/ComputePipeline.h"
 #include "GraphicsPipelineSystem/GraphicsPipeline/GraphicsPipeline.h"
-#include "Base/ResourceManager/ResourceManager.h"
+#include "Resource/ResourceReleaser/ResourceReleaser.h"
 
 namespace Kyoko {
 	namespace Engine {
@@ -152,7 +152,7 @@ namespace Kyoko {
 		void FirstUpdateInLoop()
 		{
 			dxBase->BeginFrame();
-			ResourceManager::GetInstance()->BeginFrame();
+			ResourceReleaser::GetInstance()->BeginFrame();
 			DrawerBase::BeginFrame();
 			DrawManagerBase::BeginFrame();
 			ComputePipeline::BeginFrame();
@@ -209,7 +209,7 @@ namespace Kyoko {
 			InstancingResourceManager::GetInstance()->Finalize();
 			TextureManager::GetInstance()->Finalize();
 			ModelDataManager::GetInstance()->Finalize();
-			ResourceManager::GetInstance()->Finalize();
+			ResourceReleaser::GetInstance()->Finalize();
 			DescriptorHeapManager::GetInstance()->Finalize();
 			winInfo->Finalize();
 

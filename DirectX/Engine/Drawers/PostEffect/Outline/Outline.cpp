@@ -8,7 +8,6 @@
 #include "DescriptorHeapManager/DescriptorHeap/DescriptorHeap.h"
 #include "GraphicsPipelineSystem/GraphicsPiplineManager/GraphicsPiplineManager.h"
 #include "Externals/DirectXTex/d3dx12.h"
-#include "ResourceManager/ResourceManager.h"
 
 Outline::Outline()
 {
@@ -19,7 +18,6 @@ Outline::Outline()
 
 Outline::~Outline()
 {
-	ResourceManager::GetInstance()->AddReleaseResource(std::move(outlineResource_));
 	srvHeap_->AddDeleteDescriptor(depthHandles_);
 }
 
@@ -33,9 +31,9 @@ void Outline::Draw(BlendMode blendMode)
 
 	ToReadBarrier();
 
-	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_.GetGPUVirtualAddress());
 	commandList_->SetGraphicsRootDescriptorTable(1, srvHandles_->gpuHandle);
-	commandList_->SetGraphicsRootConstantBufferView(2, outlineResource_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(2, outlineResource_.GetGPUVirtualAddress());
 	commandList_->SetGraphicsRootDescriptorTable(3, depthHandles_->gpuHandle);
 	commandList_->DrawInstanced(3, 1, 0, 0);
 
@@ -53,9 +51,9 @@ void Outline::Draw(const Camera& camera, BlendMode blendMode)
 
 	ToReadBarrier();
 
-	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_.GetGPUVirtualAddress());
 	commandList_->SetGraphicsRootDescriptorTable(1, srvHandles_->gpuHandle);
-	commandList_->SetGraphicsRootConstantBufferView(2, outlineResource_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(2, outlineResource_.GetGPUVirtualAddress());
 	commandList_->SetGraphicsRootDescriptorTable(3, depthHandles_->gpuHandle);
 	commandList_->DrawInstanced(3, 1, 0, 0);
 
@@ -78,8 +76,8 @@ void Outline::ToWriteBarrier()
 
 void Outline::CreateOutlineRes()
 {
-	outlineResource_ = DirectXBase::CreateBufferResource(sizeof(OutlineData));
-	outlineResource_->Map(0, nullptr, reinterpret_cast<void**>(&outlineData_));
+	outlineResource_.CreateResource(sizeof(OutlineData));
+	outlineResource_.Map(reinterpret_cast<void**>(&outlineData_));
 	outlineData_->projectionInverse = Matrix4x4::MakeIdentity4x4();
 	outlineData_->lengthChange = 75.0f;
 	outlineData_->maxWidth = 7;

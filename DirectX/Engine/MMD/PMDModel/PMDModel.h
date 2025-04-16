@@ -46,9 +46,7 @@ private:
 		Matrix4x4 WorldInverse;
 	};
 
-	// namespace省略
-	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-	ComPtr<ID3D12Resource> transformationResource_;
+	Kyoko::ResourceManualRelease transformationResource_;
 	TransformationMatrix* transformationData_;
 
 	void CreateModel(const std::string& fileName);
