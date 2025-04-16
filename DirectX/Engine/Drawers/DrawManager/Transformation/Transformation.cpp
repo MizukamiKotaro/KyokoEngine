@@ -11,5 +11,5 @@ Transformation::Transformation()
 
 Transformation::~Transformation()
 {
-	ResourceManager::GetInstance()->AddResource(std::move(transformationResource));
+	ResourceManager::GetInstance()->AddReleaseResource(std::move(transformationResource));
 }

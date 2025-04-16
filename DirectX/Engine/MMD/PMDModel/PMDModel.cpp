@@ -28,11 +28,11 @@ PMDModel::PMDModel(const std::string& fileName)
 
 PMDModel::~PMDModel()
 {
-	ResourceManager::GetInstance()->AddResource(std::move(transformationResource_));
-	ResourceManager::GetInstance()->AddResource(std::move(skinCluter_->influenceResouce));
-	ResourceManager::GetInstance()->AddResource(std::move(skinCluter_->paletteResouce));
-	ResourceManager::GetInstance()->AddResource(std::move(skinCluter_->informationResouce));
-	ResourceManager::GetInstance()->AddResource(std::move(skinCluter_->outputVertexResouce));
+	ResourceManager::GetInstance()->AddReleaseResource(std::move(transformationResource_));
+	ResourceManager::GetInstance()->AddReleaseResource(std::move(skinCluter_->influenceResouce));
+	ResourceManager::GetInstance()->AddReleaseResource(std::move(skinCluter_->paletteResouce));
+	ResourceManager::GetInstance()->AddReleaseResource(std::move(skinCluter_->informationResouce));
+	ResourceManager::GetInstance()->AddReleaseResource(std::move(skinCluter_->outputVertexResouce));
 
 	srvHeap_->AddDeleteDescriptor(skinCluter_->influenceSrvHandle);
 	srvHeap_->AddDeleteDescriptor(skinCluter_->inputVertexSrvHandle);

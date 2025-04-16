@@ -20,7 +20,7 @@ Mosaic::Mosaic()
 
 Mosaic::~Mosaic()
 {
-	ResourceManager::GetInstance()->AddResource(std::move(mosaicResource_));
+	ResourceManager::GetInstance()->AddReleaseResource(std::move(mosaicResource_));
 }
 
 void Mosaic::Draw(BlendMode blendMode)

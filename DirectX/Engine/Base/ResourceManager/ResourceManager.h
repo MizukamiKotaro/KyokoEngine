@@ -26,6 +26,11 @@ public:
 	/// </summary>
 	/// <param name="resource">リソース</param>
 	void AddResource(Microsoft::WRL::ComPtr<ID3D12Resource>&& resource);
+	/// <summary>
+	/// 手動リリースするリソースの追加
+	/// </summary>
+	/// <param name="resource">リソース</param>
+	void AddReleaseResource(Microsoft::WRL::ComPtr<ID3D12Resource>&& resource);
 
 private:
 	ResourceManager() = default;
@@ -35,4 +40,5 @@ private:
 
 private:
 	std::list<Microsoft::WRL::ComPtr<ID3D12Resource>> list_; // リスト
+	std::list<Microsoft::WRL::ComPtr<ID3D12Resource>> releaseList_; // 手動リリースするリスト
 };

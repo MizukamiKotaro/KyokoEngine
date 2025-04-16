@@ -26,10 +26,10 @@ Skybox::Skybox(const std::string& filename, const Vector3& scale, const Vector3&
 
 Skybox::~Skybox()
 {
-	ResourceManager::GetInstance()->AddResource(std::move(vertexResource_));
-	ResourceManager::GetInstance()->AddResource(std::move(transformResource_));
-	ResourceManager::GetInstance()->AddResource(std::move(materialResource_));
-	ResourceManager::GetInstance()->AddResource(std::move(indexResource_));
+	ResourceManager::GetInstance()->AddReleaseResource(std::move(vertexResource_));
+	ResourceManager::GetInstance()->AddReleaseResource(std::move(transformResource_));
+	ResourceManager::GetInstance()->AddReleaseResource(std::move(materialResource_));
+	ResourceManager::GetInstance()->AddReleaseResource(std::move(indexResource_));
 }
 
 void Skybox::Update()

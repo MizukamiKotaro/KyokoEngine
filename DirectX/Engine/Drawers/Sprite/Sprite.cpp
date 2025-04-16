@@ -124,9 +124,9 @@ Sprite::Sprite(const Texture* texture, const Vector2& pos, const Vector2& texLef
 
 Sprite::~Sprite()
 {
-	ResourceManager::GetInstance()->AddResource(std::move(vertexResource_));
-	ResourceManager::GetInstance()->AddResource(std::move(transformResource_));
-	ResourceManager::GetInstance()->AddResource(std::move(materialResource_));
+	ResourceManager::GetInstance()->AddReleaseResource(std::move(vertexResource_));
+	ResourceManager::GetInstance()->AddReleaseResource(std::move(transformResource_));
+	ResourceManager::GetInstance()->AddReleaseResource(std::move(materialResource_));
 }
 
 void Sprite::Initialize()

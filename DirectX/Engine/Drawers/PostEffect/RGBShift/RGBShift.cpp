@@ -17,7 +17,7 @@ RGBShift::RGBShift()
 
 RGBShift::~RGBShift()
 {
-	ResourceManager::GetInstance()->AddResource(std::move(rgbShiftResource_));
+	ResourceManager::GetInstance()->AddReleaseResource(std::move(rgbShiftResource_));
 }
 
 void RGBShift::Draw(BlendMode blendMode)

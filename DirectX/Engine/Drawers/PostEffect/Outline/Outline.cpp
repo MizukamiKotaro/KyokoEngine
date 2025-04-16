@@ -19,7 +19,7 @@ Outline::Outline()
 
 Outline::~Outline()
 {
-	ResourceManager::GetInstance()->AddResource(std::move(outlineResource_));
+	ResourceManager::GetInstance()->AddReleaseResource(std::move(outlineResource_));
 	srvHeap_->AddDeleteDescriptor(depthHandles_);
 }
 

@@ -17,7 +17,7 @@ Blur::Blur()
 
 Blur::~Blur()
 {
-	ResourceManager::GetInstance()->AddResource(std::move(blurResource_));
+	ResourceManager::GetInstance()->AddReleaseResource(std::move(blurResource_));
 }
 
 void Blur::Draw(BlendMode blendMode)

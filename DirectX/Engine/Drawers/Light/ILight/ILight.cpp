@@ -3,5 +3,5 @@
 
 BaseLight::~BaseLight()
 {
-	ResourceManager::GetInstance()->AddResource(std::move(resource_));
+	ResourceManager::GetInstance()->AddReleaseResource(std::move(resource_));
 }

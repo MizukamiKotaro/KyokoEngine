@@ -19,7 +19,7 @@ LightDepth::LightDepth(const Vector2& size)
 
 LightDepth::~LightDepth()
 {
-	ResourceManager::GetInstance()->AddResource(std::move(outlineResource_));
+	ResourceManager::GetInstance()->AddReleaseResource(std::move(outlineResource_));
 	srvHeap_->AddDeleteDescriptor(depthHandles_);
 }
 

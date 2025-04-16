@@ -19,7 +19,7 @@ HSVFilter::HSVFilter()
 
 HSVFilter::~HSVFilter()
 {
-	ResourceManager::GetInstance()->AddResource(std::move(hsvResource_));
+	ResourceManager::GetInstance()->AddReleaseResource(std::move(hsvResource_));
 }
 
 void HSVFilter::Draw(BlendMode blendMode)

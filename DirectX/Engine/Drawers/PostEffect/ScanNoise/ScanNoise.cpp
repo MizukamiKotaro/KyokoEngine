@@ -19,7 +19,7 @@ ScanNoise::ScanNoise()
 
 ScanNoise::~ScanNoise()
 {
-	ResourceManager::GetInstance()->AddResource(std::move(scanNoiseResource_));
+	ResourceManager::GetInstance()->AddReleaseResource(std::move(scanNoiseResource_));
 }
 
 void ScanNoise::Draw(BlendMode blendMode)

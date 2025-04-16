@@ -17,7 +17,7 @@ RadialBlur::RadialBlur()
 
 RadialBlur::~RadialBlur()
 {
-	ResourceManager::GetInstance()->AddResource(std::move(radialBlurResource_));
+	ResourceManager::GetInstance()->AddReleaseResource(std::move(radialBlurResource_));
 }
 
 void RadialBlur::Draw(BlendMode blendMode)

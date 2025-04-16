@@ -16,7 +16,7 @@ Smoothing::Smoothing()
 
 Smoothing::~Smoothing()
 {
-	ResourceManager::GetInstance()->AddResource(std::move(smoothingResource_));
+	ResourceManager::GetInstance()->AddReleaseResource(std::move(smoothingResource_));
 }
 
 void Smoothing::Draw(BlendMode blendMode)

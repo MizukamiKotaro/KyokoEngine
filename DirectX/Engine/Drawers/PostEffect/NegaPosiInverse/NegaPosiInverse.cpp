@@ -19,7 +19,7 @@ NegaPosiInverse::NegaPosiInverse()
 
 NegaPosiInverse::~NegaPosiInverse()
 {
-	ResourceManager::GetInstance()->AddResource(std::move(negaPosiInverseResource_));
+	ResourceManager::GetInstance()->AddReleaseResource(std::move(negaPosiInverseResource_));
 }
 
 void NegaPosiInverse::Draw(BlendMode blendMode)

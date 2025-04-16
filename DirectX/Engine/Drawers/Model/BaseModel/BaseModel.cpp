@@ -13,8 +13,8 @@
 
 BaseModel::~BaseModel()
 {
-	ResourceManager::GetInstance()->AddResource(std::move(transformationResource_));
-	ResourceManager::GetInstance()->AddResource(std::move(materialResource_));
+	ResourceManager::GetInstance()->AddReleaseResource(std::move(transformationResource_));
+	ResourceManager::GetInstance()->AddReleaseResource(std::move(materialResource_));
 }
 
 void BaseModel::SetTexture(const Texture* texture)

@@ -19,7 +19,7 @@ Gaussian::Gaussian(const bool& isRender, const bool& isDepth, const Vector2& siz
 
 Gaussian::~Gaussian()
 {
-	ResourceManager::GetInstance()->AddResource(std::move(gaussianBlurResource_));
+	ResourceManager::GetInstance()->AddReleaseResource(std::move(gaussianBlurResource_));
 }
 
 void Gaussian::Draw(BlendMode blendMode)

@@ -19,7 +19,7 @@ Noise::Noise()
 
 Noise::~Noise()
 {
-	ResourceManager::GetInstance()->AddResource(std::move(noiseResource_));
+	ResourceManager::GetInstance()->AddReleaseResource(std::move(noiseResource_));
 }
 
 void Noise::SetCameraPos(const Vector3& pos)

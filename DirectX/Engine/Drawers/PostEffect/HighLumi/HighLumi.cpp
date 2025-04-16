@@ -16,7 +16,7 @@ HighLumi::HighLumi(const Vector2& size, bool isRender, bool isDepth)
 
 HighLumi::~HighLumi()
 {
-	ResourceManager::GetInstance()->AddResource(std::move(highLumiResource_));
+	ResourceManager::GetInstance()->AddReleaseResource(std::move(highLumiResource_));
 }
 
 void HighLumi::Draw(BlendMode blendMode)

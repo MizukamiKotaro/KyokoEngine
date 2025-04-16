@@ -30,7 +30,7 @@ Camera::Camera()
 
 Camera::~Camera()
 {
-	ResourceManager::GetInstance()->AddResource(std::move(cameraForGPUResource_));
+	ResourceManager::GetInstance()->AddReleaseResource(std::move(cameraForGPUResource_));
 }
 
 

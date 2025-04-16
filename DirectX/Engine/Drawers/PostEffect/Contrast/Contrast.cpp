@@ -19,7 +19,7 @@ Contrast::Contrast()
 
 Contrast::~Contrast()
 {
-	ResourceManager::GetInstance()->AddResource(std::move(contrastResource_));
+	ResourceManager::GetInstance()->AddReleaseResource(std::move(contrastResource_));
 }
 
 void Contrast::Draw(BlendMode blendMode)

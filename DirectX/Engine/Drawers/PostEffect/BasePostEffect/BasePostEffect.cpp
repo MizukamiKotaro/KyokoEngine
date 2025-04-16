@@ -23,9 +23,9 @@ Vector2 BasePostEffect::windowSize_ = {};
 
 BasePostEffect::~BasePostEffect()
 {
-	ResourceManager::GetInstance()->AddResource(std::move(materialResource_));
+	ResourceManager::GetInstance()->AddReleaseResource(std::move(materialResource_));
 	ResourceManager::GetInstance()->AddResource(std::move(texResource_));
-	ResourceManager::GetInstance()->AddResource(std::move(rtvResource_));
+	ResourceManager::GetInstance()->AddReleaseResource(std::move(rtvResource_));
 	ResourceManager::GetInstance()->AddResource(std::move(dsvResource_));
 	srvHeap_->AddDeleteDescriptor(srvHandles_);
 	if (isRender_) {
