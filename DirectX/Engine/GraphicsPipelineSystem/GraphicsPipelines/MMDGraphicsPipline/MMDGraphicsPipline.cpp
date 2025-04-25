@@ -13,7 +13,7 @@ void MMDGraphicsPipline::InitializePSO()
 	//DescriptorRange
 	D3D12_DESCRIPTOR_RANGE descriptorRange[1] = {};
 	descriptorRange[0].BaseShaderRegister = 0; // 0から始まる
-	descriptorRange[0].NumDescriptors = SRVDescriptorHeap::GetTextureMaxNum(); // 数は1つ
+	descriptorRange[0].NumDescriptors = Kyoko::Descriptor::SRVDescriptorHeap::GetTextureMaxNum(); // 数は1つ
 	descriptorRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV; // SRVを使う
 	descriptorRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND; // offsetを自動計算
 

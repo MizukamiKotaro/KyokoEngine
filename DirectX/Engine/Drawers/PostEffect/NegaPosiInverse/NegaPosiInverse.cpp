@@ -1,10 +1,10 @@
 #include "NegaPosiInverse.h"
 
 #include "Engine/Base/DirectXBase/DirectXBase.h"
-#include "Engine/Base/DescriptorHeapManager/DescriptorHeapManager.h"
+#include "Engine/Base/Descriptor/DescriptorHeapManager/DescriptorHeapManager.h"
 #include "Camera.h"
 #include "GraphicsPipelineSystem/PipelineTypeConfig.h"
-#include "DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
+#include "Descriptor/DescriptorHandles/DescriptorHandles.h"
 #include "GraphicsPipelineSystem/GraphicsPiplineManager/GraphicsPiplineManager.h"
 
 NegaPosiInverse::NegaPosiInverse()

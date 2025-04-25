@@ -8,6 +8,10 @@ namespace Kyoko {
 	{
 		resource_ = DirectXBase::CreateBufferResource(sizeInBytes, resourceFlags);
 	}
+	void BaseResource::CreateResource(ID3D12Resource* pResource)
+	{
+		resource_ = pResource;
+	}
 	void BaseResource::Map(void** ppData, UINT subresource, const D3D12_RANGE* pReadRange)
 	{
 		resource_->Map(subresource, pReadRange, ppData);

@@ -4,8 +4,8 @@
 #pragma comment(lib, "winmm.lib")
 #include "Engine/Base/DirectXBase/DirectXBase.h"
 #include "Engine/Base/WindowsInfo/WindowsInfo.h"
-#include "Engine/Base/DescriptorHeapManager/DescriptorHeapManager.h"
-#include "DescriptorHeapManager/DescriptorHeap/DescriptorHeap.h"
+#include "Engine/Base/Descriptor/DescriptorHeapManager/DescriptorHeapManager.h"
+#include "Descriptor/DescriptorHeap/DescriptorHeap.h"
 #include "Externals/imgui/imgui_impl_dx12.h"
 #include "Externals/imgui/imgui_impl_win32.h"
 #include "Externals/imgui/ImGuizmo.h"
@@ -15,9 +15,9 @@ bool isDrawMonitor = false;
 void Kyoko::ImGuiManager::Initialize()
 {
 #ifdef _DEBUG
-	DescriptorHeap* srvHeap = DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap();
+	Kyoko::Descriptor::DescriptorHeap* srvHeap = Kyoko::Descriptor::DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap();
 
-	const DescriptorHandles* handles = srvHeap->GetNewDescriptorHandle();
+	const Kyoko::Descriptor::DescriptorHandles* handles = srvHeap->GetNewDescriptorHandle();
 
 	//ImGuiの初期化
 	IMGUI_CHECKVERSION();

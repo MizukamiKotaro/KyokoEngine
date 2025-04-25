@@ -1,26 +1,23 @@
 #pragma once
-
-#include <d3d12.h>
+#include "Resource/Resource.h"
 #include <dxgi1_6.h>
-#include <wrl.h>
 #include <array>
+#include "Singleton/Singleton.h"
 
 class WindowsInfo;
-class DescriptorHandles;
+namespace Kyoko {
+	namespace Descriptor {
+		class DescriptorHandles;
+	}
+}
 
 // DirectXの基盤クラス
-class DirectXBase
+class DirectXBase : public Kyoko::Singleton::BaseSingleton<DirectXBase>
 {
 public: // メンバ関数
 
 	// namespace省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-
-	/// <summary>
-	/// インスタンスの取得
-	/// </summary>
-	/// <returns>インスタンス</returns>
-	static DirectXBase* GetInstance();
 
 	/// <summary>
 	/// 初期化
@@ -94,22 +91,22 @@ private: // メンバ変数
 	ComPtr<IDXGIAdapter4> useAdapter_;
 	ComPtr<ID3D12CommandQueue> commandQueue_;
 	ComPtr<IDXGISwapChain4> swapChain_;
-	std::array<ComPtr<ID3D12Resource>, 2> backBuffers_;
-	ComPtr<ID3D12Resource> depthStencilResource_;
+	std::array<Kyoko::ResourceAutoRelease, 2> backBuffers_;
+	Kyoko::ResourceManualRelease depthStencilResource_;
 	ComPtr<ID3D12Fence> fence_;
 	uint64_t fenceValue_ = 0;
 
 	std::array<ComPtr<ID3D12CommandAllocator>, 2> commandAllocator_; 
 	std::array<ComPtr<ID3D12GraphicsCommandList>, 2> commandList_;
 
-	std::array<const DescriptorHandles*, 2> rtvHandles_;
-	const DescriptorHandles* dsvHandles_ = nullptr;
+	std::array<const Kyoko::Descriptor::DescriptorHandles*, 2> rtvHandles_;
+	const Kyoko::Descriptor::DescriptorHandles* dsvHandles_ = nullptr;
 
 private: // メンバ関数
-	DirectXBase() = default;
+	/*DirectXBase() = default;
 	~DirectXBase() = default;
 	DirectXBase(const DirectXBase&) = delete;
-	const DirectXBase& operator=(const DirectXBase&) = delete;
+	const DirectXBase& operator=(const DirectXBase&) = delete;*/
 	/// <summary>
 	/// デバッグコントローラーの初期化
 	/// </summary>

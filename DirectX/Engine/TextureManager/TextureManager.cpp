@@ -4,8 +4,8 @@
 #include <format>
 #include "Externals/DirectXTex/d3dx12.h"
 #include "Engine/Base/DirectXBase/DirectXBase.h"
-#include "Engine/Base/DescriptorHeapManager/DescriptorHeapManager.h"
-#include "DescriptorHeapManager/DescriptorHeap/DescriptorHeap.h"
+#include "Engine/Base/Descriptor/DescriptorHeapManager/DescriptorHeapManager.h"
+#include "Descriptor/DescriptorHeap/DescriptorHeap.h"
 #include "Texture.h"
 #include <filesystem>
 #include "StringConverter/StringConverter.h"
@@ -20,7 +20,7 @@ void TextureManager::Initialize()
 {
 	device_ = DirectXBase::GetInstance()->GetDevice();
 	commandList_ = DirectXBase::GetInstance()->GetCommandList();
-	srvHeap_ = DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap();
+	srvHeap_ = Kyoko::Descriptor::DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap();
 }
 
 void TextureManager::BeginFrame()

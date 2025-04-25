@@ -9,8 +9,8 @@
 #include "Texture/Texture.h"
 #include "TextureManager.h"
 #include "MMD/PMDModel/PMDModel.h"
-#include "Base/DescriptorHeapManager/DescriptorHeapManager.h"
-#include "Base/DescriptorHeapManager/DescriptorHeap/DescriptorHeap.h"
+#include "Base/Descriptor/DescriptorHeapManager/DescriptorHeapManager.h"
+#include "Base/Descriptor/DescriptorHeap/DescriptorHeap.h"
 
 const Texture* texCube = nullptr;
 
@@ -84,7 +84,7 @@ void DrawModelManager::Draw(const PMDModel& model, const Camera& camera, BlendMo
 	commandList_->IASetVertexBuffers(0, 1, &model.GetSkinCluter().vertexBufferView);
 	commandList_->IASetIndexBuffer(&modelData.mesh.indexBufferView_);
 	commandList_->SetGraphicsRootConstantBufferView(0, transformations_[drawNo_]->transformationResource.GetGPUVirtualAddress());
-	commandList_->SetGraphicsRootDescriptorTable(1, DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->GetTextureFirstHandle());
+	commandList_->SetGraphicsRootDescriptorTable(1, Kyoko::Descriptor::DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->GetTextureFirstHandle());
 	commandList_->SetGraphicsRootConstantBufferView(2, camera.GetGPUVirtualAddress());
 	commandList_->DrawIndexedInstanced(UINT(modelData.mesh.indices.size()), 1, 0, 0, 0);
 	drawNo_++;

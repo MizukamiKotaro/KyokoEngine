@@ -3,20 +3,20 @@
 #include <cassert>
 #include "TextureManager/TextureManager.h"
 #include "Engine/Base/DirectXBase/DirectXBase.h"
-#include "Engine/Base/DescriptorHeapManager/DescriptorHeapManager.h"
+#include "Engine/Base/Descriptor/DescriptorHeapManager/DescriptorHeapManager.h"
 #include "Camera.h"
 #include "WindowsInfo/WindowsInfo.h"
 #include "Externals/DirectXTex/d3dx12.h"
 #include <algorithm>
 #include "GraphicsPipelineSystem/PipelineTypeConfig.h"
-#include "DescriptorHeapManager/DescriptorHeap/DescriptorHeap.h"
+#include "Descriptor/DescriptorHeap/DescriptorHeap.h"
 #include "GraphicsPipelineSystem/GraphicsPiplineManager/GraphicsPiplineManager.h"
 
 const float BasePostEffect::clearColor[4] = { 0.0f,0.0f,0.0f,0.0f };
 
-DescriptorHeap* BasePostEffect::srvHeap_ = nullptr;
-DescriptorHeap* BasePostEffect::rtvHeap_ = nullptr;
-DescriptorHeap* BasePostEffect::dsvHeap_ = nullptr;
+Kyoko::Descriptor::DescriptorHeap* BasePostEffect::srvHeap_ = nullptr;
+Kyoko::Descriptor::DescriptorHeap* BasePostEffect::rtvHeap_ = nullptr;
+Kyoko::Descriptor::DescriptorHeap* BasePostEffect::dsvHeap_ = nullptr;
 ID3D12Device* BasePostEffect::device_ = nullptr;
 Vector2 BasePostEffect::windowSize_ = {};
 
@@ -33,7 +33,7 @@ BasePostEffect::~BasePostEffect()
 
 void BasePostEffect::StaticInitialize()
 {
-	DescriptorHeapManager* descriptorHeapManager = DescriptorHeapManager::GetInstance();
+	Kyoko::Descriptor::DescriptorHeapManager* descriptorHeapManager = Kyoko::Descriptor::DescriptorHeapManager::GetInstance();
 	srvHeap_ = descriptorHeapManager->GetSRVDescriptorHeap();
 	rtvHeap_ = descriptorHeapManager->GetRTVDescriptorHeap();
 	dsvHeap_ = descriptorHeapManager->GetDSVDescriptorHeap();

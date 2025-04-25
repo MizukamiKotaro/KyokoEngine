@@ -3,10 +3,10 @@
 #include <cassert>
 #include "TextureManager/TextureManager.h"
 #include "Engine/Base/DirectXBase/DirectXBase.h"
-#include "Engine/Base/DescriptorHeapManager/DescriptorHeapManager.h"
+#include "Engine/Base/Descriptor/DescriptorHeapManager/DescriptorHeapManager.h"
 #include "Camera.h"
 #include <algorithm>
-#include "DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
+#include "Descriptor/DescriptorHandles/DescriptorHandles.h"
 #include "WindowsInfo/WindowsInfo.h"
 #include "Texture.h"
 #include "GraphicsPipelineSystem/PipelineTypeConfig.h"

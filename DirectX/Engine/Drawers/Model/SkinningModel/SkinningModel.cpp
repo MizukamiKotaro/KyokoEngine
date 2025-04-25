@@ -4,15 +4,15 @@
 #include "Engine/Base/DirectXBase/DirectXBase.h"
 #include "ModelDataManager.h"
 #include "Camera.h"
-#include "DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
+#include "Descriptor/DescriptorHandles/DescriptorHandles.h"
 #include "calc.h"
-#include "DescriptorHeapManager/DescriptorHeapManager.h"
-#include "DescriptorHeapManager/DescriptorHeap/DescriptorHeap.h"
+#include "Descriptor/DescriptorHeapManager/DescriptorHeapManager.h"
+#include "Descriptor/DescriptorHeap/DescriptorHeap.h"
 #include "Drawers/DrawManager/DrawManager.h"
 #include "ComputePipelineSystem/ComputePipelineManager/ComputePipelineManager.h"
 #include "ComputePipelineSystem/ComputePipelineTypeConfig.h"
 
-DescriptorHeap* SkinningModel::srvHeap_ = nullptr;
+Kyoko::Descriptor::DescriptorHeap* SkinningModel::srvHeap_ = nullptr;
 
 SkinningModel::SkinningModel(const std::string& fileName, const bool& ispmx)
 {
@@ -26,10 +26,6 @@ SkinningModel::SkinningModel(const std::string& fileName, const bool& ispmx)
 
 SkinningModel::~SkinningModel()
 {
-	srvHeap_->AddDeleteDescriptor(skinCluter_->influenceSrvHandle);
-	srvHeap_->AddDeleteDescriptor(skinCluter_->inputVertexSrvHandle);
-	srvHeap_->AddDeleteDescriptor(skinCluter_->outputVertexSrvHandle);
-	srvHeap_->AddDeleteDescriptor(skinCluter_->paletteSrvHandle);
 }
 
 void SkinningModel::SetTime(float time)
@@ -76,7 +72,7 @@ void SkinningModel::AnimationUpdate(float time)
 
 void SkinningModel::StaticInitialize()
 {
-	srvHeap_ = DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap();
+	srvHeap_ = Kyoko::Descriptor::DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap();
 }
 
 void SkinningModel::LoadGLTF(const std::string& fileName, bool ispmx)
@@ -300,7 +296,7 @@ void SkinningModel::UpdateSkinAnimation()
 
 void SkinningModel::UpdateCompute()
 {
-	ID3D12DescriptorHeap* descriptorHeaps[] = { DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->GetHeap() };
+	ID3D12DescriptorHeap* descriptorHeaps[] = { Kyoko::Descriptor::DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->GetHeap() };
 	commandList_->SetDescriptorHeaps(1, descriptorHeaps);
 	ComputePipelineManager::GetInstance()->PreCompute(ComputePipelineType::SKINNING);
 	commandList_->SetComputeRootDescriptorTable(0, skinCluter_->paletteSrvHandle->gpuHandle);

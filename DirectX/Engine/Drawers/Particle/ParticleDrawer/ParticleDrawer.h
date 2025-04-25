@@ -5,7 +5,7 @@
 #include "Light/Light.h"
 #include "Drawers/DrawerBase/DrawerBase.h"
 #include "ModelData/ModelData.h"
-#include "DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
+#include "Descriptor/DescriptorHandles/DescriptorHandles.h"
 
 #include "ParticleData.h"
 
@@ -57,5 +57,5 @@ private:
 
 	static const PipelineType pipelineType_;
 	ParticleMeshTexData data_;
-	const DescriptorHandles* srvHandles_;
+	const Kyoko::Descriptor::DescriptorHandles* srvHandles_;
 };

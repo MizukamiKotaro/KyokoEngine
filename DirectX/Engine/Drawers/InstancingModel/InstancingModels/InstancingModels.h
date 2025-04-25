@@ -4,7 +4,7 @@
 #include "Light/Light.h"
 #include "Drawers/DrawerBase/DrawerBase.h"
 #include "ModelData/ModelData.h"
-#include "DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
+#include "Descriptor/DescriptorHandles/DescriptorHandles.h"
 
 #include "InstancingModelData.h"
 

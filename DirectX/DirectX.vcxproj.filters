@@ -22,9 +22,6 @@
     <Filter Include="Engine\Base\DebugLog">
       <UniqueIdentifier>{da14fcb3-447f-49f4-94ae-40486ab30d54}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Base\DescriptorHeapManager">
-      <UniqueIdentifier>{135ec753-fe7c-4a53-a1c8-c9e9e939d7f2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Audio">
       <UniqueIdentifier>{b3b23ed5-91b6-474a-83a0-d4ee5a65f6c5}</UniqueIdentifier>
     </Filter>
@@ -85,9 +82,6 @@
     <Filter Include="Engine\Base\WindowsInfo">
       <UniqueIdentifier>{252bb9a8-5252-4508-b5a6-6a9888718a3d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Base\DescriptorHeapManager\DescriptorHeap">
-      <UniqueIdentifier>{0726e4ee-bd27-4bce-828b-ffcbbee33815}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\GameElement">
       <UniqueIdentifier>{11d71cdf-0a7d-4dfd-bb29-1e2571632408}</UniqueIdentifier>
     </Filter>
@@ -147,15 +141,6 @@
     </Filter>
     <Filter Include="Engine\Audio\AudioManager">
       <UniqueIdentifier>{b4cbcc5e-532a-4bf6-858b-85cf0eed0e46}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Base\DescriptorHeapManager\DescriptorHeaps">
-      <UniqueIdentifier>{d8aae76e-4da8-4522-bfcf-da135fab7f81}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Base\DescriptorHeapManager\DescriptorHandles">
-      <UniqueIdentifier>{edc29bb7-fff4-4ff5-9fae-8622f90bb767}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Base\DescriptorHeapManager\Descriptor">
-      <UniqueIdentifier>{8ad1c504-0a5b-4b51-9de9-a4f6ed7da697}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Audio\VolumeManager">
       <UniqueIdentifier>{ba55635d-5f98-4afc-a3ed-88bb8ac98dde}</UniqueIdentifier>
@@ -502,6 +487,27 @@
     <Filter Include="Engine\Base\Resource\ResourceReleaser">
       <UniqueIdentifier>{aefa0bdd-6536-4727-8a72-de601d38a8d0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Singleton">
+      <UniqueIdentifier>{497a98a3-df14-4d7d-b62e-0eb00b6a03bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Base\DescriptorHeap">
+      <UniqueIdentifier>{135ec753-fe7c-4a53-a1c8-c9e9e939d7f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Base\DescriptorHeap\DescriptorHeap">
+      <UniqueIdentifier>{0726e4ee-bd27-4bce-828b-ffcbbee33815}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Base\DescriptorHeap\DescriptorHeaps">
+      <UniqueIdentifier>{d8aae76e-4da8-4522-bfcf-da135fab7f81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Base\DescriptorHeap\DescriptorHandles">
+      <UniqueIdentifier>{edc29bb7-fff4-4ff5-9fae-8622f90bb767}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Base\DescriptorHeap\Descriptor">
+      <UniqueIdentifier>{8ad1c504-0a5b-4b51-9de9-a4f6ed7da697}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Base\DescriptorHeap\DescriptorHeapManager">
+      <UniqueIdentifier>{d657d1b8-1cc8-4d87-af6b-0b3745c4f2a4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -554,9 +560,6 @@
     </ClCompile>
     <ClCompile Include="Engine\Base\DebugLog\DebugLog.cpp">
       <Filter>Engine\Base\DebugLog</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Base\DescriptorHeapManager\DescriptorHeapManager.cpp">
-      <Filter>Engine\Base\DescriptorHeapManager</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Audio\Audio.cpp">
       <Filter>Engine\Audio</Filter>
@@ -618,9 +621,6 @@
     <ClCompile Include="Engine\Base\WindowsInfo\WindowsInfo.cpp">
       <Filter>Engine\Base\WindowsInfo</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Base\DescriptorHeapManager\DescriptorHeap\DescriptorHeap.cpp">
-      <Filter>Engine\Base\DescriptorHeapManager\DescriptorHeap</Filter>
-    </ClCompile>
     <ClCompile Include="Game\GameElement\Score\Score.cpp">
       <Filter>Game\GameElement\Score</Filter>
     </ClCompile>
@@ -671,9 +671,6 @@
     </ClCompile>
     <ClCompile Include="Engine\Audio\AudioManager\AudioManager.cpp">
       <Filter>Engine\Audio\AudioManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Base\DescriptorHeapManager\DescriptorHeaps\DescriptorHeaps.cpp">
-      <Filter>Engine\Base\DescriptorHeapManager\DescriptorHeaps</Filter>
     </ClCompile>
     <ClCompile Include="Engine\TextureManager\Texture\Texture.cpp">
       <Filter>Engine\TextureManager\Texture</Filter>
@@ -1038,6 +1035,21 @@
     <ClCompile Include="Engine\Base\Resource\ResourceReleaser\ResourceReleaser.cpp">
       <Filter>Engine\Base\Resource\ResourceReleaser</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Singleton\Singleton.cpp">
+      <Filter>Engine\Singleton</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Drawers\Model\ModelData\SkinClustr.cpp">
+      <Filter>Engine\Drawers\Model\ModelData</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Base\Descriptor\DescriptorHeap\DescriptorHeap.cpp">
+      <Filter>Engine\Base\DescriptorHeap\DescriptorHeap</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Base\Descriptor\DescriptorHeapManager\DescriptorHeapManager.cpp">
+      <Filter>Engine\Base\DescriptorHeap\DescriptorHeapManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Base\Descriptor\DescriptorHeaps\DescriptorHeaps.cpp">
+      <Filter>Engine\Base\DescriptorHeap\DescriptorHeaps</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Utils\Math\calc.h">
@@ -1096,9 +1108,6 @@
     </ClInclude>
     <ClInclude Include="Engine\Base\DebugLog\DebugLog.h">
       <Filter>Engine\Base\DebugLog</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Base\DescriptorHeapManager\DescriptorHeapManager.h">
-      <Filter>Engine\Base\DescriptorHeapManager</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Audio\Audio.h">
       <Filter>Engine\Audio</Filter>
@@ -1163,9 +1172,6 @@
     <ClInclude Include="Engine\Base\WindowsInfo\WindowsInfo.h">
       <Filter>Engine\Base\WindowsInfo</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Base\DescriptorHeapManager\DescriptorHeap\DescriptorHeap.h">
-      <Filter>Engine\Base\DescriptorHeapManager\DescriptorHeap</Filter>
-    </ClInclude>
     <ClInclude Include="Game\GameElement\Score\Score.h">
       <Filter>Game\GameElement\Score</Filter>
     </ClInclude>
@@ -1222,15 +1228,6 @@
     </ClInclude>
     <ClInclude Include="Engine\Audio\AudioManager\AudioManager.h">
       <Filter>Engine\Audio\AudioManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Base\DescriptorHeapManager\DescriptorHeaps\DescriptorHeaps.h">
-      <Filter>Engine\Base\DescriptorHeapManager\DescriptorHeaps</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Base\DescriptorHeapManager\DescriptorHandles\DescriptorHandles.h">
-      <Filter>Engine\Base\DescriptorHeapManager\DescriptorHandles</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Base\DescriptorHeapManager\Descriptor\Descriptor.h">
-      <Filter>Engine\Base\DescriptorHeapManager\Descriptor</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Drawers\Model\Model.h">
       <Filter>Engine\Drawers\Model</Filter>
@@ -1669,6 +1666,24 @@
     </ClInclude>
     <ClInclude Include="Engine\Base\Resource\ResourceReleaser\ResourceReleaser.h">
       <Filter>Engine\Base\Resource\ResourceReleaser</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Singleton\Singleton.h">
+      <Filter>Engine\Singleton</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Base\Descriptor\Descriptor\Descriptor.h">
+      <Filter>Engine\Base\DescriptorHeap\Descriptor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Base\Descriptor\DescriptorHandles\DescriptorHandles.h">
+      <Filter>Engine\Base\DescriptorHeap\DescriptorHandles</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Base\Descriptor\DescriptorHeap\DescriptorHeap.h">
+      <Filter>Engine\Base\DescriptorHeap\DescriptorHeap</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Base\Descriptor\DescriptorHeapManager\DescriptorHeapManager.h">
+      <Filter>Engine\Base\DescriptorHeap\DescriptorHeapManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Base\Descriptor\DescriptorHeaps\DescriptorHeaps.h">
+      <Filter>Engine\Base\DescriptorHeap\DescriptorHeaps</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

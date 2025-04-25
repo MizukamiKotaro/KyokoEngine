@@ -14,11 +14,6 @@
 
 using namespace Microsoft::WRL;
 
-DirectXBase* DirectXBase::GetInstance() {
-	static DirectXBase instance;
-	return &instance;
-}
-
 void DirectXBase::Initialize() {
 
 	// デバッグコントローラーの初期化
@@ -39,7 +34,7 @@ void DirectXBase::Initialize() {
 	CreateSwapChain();
 
 	// ディスクリプタヒープの初期化
-	DescriptorHeapManager::GetInstance()->Initialize();;
+	Kyoko::Descriptor::DescriptorHeapManager::GetInstance()->Initialize();;
 
 	// レンダーターゲット生成
 	CreateFinalRenderTargets();
@@ -66,7 +61,7 @@ void DirectXBase::Finalize()
 		WaitForSingleObject(event, INFINITE);
 		CloseHandle(event);
 	}
-	depthStencilResource_->Release();
+	DestroyInstance();
 }
 
 void DirectXBase::PreDraw() {
@@ -119,7 +114,7 @@ void DirectXBase::PreDraw() {
 	commandList_[backBufferIndex]->RSSetScissorRects(1, &scissorRect); //Scissorを設定
 
 	//描画用のDescriptorHeapの設定
-	ID3D12DescriptorHeap* descriptorHeaps[] = { DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->GetHeap() };
+	ID3D12DescriptorHeap* descriptorHeaps[] = { Kyoko::Descriptor::DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->GetHeap() };
 	commandList_[backBufferIndex]->SetDescriptorHeaps(1, descriptorHeaps);
 }
 
@@ -166,7 +161,7 @@ void DirectXBase::BeginFrame()
 	//GPUとOSに画面の交換を行うように通知する
 	HRESULT hr = swapChain_->Present(1, 0);
 
-	DescriptorHeapManager::GetInstance()->BeginFrame();
+	Kyoko::Descriptor::DescriptorHeapManager::GetInstance()->BeginFrame();
 
 	backBufferIndex = swapChain_->GetCurrentBackBufferIndex();
 
@@ -337,7 +332,7 @@ void DirectXBase::InitializeCommand() {
 
 void DirectXBase::CreateFinalRenderTargets() {
 
-	DescriptorHeap* heap = DescriptorHeapManager::GetInstance()->GetRTVDescriptorHeap();
+	Kyoko::Descriptor::DescriptorHeap* heap = Kyoko::Descriptor::DescriptorHeapManager::GetInstance()->GetRTVDescriptorHeap();
 
 	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
 	rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB; //出力結果をSRGBに変換して書き込む
@@ -351,13 +346,14 @@ void DirectXBase::CreateFinalRenderTargets() {
 
 void DirectXBase::CreateDepthBuffer() {
 
-	DescriptorHeap* heap = DescriptorHeapManager::GetInstance()->GetDSVDescriptorHeap();
+	Kyoko::Descriptor::DescriptorHeap* heap = Kyoko::Descriptor::DescriptorHeapManager::GetInstance()->GetDSVDescriptorHeap();
 
 	dsvHandles_ = heap->GetNewDescriptorHandle();
 
 	//DepthStencilTextureをウィンドウのサイズで作成
 	Vector2 windowSize = windowInfo_->GetWindowSize();
-	depthStencilResource_ =  CreateDepthStencilTextureResource((UINT)windowSize.x, (UINT)windowSize.y);
+
+	depthStencilResource_.CreateResource(CreateDepthStencilTextureResource((UINT)windowSize.x, (UINT)windowSize.y));
 	//DSVの設定
 	D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc{};
 	dsvDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT; // Format。基本的にはResourceに合わせる

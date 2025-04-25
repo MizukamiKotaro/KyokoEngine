@@ -3,8 +3,11 @@
 #include <wrl.h>
 #include <d3d12.h>
 
-
-class DescriptorHandles;
+namespace Kyoko {
+	namespace Descriptor {
+		class DescriptorHandles;
+	}
+}
 
 class GPUParticle : public IParticle
 {
@@ -25,8 +28,8 @@ private:
 
 	void ApplyGlobalVariable() override;
 
-	const DescriptorHandles* particleUAVHandle_;
-	const DescriptorHandles* particleSRVHandle_;
+	const Kyoko::Descriptor::DescriptorHandles* particleUAVHandle_;
+	const Kyoko::Descriptor::DescriptorHandles* particleSRVHandle_;
 	Microsoft::WRL::ComPtr<ID3D12Resource> particleResouce_;
 
 };

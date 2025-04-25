@@ -22,7 +22,7 @@ void ModelDataManager::Initialize()
 {
 	LoadALL(kObjDirectoryPath_, ".obj");
 	LoadALL(kRigidAnimDirectoryPath_, ".gltf");
-	LoadALL(kSkinningAnimDirectoryPath_, ".gltf");
+	//LoadALL(kSkinningAnimDirectoryPath_, ".gltf");
 }
 
 void ModelDataManager::Finalize()

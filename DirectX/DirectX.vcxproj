@@ -117,9 +117,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Audio\AudioManager\AudioManager.cpp" />
     <ClCompile Include="Engine\Audio\VolumeManager\VolumeManager.cpp" />
     <ClCompile Include="Engine\Base\DebugLog\DebugLog.cpp" />
-    <ClCompile Include="Engine\Base\DescriptorHeapManager\DescriptorHeapManager.cpp" />
-    <ClCompile Include="Engine\Base\DescriptorHeapManager\DescriptorHeaps\DescriptorHeaps.cpp" />
-    <ClCompile Include="Engine\Base\DescriptorHeapManager\DescriptorHeap\DescriptorHeap.cpp" />
+    <ClCompile Include="Engine\Base\Descriptor\DescriptorHeapManager\DescriptorHeapManager.cpp" />
+    <ClCompile Include="Engine\Base\Descriptor\DescriptorHeaps\DescriptorHeaps.cpp" />
+    <ClCompile Include="Engine\Base\Descriptor\DescriptorHeap\DescriptorHeap.cpp" />
     <ClCompile Include="Engine\Base\DirectXBase\DirectXBase.cpp" />
     <ClCompile Include="Engine\Base\Resource\Resource.cpp" />
     <ClCompile Include="Engine\Base\Resource\ResourceReleaser\ResourceReleaser.cpp" />
@@ -156,6 +156,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Drawers\Model\BaseModel\BaseModel.cpp" />
     <ClCompile Include="Engine\Drawers\Model\Model.cpp" />
     <ClCompile Include="Engine\Drawers\Model\ModelData\ModelDataManager\ModelDataManager.cpp" />
+    <ClCompile Include="Engine\Drawers\Model\ModelData\SkinClustr.cpp" />
     <ClCompile Include="Engine\Drawers\Model\RigidAnimationModel\RigidAnimationModel.cpp" />
     <ClCompile Include="Engine\Drawers\Model\SkinningModel\SkinningModel.cpp" />
     <ClCompile Include="Engine\Drawers\Particle\Particle.cpp" />
@@ -224,6 +225,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\MMD\CameraVMD\CameraVMDDataManager.cpp" />
     <ClCompile Include="Engine\MMD\PMDModel\PMDModel.cpp" />
     <ClCompile Include="Engine\SceneObject\SceneObjectManager.cpp" />
+    <ClCompile Include="Engine\Singleton\Singleton.cpp" />
     <ClCompile Include="Engine\TextureManager\TextureManager.cpp" />
     <ClCompile Include="Engine\TextureManager\Texture\Texture.cpp" />
     <ClCompile Include="Engine\Utils\Camera\DebugCamera\DebugCamera.cpp" />
@@ -299,11 +301,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Audio\SoundData.h" />
     <ClInclude Include="Engine\Audio\VolumeManager\VolumeManager.h" />
     <ClInclude Include="Engine\Base\DebugLog\DebugLog.h" />
-    <ClInclude Include="Engine\Base\DescriptorHeapManager\DescriptorHandles\DescriptorHandles.h" />
-    <ClInclude Include="Engine\Base\DescriptorHeapManager\DescriptorHeapManager.h" />
-    <ClInclude Include="Engine\Base\DescriptorHeapManager\DescriptorHeaps\DescriptorHeaps.h" />
-    <ClInclude Include="Engine\Base\DescriptorHeapManager\DescriptorHeap\DescriptorHeap.h" />
-    <ClInclude Include="Engine\Base\DescriptorHeapManager\Descriptor\Descriptor.h" />
+    <ClInclude Include="Engine\Base\Descriptor\DescriptorHandles\DescriptorHandles.h" />
+    <ClInclude Include="Engine\Base\Descriptor\DescriptorHeapManager\DescriptorHeapManager.h" />
+    <ClInclude Include="Engine\Base\Descriptor\DescriptorHeaps\DescriptorHeaps.h" />
+    <ClInclude Include="Engine\Base\Descriptor\DescriptorHeap\DescriptorHeap.h" />
+    <ClInclude Include="Engine\Base\Descriptor\Descriptor\Descriptor.h" />
     <ClInclude Include="Engine\Base\DirectXBase\DirectXBase.h" />
     <ClInclude Include="Engine\Base\ResourceLeakChecker.h" />
     <ClInclude Include="Engine\Base\Resource\Resource.h" />
@@ -432,6 +434,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\MMD\MMDModelData\VertexDataPMD.h" />
     <ClInclude Include="Engine\MMD\PMDModel\PMDModel.h" />
     <ClInclude Include="Engine\SceneObject\SceneObjectManager.h" />
+    <ClInclude Include="Engine\Singleton\Singleton.h" />
     <ClInclude Include="Engine\TextureManager\TextureManager.h" />
     <ClInclude Include="Engine\TextureManager\Texture\Texture.h" />
     <ClInclude Include="Engine\Utils\Camera\Camera.h" />

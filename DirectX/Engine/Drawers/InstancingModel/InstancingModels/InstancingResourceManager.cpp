@@ -1,8 +1,8 @@
 #include "InstancingResourceManager.h"
 #include "DirectXBase/DirectXBase.h"
 #include <algorithm>
-#include "DescriptorHeapManager/DescriptorHeapManager.h"
-#include "DescriptorHeapManager/DescriptorHeap/DescriptorHeap.h"
+#include "Descriptor/DescriptorHeapManager/DescriptorHeapManager.h"
+#include "Descriptor/DescriptorHeap/DescriptorHeap.h"
 
 void InstancingResourceManager::CreateSRV(const int32_t& num, const InstancingGroupData* modelData)
 {
@@ -22,7 +22,7 @@ void InstancingResourceManager::CreateSRV(const int32_t& num, const InstancingGr
 		srvDesc.Buffer.NumElements = kNumInstance;
 		srvDesc.Buffer.StructureByteStride = sizeof(ParticleForGPU);
 
-		resource.srvHandles_ = DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->GetNewDescriptorHandle();
+		resource.srvHandles_ = Kyoko::Descriptor::DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->GetNewDescriptorHandle();
 
 		DirectXBase::GetInstance()->GetDevice()->CreateShaderResourceView(resource.instancingResource_.Get(), &srvDesc, resource.srvHandles_->cpuHandle);
 	}
@@ -46,7 +46,7 @@ void InstancingResourceManager::Finalize()
 	for (std::pair<const InstancingGroupData* const, std::unique_ptr<Resources>>& resource : resources_) {
 		for (InstancingResources& res : resource.second->instancingResources_) {
 			res.instancingResource_->Release();
-			DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->AddDeleteDescriptor(res.srvHandles_);
+			Kyoko::Descriptor::DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->AddDeleteDescriptor(res.srvHandles_);
 		}
 		resource.second->materialResource_->Release();
 	}

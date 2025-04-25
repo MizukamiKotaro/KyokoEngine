@@ -2,7 +2,11 @@
 #include "BaseModel/BaseModel.h"
 #include "ModelData/SkinClustr.h"
 
-class DescriptorHeap;
+namespace Kyoko {
+	namespace Descriptor {
+		class DescriptorHeap;
+	}
+}
 
 class SkinningModel : public BaseModel
 {
@@ -51,7 +55,7 @@ private:
 	void UpdateCompute();
 
 private:
-	static DescriptorHeap* srvHeap_;
+	static Kyoko::Descriptor::DescriptorHeap* srvHeap_;
 
 	std::unique_ptr<Animation> animation_;
 	std::unique_ptr<Skeleton> skeleton_;

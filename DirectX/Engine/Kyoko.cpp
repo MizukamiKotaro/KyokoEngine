@@ -6,7 +6,7 @@
 #include "TextureManager/TextureManager.h"
 #include "ImGuiManager/ImGuiManager.h"
 #include "GlobalVariables/GlobalVariables.h"
-#include "Engine/Base/DescriptorHeapManager/DescriptorHeapManager.h"
+#include "Engine/Base/Descriptor/DescriptorHeapManager/DescriptorHeapManager.h"
 #include "ModelDataManager.h"
 #include "Utils/RandomGenerator/RandomGenerator.h"
 #include "GraphicsPipelineSystem/GraphicsPiplineManager/GraphicsPiplineManager.h"
@@ -49,6 +49,8 @@ namespace Kyoko {
 
 		void Initialize(const char* windowName, int width, int height)
 		{
+			Singleton::CreateSingletons();
+
 			// ウィンドウの初期化
 			HRESULT hr = CoInitializeEx(0, COINIT_MULTITHREADED);
 			SUCCEEDED(hr);
@@ -202,7 +204,6 @@ namespace Kyoko {
 			// 解放、終了処理
 			dxBase->Finalize();
 			ImGuiManager::Finalize();
-			CoUninitialize();
 			audioManager->Finalize();
 			drawManager->Finalize();
 			LightSingleton::GetInstance()->Finalize();
@@ -210,7 +211,7 @@ namespace Kyoko {
 			TextureManager::GetInstance()->Finalize();
 			ModelDataManager::GetInstance()->Finalize();
 			ResourceReleaser::GetInstance()->Finalize();
-			DescriptorHeapManager::GetInstance()->Finalize();
+			Kyoko::Descriptor::DescriptorHeapManager::GetInstance()->Finalize();
 			winInfo->Finalize();
 
 #pragma endregion 基盤システムの終了

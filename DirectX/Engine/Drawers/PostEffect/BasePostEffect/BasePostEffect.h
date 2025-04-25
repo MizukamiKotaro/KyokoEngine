@@ -10,10 +10,14 @@
 #include "GraphicsPipelineSystem/BlendModeConfig.h"
 #include "Resource/Resource.h"
 
-class DescriptorHandles;
 enum class PipelineType;
 class GraphicsPipelineManager;
-class DescriptorHeap;
+namespace Kyoko {
+	namespace Descriptor {
+		class DescriptorHeap;
+		class DescriptorHandles;
+	}
+}
 /// <summary>
 /// ポストエフェクトの基盤
 /// </summary>
@@ -66,17 +70,17 @@ protected:
 	Kyoko::ResourceManualRelease materialResource_;
 	Material* materialData_;
 	Kyoko::ResourceAutoRelease texResource_;
-	const DescriptorHandles* srvHandles_;
+	const Kyoko::Descriptor::DescriptorHandles* srvHandles_;
 	Kyoko::ResourceManualRelease rtvResource_;
-	const DescriptorHandles* rtvHandles_;
+	const Kyoko::Descriptor::DescriptorHandles* rtvHandles_;
 	Kyoko::ResourceAutoRelease dsvResource_;
-	const DescriptorHandles* dsvHandles_;
+	const Kyoko::Descriptor::DescriptorHandles* dsvHandles_;
 public:
 	Vector4 color_;
 protected:
-	static DescriptorHeap* srvHeap_;
-	static DescriptorHeap* rtvHeap_;
-	static DescriptorHeap* dsvHeap_;
+	static Kyoko::Descriptor::DescriptorHeap* srvHeap_;
+	static Kyoko::Descriptor::DescriptorHeap* rtvHeap_;
+	static Kyoko::Descriptor::DescriptorHeap* dsvHeap_;
 	static ID3D12Device* device_;
 	static Vector2 windowSize_;
 	PipelineType piplineType_;

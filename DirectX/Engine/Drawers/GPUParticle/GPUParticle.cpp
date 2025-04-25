@@ -5,9 +5,9 @@
 #include "Camera.h"
 #include "Drawers/GPUParticle/GPUParticleData.h"
 #include "DirectXBase/DirectXBase.h"
-#include "Base/DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
-#include "Base/DescriptorHeapManager/DescriptorHeap/DescriptorHeap.h"
-#include "Base/DescriptorHeapManager/DescriptorHeapManager.h"
+#include "Base/Descriptor/DescriptorHandles/DescriptorHandles.h"
+#include "Base/Descriptor/DescriptorHeap/DescriptorHeap.h"
+#include "Base/Descriptor/DescriptorHeapManager/DescriptorHeapManager.h"
 #include "Drawers/DrawManager/DrawManager.h"
 #include "ComputePipelineSystem/ComputePipelineManager/ComputePipelineManager.h"
 #include "ComputePipelineSystem/ComputePipelineTypeConfig.h"
@@ -19,7 +19,7 @@ GPUParticle::GPUParticle(const std::string& particleName, const std::string& tex
 	// uavの作成
 	particleResouce_ = DirectXBase::CreateBufferResource(sizeof(GPUParticleData) * 1024, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
 
-	particleUAVHandle_ = DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->GetNewDescriptorHandle();
+	particleUAVHandle_ = Kyoko::Descriptor::DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->GetNewDescriptorHandle();
 	
 	D3D12_UNORDERED_ACCESS_VIEW_DESC outputVertexUAVDesc{};
 	outputVertexUAVDesc.Format = DXGI_FORMAT_UNKNOWN;
@@ -30,7 +30,7 @@ GPUParticle::GPUParticle(const std::string& particleName, const std::string& tex
 	outputVertexUAVDesc.Buffer.StructureByteStride = sizeof(GPUParticleData);
 	DirectXBase::GetInstance()->GetDevice()->CreateUnorderedAccessView(particleResouce_.Get(), nullptr, &outputVertexUAVDesc, particleUAVHandle_->cpuHandle);
 
-	particleSRVHandle_ = DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->GetNewDescriptorHandle();
+	particleSRVHandle_ = Kyoko::Descriptor::DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->GetNewDescriptorHandle();
 
 	D3D12_SHADER_RESOURCE_VIEW_DESC influenceSRVDesc{};
 	influenceSRVDesc.Format = DXGI_FORMAT_UNKNOWN;
@@ -47,8 +47,8 @@ GPUParticle::GPUParticle(const std::string& particleName, const std::string& tex
 
 GPUParticle::~GPUParticle()
 {
-	DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->AddDeleteDescriptor(particleUAVHandle_);
-	DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->AddDeleteDescriptor(particleSRVHandle_);
+	Kyoko::Descriptor::DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->AddDeleteDescriptor(particleUAVHandle_);
+	Kyoko::Descriptor::DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->AddDeleteDescriptor(particleSRVHandle_);
 	particleResouce_->Release();
 }
 
@@ -62,7 +62,7 @@ void GPUParticle::Update(const float& deltaTime)
 	ApplyGlobalVariable();
 #endif // _DEBUG
 
-	ID3D12DescriptorHeap* descriptorHeaps[] = { DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->GetHeap() };
+	ID3D12DescriptorHeap* descriptorHeaps[] = { Kyoko::Descriptor::DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->GetHeap() };
 	commandList_->SetDescriptorHeaps(1, descriptorHeaps);
 	ComputePipelineManager::GetInstance()->PreCompute(ComputePipelineType::PARTICLE_INITIALIZE);
 	commandList_->SetComputeRootDescriptorTable(0, particleUAVHandle_->gpuHandle);

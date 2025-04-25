@@ -1,7 +1,7 @@
 #include "ParticleManager.h"
 #include <cassert>
 #include "TextureManager/TextureManager.h"
-#include "Engine/Base/DescriptorHeapManager/DescriptorHeapManager.h"
+#include "Engine/Base/Descriptor/DescriptorHeapManager/DescriptorHeapManager.h"
 #include "Utils/RandomGenerator/RandomGenerator.h"
 #include "DirectXBase/DirectXBase.h"
 #include "Camera.h"

@@ -4,8 +4,8 @@
 #include <algorithm>
 #include "Light/Light.h"
 #include "GraphicsPipelineSystem/GraphicsPiplineManager/GraphicsPiplineManager.h"
-#include "DescriptorHeapManager/DescriptorHeapManager.h"
-#include "DescriptorHeapManager/DescriptorHeap/DescriptorHeap.h"
+#include "Descriptor/DescriptorHeapManager/DescriptorHeapManager.h"
+#include "Descriptor/DescriptorHeap/DescriptorHeap.h"
 
 #include "GraphicsPipelineSystem/PipelineTypeConfig.h"
 #include "ILight/ILight.h"

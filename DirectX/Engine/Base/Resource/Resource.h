@@ -21,12 +21,19 @@ namespace Kyoko {
 		void CreateResource(size_t sizeInBytes, D3D12_RESOURCE_FLAGS resourceFlags = D3D12_RESOURCE_FLAG_NONE);
 
 		/// <summary>
+		/// リソースの生成
+		/// </summary>
+		/// <param name="pResource">リソースのポインタ</param>
+		void CreateResource(ID3D12Resource* pResource);
+
+		/// <summary>
 		/// マッピング
 		/// </summary>
 		/// <param name="ppData">ポインタ</param>
 		/// <param name="Subresource">サブリソースのインデックス</param>
 		/// <param name="pReadRange">範囲</param>
 		void Map(void** ppData, UINT subresource = 0, const D3D12_RANGE* pReadRange = nullptr);
+
 
 		/// <summary>
 		/// GPUアドレスの取得

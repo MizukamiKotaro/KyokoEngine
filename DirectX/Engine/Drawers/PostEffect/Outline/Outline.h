@@ -21,7 +21,7 @@ public:
 		int32_t maxWidth;
 	};
 
-	const DescriptorHandles& GetDepthHandle() { return *depthHandles_; }
+	const Kyoko::Descriptor::DescriptorHandles& GetDepthHandle() { return *depthHandles_; }
 	void ToReadBarrier();
 	void ToWriteBarrier();
 private:
@@ -30,7 +30,7 @@ private:
 	void CreateResources() override;
 private:
 	Kyoko::ResourceManualRelease outlineResource_;
-	const DescriptorHandles* depthHandles_;
+	const Kyoko::Descriptor::DescriptorHandles* depthHandles_;
 public:
 	OutlineData* outlineData_;
 };

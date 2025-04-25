@@ -4,8 +4,8 @@
 #include <algorithm>
 #include "Light/Light.h"
 #include "GraphicsPipelineSystem/GraphicsPiplineManager/GraphicsPiplineManager.h"
-#include "DescriptorHeapManager/DescriptorHeapManager.h"
-#include "DescriptorHeapManager/DescriptorHeap/DescriptorHeap.h"
+#include "Descriptor/DescriptorHeapManager/DescriptorHeapManager.h"
+#include "Descriptor/DescriptorHeap/DescriptorHeap.h"
 
 #include "GraphicsPipelineSystem/PipelineTypeConfig.h"
 #include "ILight/ILight.h"
@@ -101,7 +101,7 @@ void ParticleDrawer::CreateSRV()
 	srvDesc.Buffer.NumElements = kNumInstance;
 	srvDesc.Buffer.StructureByteStride = sizeof(ParticleForGPU);
 
-	srvHandles_ = DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->GetNewDescriptorHandle();
+	srvHandles_ = Kyoko::Descriptor::DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->GetNewDescriptorHandle();
 
 	DirectXBase::GetInstance()->GetDevice()->CreateShaderResourceView(instancingResource_.Get(), &srvDesc, srvHandles_->cpuHandle);
 }

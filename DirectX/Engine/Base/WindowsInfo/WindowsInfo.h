@@ -32,7 +32,7 @@ public: // メンバ関数
 	/// <param name="windowName">ウィンドウの名前</param>
 	/// <param name="width">横幅</param>
 	/// <param name="height">縦幅</param>
-	void CreateGameWindow(const std::string& windowName = "LE3A_17_ミズカミ_コタロウ", int width = 1280, int height = 720);
+	void CreateGameWindow(const std::string& windowName = "LE4A_23_ミズカミ_コタロウ", int width = 1280, int height = 720);
 
 	/// <summary>
 	/// ウィンドウが閉じたかどうかの取得

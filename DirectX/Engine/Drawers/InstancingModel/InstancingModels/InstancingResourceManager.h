@@ -1,7 +1,7 @@
 #pragma once
 #include <list>
 #include <memory>
-#include "DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
+#include "Descriptor/DescriptorHandles/DescriptorHandles.h"
 #include "InstancingModelData.h"
 #include <unordered_map>
 
@@ -36,7 +36,7 @@ public:
 	struct InstancingResources {
 		Microsoft::WRL::ComPtr<ID3D12Resource> instancingResource_;
 		ParticleForGPU* instancingData_;
-		const DescriptorHandles* srvHandles_;
+		const Kyoko::Descriptor::DescriptorHandles* srvHandles_;
 	};
 
 	struct Resources

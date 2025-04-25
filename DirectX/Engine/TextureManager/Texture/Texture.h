@@ -2,7 +2,11 @@
 #include <wrl.h>
 #include <d3d12.h>
 
-class DescriptorHandles;
+namespace Kyoko {
+	namespace Descriptor {
+		class DescriptorHandles;
+	}
+}
 
 class Texture {
 public:
@@ -10,5 +14,5 @@ public:
 public:
 	Microsoft::WRL::ComPtr<ID3D12Resource> resource_;
 	Microsoft::WRL::ComPtr<ID3D12Resource> intermediateResource_;
-	const DescriptorHandles* handles_;
+	const Kyoko::Descriptor::DescriptorHandles* handles_;
 };

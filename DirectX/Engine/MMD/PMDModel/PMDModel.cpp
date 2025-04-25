@@ -5,15 +5,15 @@
 #include "Engine/Base/DirectXBase/DirectXBase.h"
 #include "ModelDataManager.h"
 #include "Camera.h"
-#include "DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
+#include "Descriptor/DescriptorHandles/DescriptorHandles.h"
 #include "calc.h"
-#include "DescriptorHeapManager/DescriptorHeapManager.h"
-#include "DescriptorHeapManager/DescriptorHeap/DescriptorHeap.h"
+#include "Descriptor/DescriptorHeapManager/DescriptorHeapManager.h"
+#include "Descriptor/DescriptorHeap/DescriptorHeap.h"
 #include "ComputePipelineSystem/ComputePipelineManager/ComputePipelineManager.h"
 #include "ComputePipelineSystem/ComputePipelineTypeConfig.h"
 #include "Drawers/DrawManager/DrawManager.h"
 
-DescriptorHeap* PMDModel::srvHeap_ = nullptr;
+Kyoko::Descriptor::DescriptorHeap* PMDModel::srvHeap_ = nullptr;
 
 PMDModel::PMDModel(const std::string& fileName)
 {
@@ -77,7 +77,7 @@ void PMDModel::AnimationUpdate(float time)
 
 void PMDModel::StaticInitialize()
 {
-	srvHeap_ = DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap();
+	srvHeap_ = Kyoko::Descriptor::DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap();
 }
 
 void PMDModel::LoadAnimation(const std::string& fileName)
@@ -281,7 +281,7 @@ void PMDModel::UpdateSkinAnimation()
 
 void PMDModel::UpdateCompute()
 {
-	ID3D12DescriptorHeap* descriptorHeaps[] = { DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->GetHeap() };
+	ID3D12DescriptorHeap* descriptorHeaps[] = { Kyoko::Descriptor::DescriptorHeapManager::GetInstance()->GetSRVDescriptorHeap()->GetHeap() };
 	commandList_->SetDescriptorHeaps(1, descriptorHeaps);
 	ComputePipelineManager::GetInstance()->PreCompute(ComputePipelineType::MMDMOTION);
 	commandList_->SetComputeRootDescriptorTable(0, skinCluter_->paletteSrvHandle->gpuHandle);

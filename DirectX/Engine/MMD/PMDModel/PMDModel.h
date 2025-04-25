@@ -15,7 +15,11 @@
 
 #include "Drawers/DrawerBase/DrawerBase.h"
 
-class DescriptorHeap;
+namespace Kyoko {
+	namespace Descriptor {
+		class DescriptorHeap;
+	}
+}
 class Camera;
 
 /// <summary>
@@ -81,7 +85,7 @@ private:
 	const ModelDataPMD* modelData_;
 
 
-	static DescriptorHeap* srvHeap_;
+	static Kyoko::Descriptor::DescriptorHeap* srvHeap_;
 
 	std::unique_ptr<Animation> animation_;
 	std::unique_ptr<Skeleton> skeleton_;

@@ -3,11 +3,11 @@
 #include <unordered_map>
 #include <map>
 #include <memory>
-#include "DescriptorHeapManager/DescriptorHeap/DescriptorHeap.h"
+#include "Descriptor/DescriptorHeap/DescriptorHeap.h"
 
 #include "Light/Light.h"
 #include "ModelData/ModelData.h"
-#include "DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
+#include "Descriptor/DescriptorHandles/DescriptorHandles.h"
 #include "ILight/ILight.h"
 
 #include "ParticleData.h"

@@ -95,6 +95,7 @@ bool WindowsInfo::ProcessMessage() {
 }
 
 void WindowsInfo::Finalize() {
+	CoUninitialize();
 	UnregisterClass(wndClass_.lpszClassName, wndClass_.hInstance);
 	CloseWindow(hwnd_);
 }

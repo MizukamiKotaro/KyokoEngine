@@ -6,7 +6,11 @@
 #include "Externals/DirectXTex/DirectXTex.h"
 
 class Texture;
-class DescriptorHeap;
+namespace Kyoko {
+	namespace Descriptor {
+		class DescriptorHeap;
+	}
+}
 
 // テクスチャマネージャ
 class TextureManager {
@@ -72,7 +76,7 @@ private:
 
 	ID3D12Device* device_ = nullptr;
 	ID3D12GraphicsCommandList* commandList_ = nullptr;
-	DescriptorHeap* srvHeap_ = nullptr;
+	Kyoko::Descriptor::DescriptorHeap* srvHeap_ = nullptr;
 
 	std::unordered_map<std::string, std::unique_ptr<Texture>> textureMap_;
 };

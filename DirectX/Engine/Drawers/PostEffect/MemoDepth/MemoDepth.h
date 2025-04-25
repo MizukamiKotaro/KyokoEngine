@@ -9,12 +9,12 @@ public:
 	MemoDepth(const Vector2& size = windowSize_);
 	~MemoDepth() override;
 
-	const DescriptorHandles& GetDepthHandle() { return *depthHandles_; }
+	const Kyoko::Descriptor::DescriptorHandles& GetDepthHandle() { return *depthHandles_; }
 	void ToReadBarrier();
 	void ToWriteBarrier();
 private:
 	void CreateDepthRes();
 	void CreateResources() override;
 private:
-	const DescriptorHandles* depthHandles_;
+	const Kyoko::Descriptor::DescriptorHandles* depthHandles_;
 };

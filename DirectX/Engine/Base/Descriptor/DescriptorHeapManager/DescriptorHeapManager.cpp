@@ -1,0 +1,33 @@
+#include "DescriptorHeapManager.h"
+#include "Descriptor/DescriptorHeaps/DescriptorHeaps.h"
+
+namespace Kyoko {
+	namespace Descriptor {
+		DescriptorHeapManager* DescriptorHeapManager::GetInstance()
+		{
+			static DescriptorHeapManager instance;
+			return &instance;
+		}
+
+		void DescriptorHeapManager::Initialize()
+		{
+			srvHeap_ = std::make_unique<SRVDescriptorHeap>();
+			rtvHeap_ = std::make_unique<RTVDescriptorHeap>();
+			dsvHeap_ = std::make_unique<DSVDescriptorHeap>();
+		}
+
+		void DescriptorHeapManager::BeginFrame()
+		{
+			srvHeap_->DeleteDescriptors();
+			rtvHeap_->DeleteDescriptors();
+			dsvHeap_->DeleteDescriptors();
+		}
+
+		void DescriptorHeapManager::Finalize()
+		{
+			srvHeap_.reset();
+			rtvHeap_.reset();
+			dsvHeap_.reset();
+		}
+	}
+}

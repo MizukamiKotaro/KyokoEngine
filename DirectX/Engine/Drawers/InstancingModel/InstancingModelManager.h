@@ -2,11 +2,11 @@
 #include <list>
 #include <unordered_map>
 #include <memory>
-#include "DescriptorHeapManager/DescriptorHeap/DescriptorHeap.h"
+#include "Descriptor/DescriptorHeap/DescriptorHeap.h"
 #include "Drawers/DrawerBase/DrawerBase.h"
 
 #include "ModelData/ModelData.h"
-#include "DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
+#include "Descriptor/DescriptorHandles/DescriptorHandles.h"
 #include "ILight/ILight.h"
 
 #include "InstancingModelData.h"

@@ -6,7 +6,7 @@
 #include <d3d12.h>
 #include "Matrix4x4.h"
 #include "ModelData/VertexData3D.h"
-#include "Base/DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
+#include "Descriptor/DescriptorHandles/DescriptorHandles.h"
 #include "Resource/Resource.h"
 
 const uint32_t kNumMaxInfluence = 4;
@@ -27,13 +27,15 @@ struct SkinCluster
 	std::span<VertexInfluence> mappedInfluence;
 	Kyoko::ResourceManualRelease paletteResouce;
 	std::span<WellForGPU> mappedPalette;
-	const DescriptorHandles* paletteSrvHandle;
+	const Kyoko::Descriptor::DescriptorHandles* paletteSrvHandle;
 
-	const DescriptorHandles* inputVertexSrvHandle;
+	const Kyoko::Descriptor::DescriptorHandles* inputVertexSrvHandle;
 	Kyoko::ResourceManualRelease outputVertexResouce;
-	const DescriptorHandles* outputVertexSrvHandle;
-	const DescriptorHandles* influenceSrvHandle;
+	const Kyoko::Descriptor::DescriptorHandles* outputVertexSrvHandle;
+	const Kyoko::Descriptor::DescriptorHandles* influenceSrvHandle;
 	Kyoko::ResourceManualRelease informationResouce;
 	uint32_t* information;
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView{};
+
+	~SkinCluster();
 };
