@@ -229,6 +229,26 @@ const std::string& GlobalVariables::GetStringValueDontTouchImGui(const std::stri
 	return GetValueDontTouchImGui<std::string>(key);
 }
 
+const Vector4& GlobalVariables::GetColorDontTouchImGui(const std::string& key) const
+{
+	return GetValueDontTouchImGui<Vector4>(kColorName + key);
+}
+
+const std::string& GlobalVariables::GetComboValueDontTouchImGui(const std::string& key, const std::string& type) const
+{
+	return GetValueDontTouchImGui<std::string>(kComboName + key + kComboTypeName + type);
+}
+
+void GlobalVariables::SetColor(const std::string& chunkName, const std::string& groupName, const std::string& key, const Vector4& value, const std::vector<std::string>& tree)
+{
+	SetValue<Vector4>(chunkName, groupName, kColorName + key, value, tree, false);
+}
+
+void GlobalVariables::SetCombo(const std::string& chunkName, const std::string& groupName, const std::string& key, const std::string& type, const std::string& value, const std::vector<std::string>& tree)
+{
+	SetValue<std::string>(chunkName, groupName, kComboName + key + kComboTypeName + type, value, tree, false);
+}
+
 template<typename T>
 void GlobalVariables::SetValue(const std::string& chunkName, const std::string& groupName, const std::string& key, const T& value, const std::vector<std::string>& tree, bool isAddItem)
 {
@@ -375,6 +395,38 @@ template void GlobalVariables::SaveAndSetVariableDontTouchImGui<Vector3>(const s
 template void GlobalVariables::SaveAndSetVariableDontTouchImGui<Vector4>(const std::string&, const Vector4&);
 template void GlobalVariables::SaveAndSetVariableDontTouchImGui<bool>(const std::string&, const bool&);
 template void GlobalVariables::SaveAndSetVariableDontTouchImGui<std::string>(const std::string&, const std::string&);
+
+void GlobalVariables::AddColorDontTouchImGui(const std::string& key, const Vector4& value)
+{
+	Group& group = datas_[kDontTouchPlayData][kDontTouch];
+	if (group.find(kColorName + key) == group.end()) {
+		std::vector<std::string> tree(1, "_");
+		SetValue<Vector4>(kDontTouchPlayData, kDontTouch, kColorName + key, value, tree);
+	}
+}
+
+void GlobalVariables::AddComboDontTouchImGui(const std::string& key, const std::string& type, const std::string& value)
+{
+	Group& group = datas_[kDontTouchPlayData][kDontTouch];
+	if (group.find(kComboName + key + kComboTypeName + type) == group.end()) {
+		std::vector<std::string> tree(1, "_");
+		SetValue<std::string>(kDontTouchPlayData, kDontTouch, kComboName + key + kComboTypeName + type, value, tree);
+	}
+}
+
+void GlobalVariables::SaveAndSetColorDontTouchImGui(const std::string& key, const Vector4& value)
+{
+	std::vector<std::string> tree(1, "_");
+	SetValue<Vector4>(kDontTouchPlayData, kDontTouch, kColorName + key, value, tree);
+	SaveFile(kDontTouchPlayData, kDontTouch);
+}
+
+void GlobalVariables::SaveAndSetComboDontTouchImGui(const std::string& key, const std::string& type, const std::string& value)
+{
+	std::vector<std::string> tree(1, "_");
+	SetValue<std::string>(kDontTouchPlayData, kDontTouch, kComboName + key + kComboTypeName + type, value, tree);
+	SaveFile(kDontTouchPlayData, kDontTouch);
+}
 
 bool GlobalVariables::IsTreeOpen(const std::string& chunkName, const std::string& groupName, const std::vector<std::string>& tree)
 {
@@ -540,6 +592,28 @@ void GlobalVariables::AddComboName(const std::string& key, const std::string& co
 const std::map<std::string, std::vector<std::string>>* GlobalVariables::GetComboNameMap() const
 {
 	return &comboNames_;
+}
+
+void GlobalVariables::DrawImGuiCombo(const std::string& key, const std::string& type, std::string* ptr)
+{
+#ifdef _DEBUG
+	int currentItem = 0;
+	int i = 0;
+	std::vector<const char*> names;
+	names.resize(comboNames_[type].size());
+	for (std::string& name : comboNames_[type]) {
+		if (name == *ptr) {
+			currentItem = i;
+		}
+		names[i] = name.c_str();
+		i++;
+	}
+	if (ImGui::Combo(key.c_str(), &currentItem, names.data(), int(names.size()))) {
+		*ptr = comboNames_[type][currentItem];
+	}
+#else
+	(void)key; (void)type; (void)ptr;
+#endif // _DEBUG
 }
 
 std::string GlobalVariables::GetAfterName(const std::string& itemName, const std::string& findName)

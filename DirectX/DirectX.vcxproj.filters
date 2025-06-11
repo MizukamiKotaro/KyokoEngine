@@ -508,6 +508,18 @@
     <Filter Include="Engine\Base\DescriptorHeap\DescriptorHeapManager">
       <UniqueIdentifier>{d657d1b8-1cc8-4d87-af6b-0b3745c4f2a4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GlobalDatas">
+      <UniqueIdentifier>{411bf1d1-6fe8-44c1-a292-ef44a5e078fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GlobalDatas\GlobalDataManager">
+      <UniqueIdentifier>{25cbf89e-1de8-4f0e-940b-e9caa95de228}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GlobalDatas\BaseGlobalData">
+      <UniqueIdentifier>{1cdf60d6-8a44-4c03-9561-2bc6d25e6705}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GlobalDatas\GlobalNames">
+      <UniqueIdentifier>{a585c25c-2b71-40ab-ba31-2135d60008a6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1049,6 +1061,18 @@
     </ClCompile>
     <ClCompile Include="Engine\Base\Descriptor\DescriptorHeaps\DescriptorHeaps.cpp">
       <Filter>Engine\Base\DescriptorHeap\DescriptorHeaps</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\GlobalVariables\GlobalVariableData.cpp">
+      <Filter>Engine\GlobalVariables</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GlobalDatas\GlobalDataManager\GlobalDataManager.cpp">
+      <Filter>GlobalDatas\GlobalDataManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GlobalDatas\BaseGlobalData\BaseGlobalData.cpp">
+      <Filter>GlobalDatas\BaseGlobalData</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GlobalDatas\GlobalNames\GlobalNames.cpp">
+      <Filter>GlobalDatas\GlobalNames</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1684,6 +1708,18 @@
     </ClInclude>
     <ClInclude Include="Engine\Base\Descriptor\DescriptorHeaps\DescriptorHeaps.h">
       <Filter>Engine\Base\DescriptorHeap\DescriptorHeaps</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GlobalVariables\GlobalVariableData.h">
+      <Filter>Engine\GlobalVariables</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GlobalDatas\GlobalDataManager\GlobalDataManager.h">
+      <Filter>GlobalDatas\GlobalDataManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GlobalDatas\BaseGlobalData\BaseGlobalData.h">
+      <Filter>GlobalDatas\BaseGlobalData</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GlobalDatas\GlobalNames\GlobalNames.h">
+      <Filter>GlobalDatas\GlobalNames</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

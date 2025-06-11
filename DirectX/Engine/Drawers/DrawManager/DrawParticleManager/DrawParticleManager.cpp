@@ -6,7 +6,7 @@
 #include "ModelData/ModelData.h"
 #include "GraphicsPipelineSystem/PipelineTypeConfig.h"
 #include "Drawers/GPUParticle/GPUParticle.h"
-#include "Base/DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
+#include "Descriptor/DescriptorHandles/DescriptorHandles.h"
 
 DrawParticleManager::DrawParticleManager()
 {

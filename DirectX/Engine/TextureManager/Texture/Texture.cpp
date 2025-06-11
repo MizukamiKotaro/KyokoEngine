@@ -1,5 +1,5 @@
 #include "Texture.h"
-#include "DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
+#include "Descriptor/DescriptorHandles/DescriptorHandles.h"
 
 Texture::~Texture()
 {

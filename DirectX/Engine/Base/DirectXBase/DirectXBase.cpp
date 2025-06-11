@@ -5,8 +5,8 @@
 #include<format>
 #pragma comment(lib, "d3d12.lib")
 #pragma comment(lib, "dxgi.lib")
-#include "DescriptorHeapManager/DescriptorHeap/DescriptorHeap.h"
-#include "DescriptorHeapManager/DescriptorHeapManager.h"
+#include "Descriptor/DescriptorHeap/DescriptorHeap.h"
+#include "Descriptor/DescriptorHeapManager/DescriptorHeapManager.h"
 #include "Engine/Base/WindowsInfo/WindowsInfo.h"
 #include <thread>
 #include "StringConverter/StringConverter.h"

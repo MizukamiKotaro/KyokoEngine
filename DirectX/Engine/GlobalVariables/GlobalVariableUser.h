@@ -47,6 +47,15 @@ public:
 	/// <param name="type">タイプ</param>
 	/// <param name="comboName">名前</param>
 	void AddComboName(ComboNameType type, const std::string& comboName);
+	void AddComboName(int32_t type, const std::string& comboName);
+	void AddComboName(const std::string& type, const std::string& comboName);
+
+	void AddComboType(const std::string& type);
+
+	/// <summary>
+	/// セーブ
+	/// </summary>
+	void Save() const;
 
 	/// <summary>
 	/// アイテムの追加
@@ -69,6 +78,8 @@ public:
 
 	void AddItemColor(const std::string& key, const Vector4& value, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
 	void AddItemCombo(const std::string& key, ComboNameType type, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
+	void AddItemCombo(const std::string& key, int32_t type, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
+
 
 	/// <summary>
 	/// 値の取得
@@ -91,6 +102,7 @@ public:
 
 	const Vector4& GetColor(const std::string& key, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_") const;
 	const std::string& GetCombo(const std::string& key, ComboNameType type, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_") const;
+	const std::string& GetCombo(const std::string& key, int32_t type, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_") const;
 
 	/// <summary>
 	/// 値のセット
@@ -110,6 +122,11 @@ public:
 	void SetVariable(const std::string& key, const Vector4& value, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
 	void SetVariable(const std::string& key, bool value, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
 	void SetVariable(const std::string& key, const std::string& value, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
+
+	void SetColor(const std::string& key, const Vector4& value, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
+	void SetCombo(const std::string& key, ComboNameType type, const std::string& value, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
+	void SetCombo(const std::string& key, int32_t type, const std::string& value, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
+
 
 	/// <summary>
 	/// ImGuiを使わないアイテムの追加、プレイヤーがゲーム内で設定できる項目とか
@@ -178,6 +195,16 @@ public:
 	/// </summary>
 	/// <returns>チャンク名</returns>
 	const std::string& GetChunkName() const { return chunkName_; }
+
+	/// <summary>
+	/// コンボの呼び出し
+	/// </summary>
+	/// <param name="key">キー</param>
+	/// <param name="type">タイプ</param>
+	/// <param name="ptr">ポインタ</param>
+	void DrawImGuiCombo(const std::string& key, const std::string& type, std::string* ptr);
+	void DrawImGuiCombo(const std::string& key, ComboNameType type, std::string* ptr);
+	void DrawImGuiCombo(const std::string& key, int32_t type, std::string* ptr);
 
 private:
 	/// <summary>

@@ -192,6 +192,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Editor\TimerStageEditor.cpp" />
     <ClCompile Include="Engine\FrameInfo\FrameInfo.cpp" />
     <ClCompile Include="Engine\GlobalVariables\GlobalVariableComboNames.cpp" />
+    <ClCompile Include="Engine\GlobalVariables\GlobalVariableData.cpp" />
     <ClCompile Include="Engine\GlobalVariables\GlobalVariables.cpp" />
     <ClCompile Include="Engine\GlobalVariables\GlobalVariableUser.cpp" />
     <ClCompile Include="Engine\GraphicsPipelineSystem\GraphicsPipelines\BasePostEffectGraphicsPipeline\BasePostEffectGraphicsPipeline.cpp" />
@@ -268,6 +269,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\GameElement\ScoreManager\ScoreManager.cpp" />
     <ClCompile Include="Game\GameElement\Score\Score.cpp" />
     <ClCompile Include="Game\GameElement\StageUI\StageUI.cpp" />
+    <ClCompile Include="Game\GlobalDatas\BaseGlobalData\BaseGlobalData.cpp" />
+    <ClCompile Include="Game\GlobalDatas\GlobalDataManager\GlobalDataManager.cpp" />
+    <ClCompile Include="Game\GlobalDatas\GlobalNames\GlobalNames.cpp" />
     <ClCompile Include="Game\SceneSystem\ClearScene\ClearScene.cpp" />
     <ClCompile Include="Game\SceneSystem\SceneBase\SceneBase.cpp" />
     <ClCompile Include="Game\SceneSystem\SceneFactory\SceneFactory.cpp" />
@@ -394,6 +398,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\FrameInfo\FrameInfo.h" />
     <ClInclude Include="Engine\GlobalVariables\ComboNameConfig.h" />
     <ClInclude Include="Engine\GlobalVariables\GlobalVariableComboNames.h" />
+    <ClInclude Include="Engine\GlobalVariables\GlobalVariableData.h" />
     <ClInclude Include="Engine\GlobalVariables\GlobalVariables.h" />
     <ClInclude Include="Engine\GlobalVariables\GlobalVariableUser.h" />
     <ClInclude Include="Engine\GraphicsPipelineSystem\BlendModeConfig.h" />
@@ -497,6 +502,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\GameElement\ScoreManager\ScoreManager.h" />
     <ClInclude Include="Game\GameElement\Score\Score.h" />
     <ClInclude Include="Game\GameElement\StageUI\StageUI.h" />
+    <ClInclude Include="Game\GlobalDatas\BaseGlobalData\BaseGlobalData.h" />
+    <ClInclude Include="Game\GlobalDatas\GlobalDataManager\GlobalDataManager.h" />
+    <ClInclude Include="Game\GlobalDatas\GlobalNames\GlobalNames.h" />
     <ClInclude Include="Game\SceneSystem\ClearScene\ClearScene.h" />
     <ClInclude Include="Game\SceneSystem\ISceneFactory\ISceneFactory.h" />
     <ClInclude Include="Game\SceneSystem\SceneBase\SceneBase.h" />

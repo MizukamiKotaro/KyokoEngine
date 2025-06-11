@@ -4,7 +4,7 @@
 #include "TextureManager/TextureManager.h"
 #include "Engine/Base/DirectXBase/DirectXBase.h"
 #include "Camera.h"
-#include "DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
+#include "Descriptor/DescriptorHandles/DescriptorHandles.h"
 #include "Texture.h"
 #include "GraphicsPipelineSystem/PipelineTypeConfig.h"
 #include "GraphicsPipelineSystem/GraphicsPiplineManager/GraphicsPiplineManager.h"

@@ -1,7 +1,7 @@
 #include "MMDGraphicsPipline.h"
 #include "Engine/Base/DebugLog/DebugLog.h"
 #include <cassert>
-#include "Base/DescriptorHeapManager/DescriptorHeaps/DescriptorHeaps.h"
+#include "Descriptor/DescriptorHeaps/DescriptorHeaps.h"
 
 MMDGraphicsPipline::MMDGraphicsPipline()
 {

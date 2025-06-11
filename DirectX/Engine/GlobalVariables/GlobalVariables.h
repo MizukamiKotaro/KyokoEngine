@@ -84,6 +84,8 @@ public:
 	const Vector4& GetVector4ValueDontTouchImGui(const std::string& key) const;
 	bool GetBoolValueDontTouchImGui(const std::string& key) const;
 	const std::string& GetStringValueDontTouchImGui(const std::string& key) const;
+	const Vector4& GetColorDontTouchImGui(const std::string& key) const;
+	const std::string& GetComboValueDontTouchImGui(const std::string& key, const std::string& type) const;
 
 	/// <summary>
 	/// 値のセット
@@ -96,6 +98,9 @@ public:
 	/// <param name="tree">ツリー</param>
 	template<typename T>
 	void SetVariable(const std::string& chunkName, const std::string& groupName, const std::string& key, const T& value, const std::vector<std::string>& tree);
+	void SetColor(const std::string& chunkName, const std::string& groupName, const std::string& key, const Vector4& value, const std::vector<std::string>& tree);
+	void SetCombo(const std::string& chunkName, const std::string& groupName, const std::string& key, const std::string& type, const std::string& value, const std::vector<std::string>& tree);
+	
 	/// <summary>
 	/// 値のセットと保存
 	/// </summary>
@@ -115,6 +120,9 @@ public:
 	/// <param name="value">値</param>
 	template<typename T>
 	void AddItemDontTouchImGui(const std::string& key, const T& value);
+	void AddColorDontTouchImGui(const std::string& key, const Vector4& value);
+	void AddComboDontTouchImGui(const std::string& key, const std::string& type, const std::string& value);
+	
 	/// <summary>
 	/// ImGuiを使わない値のセットと保存
 	/// </summary>
@@ -123,6 +131,9 @@ public:
 	/// <param name="value">値</param>
 	template<typename T>
 	void SaveAndSetVariableDontTouchImGui(const std::string& key, const T& value);
+	void SaveAndSetColorDontTouchImGui(const std::string& key, const Vector4& value);
+	void SaveAndSetComboDontTouchImGui(const std::string& key, const std::string& type, const std::string& value);
+
 	/// <summary>
 	/// ツリーが開いているかの取得
 	/// </summary>
@@ -159,6 +170,14 @@ public:
 	/// </summary>
 	/// <returns>コンボ名のマップ</returns>
 	const std::map<std::string, std::vector<std::string>>* GetComboNameMap() const;
+	
+	/// <summary>
+	/// コンボの呼び出し
+	/// </summary>
+	/// <param name="key">キー</param>
+	/// <param name="type">タイプ</param>
+	/// <param name="ptr">ポインタ</param>
+	void DrawImGuiCombo(const std::string& key, const std::string& type, std::string* ptr);
 
 private:
 	GlobalVariables() = default;

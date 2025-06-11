@@ -33,6 +33,23 @@ public:
 	/// <returns>名前</returns>
 	std::pair<std::string, std::string> GetName(ComboNameType type);
 
+
+	void AddComboType(const std::string& typeName);
+
+	/// <summary>
+	/// コンボの名前の追加
+	/// </summary>
+	/// <param name="type">タイプ</param>
+	/// <param name="comboName">コンボの名前</param>
+	void AddComboName(int32_t type, const std::string& comboName);
+	void AddComboName(const std::string& type, const std::string& comboName);
+	/// <summary>
+	/// 名前の取得
+	/// </summary>
+	/// <param name="type">タイプ</param>
+	/// <returns>名前</returns>
+	std::pair<std::string, std::string> GetName(int32_t type);
+
 private:
 	GlobalVariableComboNames() = default;
 	~GlobalVariableComboNames() = default;
@@ -43,4 +60,5 @@ private:
 	GlobalVariables* global_; // グローバル変数を管理するクラス
 	const std::map<std::string, std::vector<std::string>>* comboNameMap_; // コンボの名前のマップ
 	std::map<ComboNameType, std::string> names_; // 名前のマップ
+	std::vector<std::string> snames_;
 };

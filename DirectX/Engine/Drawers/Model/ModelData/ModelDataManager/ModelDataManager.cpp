@@ -8,7 +8,7 @@
 #include <filesystem>
 #include "TextureManager/TextureManager.h"
 #include "ModelData/ModelData.h"
-#include "Base/DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
+#include "Descriptor/DescriptorHandles/DescriptorHandles.h"
 #include "GlobalVariables/GlobalVariableComboNames.h"
 #include "MMD/MMDModelData/ModelDataPMD.h"
 

@@ -5,10 +5,10 @@
 #include "Engine/Base/DirectXBase/DirectXBase.h"
 #include "ModelDataManager.h"
 #include "Camera.h"
-#include "DescriptorHeapManager/DescriptorHandles/DescriptorHandles.h"
+#include "Descriptor/DescriptorHandles/DescriptorHandles.h"
 #include "calc.h"
-#include "DescriptorHeapManager/DescriptorHeapManager.h"
-#include "DescriptorHeapManager/DescriptorHeap/DescriptorHeap.h"
+#include "Descriptor/DescriptorHeapManager/DescriptorHeapManager.h"
+#include "Descriptor/DescriptorHeap/DescriptorHeap.h"
 
 BaseModel::~BaseModel()
 {
