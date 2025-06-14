@@ -1,13 +1,11 @@
 #pragma once
-#include <string>
 #include <stdint.h>
-#include <vector>
 #include "ComboNameConfig.h"
+#include "KyokoGlobalVariables.h"
 
 class Vector2;
 class Vector3;
 class Vector4;
-class GlobalVariables;
 class GlobalVariableComboNames;
 
 /// <summary>
@@ -21,6 +19,11 @@ public:
 	static void StaticInitialize();
 
 public:
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
+	/// <param name="data">データ</param>
+	GlobalVariableUser(const GlobalVariableUser& data);
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
@@ -49,8 +52,10 @@ public:
 	void AddComboName(ComboNameType type, const std::string& comboName);
 	void AddComboName(int32_t type, const std::string& comboName);
 	void AddComboName(const std::string& type, const std::string& comboName);
+	void AddSystemComboName(const std::string& type, const std::string& comboName);
 
 	void AddComboType(const std::string& type);
+	void AddSystemComboType(const std::string& type);
 
 	/// <summary>
 	/// セーブ
@@ -79,6 +84,7 @@ public:
 	void AddItemColor(const std::string& key, const Vector4& value, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
 	void AddItemCombo(const std::string& key, ComboNameType type, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
 	void AddItemCombo(const std::string& key, int32_t type, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
+	void AddItemSystemCombo(const std::string& key, int32_t type, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
 
 
 	/// <summary>
@@ -103,6 +109,8 @@ public:
 	const Vector4& GetColor(const std::string& key, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_") const;
 	const std::string& GetCombo(const std::string& key, ComboNameType type, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_") const;
 	const std::string& GetCombo(const std::string& key, int32_t type, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_") const;
+	const std::string& GetSystemCombo(const std::string& key, int32_t type, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_") const;
+
 
 	/// <summary>
 	/// 値のセット
@@ -126,6 +134,7 @@ public:
 	void SetColor(const std::string& key, const Vector4& value, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
 	void SetCombo(const std::string& key, ComboNameType type, const std::string& value, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
 	void SetCombo(const std::string& key, int32_t type, const std::string& value, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
+	void SetSystemCombo(const std::string& key, int32_t type, const std::string& value, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
 
 
 	/// <summary>
@@ -205,6 +214,24 @@ public:
 	void DrawImGuiCombo(const std::string& key, const std::string& type, std::string* ptr);
 	void DrawImGuiCombo(const std::string& key, ComboNameType type, std::string* ptr);
 	void DrawImGuiCombo(const std::string& key, int32_t type, std::string* ptr);
+	void DrawImGuiSystemCombo(const std::string& key, int32_t type, std::string* ptr);
+
+	/// <summary>
+	/// 要素の削除
+	/// </summary>
+	/// <param name="key">キー</param>
+	/// <param name="tree1">ツリー名1</param>
+	/// <param name="tree2">ツリー名2</param>
+	/// <param name="tree3">ツリー名3</param>
+	/// <param name="tree4">ツリー名4</param>
+	/// <param name="tree5">ツリー名5</param>
+	/// <param name="tree6">ツリー名6</param>
+	void EraseItem(const std::string& key, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
+	void EraseItemColor(const std::string& key, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
+	void EraseItemCombo(const std::string& key, const std::string& type, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
+	void EraseItemCombo(const std::string& key, ComboNameType type, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
+	void EraseItemCombo(const std::string& key, int32_t type, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
+	void EraseItemSystemCombo(const std::string& key, int32_t type, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
 
 private:
 	/// <summary>
@@ -220,7 +247,7 @@ private:
 	std::vector<std::string> CreateTree(const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_") const;
 
 private:
-	static GlobalVariables* global_; // グローバル変数を管理するクラス
+	static Kyoko::GlobalVariables* global_; // グローバル変数を管理するクラス
 	static GlobalVariableComboNames* globalCombo_; // コンボの名前を管理するクラス
 	std::string chunkName_; // チャンク名
 	std::string groupName_; // グループ名

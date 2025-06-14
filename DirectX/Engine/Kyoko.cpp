@@ -5,7 +5,7 @@
 #include "Input/Input.h"
 #include "TextureManager/TextureManager.h"
 #include "ImGuiManager/ImGuiManager.h"
-#include "GlobalVariables/GlobalVariables.h"
+#include "GlobalVariables/KyokoGlobalVariables.h"
 #include "Engine/Base/Descriptor/DescriptorHeapManager/DescriptorHeapManager.h"
 #include "ModelDataManager.h"
 #include "Utils/RandomGenerator/RandomGenerator.h"

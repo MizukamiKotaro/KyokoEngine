@@ -25,4 +25,5 @@ enum class ItemStruct {
 	kColor,
 	kCombo,
 	kComboID,
+	kSystemComboID,
 };

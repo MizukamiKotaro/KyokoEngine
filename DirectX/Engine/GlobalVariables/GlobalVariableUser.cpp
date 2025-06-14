@@ -1,24 +1,32 @@
 #include "Vector2.h"
 #include "Vector3.h"
+#include "Vector4.h"
 #include "GlobalVariableUser.h"
-#include "GlobalVariables.h"
 #include "GlobalVariableComboNames.h"
 
-GlobalVariables* GlobalVariableUser::global_ = nullptr;
+Kyoko::GlobalVariables* GlobalVariableUser::global_ = nullptr;
 GlobalVariableComboNames* GlobalVariableUser::globalCombo_ = nullptr;
 
 void GlobalVariableUser::StaticInitialize()
 {
-	global_ = GlobalVariables::GetInstance();
+	global_ = Kyoko::GlobalVariables::GetInstance();
 	globalCombo_ = GlobalVariableComboNames::GetInstance();
 }
+
+GlobalVariableUser::GlobalVariableUser(const GlobalVariableUser& data)
+{
+	chunkName_ = data.chunkName_;
+	groupName_ = data.groupName_;
+	tree_ = data.tree_;
+}
+
 
 GlobalVariableUser::GlobalVariableUser(const std::string& chunkName, const std::string& groupName, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5)
 {
 	chunkName_ = chunkName;
 	groupName_ = groupName;
 	CreateGroup();
-	
+
 	tree_.resize(7);
 	tree_ = { tree1, tree2, tree3, tree4, tree5, "_", "_" };
 }
@@ -49,9 +57,19 @@ void GlobalVariableUser::AddComboName(const std::string& type, const std::string
 	globalCombo_->AddComboName(type, comboName);
 }
 
+void GlobalVariableUser::AddSystemComboName(const std::string& type, const std::string& comboName)
+{
+	globalCombo_->AddSystemComboName(type, comboName);
+}
+
 void GlobalVariableUser::AddComboType(const std::string& type)
 {
 	globalCombo_->AddComboType(type);
+}
+
+void GlobalVariableUser::AddSystemComboType(const std::string& type)
+{
+	globalCombo_->AddSystemComboType(type);
 }
 
 void GlobalVariableUser::Save() const
@@ -121,6 +139,13 @@ void GlobalVariableUser::AddItemCombo(const std::string& key, int32_t type, cons
 	global_->AddItemCombo(chunkName_, groupName_, key, combo.first, combo.second, tree);
 }
 
+void GlobalVariableUser::AddItemSystemCombo(const std::string& key, int32_t type, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
+{
+	std::vector<std::string> tree = CreateTree(tree1, tree2, tree3, tree4, tree5, tree6);
+	std::pair<std::string, std::string> combo = globalCombo_->GetSystemName(type);
+	global_->AddItemCombo(chunkName_, groupName_, key, combo.first, combo.second, tree);
+}
+
 int32_t GlobalVariableUser::GetIntValue(const std::string& key, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6) const
 {
 	std::vector<std::string> tree = CreateTree(tree1, tree2, tree3, tree4, tree5, tree6);
@@ -181,6 +206,12 @@ const std::string& GlobalVariableUser::GetCombo(const std::string& key, int32_t 
 	return global_->GetCombo(chunkName_, groupName_, key, globalCombo_->GetName(type).first, tree);
 }
 
+const std::string& GlobalVariableUser::GetSystemCombo(const std::string& key, int32_t type, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6) const
+{
+	std::vector<std::string> tree = CreateTree(tree1, tree2, tree3, tree4, tree5, tree6);
+	return global_->GetCombo(chunkName_, groupName_, key, globalCombo_->GetSystemName(type).first, tree);
+}
+
 void GlobalVariableUser::SetVariable(const std::string& key, int32_t value, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
 {
 	std::vector<std::string> tree = CreateTree(tree1, tree2, tree3, tree4, tree5, tree6);
@@ -239,6 +270,12 @@ void GlobalVariableUser::SetCombo(const std::string& key, int32_t type, const st
 {
 	std::vector<std::string> tree = CreateTree(tree1, tree2, tree3, tree4, tree5, tree6);
 	global_->SetCombo(chunkName_, groupName_, key, globalCombo_->GetName(type).first, value, tree);
+}
+
+void GlobalVariableUser::SetSystemCombo(const std::string& key, int32_t type, const std::string& value, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
+{
+	std::vector<std::string> tree = CreateTree(tree1, tree2, tree3, tree4, tree5, tree6);
+	global_->SetCombo(chunkName_, groupName_, key, globalCombo_->GetSystemName(type).first, value, tree);
 }
 
 void GlobalVariableUser::AddItemDontTouchImGui(const std::string& key, int32_t value)
@@ -381,6 +418,47 @@ void GlobalVariableUser::DrawImGuiCombo(const std::string& key, ComboNameType ty
 void GlobalVariableUser::DrawImGuiCombo(const std::string& key, int32_t type, std::string* ptr)
 {
 	global_->DrawImGuiCombo(key, globalCombo_->GetName(type).first, ptr);
+}
+
+void GlobalVariableUser::DrawImGuiSystemCombo(const std::string& key, int32_t type, std::string* ptr)
+{
+	global_->DrawImGuiCombo(key, globalCombo_->GetSystemName(type).first, ptr);
+}
+
+void GlobalVariableUser::EraseItem(const std::string& key, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
+{
+	std::vector<std::string> tree = CreateTree(tree1, tree2, tree3, tree4, tree5, tree6);
+	global_->EraseItem(chunkName_, groupName_, key, tree);
+}
+
+void GlobalVariableUser::EraseItemColor(const std::string& key, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
+{
+	std::vector<std::string> tree = CreateTree(tree1, tree2, tree3, tree4, tree5, tree6);
+	global_->EraseItemColor(chunkName_, groupName_, key, tree);
+}
+
+void GlobalVariableUser::EraseItemCombo(const std::string& key, const std::string& type, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
+{
+	std::vector<std::string> tree = CreateTree(tree1, tree2, tree3, tree4, tree5, tree6);
+	global_->EraseItem(chunkName_, groupName_, key, type, tree);
+}
+
+void GlobalVariableUser::EraseItemCombo(const std::string& key, ComboNameType type, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
+{
+	std::vector<std::string> tree = CreateTree(tree1, tree2, tree3, tree4, tree5, tree6);
+	global_->EraseItem(chunkName_, groupName_, key, globalCombo_->GetName(type).first, tree);
+}
+
+void GlobalVariableUser::EraseItemCombo(const std::string& key, int32_t type, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
+{
+	std::vector<std::string> tree = CreateTree(tree1, tree2, tree3, tree4, tree5, tree6);
+	global_->EraseItem(chunkName_, groupName_, key, globalCombo_->GetName(type).first, tree);
+}
+
+void GlobalVariableUser::EraseItemSystemCombo(const std::string& key, int32_t type, const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6)
+{
+	std::vector<std::string> tree = CreateTree(tree1, tree2, tree3, tree4, tree5, tree6);
+	global_->EraseItem(chunkName_, groupName_, key, globalCombo_->GetSystemName(type).first, tree);
 }
 
 std::vector<std::string> GlobalVariableUser::CreateTree(const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6) const

@@ -10,7 +10,7 @@ public:
 	/// </summary>
 	/// <param name="obj">vector3</param>
 	/// <returns>数値が同じか</returns>
-	bool operator==(const Vector3& obj) const {
+	bool operator==(const Vector3& obj) const  noexcept {
 		if (x == obj.x && y == obj.y && z == obj.z) {
 			return true;
 		}
@@ -21,7 +21,7 @@ public:
 	/// </summary>
 	/// <param name="obj">vector3</param>
 	/// <returns>数値が違うか</returns>
-	bool operator!=(const Vector3& obj) {
+	bool operator!=(const Vector3& obj) const noexcept {
 		if (x != obj.x || y != obj.y || z != obj.z) {
 			return true;
 		}
@@ -79,6 +79,7 @@ public:
 		this->y /= a;
 		this->z /= a;
 	}
+	
 	/// <summary>
 	/// 長さの取得
 	/// </summary>

@@ -7,22 +7,55 @@
 #include "Vector3.h"
 #include "Vector4.h"
 
+/// <summary>
+/// 響子
+/// </summary>
+namespace Kyoko {
+	/// <summary>
+	/// enum classからintへの変換
+	/// </summary>
+	/// <typeparam name="EnumT">enum class</typeparam>
+	/// <param name="id">値</param>
+	/// <returns>値</returns>
+	template<typename EnumT>
+	static int32_t EnumToInt(EnumT id) {
+		return static_cast<int32_t>(id);
+	}
+}
+
 class GlobalVariables;
 
+/// <summary>
+/// Kyokoのグローバル変数のデータ
+/// </summary>
 class GlobalVariableData {
 public:
-
-	template<typename EnumT>
-	static int32_t EnumToInt(EnumT id);
-
+	/// <summary>
+	/// 更新(ImGuiで変わった値の更新)
+	/// </summary>
 	void Update();
-
+	/// <summary>
+	/// データのセーブ
+	/// </summary>
 	void Save();
-
+	// アイテム
 	using Item = std::variant<int32_t, float, Vector2, Vector3, bool, std::string, Vector4>;
+	/// <summary>
+	/// データのセット
+	/// </summary>
+	/// <param name="items"></param>
 	void SetData(const std::map<int32_t, Item>& items);
-
+	/// <summary>
+	/// データの取得
+	/// </summary>
+	/// <returns></returns>
 	const std::map<int32_t, Item>& GetData() const;
+
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
+	/// <param name="data">データ</param>
+	GlobalVariableData(const GlobalVariableData& data);
 
 	/// <summary>
 	/// コンストラクタ
@@ -74,6 +107,7 @@ public:
 	void AddItemColor(int32_t id, const std::string& key, const Vector4& value, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
 	void AddItemCombo(int32_t id, const std::string& key, ComboNameType type, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
 	void AddItemCombo(int32_t id, const std::string& key, int32_t type, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
+	void AddItemSystemCombo(int32_t id, const std::string& key, int32_t type, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
 
 	/// <summary>
 	/// 値の取得
@@ -105,26 +139,56 @@ public:
 	void SetVariable(int32_t id, const std::string& value);
 	void SetColor(int32_t id, const Vector4& value);
 	void SetCombo(int32_t id, const std::string& value);
+	void SetSystemCombo(int32_t id, const std::string& value);
 
+	/// <summary>
+	/// ImGuiの描画
+	/// </summary>
+	/// <param name="treeName">ツリー名</param>
+	/// <param name="isSave">値を更新するか</param>
 	void DrawImGui(const std::string& treeName, bool isSave = false);
+	/// <summary>
+	/// データの削除
+	/// </summary>
+	/// <param name="id">削除したいid</param>
+	void EraseItem(int32_t id);
+
+	/// <summary>
+	/// 値が変化したか
+	/// </summary>
+	/// <returns>値が変化したか</returns>
+	bool IsChange() const;
 
 private:
+	/// <summary>
+	/// 値の更新
+	/// </summary>
 	void UpdateValues();
-
+	/// <summary>
+	/// 値のセット
+	/// </summary>
 	void SetGlobals();
-
+	/// <summary>
+	/// 名前の保存
+	/// </summary>
 	void SetNames(int32_t id, ItemStruct itemStruct, const std::string& key, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
-
+	/// <summary>
+	/// id毎のImGuiの描画
+	/// </summary>
 	void DrawImGui(int32_t id);
-
+	/// <summary>
+	/// ImGuiのツリー毎にまとめる再起関数
+	/// </summary>
 	void DrawTreeRecursive(const std::map<int32_t, std::pair<ItemStruct, std::pair<std::string, std::vector<std::string>>>>& names_,int32_t level,const std::string& parentPath = "");
 
-	std::map<int32_t, Item> values_;
-	std::unique_ptr<GlobalVariableUser> global_;
+	std::map<int32_t, Item> values_; // 値
+	std::unique_ptr<GlobalVariableUser> global_; // グローバル変数クラス
+	bool isChange_; // 値が変化したか
 
+	std::map<int32_t, std::pair<ItemStruct, std::pair<std::string, std::vector<std::string>>>> names_; // 名前
 #ifdef _DEBUG
-	std::map<int32_t, std::pair<ItemStruct, std::pair<std::string, std::vector<std::string>>>> names_;
-	std::map<int32_t, ComboNameType> comboTypes_;
-	std::map<int32_t, int32_t> comboIDs_;
+	std::map<int32_t, ComboNameType> comboTypes_; // コンボのタイプ
+	std::map<int32_t, int32_t> comboIDs_; // コンボのid
+	std::map<int32_t, int32_t> debugInt_; // 入力中の値
 #endif // _DEBUG
 };

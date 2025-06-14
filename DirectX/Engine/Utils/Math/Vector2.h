@@ -48,6 +48,22 @@ public:
 		this->y /= a;
 	}
 	/// <summary>
+	/// 比較演算子、等しいか
+	/// </summary>
+	/// <param name="other"></param>
+	/// <returns></returns>
+	bool operator==(const Vector2& other) const noexcept {
+		return x == other.x && y == other.y;
+	}
+	/// <summary>
+	/// 比較演算子
+	/// </summary>
+	/// <param name="other">等しくないか</param>
+	/// <returns></returns>
+	bool operator!=(const Vector2& other) const noexcept {
+		return !(*this == other);
+	}
+	/// <summary>
 	/// 長さの取得
 	/// </summary>
 	/// <returns>長さ</returns>
