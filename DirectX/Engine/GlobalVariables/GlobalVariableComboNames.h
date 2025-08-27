@@ -77,8 +77,8 @@ private:
 
 private:
 	Kyoko::GlobalVariables* global_; // グローバル変数を管理するクラス
-	const std::map<std::string, std::vector<std::string>>* comboNameMap_; // コンボの名前のマップ
-	std::map<ComboNameType, std::string> names_; // 名前のマップ
+	const std::unordered_map<std::string, std::vector<std::string>>* comboNameMap_; // コンボの名前のマップ
+	std::unordered_map<ComboNameType, std::string> names_; // 名前のマップ
 	std::vector<std::string> dnames_; // 動的なコンボの追加
 	std::vector<std::string> snames_; // 明示的なコンボの追加
 };

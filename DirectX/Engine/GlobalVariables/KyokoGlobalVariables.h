@@ -1,6 +1,6 @@
 #pragma once
 #include <variant>
-#include <map>
+#include <unordered_map>
 #include <string>
 #include <vector>
 #include "Externals/nlohmann/json.hpp"
@@ -181,7 +181,7 @@ namespace Kyoko {
 		/// コンボ名のマップの取得
 		/// </summary>
 		/// <returns>コンボ名のマップ</returns>
-		const std::map<std::string, std::vector<std::string>>* GetComboNameMap() const;
+		const std::unordered_map<std::string, std::vector<std::string>>* GetComboNameMap() const;
 
 		/// <summary>
 		/// コンボの呼び出し
@@ -210,15 +210,15 @@ namespace Kyoko {
 		/// <summary>
 		/// グループ
 		/// </summary>
-		using Group = std::map<std::string, Item>;
+		using Group = std::unordered_map<std::string, Item>;
 		/// <summary>
 		/// グループのポインタ版
 		/// </summary>
-		using GroupPtr = std::map<std::string, Item*>;
+		using GroupPtr = std::unordered_map<std::string, Item*>;
 		/// <summary>
 		/// チャンク
 		/// </summary>
-		using Chunk = std::map<std::string, Group>;
+		using Chunk = std::unordered_map<std::string, Group>;
 		/// <summary>
 		/// 特定のワードの後ろを取得
 		/// </summary>
@@ -300,7 +300,7 @@ namespace Kyoko {
 		/// <param name="treeNames">ツリー</param>
 		/// <param name="level">レベル</param>
 		void MakeTreeMap(const std::string& chunkName, const std::string& groupName,
-			std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, GroupPtr>>>>>>& treeMap,
+			std::unordered_map<std::string, std::unordered_map<std::string, std::unordered_map<std::string, std::unordered_map<std::string, std::unordered_map<std::string, std::unordered_map<std::string, GroupPtr>>>>>>& treeMap,
 			Item& item, const std::string& itemName, std::vector<std::string>& treeNames, uint32_t level = 0);
 		/// <summary>
 		/// ImGuiのツリー作成
@@ -324,7 +324,7 @@ namespace Kyoko {
 
 	private:
 
-		std::map<std::string, Chunk> datas_; // データ
+		std::unordered_map<std::string, Chunk> datas_; // データ
 		uint32_t kMaxTreeNum_; // ツリーの最大数
 		const std::string kDirectoryPath = "Resources/GlobalVariables/"; // パス
 		std::vector<std::string> kTreeName_; // ツリーの名前
@@ -340,14 +340,14 @@ namespace Kyoko {
 
 #ifdef _DEBUG
 		bool isDraw_; // 全体を描画するか
-		std::map<std::string, bool> isDrawTitle_; // ImGuiを表示させるか
-		std::map<std::string, Chunk> isTreeOpen_; // ツリーが開いているか
+		std::unordered_map<std::string, bool> isDrawTitle_; // ImGuiを表示させるか
+		std::unordered_map<std::string, Chunk> isTreeOpen_; // ツリーが開いているか
 		char filterName[128] = ""; // コンボの検索用
-		std::map<std::string, Item> tempData_; // 遅延データ
+		std::unordered_map<std::string, Item> tempData_; // 遅延データ
 #endif // _DEBUG
 
 		bool isSomethingSave_; // 何かがセーブされたか
-		std::map<std::string, std::vector<std::string>> comboNames_; // コンボの名前
+		std::unordered_map<std::string, std::vector<std::string>> comboNames_; // コンボの名前
 	};
 
 }

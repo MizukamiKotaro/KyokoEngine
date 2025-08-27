@@ -35,11 +35,11 @@ namespace Kyoko {
 	void GlobalVariables::Finalize()
 	{
 #ifdef _DEBUG
-		for (std::map<std::string, Chunk>::iterator itChunk = datas_.begin();
+		for (std::unordered_map<std::string, Chunk>::iterator itChunk = datas_.begin();
 			itChunk != datas_.end(); ++itChunk) {
 			const std::string& chunkName = itChunk->first;
 			Chunk& chunk = itChunk->second;
-			for (std::map<std::string, Group>::iterator itGroup = chunk.begin();
+			for (std::unordered_map<std::string, Group>::iterator itGroup = chunk.begin();
 				itGroup != chunk.end(); ++itGroup) {
 				const std::string& groupName = itGroup->first;
 				SaveFile(chunkName, groupName, true);
@@ -76,7 +76,7 @@ namespace Kyoko {
 			return;
 		}
 
-		for (std::map<std::string, Chunk>::iterator itChunk = datas_.begin();
+		for (std::unordered_map<std::string, Chunk>::iterator itChunk = datas_.begin();
 			itChunk != datas_.end(); ++itChunk) {
 			const std::string& chunkName = itChunk->first;
 
@@ -93,7 +93,7 @@ namespace Kyoko {
 				continue;
 			}
 
-			for (std::map<std::string, Group>::iterator itGroup = chunk.begin();
+			for (std::unordered_map<std::string, Group>::iterator itGroup = chunk.begin();
 				itGroup != chunk.end(); ++itGroup) {
 				const std::string& groupName = itGroup->first;
 				Group& group = itGroup->second;
@@ -104,8 +104,8 @@ namespace Kyoko {
 				isTreeOpen_[chunkName][groupName]["_"] = true;
 
 
-				std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, GroupPtr>>>>>> treeMap;
-				for (std::map<std::string, Item>::iterator itItem = group.begin();
+				std::unordered_map<std::string, std::unordered_map<std::string, std::unordered_map<std::string, std::unordered_map<std::string, std::unordered_map<std::string, std::unordered_map<std::string, GroupPtr>>>>>> treeMap;
+				for (std::unordered_map<std::string, Item>::iterator itItem = group.begin();
 					itItem != group.end(); ++itItem) {
 					const std::string& itemName = itItem->first;
 					Item& item = itItem->second;
@@ -113,7 +113,7 @@ namespace Kyoko {
 					MakeTreeMap(chunkName, groupName, treeMap, item, itemName, treeNames);
 				}
 
-				for (std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, GroupPtr>>>>>>::iterator itTree1 = treeMap.begin(); itTree1 != treeMap.end(); ++itTree1) {
+				for (std::unordered_map<std::string, std::unordered_map<std::string, std::unordered_map<std::string, std::unordered_map<std::string, std::unordered_map<std::string, std::unordered_map<std::string, GroupPtr>>>>>>::iterator itTree1 = treeMap.begin(); itTree1 != treeMap.end(); ++itTree1) {
 					const std::string& tree1 = itTree1->first;
 					if (ImGui::TreeNode(tree1.c_str())) {
 						isTreeOpen_[chunkName][groupName][kTreeName_[0] + tree1] = true;
@@ -534,11 +534,11 @@ namespace Kyoko {
 	{
 		isSomethingSave_ = true;
 
-		std::map<std::string, Chunk>::iterator itChunk = datas_.find(chunkName);
+		std::unordered_map<std::string, Chunk>::iterator itChunk = datas_.find(chunkName);
 
 		assert(itChunk != datas_.end());
 
-		std::map<std::string, Group>::iterator itGroup = itChunk->second.find(groupName);
+		std::unordered_map<std::string, Group>::iterator itGroup = itChunk->second.find(groupName);
 
 		assert(itGroup != itChunk->second.end());
 
@@ -548,7 +548,7 @@ namespace Kyoko {
 
 		root[groupName] = nlohmann::json::object();
 
-		for (std::map<std::string, Item>::iterator itItem = itGroup->second.begin();
+		for (std::unordered_map<std::string, Item>::iterator itItem = itGroup->second.begin();
 			itItem != itGroup->second.end(); ++itItem) {
 
 			std::string itemName = itItem->first;
@@ -658,7 +658,7 @@ namespace Kyoko {
 		SetComboName(key, comboName);
 	}
 
-	const std::map<std::string, std::vector<std::string>>* GlobalVariables::GetComboNameMap() const
+	const std::unordered_map<std::string, std::vector<std::string>>* GlobalVariables::GetComboNameMap() const
 	{
 		return &comboNames_;
 	}
@@ -826,7 +826,7 @@ namespace Kyoko {
 	}
 
 #ifdef _DEBUG
-	void GlobalVariables::MakeTreeMap(const std::string& chunkName, const std::string& groupName, std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, GroupPtr>>>>>>& treeMap, Item& item, const std::string& itemName, std::vector<std::string>& treeNames, uint32_t level)
+	void GlobalVariables::MakeTreeMap(const std::string& chunkName, const std::string& groupName, std::unordered_map<std::string, std::unordered_map<std::string, std::unordered_map<std::string, std::unordered_map<std::string, std::unordered_map<std::string, std::unordered_map<std::string, GroupPtr>>>>>>& treeMap, Item& item, const std::string& itemName, std::vector<std::string>& treeNames, uint32_t level)
 	{
 		size_t pos = itemName.find(kTreeName_[level]);
 		std::string text = itemName;
@@ -891,10 +891,10 @@ namespace Kyoko {
 		}
 	}
 	template <>
-	void GlobalVariables::DrawTreeImGui<std::map<std::string, GlobalVariables::Item*>>(std::map<std::string, Item*>& tree, const std::string& chunkName, const std::string& groupName, const std::string& treeName, uint32_t level)
+	void GlobalVariables::DrawTreeImGui<std::unordered_map<std::string, GlobalVariables::Item*>>(std::unordered_map<std::string, Item*>& tree, const std::string& chunkName, const std::string& groupName, const std::string& treeName, uint32_t level)
 	{
 		if (level == 10 && chunkName == treeName && treeName == groupName) {}
-		for (std::map<std::string, Item*>::iterator it = tree.begin(); it != tree.end(); ++it) {
+		for (std::unordered_map<std::string, Item*>::iterator it = tree.begin(); it != tree.end(); ++it) {
 			std::string debugName = chunkName + groupName + treeName + it->first;
 			PreparationImGui(it->first, *it->second, debugName);
 		}
