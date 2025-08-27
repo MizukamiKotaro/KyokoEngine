@@ -54,5 +54,5 @@ public:
 	void SetData(const GlobalVariableData& data);
 
 protected:
-	std::unique_ptr<GlobalVariableData> datas_; // データ
+	std::unique_ptr<GlobalVariableData> data_; // データ
 };

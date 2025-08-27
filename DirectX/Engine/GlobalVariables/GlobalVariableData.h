@@ -3,9 +3,9 @@
 #include <variant>
 #include <memory>
 #include "GlobalVariableUser.h"
-#include "Vector2.h"
-#include "Vector3.h"
-#include "Vector4.h"
+#include "Math/Vector2.h"
+#include "Math/Vector3.h"
+#include "Math/Vector4.h"
 
 /// <summary>
 /// 響子
@@ -190,5 +190,6 @@ private:
 	std::map<int32_t, ComboNameType> comboTypes_; // コンボのタイプ
 	std::map<int32_t, int32_t> comboIDs_; // コンボのid
 	std::map<int32_t, int32_t> debugInt_; // 入力中の値
+	bool isDraw_ = false;
 #endif // _DEBUG
 };

@@ -4,7 +4,7 @@
 #include "Vector3.h"
 #include "Vector4.h"
 #include "GlobalVariableComboNames.h"
-#include "GlobalVariables/GlobalVariableUser.h"
+#include "GlobalVariableUser.h"
 
 #ifdef _DEBUG
 #include "ImGuiManager/ImGuiManager.h"
@@ -50,6 +50,8 @@ namespace Kyoko {
 
 	void GlobalVariables::Update() {
 #ifdef _DEBUG
+		isSomethingSave_ = false;
+
 		for (std::pair<const std::string, Chunk> chunk : isTreeOpen_) {
 			for (std::pair<const std::string, Group>& group : chunk.second) {
 				for (std::pair<const std::string, Item>& item : group.second) {
@@ -96,8 +98,11 @@ namespace Kyoko {
 				const std::string& groupName = itGroup->first;
 				Group& group = itGroup->second;
 				if (!ImGui::BeginMenu(groupName.c_str())) {
+					isTreeOpen_[chunkName][groupName]["_"] = false;
 					continue;
 				}
+				isTreeOpen_[chunkName][groupName]["_"] = true;
+
 
 				std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, GroupPtr>>>>>> treeMap;
 				for (std::map<std::string, Item>::iterator itItem = group.begin();
@@ -302,7 +307,9 @@ namespace Kyoko {
 	void GlobalVariables::SetValue(const std::string& chunkName, const std::string& groupName, const std::string& key, const T& value, const std::vector<std::string>& tree, bool isAddItem)
 	{
 		Group& group = datas_[chunkName][groupName];
-
+#ifdef _DEBUG
+		isTreeOpen_[chunkName][groupName]["_"] = false;
+#endif // _DEBUG
 		Item newItem{};
 		newItem = value;
 		uint32_t i = 0;
@@ -502,7 +509,7 @@ namespace Kyoko {
 		for (const std::string& treeName : tree) {
 			if (treeName == "_") {
 				if (group.find(name) == group.end()) {
-					return false;
+					return std::get<bool>(group.find(treeName)->second);
 				}
 				return std::get<bool>(group.find(name)->second);
 			}
@@ -525,6 +532,8 @@ namespace Kyoko {
 
 	void GlobalVariables::SaveFile(const std::string& chunkName, const std::string& groupName, bool isFin)
 	{
+		isSomethingSave_ = true;
+
 		std::map<std::string, Chunk>::iterator itChunk = datas_.find(chunkName);
 
 		assert(itChunk != datas_.end());
@@ -696,6 +705,11 @@ namespace Kyoko {
 #else
 		(void)key; (void)type; (void)ptr;
 #endif // _DEBUG
+	}
+
+	bool GlobalVariables::IsSomethingSave() const
+	{
+		return isSomethingSave_;
 	}
 
 

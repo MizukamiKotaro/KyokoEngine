@@ -2,35 +2,35 @@
 
 void BaseGlobalData::Update()
 {
-	datas_->Update();
+	data_->Update();
 }
 
 void BaseGlobalData::DrawImGui(const std::string& treeName, bool isSave)
 {
-	datas_->DrawImGui(treeName, isSave);
+	data_->DrawImGui(treeName, isSave);
 }
 
 void BaseGlobalData::Save()
 {
-	datas_->Save();
+	data_->Save();
 }
 
 void BaseGlobalData::SetData(const std::map<int32_t, GlobalVariableData::Item>& items)
 {
-	datas_->SetData(items);
+	data_->SetData(items);
 }
 
 const std::map<int32_t, GlobalVariableData::Item>& BaseGlobalData::GetData() const
 {
-	return datas_->GetData();
+	return data_->GetData();
 }
 
 const GlobalVariableData& BaseGlobalData::GetGlobalData() const
 {
-	return *datas_;
+	return *data_;
 }
 
 void BaseGlobalData::SetData(const GlobalVariableData& data)
 {
-	datas_ = std::make_unique<GlobalVariableData>(data);
+	data_ = std::make_unique<GlobalVariableData>(data);
 }

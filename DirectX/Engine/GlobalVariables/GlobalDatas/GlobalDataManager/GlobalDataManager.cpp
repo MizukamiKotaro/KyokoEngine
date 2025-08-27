@@ -1,5 +1,7 @@
 #include "GlobalDataManager.h"
 
+#include "GlobalVariables/GlobalVariableComboNames.h"
+
 #ifdef _DEBUG
 #include "imgui.h"
 #endif // _DEBUG
@@ -41,6 +43,7 @@ void GlobalDataManager::Update()
 	ImGui::Begin("KyokoEditor");
 	ImGui::Checkbox("デバッグオン", &isDebug_);
 	for (int32_t i = 0; i < Kyoko::EnumToInt(ComboTypeNames::kComboTypeNamesEnd); i++) {
+		isSave_[i] = false;
 		if (ImGui::TreeNode(typeNames_[i].c_str())) {
 			editorData_[i]->data->Update();
 
@@ -73,6 +76,7 @@ void GlobalDataManager::Update()
 					if (ImGui::Button("作成")) {
 						Save(editorData_[i]->data, typeNames_[i], editorData_[i]->inputName);
 						names_->AddComboName(i, typeNames_[i], editorData_[i]->inputName);
+						isSave_[i] = true;
 					}
 				}
 			}
@@ -123,6 +127,7 @@ void GlobalDataManager::Update()
 				editorData_[i]->data->DrawImGui("調整項目");
 				if (ImGui::Button("保存")) {
 					Save(editorData_[i]->data, typeNames_[i], editorData_[i]->currentName);
+					isSave_[i] = true;
 				}
 			}
 
@@ -181,40 +186,67 @@ bool GlobalDataManager::IsDebug() const
 	return isDebug_;
 }
 
+bool GlobalDataManager::IsSave(ComboTypeNames type)
+{
+	return isSave_[Kyoko::EnumToInt(type)];
+}
+
 void GlobalDataManager::AddTypes()
 {
 	// 第二引数は書いてあるもの同様Englishで設定してクレメンス
 	// エディターでパターンを増やしたいものの設定
-	AddType(ComboTypeNames::kStagePattern, "StagePattern");
-	AddType(ComboTypeNames::kBlockPattern, "BlockPattern");
+	//AddType(ComboTypeNames::kStagePattern, "StagePattern");
 
 	// コードで行うパターンの設定
-	AddSystemType(SystemComboTypeNames::kBlockType, "BlockType", "固定");
-	AddSystemType(SystemComboTypeNames::kBlockType, "BlockType", "動かせる");
+	//AddSystemType(SystemComboTypeNames::kBlockType, "BlockType", "固定");
 
-	AddSystemType(SystemComboTypeNames::kStampType, "StampType", "うえ");
-	AddSystemType(SystemComboTypeNames::kStampType, "StampType", "した");
-	AddSystemType(SystemComboTypeNames::kStampType, "StampType", "みぎ");
-	AddSystemType(SystemComboTypeNames::kStampType, "StampType", "ひだり");
-	AddSystemType(SystemComboTypeNames::kStampType, "StampType", "てまえ");
-	AddSystemType(SystemComboTypeNames::kStampType, "StampType", "おく");
+	AddEffekseerTypes();
+}
+
+void GlobalDataManager::AddEffekseerTypes()
+{
+	// これを汎用的にする
+	std::filesystem::path dir("Effekseer/");
+	if (!std::filesystem::exists(dir)) {
+		return;
+	}
+	GlobalVariableComboNames* global = GlobalVariableComboNames::GetInstance();
+	std::filesystem::recursive_directory_iterator dir_it(dir);
+	for (const std::filesystem::directory_entry& entry : dir_it) {
+
+		const std::filesystem::path& filePath = entry.path();
+
+		std::string extension = filePath.extension().string();
+
+		if (extension.compare(".efkefc") != 0) {
+			continue;
+		}
+		std::string filePathStr = filePath.stem().string();
+
+		global;
+		//global->AddComboName(ComboNameType::kEffekseer, filePathStr);
+	}
 }
 
 BaseGlobalData* GlobalDataManager::CreateData(const std::string& type)
 {
 	// 新しくエディターのパターンを増やす場合は追記してね
 	BaseGlobalData* data = nullptr;
-	switch (nameTypes_[type])
-	{
-	case ComboTypeNames::kStagePattern:
-		//data = new StageData();
-		break;
-	case ComboTypeNames::kBlockPattern:
-		//data = new BlockData();
-		break;
-	default:
-		break;
-	}
+	type;
+	//switch (nameTypes_[type])
+	//{
+	///*case ComboTypeNames::kStagePattern:
+	//	data = new StageData();
+	//	break;
+	//case ComboTypeNames::kBlockPattern:
+	//	data = new BlockData();
+	//	break;
+	//case ComboTypeNames::kEffekseerDataPattern:
+	//	data = new EffekseerData();
+	//	break;*/
+	//default:
+	//	break;
+	//}
 
 	return data;
 }
@@ -224,6 +256,7 @@ void GlobalDataManager::AddType(ComboTypeNames id, const std::string& type)
 	typeNames_[Kyoko::EnumToInt(id)] = type;
 	nameTypes_[type] = id;
 	names_->AddComboName(Kyoko::EnumToInt(id), type);
+	isSave_[Kyoko::EnumToInt(id)] = false;
 }
 
 void GlobalDataManager::AddSystemType(SystemComboTypeNames id, const std::string& type, const std::string& name)
@@ -236,6 +269,10 @@ void GlobalDataManager::Save(const std::unique_ptr<BaseGlobalData>& data, const 
 	std::unique_ptr<BaseGlobalData> d;
 	d.reset(CreateData(typeName));
 	d->CreateData(kPatternName, typeName, name);
+	// 一度目のセットと更新で、パラメータの数が増減するデータの数をセットして格納先を用意する
+	d->SetData(data->GetData());
+	d->Update();
+	// 二度目のセットと更新で、用意された格納先に全てのデータをセットして生成している
 	d->SetData(data->GetData());
 	d->Update();
 	d->Save();
@@ -246,7 +283,9 @@ void GlobalDataManager::SetData(std::unique_ptr<BaseGlobalData>& data, const std
 	std::unique_ptr<BaseGlobalData> d;
 	d.reset(CreateData(typeName));
 	d->CreateData(kPatternName, typeName, name);
+	// 一度目のセットと更新で、パラメータの数が増減するデータの数をセットして格納先を用意する
 	data->SetData(d->GetData());
 	data->Update();
+	// 二度目のセットで、用意された格納先に全てのデータをセットしてしている
 	data->SetData(d->GetData());
 }

@@ -233,6 +233,12 @@ public:
 	void EraseItemCombo(const std::string& key, int32_t type, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
 	void EraseItemSystemCombo(const std::string& key, int32_t type, const std::string& tree1 = "_", const std::string& tree2 = "_", const std::string& tree3 = "_", const std::string& tree4 = "_", const std::string& tree5 = "_", const std::string& tree6 = "_");
 
+	/// <summary>
+	/// 何かがセーブされたか
+	/// </summary>
+	/// <returns>セーブされたか</returns>
+	bool IsSomethingSave() const;
+
 private:
 	/// <summary>
 	/// ツリーの作成

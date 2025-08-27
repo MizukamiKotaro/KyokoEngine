@@ -1,6 +1,6 @@
-#include "Vector2.h"
-#include "Vector3.h"
-#include "Vector4.h"
+#include "Math/Vector2.h"
+#include "Math/Vector3.h"
+#include "Math/Vector4.h"
 #include "GlobalVariableUser.h"
 #include "GlobalVariableComboNames.h"
 
@@ -459,6 +459,11 @@ void GlobalVariableUser::EraseItemSystemCombo(const std::string& key, int32_t ty
 {
 	std::vector<std::string> tree = CreateTree(tree1, tree2, tree3, tree4, tree5, tree6);
 	global_->EraseItem(chunkName_, groupName_, key, globalCombo_->GetSystemName(type).first, tree);
+}
+
+bool GlobalVariableUser::IsSomethingSave() const
+{
+	return global_->IsSomethingSave();
 }
 
 std::vector<std::string> GlobalVariableUser::CreateTree(const std::string& tree1, const std::string& tree2, const std::string& tree3, const std::string& tree4, const std::string& tree5, const std::string& tree6) const

@@ -10,6 +10,10 @@ void GlobalVariableData::Update()
 {
 #ifdef _DEBUG
 	isChange_ = false;
+	if (!global_->IsTreeOpen() && !isDraw_ && !global_->IsSomethingSave()) {
+		return;
+	}
+	isDraw_ = false;
 	UpdateValues();
 	SetGlobals();
 #endif // _DEBUG
@@ -552,6 +556,7 @@ void GlobalVariableData::DrawTreeRecursive(const std::map<int32_t, std::pair<Ite
 void GlobalVariableData::DrawImGui(const std::string& treeName, bool isSave)
 {
 #ifdef _DEBUG
+	isDraw_ = true;
 	if (ImGui::TreeNode(treeName.c_str())) {
 		DrawTreeRecursive(names_, 0);
 		if (isSave) {
@@ -591,6 +596,7 @@ void GlobalVariableData::EraseItem(int32_t id)
 	}
 	names_.erase(id);
 	debugInt_.erase(id);
+	isChange_ = true;
 #else
 	(void)id;
 #endif // _DEBUG

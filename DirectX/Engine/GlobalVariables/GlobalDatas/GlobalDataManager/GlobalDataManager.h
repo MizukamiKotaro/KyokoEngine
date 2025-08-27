@@ -13,8 +13,9 @@ public:
 	/// エディターでパターンを増やしたいもの
 	/// </summary>
 	enum class ComboTypeNames {
-		kStagePattern, // ステージのパターン
-		kBlockPattern, // ブロックの配置パターン
+		//kStagePattern, // ステージのパターン
+		//kBlockPattern, // ブロックの配置パターン
+		//kEffekseerDataPattern, // Effekseerデータパターン
 		kComboTypeNamesEnd, // 末尾
 	};
 
@@ -22,8 +23,8 @@ public:
 	/// 事前にパターンを増やしたいもの（ブロックのタイプとか）
 	/// </summary>
 	enum class SystemComboTypeNames {
-		kBlockType, // ブロックのタイプ
-		kStampType, // スタンプの面タイプ
+		//kBlockType, // ブロックのタイプ
+		//kStampType, // スタンプの面タイプ
 		kSystemComboTypeNamesEnd, // 末尾
 	};
 
@@ -62,6 +63,13 @@ public:
 	/// <returns>デバッグ中か</returns>
 	bool IsDebug() const;
 
+	/// <summary>
+	/// セーブされたか
+	/// </summary>
+	/// <param name="type">タイプ</param>
+	/// <returns>セーブされたか</returns>
+	bool IsSave(ComboTypeNames type);
+
 private:
 	GlobalDataManager() = default;
 	~GlobalDataManager() = default;
@@ -72,6 +80,10 @@ private:
 	/// タイプの追加
 	/// </summary>
 	void AddTypes();
+	/// <summary>
+	/// Effekseerの種類の追加
+	/// </summary>
+	void AddEffekseerTypes();
 	/// <summary>
 	/// データの生成
 	/// </summary>
@@ -132,6 +144,7 @@ private:
 	std::vector<std::unique_ptr<EditorData>> editorData_; // エディターデータ
 #endif // _DEBUG
 
+	std::map<int32_t, bool> isSave_; // セーブしたか
 	std::unique_ptr<GlobalNames> names_; // コンボ名保存用
 	bool isDebug_; // デバッグ中か
 };

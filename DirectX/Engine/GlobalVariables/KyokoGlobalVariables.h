@@ -191,6 +191,12 @@ namespace Kyoko {
 		/// <param name="ptr">ポインタ</param>
 		void DrawImGuiCombo(const std::string& key, const std::string& type, std::string* ptr);
 
+		/// <summary>
+		/// 何かがセーブされたか
+		/// </summary>
+		/// <returns>セーブされたか</returns>
+		bool IsSomethingSave() const;
+
 	private:
 		GlobalVariables() = default;
 		~GlobalVariables() = default;
@@ -340,7 +346,7 @@ namespace Kyoko {
 		std::map<std::string, Item> tempData_; // 遅延データ
 #endif // _DEBUG
 
-
+		bool isSomethingSave_; // 何かがセーブされたか
 		std::map<std::string, std::vector<std::string>> comboNames_; // コンボの名前
 	};
 
